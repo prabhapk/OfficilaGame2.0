@@ -46,10 +46,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   webContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-    height: '100vh' as any,
-  },
+  flex: 1,
+  backgroundColor: '#fff',
+  minHeight: '100vh' as any,  // ✅ instead of height
+},
+
   nativeContainer: {
     flex: 1,
   },
