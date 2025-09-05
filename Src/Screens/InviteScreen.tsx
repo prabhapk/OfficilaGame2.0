@@ -1,20 +1,40 @@
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  ImageBackground,
+  Alert,
+} from 'react-native';
+import React, { useState } from 'react';
 import { Image } from 'expo-image';
-import { bannerLuna1 } from '../../assets/assets'
-import Scale from '../Components/Scale'
+import {
+  bannerLuna1,
+  CommissionIcon,
+  graphIcon,
+  inviteRecharge,
+  invitetop,
+} from '../../assets/assets';
+import Scale from '../Components/Scale';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Redux/store';
+import { useNavigation } from '@react-navigation/native';
 const InviteScreen = () => {
-
   const [dateRange, setDateRange] = useState({
     start: new Date(),
     end: new Date(),
   });
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
-
-  const handleDateChange = (event: any, selectedDate: Date | undefined, type: 'start' | 'end') => {
+  const navigation = useNavigation();
+  const handleDateChange = (
+    event: any,
+    selectedDate: Date | undefined,
+    type: 'start' | 'end',
+  ) => {
     if (selectedDate) {
       setDateRange(prev => ({ ...prev, [type]: selectedDate }));
     }
@@ -22,22 +42,57 @@ const InviteScreen = () => {
   };
 
   const dateOptions = ['Today', 'Yesterday', '3days', '7days', '14days'];
-
+  const { isLoggedIn, userDetails } = useSelector(
+    (state: RootState) => state.signInSlice,
+  );
+  const handleInvite = async () => {
+    if (isLoggedIn) {
+      Alert.alert('Code copied to clipboard');
+    } else {
+      navigation.navigate('SignInScreen');
+    }
+  };
   return (
-    <ScrollView style={{ flex: 1,backgroundColor: '#560303' }}>
-      <Image source={bannerLuna1} style={{ width: "100%", height: 250, }} resizeMode="stretch" />
-        <View style={{ borderRadius: 10, bottom: 70, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginHorizontal: 10, marginTop: Scale(10) }}>
-          <View style={{ borderRadius: 10, padding: Scale(10), borderWidth: 1, borderColor: '#fff', justifyContent: 'center', alignItems: 'center', backgroundColor: "#ff493a" }}>
-            <Text style={{ textAlign: 'center', fontSize: Scale(30), fontWeight: "bold", letterSpacing: Scale(5), color: '#fff' }}>
-              123456
-            </Text>
-          </View>
+    <ScrollView style={{ flex: 1, backgroundColor: '#380100' }}>
+      <ImageBackground
+        source={invitetop}
+        style={{ width: '100%', height: '70%' }}
+        resizeMode="stretch"
+      >
+        <View
+          style={{
+            borderRadius: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginHorizontal: 10,
+            marginTop: '65%',
+          }}
+        >
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: Scale(30),
+              fontWeight: 'bold',
+              letterSpacing: Scale(10),
+              color: '#fff',
+              marginLeft: Scale(30),
+            }}
+          >
+            {isLoggedIn ? userDetails.referralCode : ''}
+          </Text>
+
           <TouchableOpacity
             style={{
-              backgroundColor: "#ff493a", borderRadius: 30, paddingVertical: Scale(10),
-              paddingHorizontal: Scale(30), marginRight: Scale(10)
+              backgroundColor: '#ff493a',
+              borderRadius: 30,
+              paddingVertical: Scale(10),
+              paddingHorizontal: Scale(20),
+              // marginRight: Scale(5),
             }}
-
+            onPress={() => {
+              handleInvite();
+            }}
           >
             <Text
               style={{
@@ -45,78 +100,134 @@ const InviteScreen = () => {
                 fontWeight: 'bold',
                 textAlign: 'center',
                 fontSize: Scale(20),
-              }}>
-              {"Invite"}
+              }}
+            >
+              {'Invite'}
             </Text>
           </TouchableOpacity>
         </View>
-<View style={{marginHorizontal:Scale(20),marginTop:Scale(-20)}}>
-      <View style={styles.card}>
-        <Text style={styles.heading}><Icon name="bar-chart" size={18} /> Team data</Text>
+        <View style={{ marginHorizontal: Scale(20), marginTop: Scale(50) }}>
+          <View style={styles.card}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Image
+                source={graphIcon}
+                style={{ width: Scale(30), height: Scale(30) }}
+                resizeMode="contain"
+              />
+              <Text style={styles.heading}>Team data</Text>
+            </View>
 
-        <View style={styles.statsRow}>
-          <View style={styles.statBox}>
-            <Text style={styles.statAmount}>₹0</Text>
-            <Text style={styles.statLabel}>Commission</Text>
+            <View style={styles.statsRow}>
+              <ImageBackground
+                source={CommissionIcon}
+                style={styles.statBox}
+                resizeMode="contain"
+              >
+                <Text style={styles.statAmount}>₹0</Text>
+                <Text style={styles.statLabel}>Commission</Text>
+              </ImageBackground>
+              <ImageBackground
+                source={inviteRecharge}
+                style={styles.statBox}
+                resizeMode="contain"
+              >
+                <Text style={styles.statAmount}>₹0</Text>
+                <Text style={styles.statLabel}>Recharges</Text>
+              </ImageBackground>
+            </View>
+
+            <View style={styles.settlementBox}>
+              <Text style={styles.settlementText}>
+                Commission to be settled:
+              </Text>
+              <Text
+                style={{
+                  fontSize: Scale(18),
+                  fontWeight: 'bold',
+                  color: 'yellow',
+                }}
+              >
+                ₹0
+              </Text>
+            </View>
+            <Text style={styles.settlementTime}>
+              Settlement time: 20-07-2025 02:00 AM
+            </Text>
           </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statAmount}>₹0</Text>
-            <Text style={styles.statLabel}>Recharges</Text>
+          <View style={styles.dateRangeRow}>
+            {dateOptions.map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.dateButton,
+                  option === 'Today' && styles.activeDateButton,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.dateButtonText,
+                    option === 'Today' && styles.activeDateButtonText,
+                  ]}
+                >
+                  {option}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          s
+          <View style={styles.datePickerRow}>
+            <TouchableOpacity
+              onPress={() => setShowStartPicker(true)}
+              style={styles.dateInput}
+            >
+              <Text style={{ color: '#fff' }}>
+                {dateRange.start.toISOString().split('T')[0]}
+              </Text>
+              <Icon
+                name="calendar-minus-o"
+                size={18}
+                style={{ marginLeft: Scale(5) }}
+                color={'#fff'}
+              />
+            </TouchableOpacity>
+            <Text style={styles.hyphen}>-</Text>
+            <TouchableOpacity
+              onPress={() => setShowEndPicker(true)}
+              style={styles.dateInput}
+            >
+              <Text style={{ color: '#fff' }}>
+                {dateRange.end.toISOString().split('T')[0]}
+              </Text>
+              <Icon
+                name="calendar-minus-o"
+                size={18}
+                style={{ marginLeft: Scale(5) }}
+                color={'#fff'}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.tableHeader}>
+            <Text style={styles.tableCell}>Level</Text>
+            <Text style={styles.tableCell}>Invites</Text>
+            <Text style={styles.tableCell}>Recharge</Text>
+            <Text style={styles.tableCell}>Bets</Text>
+            <Text style={styles.tableCell}>Commission</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCell}>Lv.1</Text>
+            <Text style={styles.tableCell}>-</Text>
+            <Text style={styles.tableCell}>-</Text>
+            <Text style={styles.tableCell}>-</Text>
+            <Text style={styles.tableCell}>-</Text>
+          </View>
+          <View style={styles.bonusBox}>
+            <Text style={styles.bonusText}>
+              Every time your first level subordinate recharges, You will
+              receive a <Text style={styles.highlight}>5% </Text>bonus!!!
+            </Text>
           </View>
         </View>
-
-        <View style={styles.settlementBox}>
-          <Text style={styles.settlementText}>Commission to be settled:</Text>
-           <Text style={{fontSize:Scale(18),fontWeight:'bold',color:'yellow'}}>₹0</Text>
-         
-         
-        </View>
-         <Text style={styles.settlementTime}>Settlement time: 20-07-2025 02:00 AM</Text>
-      </View>
-
-      <View style={styles.dateRangeRow}>
-        {dateOptions.map((option, index) => (
-          <TouchableOpacity key={index} style={[styles.dateButton, option === 'Today' && styles.activeDateButton]}>
-            <Text style={[styles.dateButtonText, option === 'Today' && styles.activeDateButtonText]}>{option}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-s 
-      <View style={styles.datePickerRow}>
-        <TouchableOpacity onPress={() => setShowStartPicker(true)} style={styles.dateInput}>
-          <Text style={{color:"#fff"}}>{dateRange.start.toISOString().split('T')[0]}</Text>
-          <Icon name="calendar-minus-o" size={18} style={{marginLeft:Scale(5)}} color={'#fff'}/>
-        </TouchableOpacity>
-        <Text style={styles.hyphen}>-</Text>
-        <TouchableOpacity onPress={() => setShowEndPicker(true)} style={styles.dateInput}>
-          <Text style={{color:"#fff"}}>{dateRange.end.toISOString().split('T')[0]}</Text>
-          <Icon name="calendar-minus-o" size={18} style={{marginLeft:Scale(5)}} color={'#fff'}/>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.tableHeader}>
-        <Text style={styles.tableCell}>Level</Text>
-        <Text style={styles.tableCell}>Invites</Text>
-        <Text style={styles.tableCell}>Recharge</Text>
-        <Text style={styles.tableCell}>Bets</Text>
-        <Text style={styles.tableCell}>Commission</Text>
-      </View>
-
-      <View style={styles.tableRow}>
-        <Text style={styles.tableCell}>Lv.1</Text>
-        <Text style={styles.tableCell}>-</Text>
-        <Text style={styles.tableCell}>-</Text>
-        <Text style={styles.tableCell}>-</Text>
-        <Text style={styles.tableCell}>-</Text>
-      </View>
-
-      <View style={styles.bonusBox}>
-        <Text style={styles.bonusText}>
-          Every time your first level subordinate recharges, You will receive a <Text style={styles.highlight}>5% </Text>bonus!!!
-        </Text>
-      </View>
-      </View>
-      
+      </ImageBackground>
       {showStartPicker && (
         <DateTimePicker
           value={dateRange.start}
@@ -133,12 +244,11 @@ s
           onChange={(e, date) => handleDateChange(e, date, 'end')}
         />
       )}
-
     </ScrollView>
-  )
-}
+  );
+};
 
-export default InviteScreen
+export default InviteScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -157,18 +267,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom: 15,
   },
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: Scale(10),
   },
   statBox: {
-    backgroundColor: '#db2020',
-    padding: 15,
     borderRadius: 10,
     flex: 1,
-    alignItems: 'center',
+    padding: 15,
     marginHorizontal: 5,
   },
   statAmount: {
@@ -183,11 +291,11 @@ const styles = StyleSheet.create({
   },
   settlementBox: {
     marginTop: 15,
-    backgroundColor: '#f09191ff',
+    backgroundColor: '#A5595A',
     borderRadius: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding:10,
+    padding: 10,
   },
   settlementText: {
     color: '#fff',
@@ -196,8 +304,8 @@ const styles = StyleSheet.create({
   settlementTime: {
     color: '#ccc',
     fontSize: 12,
-    marginTop: 5,
-    textAlign:'center',
+    marginTop: 10,
+    textAlign: 'center',
   },
   dateRangeRow: {
     flexDirection: 'row',
@@ -226,11 +334,11 @@ const styles = StyleSheet.create({
   },
   dateInput: {
     padding: 10,
-   borderColor: '#db2020',
-   borderWidth:1,
+    borderColor: '#db2020',
+    borderWidth: 1,
     borderRadius: 8,
     marginHorizontal: 5,
-    flexDirection:'row',
+    flexDirection: 'row',
   },
   hyphen: {
     color: '#fff',
@@ -240,7 +348,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#db2020',
-   
   },
   tableRow: {
     flexDirection: 'row',
@@ -252,25 +359,25 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     fontSize: 12,
-    borderWidth:1,
-    borderColor:'#fff',
-    padding:10
+    borderWidth: 1,
+    borderColor: '#fff',
+    padding: 10,
   },
   bonusBox: {
     backgroundColor: '#a43f3f',
     marginTop: 20,
     padding: 15,
     borderRadius: 8,
-    marginBottom:Scale(20)
+    marginBottom: Scale(20),
   },
   bonusText: {
     color: '#fff',
     textAlign: 'center',
-    fontSize:Scale(16)
+    fontSize: Scale(16),
   },
   highlight: {
     color: 'yellow',
     fontWeight: 'bold',
-    fontSize:Scale(24)
+    fontSize: Scale(24),
   },
 });

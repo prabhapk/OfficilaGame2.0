@@ -29,13 +29,22 @@ import CustomTabs from '../Components/CustomTabsHeader';
 import CommonBall from '../Components/CommonBall';
 import TableCommonBall from '../Components/TableCommonBall';
 import MyBets3DigitsCard from '../Components/MyBets3DigitsCard';
+import DateTimePicker from '@react-native-community/datetimepicker';
 const MyBetsScreen = () => {
     const [selectedHeaderId, setSelectedHeaderId] = useState(1);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedFilerId, setSelectedFilerId] = useState(1);
     const [showFilter, setShowFilter] = useState(false);
     const onClose = () => setShowFilter(false);
+    const [selectedDate, setSelected] = useState<any>("")
     const headers = ["A", "B", "C"];
+
+    const handleDateChange = (event: any, selectedDate?: Date) => {
+        if (selectedDate) {
+            setSelected(selectedDate); // update state with selected date
+        }
+        setShowFilter(false);
+    };
     const renderHeader = ({ item }: any) => {
         const isSelected = item.id === selectedHeaderId;
         return (
@@ -71,7 +80,7 @@ const MyBetsScreen = () => {
                         onPress={() => setShowFilter(!showFilter)}
                     >
                         <Icon name="filter" size={16} color="white" />
-                        <Text style={styles.filterText}> Filter</Text>
+                        <Text style={styles.filterText}> {"Filter"}</Text>
                         <Entypo name="chevron-down" size={14} color="white" />
                     </TouchableOpacity>
                 </View>
@@ -95,32 +104,41 @@ const MyBetsScreen = () => {
                     />
                 </View>
             </View>
-            <MyBets3DigitsCard
-  headers={["A", "B", "C"]}
-  myBetsTableData={[
-    { type: "A", value: 2, payment: 33, result: "No Won" },
-    { type: "B", value: 3, payment: 33, result: "No Won" },
-    { type: "C", value: 4, payment: 33, result: "No Won" }
-  ]}
-  id="PK56283947"
-  bettingTime="01-08-2022 12:00 PM"
-  paymentAmount={33}
-  drawTime="01-08-2022 12:00 PM"
-  topBalls={[
-    { text: "A", color: "#DE3C3F" },
-    { text: "B", color: "#EC8204" },
-    { text: "C", color: "#066FEA" }
-  ]}
-  bottomBalls={[
-    { text: "2", color: "#DE3C3F" },
-    { text: "3", color: "#EC8204" },
-    { text: "4", color: "#066FEA" }
-  ]}
-  date="01-08-2022"
-  status="NO WON"
-  imageSource={hot}
-/>
-
+            {showFilter && (
+                <DateTimePicker
+                    value={new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={(e, date) => handleDateChange(e, date)}
+                />
+            )}
+            <View style={{ marginHorizontal: 15 }}>
+                <MyBets3DigitsCard
+                    headers={["A", "B", "C"]}
+                    myBetsTableData={[
+                        { type: "A", value: 2, payment: 33, result: "No Won" },
+                        { type: "B", value: 3, payment: 33, result: "No Won" },
+                        { type: "C", value: 4, payment: 33, result: "No Won" }
+                    ]}
+                    id="PK56283947"
+                    bettingTime="01-08-2022 12:00 PM"
+                    paymentAmount={33}
+                    drawTime="01-08-2022 12:00 PM"
+                    topBalls={[
+                        { text: "A", color: "#DE3C3F" },
+                        { text: "B", color: "#EC8204" },
+                        { text: "C", color: "#066FEA" }
+                    ]}
+                    bottomBalls={[
+                        { text: "2", color: "#DE3C3F" },
+                        { text: "3", color: "#EC8204" },
+                        { text: "4", color: "#066FEA" }
+                    ]}
+                    date="01-08-2022"
+                    status="NO WON"
+                    imageSource={hot}
+                />
+            </View>
 
         </ScrollView>
     );

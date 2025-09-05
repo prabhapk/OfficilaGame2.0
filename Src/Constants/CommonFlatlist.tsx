@@ -333,7 +333,7 @@ export const myBetsFilterList = [
   {id: 1, name: 'All'},
   {id: 2, name: 'To be Drawn'},
   {id: 3, name: 'Drawn'},
-  {id: 4, name: 'Own'},
+  {id: 4, name: 'Won'},
 ]
 
 export const myBetsTableData = [{

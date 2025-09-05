@@ -43,6 +43,8 @@ export interface IDigitProps {
     count: number,
     selectedOption: any,
     price: number,
+    groupId: number,
+    gameId: number,
   ) => void;
   selectedOption: any;
 
@@ -65,6 +67,11 @@ export interface IDigitProps {
   onStateChange: any;
   targetDateProp?: any;
   onTimerComplete?: any;
+  gameName: string;
+  groupId: number,
+  singleDigitGameId: number,
+  doubleDigitGameId: number,
+  threeDigitGameId: number,
 }
 
 const DigitComponent: React.FC<IDigitProps> = ({
@@ -87,6 +94,11 @@ const DigitComponent: React.FC<IDigitProps> = ({
   onStateChange,
   targetDateProp,
   onTimerComplete,
+  gameName,
+  groupId,
+  singleDigitGameId,
+  doubleDigitGameId,
+  threeDigitGameId,
 }) => {
   const [targetDate, setTargetDate] = useState('2025-07-03T18:35:27.123Z');
 
@@ -233,7 +245,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               alignItems: 'flex-start',
             }}
           >
-            <Text style={styles.gameNameText}>Quick3D</Text>
+            <Text style={styles.gameNameText}>{gameName}</Text>
             <View style={{ flexDirection: 'row' }}>
               <Text style={[styles.gameNameText, { flex:1, flexWrap:'wrap'}]}>{lastGameWiiningId}</Text>
               <TouchableOpacity
@@ -356,6 +368,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   singleACount,
                   selectedOption,
                   singleDigitPrice,
+                  groupId,
+                  singleDigitGameId,
+
                 )
               }
             />
@@ -397,6 +412,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   singleBCount,
                   selectedOption,
                   singleDigitPrice,
+                  groupId,
+                  singleDigitGameId,
                 )
               }
             />
@@ -438,6 +455,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   singleCCount,
                   selectedOption,
                   singleDigitPrice,
+                  groupId,
+                  singleDigitGameId,
                 )
               }
             />
@@ -449,7 +468,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
           <View style={styles.gameHeader}>
             <View>
               <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.DigitTitleText}>Single Digit</Text>
+                <Text style={styles.DigitTitleText}>Double Digit</Text>
               </View>
 
               <Text
@@ -545,6 +564,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   doubleABCount,
                   selectedOption,
                   doubleDigitPrice,
+                  groupId,
+                  doubleDigitGameId,
                 )
               }
             />
@@ -607,6 +628,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   doubleACCount,
                   selectedOption,
                   doubleDigitPrice,
+                  groupId,
+                  doubleDigitGameId,
                 )
               }
             />
@@ -669,6 +692,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   doubleBCCount,
                   selectedOption,
                   doubleDigitPrice,
+                  groupId,
+                  doubleDigitGameId,
                 )
               }
             />
@@ -841,6 +866,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
                     threeDigitCount,
                     selectedOption,
                     threeDigitPrice,
+                    groupId,
+                    threeDigitGameId,
                   )
                 }
               />

@@ -62,13 +62,8 @@ import DigitComponent from '../Components/DigitComponent';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '../Constants/Theme';
 import { getIndividualGameResult } from '../Redux/Slice/resultSlice';
-import { getIndividualGameData, payNow } from '../Redux/Slice/HomeSlice';
-import { formatToTime } from '../Utils/Common';
-import { unwrapResult } from '@reduxjs/toolkit';
-import CustomLoader from '../Components/CustomLoader';
 
-
-const ThreeDigitMain = ({ navigation, route }: any) => {
+const Quick3DScreen = ({ navigation, route }: any) => {
   const {
     threeDigitA,
     threeDigitB,
@@ -78,26 +73,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     min3TargetDate,
     min5TargetDate,
   } = useSelector((state: RootState) => state.threeDigit);
-  const {
-    individualGameData,
-    individualGameDataLoader
-  } = useSelector((state: RootState) => state.homeSlice);
-  const {
-    isLoggedIn
-  } = useSelector((state: RootState) => state.signInSlice);
-  console.log("individualGameData==>",individualGameData);
   const dispatch = useDispatch();
-
-  const OPTIONS = [
-    { id: 1, name: '01:00 PM', isSelected: true },
-    { id: 2, name: '03:00 PM', isSelected: false },
-    { id: 3, name: '05:00 PM', isSelected: false },
-    { id: 4, name: '07:00 PM', isSelected: false },
-    { id: 5, name: '09:00 PM', isSelected: false },
-    { id: 6, name: '11:00 PM', isSelected: false },
-  ];
-
-  const [selectedOption, setSelectedOption] = useState(OPTIONS[0].name);
+  const [selectedOption, setSelectedOption] = useState('1 Mins');
   const now = new Date();
   const [targetDate, setTargetDate] = useState(
     new Date(new Date().getTime() + 3 * 60 * 1000).toISOString(),
@@ -112,6 +89,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const doubleDigitPrice = 11.0;
   const threeDigitPrice = 21.0;
 
+
   const singleDigitWinningPrice = 110.0;
   const doubleDigitWinningPrice = 220.0;
   const threeDigitWinningPrice = 330.0;
@@ -124,58 +102,139 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     console.log('Received from DigitComponent:', updatedValue);
     setCartValues(updatedValue);
   };
-  const { allResultData, individualGameResults } = useSelector(
-    (state: RootState) => state.resultSlice,
-  );
+  const {allResultData,individualGameResults} = useSelector((state: RootState) => state.resultSlice);
 
-  console.log('individualGameResults==>', individualGameResults);
+console.log("individualGameResults==>", individualGameResults);
 
-  const transformedData = individualGameResults.map((item: any) => ({
-    ...item,
-    balls: item.winningNumber.split(''),
-  }));
-  console.log('transformedData==>', transformedData);
+const transformedData = individualGameResults.map((item: any) => ({
+  ...item,
+  balls: item.winningNumber
+  .split(''),
+}));
+ console.log("transformedData==>", transformedData);
+ 
 
-
-  const groupId = route.params.gameData;
-  console.log("groupId==>", groupId);
-  // const WinningBalls = individualGameData[0]?.lastResult?.winningNumber.split('');
-const WinningBalls = "123"
-
+  const ganeData = route.params.gameData;
+  console.log("ganeData", ganeData);
+  useEffect(() => {
+    if (ganeData.id === "1minGame") {
+      setSelectedOption("1 Mins");
+    }
+    else if (ganeData.id === "3minGame") {
+      setSelectedOption("3 Mins");
+    }
+    else if (ganeData.id === "5minGame") {
+      setSelectedOption("5 Mins");
+    }
+  }, [ganeData])
   const renderContent = () => {
-    return (
-      <>
-        <DigitComponent
-          lastGameWiiningId="12345678890"
-          nextGameId={formatToTime(individualGameData[0]?.nextresulttime)}
-          latGameWinningA={WinningBalls[0]}
-          lastGameWinningB={WinningBalls[1]}
-          lastGameWinningC={WinningBalls[2]}
-          singleDigitPrice={Number(individualGameData[0]?.ticketprize)}
-          singleDigitWinningPrice={Number(individualGameData[0]?.prizeamount)}
-          handleAdd={handleAdd}
-          selectedOption={selectedOption}
-          doubleDigitPrice={Number(individualGameData[1]?.ticketprize)}
-          doubleDigitWinningPrice={Number(individualGameData[1]?.prizeamount)}
-          tableData={transformedData}
-          handleGenerate={handleGenerate}
-          threeDigitWinningPrice={Number(individualGameData[2]?.prizeamount)}
-          threeDigitPrice={Number(individualGameData[2]?.ticketprize)}
-          onStateChange={handleChildStateChange}
-          targetDateProp={individualGameData[0]?.nextresulttime}
-          onTimerComplete={handleTimerComplete}
-          gameName={individualGameData[0]?.name}
-          singleDigitGameId={individualGameData[0]?.id}
-          doubleDigitGameId={individualGameData[1]?.id}
-          threeDigitGameId={individualGameData[2]?.id}
-          groupId={groupId}
-          
-        />
-      </>
-    );
+    switch (selectedOption) {
+      case '1 Mins':
+        return (
+          <>
+            <DigitComponent
+              lastGameWiiningId="12345678891000000000"
+              nextGameId="678976567"
+              latGameWinningA='1'
+              lastGameWinningB='2'
+              lastGameWinningC='3'
+              singleDigitPrice={singleDigitPrice}
+              singleDigitWinningPrice={singleDigitWinningPrice}
+              handleAdd={handleAdd}
+              selectedOption={selectedOption}
+              doubleDigitPrice={doubleDigitPrice}
+              doubleDigitWinningPrice={doubleDigitWinningPrice}
+              tableData={transformedData}
+              handleGenerate={handleGenerate}
+              threeDigitWinningPrice={threeDigitWinningPrice}
+              threeDigitPrice={threeDigitPrice}
+              onStateChange={handleChildStateChange}
+              targetDateProp={min1TargetDate}
+              onTimerComplete={handleTimerComplete}
+            />
+          </>)
+      case '3 Mins':
+        return (
+          <>
+            <DigitComponent
+              lastGameWiiningId="222222222"
+              nextGameId="12312122"
+              latGameWinningA='3'
+              lastGameWinningB='2'
+              lastGameWinningC='3'
+              singleDigitPrice={singleDigitPrice}
+              singleDigitWinningPrice={singleDigitWinningPrice}
+              handleAdd={handleAdd}
+              selectedOption={selectedOption}
+              doubleDigitPrice={doubleDigitPrice}
+              doubleDigitWinningPrice={doubleDigitWinningPrice}
+              tableData={transformedData}
+              handleGenerate={handleGenerate}
+              threeDigitWinningPrice={threeDigitWinningPrice}
+              threeDigitPrice={threeDigitPrice}
+              onStateChange={handleChildStateChange}
+              targetDateProp={min3TargetDate}
+              onTimerComplete={handleTimerComplete}
+            />
+          </>
+        )
+      case '5 Mins':
+        return (
+          <>
+            <DigitComponent
+              lastGameWiiningId="111111111"
+              nextGameId="12312122"
+              latGameWinningA='3'
+              lastGameWinningB='2'
+              lastGameWinningC='3'
+              singleDigitPrice={singleDigitPrice}
+              singleDigitWinningPrice={singleDigitWinningPrice}
+              handleAdd={handleAdd}
+              selectedOption={selectedOption}
+              doubleDigitPrice={doubleDigitPrice}
+              doubleDigitWinningPrice={doubleDigitWinningPrice}
+              tableData={transformedData}
+              handleGenerate={handleGenerate}
+              threeDigitWinningPrice={threeDigitWinningPrice}
+              threeDigitPrice={threeDigitPrice}
+              onStateChange={handleChildStateChange}
+              targetDateProp={min5TargetDate}
+              onTimerComplete={handleTimerComplete}
+            />
+          </>
+        )
+      default:
+        return <Text style={{ color: 'red' }}>Invalid Option</Text>;
+    }
+  }
+  const handleThirtySecondsLeft = () => {
+    setLast30sec(true);
+    dispatch(handleShowAlert());
+    setTimeout(() => {
+      setLast30sec(false);
+      dispatch(handleShowAlert());
+    }, 2000);
   };
 
-  const handleTimerComplete = () => {};
+
+const handleTimerComplete = () => {
+ let updatedTime=""
+ if(selectedOption==="1 Mins"){
+  updatedTime = new Date(new Date(min1TargetDate).getTime() + 1 * 60 * 1000).toISOString();
+  dispatch(setMin1TargetDate(updatedTime));
+ }
+ else if(selectedOption==="3 Mins"){
+  updatedTime = new Date(new Date(min3TargetDate).getTime() + 3 * 60 * 1000).toISOString();
+  dispatch(setMin3TargetDate(updatedTime));
+ }
+ else if(selectedOption==="5 Mins"){
+ updatedTime = new Date(new Date(min5TargetDate).getTime() + 5 * 60 * 1000).toISOString();
+ dispatch(setMin5TargetDate(updatedTime));
+ }
+console.log(updatedTime,"kokokokokok");
+
+  };
+
   const filterNumericInput = (value: string) => {
     return value.replace(/[^0-9]/g, '');
   };
@@ -236,18 +295,15 @@ const WinningBalls = "123"
     navigation.navigate('DrawerNavigation');
   };
 
+
+
   const handleAdd = (
     label: string,
     value: string,
     count: number,
     selectedOption: string,
     price: number,
-    groupId: number,
-    gameId: number,
   ) => {
-    console.log('testttt', label, value, count, selectedOption, price, groupId, gameId);
-
-    
     if (value === '') {
       Alert.alert('Error', 'Please enter a value');
       return;
@@ -262,8 +318,6 @@ const WinningBalls = "123"
         count,
         type: selectedOption,
         price,
-        groupId,
-        gameId,
       },
     ]);
     console.log('Label==>', label);
@@ -292,7 +346,7 @@ const WinningBalls = "123"
       onChangeThreeDigitA(''), dispatch(setThreeDigitCount(3));
       onChangeThreeDigitB(''), onChangeThreeDigitC('');
     }
-  };
+  }
   const handleHeader = (value: any) => {
     const isAdded = numbers.find((item: any) => item.type !== value.name);
 
@@ -409,6 +463,8 @@ const WinningBalls = "123"
     ]);
 
     console.log('Label==>', label);
+
+
   };
 
   // Handle button press
@@ -421,28 +477,29 @@ const WinningBalls = "123"
         threeDigitCount,
         selectedOption,
         threeDigitPrice,
-      );
+      )
       clearInputs('ABC');
     }
-  };
+  }
+  const OPTIONS = [{ id: 1, name: '1 Mins', isSelected: true },
+  { id: 2, name: '3 Mins', isSelected: false },
+  { id: 3, name: '5 Mins', isSelected: false }];
 
   const renderHeader = ({ item }: any) => {
     return (
-      <LinearGradient
-        colors={[
-          selectedOption === item.name ? '#FF4242' : COLORS.secondary, // fallback color
-          selectedOption === item.name ? '#f6c976ff' : COLORS.secondary,
-        ]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={[
-          styles.headerBtn,
-        ]}
-      >
-        <TouchableOpacity
-          style={{ justifyContent: 'center', alignItems: 'center' }}
-          onPress={() => handleHeader(item)}
-        >
+     
+        <LinearGradient
+          colors={[
+            selectedOption === item.name ? '#FF4242' : COLORS.secondary, // fallback color
+            selectedOption === item.name ? '#f6c976ff' : COLORS.secondary,
+          ]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={[styles.headerBtn, { backgroundColor: selectedOption === item.name ? 'pink' : 'white', }]}>
+              <TouchableOpacity
+      style={{justifyContent:"center", alignItems:"center"}}
+              onPress={() => handleHeader(item)}>
+
           <Image
             source={sameClock}
             resizeMode="contain"
@@ -450,74 +507,41 @@ const WinningBalls = "123"
           />
           <Text
             style={{
-              color: 'white',
+              color: 'white' ,
               marginLeft: 5,
               fontSize: Scale(14),
               fontWeight: 'bold',
               marginTop: Scale(5),
-            }}
-          >
+            }}>
             {item.name}
           </Text>
-        </TouchableOpacity>
-      </LinearGradient>
-    );
-  };
+            </TouchableOpacity>
+        </LinearGradient>
+    
+    )
+  }
 
-
-  
   useEffect(() => {
-    dispatch(
-      getIndividualGameResult({
-        groupId: groupId,
-      }),
-    );
-    dispatch(
-      getIndividualGameData({
-        groupId: groupId,
-      }),
-    );
-  }, []);
-
-  const handlePayNow = () => {
-    if (isLoggedIn) {
-      try {
-        const apiData = {
-          bets: numbers.map(item => ({
-            gameId: item.gameId,
-            groupId: item.groupId,
-            betType: item.label,        
-            selectedNumber: String(item.value), // ensure it's a string
-            betCount: item.count,     
-            amount: item.price, 
-          }))
-        };
-  
-        const resultAction = dispatch(payNow(apiData));  // 👈 no extra wrapper
-        unwrapResult(resultAction);
-      } catch (error: any) {
-        console.log('error', error);
+    dispatch(getIndividualGameResult(
+      {
+        groupId: 1,
       }
-    } else {
-      navigation.navigate('SignInScreen');
-    }
-  };
-  
+    ));
+  }, []);
 
 
   return (
     <View style={styles.mainContainer}>
+
       {islast30sec && <Show30SecondsModal />}
       <ScrollView
         scrollEnabled
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
         nestedScrollEnabled
-        contentContainerStyle={{ paddingBottom: Scale(100) }}
-      >
-         {/* <CustomLoader visible={individualGameDataLoader} /> */}
+        contentContainerStyle={{ paddingBottom: Scale(100) }}>
         <GameHeader
-          HeaderText={individualGameData[0]?.name}// {gameData.name}
+          HeaderText={'3 Digit Game'}
           leftonPress={goBack}
           leftImage={lefArrow}
           rightImage={lefArrow}
@@ -539,7 +563,10 @@ const WinningBalls = "123"
           />
 
           {/* Conditionally Render UI Based on Selection */}
-          <View style={styles.renderDataView}>{renderContent()}</View>
+          <View style={styles.renderDataView}>
+            {renderContent()}
+
+          </View>
           <View>
             <HowToPlayModal />
           </View>
@@ -567,24 +594,21 @@ const WinningBalls = "123"
             borderRadius: Scale(2.5),
             marginVertical: Scale(10),
           },
-        }}
-      >
+        }}>
         <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 20 }}>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-            }}
-          >
+            }}>
             <Text
               style={{
                 fontWeight: 'bold',
                 fontSize: Scale(16),
                 color: 'black',
                 marginHorizontal: Scale(10),
-              }}
-            >
+              }}>
               My Numbers
             </Text>
             <TouchableOpacity onPress={() => setNumbers([])}>
@@ -608,8 +632,7 @@ const WinningBalls = "123"
                   flexDirection: 'row',
                   flexWrap: 'wrap',
                   gap: Scale(10),
-                }}
-              >
+                }}>
                 {numbers.map(item => (
                   <View
                     key={item.id}
@@ -621,15 +644,13 @@ const WinningBalls = "123"
                       paddingHorizontal: Scale(15),
                       paddingVertical: Scale(8),
                       position: 'relative',
-                    }}
-                  >
+                    }}>
                     <Text
                       style={{
                         fontSize: Scale(14),
                         fontWeight: 'bold',
                         color: '#000',
-                      }}
-                    >
+                      }}>
                       {item.label} = {item.value}
                     </Text>
 
@@ -639,15 +660,13 @@ const WinningBalls = "123"
                         borderRadius: Scale(5),
                         paddingHorizontal: Scale(5),
                         marginLeft: Scale(5),
-                      }}
-                    >
+                      }}>
                       <Text
                         style={{
                           fontSize: Scale(12),
                           fontWeight: 'bold',
                           color: 'white',
-                        }}
-                      >
+                        }}>
                         x{item.count}
                       </Text>
                     </View>
@@ -669,8 +688,7 @@ const WinningBalls = "123"
                         shadowOpacity: 0.2,
                         shadowRadius: 3,
                         elevation: 3, // Android shadow
-                      }}
-                    >
+                      }}>
                       <Image
                         source={cancel}
                         style={{ width: Scale(10), height: Scale(10) }}
@@ -685,21 +703,14 @@ const WinningBalls = "123"
         </View>
       </RBSheet>
       <SafeAreaView
-        style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
-      >
+        style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
         <View
-          style={{
-            backgroundColor: '#3e0d0d',
-            height: Scale(80),
-            elevation: 10,
-          }}
-        >
+          style={{ backgroundColor: '#3e0d0d', height: Scale(80), elevation: 10 }}>
           <GameFooter
             openSheet={() => refRBSheet.current.open()}
             totalAmount={sum}
             totalCount={sum1}
             isDisabled={sum1 === 0 || islast30sec}
-            handlePayNow={handlePayNow}
           />
         </View>
       </SafeAreaView>
@@ -714,7 +725,7 @@ const styles = StyleSheet.create({
   },
   subContainer: {
     flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: 10
   },
   container: {
     flex: 1,
@@ -739,7 +750,7 @@ const styles = StyleSheet.create({
     // flexDirection: 'row',
     // borderRadius: 10,
     // width: '100%',
-    // justifyContent: 'center',
+    justifyContent: 'center',
     flex: 1,
   },
   renderDataView: {
@@ -818,6 +829,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 5,
   },
-  headerImg: { width: 30, height: 30 },
+  headerImg: { width: 30, height: 30 }
 });
-export default ThreeDigitMain;
+export default Quick3DScreen;

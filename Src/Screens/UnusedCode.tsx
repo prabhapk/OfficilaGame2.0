@@ -1,8 +1,8 @@
 
 
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
 import React from 'react'
-import { Image } from 'expo-image';
+import FastImage from 'react-native-fast-image'
 import { gifAgent, gifLottery, gifPromotion, gifRefer } from '../../assets/assets'
 import CommonDigits from '../Components/CommonDigits'
 

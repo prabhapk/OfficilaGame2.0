@@ -23,15 +23,28 @@ import {
 } from '../../assets/assets';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
-import { setMobileNumber, setOtp, setReferralCode, setIsEighteenPlus, setIsNotify, GetRegistrationOtp, VerifyRegisterationOtp } from '../Redux/Slice/signUpSlice';
+import {
+  setMobileNumber,
+  setOtp,
+  setReferralCode,
+  setIsEighteenPlus,
+  setIsNotify,
+  GetRegistrationOtp,
+  VerifyRegisterationOtp,
+} from '../Redux/Slice/signUpSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Toast from 'react-native-toast-message';
+import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
 const SignUpScreen = ({ navigation }: any) => {
-
   const dispatch = useDispatch();
-  const { mobileNumber, otp, referralCode, isEighteenPlus, isNotify } = useSelector(
-    (state: RootState) => state.signUpSlice,
-  );
+  const {
+    mobileNumber,
+    otp,
+    referralCode,
+    isEighteenPlus,
+    isNotify,
+    nextButtonLoader,
+  } = useSelector((state: RootState) => state.signUpSlice);
   const [countdown, setCountdown] = useState(0);
 
   const mobileRegex = /^\d{10}$/;
@@ -48,9 +61,9 @@ const SignUpScreen = ({ navigation }: any) => {
     Toast.show({
       type: 'success',
       text1: 'Hello',
-      text2: 'This is some something 👋'
+      text2: 'This is some something 👋',
     });
-  }
+  };
 
   const handleGetOtp = async () => {
     if (mobileNumberValid) {
@@ -91,7 +104,7 @@ const SignUpScreen = ({ navigation }: any) => {
   };
 
   const handleVerifyOtp = async () => {
-    console.log('request handddNext',);
+    console.log('request handddNext');
     try {
       const resultAction = await dispatch(
         VerifyRegisterationOtp({
@@ -159,7 +172,14 @@ const SignUpScreen = ({ navigation }: any) => {
               leftText={true}
             />
             {mobileNumber && !mobileRegex.test(mobileNumber) && (
-              <Text style={{ color: 'red', fontSize: Scale(12), marginLeft: Scale(10), marginBottom: Scale(10), }}>
+              <Text
+                style={{
+                  color: 'red',
+                  fontSize: Scale(12),
+                  marginLeft: Scale(10),
+                  marginBottom: Scale(10),
+                }}
+              >
                 Mobile number must be exactly 10 digits
               </Text>
             )}
@@ -181,12 +201,9 @@ const SignUpScreen = ({ navigation }: any) => {
                     color="#999"
                   />
                 }
-
                 rightButton={
                   countdown > 0 ? (
-                    <Text style={styles.getOtpText}>
-                      {countdown}s
-                    </Text>
+                    <Text style={styles.getOtpText}>{countdown}s</Text>
                   ) : (
                     <TouchableOpacity onPress={handleGetOtp}>
                       {/* // <TouchableOpacity onPress={showToast}> */}
@@ -196,10 +213,14 @@ const SignUpScreen = ({ navigation }: any) => {
                 }
               />
               {otp && !otpRegex.test(otp) && (
-                <Text style={{
-                  color: 'red', fontSize: Scale(12), marginLeft: Scale(10),
-                  marginBottom: Scale(10),
-                }}>
+                <Text
+                  style={{
+                    color: 'red',
+                    fontSize: Scale(12),
+                    marginLeft: Scale(10),
+                    marginBottom: Scale(10),
+                  }}
+                >
                   OTP must be exactly 6 digits
                 </Text>
               )}
@@ -224,12 +245,24 @@ const SignUpScreen = ({ navigation }: any) => {
             </View>
           </View>
           <View style={{ marginHorizontal: Scale(10) }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: Scale(10), marginTop: Scale(10) }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginHorizontal: Scale(10),
+                marginTop: Scale(10),
+              }}
+            >
               <TouchableOpacity
                 style={styles.container}
-                onPress={() => dispatch(setIsEighteenPlus(!isEighteenPlus))}>
+                onPress={() => dispatch(setIsEighteenPlus(!isEighteenPlus))}
+              >
                 <View
-                  style={[styles.circle, isEighteenPlus && styles.checkedCircle]}>
+                  style={[
+                    styles.circle,
+                    isEighteenPlus && styles.checkedCircle,
+                  ]}
+                >
                   {isEighteenPlus && (
                     <Ionicons name="checkmark" size={14} color="#fff" />
                   )}
@@ -237,16 +270,23 @@ const SignUpScreen = ({ navigation }: any) => {
               </TouchableOpacity>
               <Text style={styles.label}>I confirm I am 18+</Text>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: Scale(20), marginHorizontal: Scale(10) }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: Scale(20),
+                marginHorizontal: Scale(10),
+              }}
+            >
               <TouchableOpacity
                 style={styles.container}
-                onPress={() => dispatch(setIsNotify(!isNotify))}>
+                onPress={() => dispatch(setIsNotify(!isNotify))}
+              >
                 <View style={[styles.circle, isNotify && styles.checkedCircle]}>
                   {isNotify && (
                     <Ionicons name="checkmark" size={14} color="#fff" />
                   )}
                 </View>
-
               </TouchableOpacity>
               <Text style={styles.label}>
                 Allow us to notify you important winning information through
@@ -257,18 +297,27 @@ const SignUpScreen = ({ navigation }: any) => {
 
           {/* Login Button */}
           <TouchableOpacity
-            disabled={!mobileNumber || !otp || !isEighteenPlus || !isNotify}
-
-            onPress={() => handleVerifyOtp()}
-            style={[styles.buttonWrapper,
-            { opacity: isFormValid ? 1 : 0.5 }
-            ]}>
+            // disabled={
+            //   !mobileNumber ||
+            //   !otp ||
+            //   !isEighteenPlus ||
+            //   !isNotify ||
+            //   nextButtonLoader
+            // }
+            onPress={() => navigation.navigate('SignUpSetPassword')}
+            style={[styles.buttonWrapper, { opacity: isFormValid ? 1 : 0.5 }]}
+          >
             <LinearGradient
               colors={['#FF4140', '#FFAD45']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={styles.signInButton}>
-              <Text style={styles.signInButtonText}>NEXT</Text>
+              style={styles.signInButton}
+            >
+              {nextButtonLoader ? (
+                <LoadingSpinnerButton color="#fff" durationMs={1000} />
+              ) : (
+                <Text style={styles.signInButtonText}>NEXT</Text>
+              )}
             </LinearGradient>
           </TouchableOpacity>
           <View style={styles.accountTextView}>
@@ -276,7 +325,8 @@ const SignUpScreen = ({ navigation }: any) => {
               Already have an account? {''}
             </Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate('SignInScreen')}>
+              onPress={() => navigation.navigate('SignInScreen')}
+            >
               <Text style={styles.siginText}>Sign in</Text>
             </TouchableOpacity>
           </View>
@@ -428,7 +478,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   container: {
-
     alignItems: 'center',
   },
   circle: {

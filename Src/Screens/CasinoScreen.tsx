@@ -48,7 +48,7 @@ const CasinoScreen: React.FC<CasinoScreenProps> = ({ showHeader =true}) => {
     }
 
     return (
-        <ScrollView style={{ flex: 1, backgroundColor: '#560303' }}>
+        <ScrollView style={{ flex: 1, backgroundColor: '#250f0fff' }}>
            {showHeader&& <View style={{ backgroundColor: COLORS.primary, elevation: 10, }}>
                 <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', padding: 10, textAlign: 'center' }}>Casino</Text>
             </View>}

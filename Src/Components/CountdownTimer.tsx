@@ -18,7 +18,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
   const calculateTimeLeft = () => {
     const now = new Date().getTime();
     const targetDateTime = new Date(targetDate).getTime();
-    console.log("targetDateTime1212",targetDateTime, targetDate, now);
+    // console.log("targetDateTime1212",targetDateTime, targetDate, now);
     const difference = targetDateTime - now;
 
     if (difference > 0) {
@@ -41,10 +41,10 @@ console.log("targetDatetargetDate");
     const timer = setInterval(() => {
       const newTimeLeft = calculateTimeLeft();
       setTimeLeft(newTimeLeft);
-console.log("newTimeLeftqwqwq",newTimeLeft);
+// console.log("newTimeLeftqwqwq",newTimeLeft);
 const now = new Date().toISOString(); // returns ISO 8601 with milliseconds and 'Z'
-console.log(now,newTimeLeft);
-console.log(now,"newTimeLeft");
+// console.log(now,newTimeLeft);
+// console.log(now,"newTimeLeft");
 
       if (!alertTriggered && newTimeLeft.minutes === 0 && newTimeLeft.seconds === 30) {
         setAlertTriggered(true);

@@ -79,7 +79,7 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
                     <Text style={styles.detailText}>Payment</Text>
                 </View>
                 <View style={styles.detailsSubHeader}>
-                    <Text style={styles.detailText}>Betting Time : {bettingTime}</Text>
+                    <Text style={[styles.detailText,{flexWrap:"wrap"}]}>Betting Time :{"\n"}{bettingTime}</Text>
                     <Text style={styles.paymentAmount}>₹ {paymentAmount}</Text>
                 </View>
 
@@ -193,7 +193,7 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
 const styles = StyleSheet.create({
     cardContainer: {
         marginTop: Scale(10),
-        marginHorizontal: Scale(10),
+        // marginHorizontal: Scale(10),
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         backgroundColor: "#8E0B00"

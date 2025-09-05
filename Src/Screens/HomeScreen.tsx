@@ -1,16 +1,19 @@
-import React, { useRef, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { bannerLuna1, bannerLuna2 } from "../../assets/assets";
-import CustomHeader from "../Components/CustomHeader";
-import CommonBanner from "../Components/CommonBanner";
-import { scale } from "react-native-size-matters";
-import { HomeScreenFlatlist } from "../Constants/CommonFlatlist";
-import HomeScreenGameHeaders from "../Components/HomeScreenGameHeaders";
-import CasinoScreen from "./CasinoScreen";
-import LotteryScreen from "./Lottery/LotteryScreen";
-import CustomLoader from "../Components/CustomLoader";
+import React, { use, useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { bannerLuna1, bannerLuna2 } from '../../assets/assets';
+import CustomHeader from '../Components/CustomHeader';
+import CommonBanner from '../Components/CommonBanner';
+import Scale from '../Components/Scale';
+import { HomeScreenFlatlist } from '../Constants/CommonFlatlist';
+import HomeScreenGameHeaders from '../Components/HomeScreenGameHeaders';
+import CasinoScreen from './CasinoScreen';
+import LotteryScreen from './Lottery/LotteryScreen';
+import CustomLoader from '../Components/CustomLoader';
+import { useDispatch } from 'react-redux';
+import { getAllGamesList } from '../Redux/Slice/HomeSlice';
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
+  const dispatch = useDispatch();
   const [gameList, setGameList] = useState(HomeScreenFlatlist);
   const [selectedGameId, setSelectedGameId] = useState(1);
 
@@ -23,13 +26,17 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     // {id: 4, name: banner4},
   ];
 
+  useEffect(() => {
+    dispatch(getAllGamesList());
+  }, []);
+
   const openDrawerdd = () => {
-    console.log("openDrawerdd", navigation.toggleDrawer);
+    console.log('openDrawerdd', navigation.toggleDrawer);
     navigation.toggleDrawer();
   };
 
   const handleSelectGameHeader = (id: number) => {
-    const updatedList = gameList.map((item) => ({
+    const updatedList = gameList.map(item => ({
       ...item,
       isSelected: item.id === id,
     }));
@@ -41,7 +48,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     switch (selectedGameId) {
       case 1:
         return (
-          <View style={{ marginTop: scale(10) }}>
+          <View style={{ marginTop: Scale(10) }}>
             <CasinoScreen showHeader={false} />
           </View>
         );
@@ -75,14 +82,14 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#560303" }}>
+    <View style={{ flex: 1, backgroundColor: '#250f0fff' }}>
       <CustomHeader
         onMenuPress={openDrawerdd}
         onLoginPress={() => {
-          navigation.navigate("SignInScreen");
+          navigation.navigate('SignInScreen');
         }}
         registerPress={() => {
-          navigation.navigate("SignUpScreen");
+          navigation.navigate('SignUpScreen');
         }}
       />
       <CustomLoader visible={loader} />

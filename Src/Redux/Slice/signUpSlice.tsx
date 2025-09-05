@@ -19,7 +19,13 @@ const initialValues: signUpSliceState = {
   isNotify: false,
   ipAddress: '173.191.40.28',
   registrationType: 'mobile',
-  deviceInfo: '',
+  deviceInfo: {
+    deviceId: '',
+    brand: '',
+    model: '',
+  },
+  nextButtonLoader: false,
+  singUpConfirmLoader: false,
 };
 
 export const GetRegistrationOtp = createAsyncThunk(
@@ -94,7 +100,8 @@ export const RegisterUSer = createAsyncThunk<
   ) => {
     const state = thunkAPI.getState() as RootState;
     const ipAddress = state.signUpSlice.ipAddress;
-    const deviceInfo = state.signUpSlice.deviceInfo.deviceId;
+    const deviceInfo = state.signUpSlice?.deviceInfo?.deviceId;
+    console.log("deviceInfoApiData==>",deviceInfo);
     const registrationType = state.signUpSlice.registrationType;
     const paramsData = {
       ipAddress,
@@ -119,7 +126,7 @@ export const RegisterUSer = createAsyncThunk<
 
       if (response.status === 200) {
         thunkAPI.dispatch(setIsLoggedIn(true));
-        navigation.navigate('BottomNavigation');
+        navigation.navigate('DrawerNavigation');
       }
       console.log('VerifyOtpResponse', response.data);
       return response.data;
@@ -167,12 +174,35 @@ export const signUpSlice = createSlice({
     setIpAddress: (state, action: PayloadAction<string>) => {
       state.ipAddress = action.payload;
     },
-    setDeviceInfo: (state, action: PayloadAction<string>) => {
+    setDeviceInfo: (state, action: PayloadAction<any>) => {
       state.deviceInfo = action.payload;
     },
     setRegistrationType: (state, action: PayloadAction<string>) => {
       state.registrationType = action.payload;
     },
+  },
+  extraReducers: builder => {
+    // Pending 
+    builder.addCase(VerifyRegisterationOtp.pending, (state, action) => {
+      state.nextButtonLoader = true;
+    });
+    builder.addCase(RegisterUSer.pending, (state, action) => {
+      state.singUpConfirmLoader = true;
+    });
+    // Fulfilled
+    builder.addCase(VerifyRegisterationOtp.fulfilled, (state, action) => {
+      state.nextButtonLoader = false;
+    });
+    builder.addCase(RegisterUSer.fulfilled, (state, action) => {
+      state.singUpConfirmLoader = false;
+    });
+    // Rejected
+    builder.addCase(VerifyRegisterationOtp.rejected, (state, action) => {
+      state.nextButtonLoader = false;
+    });
+    builder.addCase(RegisterUSer.rejected, (state, action) => {
+      state.singUpConfirmLoader = false;
+    });
   },
 });
 

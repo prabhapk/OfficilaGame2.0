@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -14,9 +14,13 @@ import CommonTextInput from '../Components/CommonTextInput';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { LinearGradient } from 'expo-linear-gradient';
-import {lefArrow, loginImageBackground, signInLogo} from '../../assets/assets';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../Redux/store';
+import {
+  lefArrow,
+  loginImageBackground,
+  signInLogo,
+} from '../../assets/assets';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../Redux/store';
 import {
   setMobileNumber,
   setPassword,
@@ -25,12 +29,18 @@ import {
 } from '../Redux/Slice/signUpSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Toast from 'react-native-toast-message';
+import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
 
-const SignUpSetPassword = ({navigation}: any) => {
+const SignUpSetPassword = ({ navigation }: any) => {
   const dispatch = useDispatch();
-  const {mobileNumber, password, confirmPassword, referralCode, otp} = useSelector(
-    (state: RootState) => state.signUpSlice,
-  );
+  const {
+    mobileNumber,
+    password,
+    confirmPassword,
+    referralCode,
+    otp,
+    singUpConfirmLoader,
+  } = useSelector((state: RootState) => state.signUpSlice);
   const [passwordError, setPasswordError] = useState('');
   const [confirmError, setConfirmError] = useState('');
   const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
@@ -40,7 +50,9 @@ const SignUpSetPassword = ({navigation}: any) => {
   const handlePassword = (value: string) => {
     dispatch(setPassword(value));
     if (!passwordRegex.test(value)) {
-      setPasswordError('Password must be at least 8 chars, 1 uppercase & 1 special char.');
+      setPasswordError(
+        'Password must be at least 8 chars, 1 uppercase & 1 special char.',
+      );
     } else {
       setPasswordError('');
     }
@@ -54,9 +66,9 @@ const SignUpSetPassword = ({navigation}: any) => {
     }
   };
   const isFormValid =
-  passwordRegex.test(password) &&
-  password === confirmPassword &&
-  mobileNumber;
+    passwordRegex.test(password) &&
+    password === confirmPassword &&
+    mobileNumber;
 
   const handleSingUp = async () => {
     try {
@@ -83,7 +95,7 @@ const SignUpSetPassword = ({navigation}: any) => {
   };
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={{paddingBottom: Scale(30)}}>
+      <ScrollView contentContainerStyle={{ paddingBottom: Scale(30) }}>
         <ImageBackground source={loginImageBackground} style={styles.topImage}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
@@ -103,7 +115,6 @@ const SignUpSetPassword = ({navigation}: any) => {
             <Text style={styles.headerText}>Set password</Text>
           </View>
 
-          {/* Inputs */}
           <View style={styles.inputWrapper}>
             <CommonTextInput
               placeholderText="Enter Mobile number"
@@ -115,7 +126,6 @@ const SignUpSetPassword = ({navigation}: any) => {
               leftIcon={
                 <Ionicons name="call-outline" size={Scale(18)} color="#999" />
               }
-              
             />
             <View style={styles.inputSpacing}>
               <CommonTextInput
@@ -128,9 +138,10 @@ const SignUpSetPassword = ({navigation}: any) => {
                 leftIcon={
                   <Entypo name="dial-pad" size={Scale(18)} color="#999" />
                 }
-                
               />
-               {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+              {passwordError ? (
+                <Text style={styles.errorText}>{passwordError}</Text>
+              ) : null}
             </View>
             <View style={styles.inputSpacing}>
               <CommonTextInput
@@ -144,23 +155,28 @@ const SignUpSetPassword = ({navigation}: any) => {
                   <Entypo name="dial-pad" size={Scale(18)} color="#999" />
                 }
               />
-               {confirmError ? <Text style={styles.errorText}>{confirmError}</Text> : null}
+              {confirmError ? (
+                <Text style={styles.errorText}>{confirmError}</Text>
+              ) : null}
             </View>
           </View>
 
-          {/* Login Button */}
-          <TouchableOpacity 
-          onPress={()=> handleSingUp()
-          }
-          disabled={!isFormValid}
-          style={[styles.buttonWrapper,
-            {opacity: isFormValid ? 1 : 0.5},]}>
+          <TouchableOpacity
+            onPress={() => handleSingUp()}
+            disabled={!isFormValid || singUpConfirmLoader}
+            style={[styles.buttonWrapper, { opacity: isFormValid ? 1 : 0.5 }]}
+          >
             <LinearGradient
               colors={['#FF4140', '#FFAD45']}
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-              style={styles.signInButton}>
-              <Text style={styles.signInButtonText}>Confirm</Text>
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.signInButton}
+            >
+              {singUpConfirmLoader ? (
+                <LoadingSpinnerButton color="#fff" />
+              ) : (
+                <Text style={styles.signInButtonText}>Confirm</Text>
+              )}
             </LinearGradient>
           </TouchableOpacity>
         </View>

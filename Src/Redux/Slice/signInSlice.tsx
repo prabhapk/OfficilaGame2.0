@@ -18,6 +18,8 @@ const initialValues: signInSliceState = {
   refreshAccessToken: '',
   userDetails: {},
   isLoggedIn: false,
+  mainWalletBalance: 0,
+  withdrawBalance: 1,
 }
 
 
@@ -243,6 +245,9 @@ export const signInSlice = createSlice({
       state.refreshAccessToken = action.payload.refreshToken;
       state.userDetails = action.payload.user;
       state.mobileNumber = action.payload.user.mobileNumber;
+      state.mainWalletBalance = action.payload.user?.walletBalance?.rechargeBalance
+      state.withdrawBalance = action.payload.user?.walletBalance?.withdrawBalance
+      ;
       console.log("state.mobileNumber", state.mobileNumber);
       state.isLoading = false;
       

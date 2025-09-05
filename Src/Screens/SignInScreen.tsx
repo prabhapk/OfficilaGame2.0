@@ -20,7 +20,7 @@ import {
   signInCustomerLogo,
   signInLogo,
 } from '../../assets/assets';
-import { GetLoginOtp, SignInOtp, SignInPassword } from '../Redux/Slice/signInSlice';
+import { GetLoginOtp, setIsLoggedIn, SignInOtp, SignInPassword } from '../Redux/Slice/signInSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -79,8 +79,10 @@ const SignInScreen = ({ navigation }: any) => {
     console.log('Sign In clicked');
     // setIsShowAlert(true);
     try {
-      const resultAction = await dispatch(SignInPassword({ mobileNumber, password,navigation: navigation }));
-      unwrapResult(resultAction);
+      // const resultAction = await dispatch(SignInPassword({ mobileNumber, password,navigation: navigation }));
+      // unwrapResult(resultAction);
+      navigation.navigate("DrawerNavigation")
+      dispatch(setIsLoggedIn(true))
       Toast.show({
         type: 'success',
         text1: 'Login Successful',
@@ -186,7 +188,7 @@ const SignInScreen = ({ navigation }: any) => {
                   value={password}
                   onChange={setPassword}
                   isDisabled={false}
-                  secureTextEntry
+                  secureTextEntry= {true}
                   showEyeIcon
                   leftIcon={<Ionicons name="lock-closed-outline" size={Scale(18)} color="#999" />}
                 />

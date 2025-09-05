@@ -4,6 +4,8 @@ import commonSlice from './Slice/commonSlice';
 import  LoaderSlice  from './Slice/loaderSlice';
 import signInSlice from './Slice/signInSlice';
 import signUpSlice from './Slice/signUpSlice';
+import homeSlice from './Slice/HomeSlice';
+import resultSlice from './Slice/resultSlice';
 import storage from '@react-native-async-storage/async-storage';
 import {
   FLUSH,
@@ -27,7 +29,9 @@ const reducers = combineReducers({
   commonSlice:commonSlice,
   LoaderSlice:LoaderSlice,
   signInSlice:signInSlice,
-  signUpSlice:signUpSlice
+  signUpSlice:signUpSlice,
+  homeSlice:homeSlice,
+  resultSlice:resultSlice
 });
 const rootReducer = (state: any, action: AnyAction) => {
   if (action.type === resetState.type) {

@@ -4,6 +4,8 @@ import Scale from './Scale';
 import TableCommonBall from './TableCommonBall';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { COLORS } from '../Constants/Theme';
+import MyBets3DigitsCard from './MyBets3DigitsCard';
+import { hot } from '../../assets/assets';
 
 interface ResultTableProps {
   tableData: any[];
@@ -12,7 +14,7 @@ interface ResultTableProps {
   hidePages?: boolean;
 }
 
-const ResultTable: React.FC<ResultTableProps> = ({ tableData,showHeader,customStyle,hidePages=false }) => {
+const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, customStyle, hidePages = false }) => {
   const [onTableSelect, setOnTableSelect] = useState('ResultHistory');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -59,36 +61,36 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData,showHeader,customSt
 
   return (
     <View>
-      <View style={{ marginTop: Scale(10), marginHorizontal: Scale(10) ,...customStyle}}>
+      <View style={{ marginTop: Scale(10), ...customStyle }}>
         {showHeader && (
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            backgroundColor: '#360400',
-          }}>
-          {['ResultHistory', 'MyOrders'].map(tab => (
-            <TouchableOpacity
-              key={tab}
-              onPress={() => setOnTableSelect(tab)}
-              style={{
-                padding: Scale(10),
-                backgroundColor: '#360400',
-                borderBottomWidth: onTableSelect === tab ? Scale(5) : 0,
-                borderBottomColor: onTableSelect === tab ? '#ff5f5f' : 'transparent',
-              }}>
-              <Text
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              backgroundColor: '#360400',
+            }}>
+            {['ResultHistory', 'MyOrders'].map(tab => (
+              <TouchableOpacity
+                key={tab}
+                onPress={() => setOnTableSelect(tab)}
                 style={{
-                  fontSize: 16,
-                  color: 'white',
                   padding: Scale(10),
-                  fontWeight: onTableSelect === tab ? 'bold' : '400',
+                  backgroundColor: '#360400',
+                  borderBottomWidth: onTableSelect === tab ? Scale(5) : 0,
+                  borderBottomColor: onTableSelect === tab ? '#ff5f5f' : 'transparent',
                 }}>
-                {tab === 'ResultHistory' ? 'Result History' : 'My Order'}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: 'white',
+                    padding: Scale(10),
+                    fontWeight: onTableSelect === tab ? 'bold' : '400',
+                  }}>
+                  {tab === 'ResultHistory' ? 'Result History' : 'My Order'}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         )}
         <View style={{ marginVertical: Scale(20) }}>
           {onTableSelect === 'ResultHistory' ? (
@@ -104,7 +106,7 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData,showHeader,customSt
                   <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Name</Text>
                 </View>
                 <View style={{ flex: 1, alignItems: 'center' }}>
-                  <Text style={{ color:COLORS.white, fontWeight: 'bold' }}>Time</Text>
+                  <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Time</Text>
                 </View>
                 <View style={{ flex: 1.5, flexDirection: 'row', justifyContent: 'center' }}>
                   <TableCommonBall backgroundColor="#DE3C3F" innerText="A" borderColor={'#DE3C3F'} />
@@ -121,7 +123,7 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData,showHeader,customSt
               />
 
               {/* Pagination Controls */}
-             {!hidePages && <View
+              {!hidePages && <View
                 style={{
                   flexDirection: 'row',
                   marginTop: Scale(10),
@@ -183,10 +185,10 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData,showHeader,customSt
                     justifyContent: 'center',
                   }}>
                   <FontAwesome5 name={'chevron-left'} size={15} color={
-                    
+
                     currentPage === 1 ? 'grey' : 'white'
-                    
-                    } />
+
+                  } />
                 </TouchableOpacity>
 
                 {/* Right Arrow */}
@@ -205,21 +207,39 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData,showHeader,customSt
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                  <FontAwesome5 name={'chevron-right'} size={15} 
-                  color={ currentPage === 1 ? 'white' : 'grey'} />
+                  <FontAwesome5 name={'chevron-right'} size={15}
+                    color={currentPage === 1 ? 'white' : 'grey'} />
                 </TouchableOpacity>
               </View>}
             </>
           ) : (
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: 'black',
-                textAlign: 'center',
-              }}>
-              Here your orders will show when you have placed an order.
-            </Text>
+            <>
+              <MyBets3DigitsCard
+                headers={["A", "B", "C"]}
+                myBetsTableData={[
+                  { type: "A", value: 2, payment: 33, result: "No Won" },
+                  { type: "B", value: 3, payment: 33, result: "No Won" },
+                  { type: "C", value: 4, payment: 33, result: "No Won" }
+                ]}
+                id="PK56283947"
+                bettingTime="01-08-2022 12:00 PM"
+                paymentAmount={33}
+                drawTime="01-08-2022 12:00 PM"
+                topBalls={[
+                  { text: "A", color: "#DE3C3F" },
+                  { text: "B", color: "#EC8204" },
+                  { text: "C", color: "#066FEA" }
+                ]}
+                bottomBalls={[
+                  { text: "2", color: "#DE3C3F" },
+                  { text: "3", color: "#EC8204" },
+                  { text: "4", color: "#066FEA" }
+                ]}
+                date="01-08-2022"
+                status="NO WON"
+                imageSource={hot}
+              />
+            </>
           )}
         </View>
       </View>

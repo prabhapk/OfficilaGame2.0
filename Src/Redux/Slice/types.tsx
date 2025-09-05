@@ -39,6 +39,9 @@ export interface CommonSliceState {
     userDetails?: any;
     isLoggedIn?: boolean;
     isLoading?: boolean;
+    mainWalletBalance?: number;
+    withdrawBalance?: number;
+
   }
   export interface signUpSliceState {
     mobileNumber?: string;
@@ -52,6 +55,19 @@ export interface CommonSliceState {
     isNotify?: boolean;
     ipAddress?: string;
     navigation?: any;
-    deviceInfo?: string;
+    deviceInfo?: any;
     registrationType?: string;
+    nextButtonLoader?: boolean;
+    singUpConfirmLoader?: boolean;
+  }
+  export interface homeSliceState {
+    howScreenCommonLoader: boolean;
+    allGamesList: any;
+    individualGameData: any;
+    individualGameDataLoader: boolean;
+  }
+  export interface resultSliceState {
+    resultScreenCommonLoader: boolean;
+    allResultData: any;
+    individualGameResults: any;
   }

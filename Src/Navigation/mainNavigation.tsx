@@ -4,13 +4,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import SplashScreen from '../Screens/splashScreen';
 import Login from '../Screens/Login';
 import BottomNavigation from './BottomNavigation';
-import ThreeDigitMain from '../Screens/ThreeDigitMain';
+import Quick3DScreen from '../Screens/Quick3DScreen';
 import Profile from '../Screens/Profile';
 import SignUpScreen from '../Screens/SignUpScreen';
 import SignInScreen from '../Screens/SignInScreen';
-import UserDetails from '../Screens/UserDetails';
 import PasswordChange from '../Screens/PasswordChange';
-import DummyScreen from '../Screens/DummyScreen';
+import ThreeDigitMain from '../Screens/ThreeDigitMain';
 import LotteryScreen from '../Screens/Lottery/LotteryScreen';
 import ForgotPassword from '../Screens/ForgotPassword';
 import SignUpSetPassword from '../Screens/SignUpSetPassword';
@@ -44,8 +43,8 @@ function MainNavigation() {
           component={BottomNavigation}
         />
         <Stack.Screen
-          name="ThreeDigitMain"
-          component={ThreeDigitMain}
+          name="Quick3DScreen"
+          component={Quick3DScreen}
         />
         <Stack.Screen
           name="Profile"
@@ -60,16 +59,12 @@ function MainNavigation() {
           component={SignUpScreen}
         />
         <Stack.Screen
-          name="UserDetails"
-          component={UserDetails}
-        />
-        <Stack.Screen
           name="PasswordChange"
           component={PasswordChange}
         />
         <Stack.Screen
-          name="DummyScreen"
-          component={DummyScreen}
+          name="ThreeDigitMain"
+          component={ThreeDigitMain}
         />
         <Stack.Screen
           name="LotteryScreen"

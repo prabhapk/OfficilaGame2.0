@@ -28,8 +28,10 @@ import { useDispatch } from 'react-redux';
 import { persistor, resetState, RootState } from '../Redux/store';
 import { setIsLoggedIn } from '../Redux/Slice/signInSlice';
 import { useSelector } from 'react-redux';
+import { formatToDecimal } from '../Utils/Common';
 
 const ProfileScreen = ({ navigation }: any) => {
+  const { isLoggedIn,mainWalletBalance, withdrawBalance } = useSelector((state: RootState) => state.signInSlice);
   const dispatch = useDispatch();
   const [showLogoutButton, setShowLogoutButton] = useState(true);
   
@@ -55,13 +57,12 @@ const ProfileScreen = ({ navigation }: any) => {
       dispatch(setIsLoggedIn(false));
       await persistor.flush();
       persistor.purge();
-      navigation.reset({ index: 0, routes: [{ name: 'BottomNavigation' }] });
+      // navigation.reset({ index: 0, routes: [{ name: 'DrawerNavigation' }] });
+      navigation.replace('DrawerNavigation');
     } catch (error) {
       console.error('Error resetting state:', error);
     }
   };
-const {isLoggedIn} = useSelector((state: RootState) => state.signInSlice);
-console.log("asasasasas",isLoggedIn);
 
   return (
     <View style={styles.safeArea}>
@@ -78,7 +79,7 @@ console.log("asasasasas",isLoggedIn);
               style={[styles.loginBox, styles.loginBoxRow]}
             >
               <Text style={styles.loginText}>Please Login</Text>
-              <Entypo name="chevron-right" size={30} color="white" style={styles.chevronIcon} />
+              <Entypo name="chevron-right" size={Scale(30)} color="white" style={styles.chevronIcon} />
             </LinearGradient>
           </TouchableOpacity>
         ) : (
@@ -93,7 +94,7 @@ console.log("asasasasas",isLoggedIn);
           style={styles.walletCard}
         >
           <Text style={styles.walletTitle}>Total Wallet</Text>
-          <Text style={styles.walletAmount}>₹ 0.00</Text>
+          <Text style={styles.walletAmount}>₹ {formatToDecimal(mainWalletBalance)}</Text>
 
           <View style={styles.walletRow}>
             <View>
@@ -103,7 +104,7 @@ console.log("asasasasas",isLoggedIn);
                   <Image source={tootTipImage} style={styles.tooltipIcon} />
                 </TouchableOpacity>
               </View>
-              <Text style={styles.walletSub}>₹ 0.00</Text>
+              <Text style={styles.walletSub}>₹ {formatToDecimal(mainWalletBalance)}</Text>
             </View>
             <View>
               <View style={styles.rowCenter}>
@@ -112,7 +113,7 @@ console.log("asasasasas",isLoggedIn);
                   <Image source={tootTipImage} style={styles.tooltipIcon} />
                 </TouchableOpacity>
               </View>
-              <Text style={styles.walletSub}>₹ 0.00</Text>
+              <Text style={styles.walletSub}>₹ {formatToDecimal(withdrawBalance)}</Text>
             </View>
           </View>
         </LinearGradient>
@@ -130,7 +131,8 @@ console.log("asasasasas",isLoggedIn);
               end={{ x: 1, y: 0 }}
               style={styles.actionButton}
             >
-              <TouchableOpacity onPress={() => navigation.navigate(btn.route)}>
+              <TouchableOpacity
+               onPress={() => {isLoggedIn ? navigation.navigate(btn.route) : navigation.navigate('SignInScreen')}}>
                 <View style={styles.rowCenter}>
                   <Text style={styles.buttonText}>{btn.label}</Text>
                   <Image source={wallet} resizeMode="contain" style={styles.buttonIcon} />
@@ -142,6 +144,7 @@ console.log("asasasasas",isLoggedIn);
         </View>
 
         {/* VIP Badge */}
+        {isLoggedIn ? (
         <TouchableOpacity
           onPress={() => navigation.navigate('VipLevelDetailsScreen')}
           style={styles.vipTouchable}
@@ -160,12 +163,12 @@ console.log("asasasasas",isLoggedIn);
             </View>
           </ImageBackground>
         </TouchableOpacity>
-
+        ):null}
         {/* Bottom Tabs */}
         <View style={styles.bottomTabs}>
           {tabItems.map(item => (
             <TouchableOpacity 
-            onPress={() => navigation.navigate(item.route)}
+            onPress={() => {isLoggedIn ? navigation.navigate(item.route) : navigation.navigate('SignInScreen')}}
             key={item.label} style={styles.tabCenter}>
               <View>
                 <Image source={item.image} style={styles.tabIcon} />
@@ -183,23 +186,23 @@ console.log("asasasasas",isLoggedIn);
           <View style={styles.inputRow} key={idx}>
             <TouchableOpacity style={styles.inputButton}>
               <Text style={styles.inputLabel}>{label}</Text>
-              <Entypo name="chevron-right" size={20} color="white" />
+              <Entypo name="chevron-right" size={Scale(20)} color="white" />
             </TouchableOpacity>
           </View>
         ))} */}
   
           <View style={styles.inputRow}>
             <TouchableOpacity
-            onPress={() => navigation.navigate('ForgotPassword')}
+            onPress={() => {isLoggedIn ? navigation.navigate('ForgotPassword') : navigation.navigate('SignInScreen')}}
             style={styles.inputButton}>
               <Text style={styles.inputLabel}>Password</Text>
-              <Entypo name="chevron-right" size={20} color="white" />
+              <Entypo name="chevron-right" size={Scale(20)} color="white" />
             </TouchableOpacity>
           </View>
   
 
         {/* Logout */}
-        {showLogoutButton ? (
+        {isLoggedIn ? (
           <View style={styles.logoutWrapper}>
             <TouchableOpacity style={styles.logoutButton} onPress={() => setShowModal(true)}>
               <Text style={styles.logoutText}>LOG OUT</Text>
@@ -260,7 +263,7 @@ const styles = StyleSheet.create({
 
   /* ===== Login ===== */
   loginWrapper: {
-    marginHorizontal: 5,
+    marginHorizontal: Scale(5),
     marginBottom: 16,
   },
   loginBox: {
@@ -279,10 +282,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   chevronIcon: {
-    marginLeft: 10,
+    marginLeft: Scale(10),
   },
   mt20: {
-    marginTop: 20,
+    marginTop: Scale(20),
   },
 
   /* ===== Wallet Card ===== */
@@ -291,13 +294,13 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
-    marginHorizontal: 5,
+    marginHorizontal: Scale(5),
   },
   walletTitle: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: Scale(10),
   },
   walletAmount: {
     fontSize: 28,
@@ -308,7 +311,7 @@ const styles = StyleSheet.create({
   walletRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: Scale(20),
   },
   rowCenter: {
     flexDirection: 'row',
@@ -316,14 +319,14 @@ const styles = StyleSheet.create({
   },
   walletSub: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: Scale(16),
     fontWeight: 'bold',
-    paddingVertical: 5,
+    paddingVertical: Scale(5),
   },
   tooltipIcon: {
-    width: 15,
-    height: 15,
-    marginLeft: 5,
+    width: Scale(15),
+    height: Scale(15),
+    marginLeft: Scale(5),
   },
 
   /* ===== Action Buttons ===== */
@@ -331,8 +334,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 24,
-    marginHorizontal: 5,
-    marginTop: 10,
+    marginHorizontal: Scale(5),
+    marginTop: Scale(10),
   },
   actionButton: {
     width: '48%',
@@ -345,9 +348,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonIcon: {
-    height: 50,
-    width: 50,
-    marginHorizontal: 5,
+    height: Scale(50),
+    width: Scale(50),
+    marginHorizontal: Scale(5),
   },
   buttonText: {
     fontSize: 20,
@@ -362,40 +365,40 @@ const styles = StyleSheet.create({
 
   /* ===== VIP Badge ===== */
   vipTouchable: {
-    marginVertical: 20,
+    marginVertical: Scale(20),
   },
   vipImageBackground: {
     width: '100%',
-    height: 110,
-    borderRadius: 10,
+    height: Scale(110),
+    borderRadius: Scale(10),
     overflow: 'hidden',
   },
   vipTopRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 15,
+    paddingHorizontal: Scale(20),
+    paddingTop: Scale(15),
   },
   vipBadgeImage: {
-    width: 50,
-    height: 50,
+    width: Scale(50),
+    height: Scale(50),
   },
   vipTopRight: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: Scale(20),
   },
   vipText: {
     color: 'white',
-    fontSize: 22,
+    fontSize: Scale(22),
     fontWeight: 'bold',
   },
   vipProgressBackground: {
-    marginTop: 10,
-    marginHorizontal: 20,
+    marginTop: Scale(10),
+    marginHorizontal: Scale(20),
     backgroundColor: 'rgba(255,255,255,0.3)',
-    height: 10,
+    height: Scale(10),
     borderRadius: 999,
     overflow: 'hidden',
   },
@@ -411,26 +414,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 24,
-    marginTop: 20,
+    marginTop: Scale(20),
   },
   tabCenter: {
     alignItems: 'center',
-    marginHorizontal: 5,
+    marginHorizontal: Scale(5),
   },
   tabItem: {
     color: '#fff',
     fontSize: 14,
     textAlign: 'left',
-    marginVertical: 5,
+    marginVertical: Scale(5),
   },
   tabIcon: {
-    height: 60,
-    width: 60,
-    marginBottom: 5,
+    height: Scale(60),
+    width: Scale(60),
+    marginBottom: Scale(5),
   },
   tabBadge: {
-    height: 24,
-    width: 24,
+    height: Scale(24),
+    width: Scale(24),
     position: 'absolute',
     top: 0,
     right: 0,
@@ -445,7 +448,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 5,
+    marginHorizontal: Scale(5),
   },
   inputButton: {
     flexDirection: 'row',
@@ -455,13 +458,13 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: Scale(18),
     fontWeight: 'bold',
   },
 
   /* ===== Logout ===== */
   logoutWrapper: {
-    marginTop: 40,
+    marginTop: Scale(40),
   },
   logoutButton: {
     borderWidth: 2,
@@ -491,31 +494,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: Scale(20),
   },
   modalHeaderText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 24,
+    fontSize: Scale(24),
   },
   modalBodyText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: Scale(16),
     textAlign: 'center',
   },
   modalButtonRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 10,
-    marginTop: 40,
+    marginHorizontal: Scale(10),
+    marginTop: Scale(40),
     justifyContent: 'space-evenly',
   },
   modalButton: {
-    borderRadius: 10,
+    borderRadius: Scale(10),
     backgroundColor: 'white',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: Scale(10),
+    paddingHorizontal: Scale(20),
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
@@ -529,12 +532,12 @@ const styles = StyleSheet.create({
   modalCancelText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: Scale(14),
   },
   modalLogoutText: {
     color: 'red',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: Scale(14),
   },
 });
 
