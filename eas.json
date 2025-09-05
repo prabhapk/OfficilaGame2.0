@@ -1,0 +1,58 @@
+{
+  "cli": {
+    "version": ">= 3.15.1",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development": {
+      "extends": "production",
+      "environment": "production",
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "channel": "development"
+    },
+    "development:device": {
+      "extends": "development",
+      "environment": "production",
+      "distribution": "internal",
+      "channel": "development-device"
+    },
+    "preview": {
+      "extends": "production",
+      "environment": "production",
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "channel": "preview"
+    },
+    "preview:device": {
+      "extends": "preview",
+      "environment": "production",
+      "channel": "preview-device"
+    },
+    "production": {
+      "channel": "production",
+      "environment": "production",
+      "android": {
+        "buildType": "apk",
+        "credentialsSource": "local"
+      }
+    },
+    "local": {
+      "channel": "production",
+      "environment": "production",
+      "android": {
+        "buildType": "apk",
+        "credentialsSource": "local",
+        "gradleCommand": ":app:assembleRelease",
+        "applicationArchivePath": "android/app/build/outputs/apk/release/app-release.apk"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
