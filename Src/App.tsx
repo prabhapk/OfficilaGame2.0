@@ -7,7 +7,7 @@ import axios from 'axios';
 import { setDeviceInfo, setIpAddress } from './Redux/Slice/signUpSlice';
 import { RootState } from './Redux/store';
 import Toast from 'react-native-toast-message'
-import MobileContainer from '../Components/MobileContainer';
+import MobileContainer from './Components/MobileContainer';
 
 const App = () => {
   const dispatch = useDispatch();

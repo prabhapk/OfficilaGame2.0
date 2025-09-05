@@ -78,7 +78,7 @@ console.log("asasasasas",isLoggedIn);
               style={[styles.loginBox, styles.loginBoxRow]}
             >
               <Text style={styles.loginText}>Please Login</Text>
-              <Entypo name="chevron-right" size={Scale(30)} color="white" style={styles.chevronIcon} />
+              <Entypo name="chevron-right" size={30} color="white" style={styles.chevronIcon} />
             </LinearGradient>
           </TouchableOpacity>
         ) : (
@@ -183,7 +183,7 @@ console.log("asasasasas",isLoggedIn);
           <View style={styles.inputRow} key={idx}>
             <TouchableOpacity style={styles.inputButton}>
               <Text style={styles.inputLabel}>{label}</Text>
-              <Entypo name="chevron-right" size={Scale(20)} color="white" />
+              <Entypo name="chevron-right" size={20} color="white" />
             </TouchableOpacity>
           </View>
         ))} */}
@@ -193,7 +193,7 @@ console.log("asasasasas",isLoggedIn);
             onPress={() => navigation.navigate('ForgotPassword')}
             style={styles.inputButton}>
               <Text style={styles.inputLabel}>Password</Text>
-              <Entypo name="chevron-right" size={Scale(20)} color="white" />
+              <Entypo name="chevron-right" size={20} color="white" />
             </TouchableOpacity>
           </View>
   
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
 
   /* ===== Login ===== */
   loginWrapper: {
-    marginHorizontal: Scale(5),
+    marginHorizontal: 5,
     marginBottom: 16,
   },
   loginBox: {
@@ -279,10 +279,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   chevronIcon: {
-    marginLeft: Scale(10),
+    marginLeft: 10,
   },
   mt20: {
-    marginTop: Scale(20),
+    marginTop: 20,
   },
 
   /* ===== Wallet Card ===== */
@@ -291,13 +291,13 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
-    marginHorizontal: Scale(5),
+    marginHorizontal: 5,
   },
   walletTitle: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
-    marginTop: Scale(10),
+    marginTop: 10,
   },
   walletAmount: {
     fontSize: 28,
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
   walletRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: Scale(20),
+    marginTop: 20,
   },
   rowCenter: {
     flexDirection: 'row',
@@ -316,14 +316,14 @@ const styles = StyleSheet.create({
   },
   walletSub: {
     color: '#fff',
-    fontSize: Scale(16),
+    fontSize: 16,
     fontWeight: 'bold',
-    paddingVertical: Scale(5),
+    paddingVertical: 5,
   },
   tooltipIcon: {
-    width: Scale(15),
-    height: Scale(15),
-    marginLeft: Scale(5),
+    width: 15,
+    height: 15,
+    marginLeft: 5,
   },
 
   /* ===== Action Buttons ===== */
@@ -331,8 +331,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 24,
-    marginHorizontal: Scale(5),
-    marginTop: Scale(10),
+    marginHorizontal: 5,
+    marginTop: 10,
   },
   actionButton: {
     width: '48%',
@@ -345,9 +345,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonIcon: {
-    height: Scale(50),
-    width: Scale(50),
-    marginHorizontal: Scale(5),
+    height: 50,
+    width: 50,
+    marginHorizontal: 5,
   },
   buttonText: {
     fontSize: 20,
@@ -362,40 +362,40 @@ const styles = StyleSheet.create({
 
   /* ===== VIP Badge ===== */
   vipTouchable: {
-    marginVertical: Scale(20),
+    marginVertical: 20,
   },
   vipImageBackground: {
     width: '100%',
-    height: Scale(110),
-    borderRadius: Scale(10),
+    height: 110,
+    borderRadius: 10,
     overflow: 'hidden',
   },
   vipTopRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: Scale(20),
-    paddingTop: Scale(15),
+    paddingHorizontal: 20,
+    paddingTop: 15,
   },
   vipBadgeImage: {
-    width: Scale(50),
-    height: Scale(50),
+    width: 50,
+    height: 50,
   },
   vipTopRight: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: Scale(20),
+    paddingHorizontal: 20,
   },
   vipText: {
     color: 'white',
-    fontSize: Scale(22),
+    fontSize: 22,
     fontWeight: 'bold',
   },
   vipProgressBackground: {
-    marginTop: Scale(10),
-    marginHorizontal: Scale(20),
+    marginTop: 10,
+    marginHorizontal: 20,
     backgroundColor: 'rgba(255,255,255,0.3)',
-    height: Scale(10),
+    height: 10,
     borderRadius: 999,
     overflow: 'hidden',
   },
@@ -411,26 +411,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 24,
-    marginTop: Scale(20),
+    marginTop: 20,
   },
   tabCenter: {
     alignItems: 'center',
-    marginHorizontal: Scale(5),
+    marginHorizontal: 5,
   },
   tabItem: {
     color: '#fff',
     fontSize: 14,
     textAlign: 'left',
-    marginVertical: Scale(5),
+    marginVertical: 5,
   },
   tabIcon: {
-    height: Scale(60),
-    width: Scale(60),
-    marginBottom: Scale(5),
+    height: 60,
+    width: 60,
+    marginBottom: 5,
   },
   tabBadge: {
-    height: Scale(24),
-    width: Scale(24),
+    height: 24,
+    width: 24,
     position: 'absolute',
     top: 0,
     right: 0,
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: Scale(5),
+    marginHorizontal: 5,
   },
   inputButton: {
     flexDirection: 'row',
@@ -455,13 +455,13 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     color: '#fff',
-    fontSize: Scale(18),
+    fontSize: 18,
     fontWeight: 'bold',
   },
 
   /* ===== Logout ===== */
   logoutWrapper: {
-    marginTop: Scale(40),
+    marginTop: 40,
   },
   logoutButton: {
     borderWidth: 2,
@@ -491,31 +491,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: Scale(20),
+    marginBottom: 20,
   },
   modalHeaderText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: Scale(24),
+    fontSize: 24,
   },
   modalBodyText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: Scale(16),
+    fontSize: 16,
     textAlign: 'center',
   },
   modalButtonRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: Scale(10),
-    marginTop: Scale(40),
+    marginHorizontal: 10,
+    marginTop: 40,
     justifyContent: 'space-evenly',
   },
   modalButton: {
-    borderRadius: Scale(10),
+    borderRadius: 10,
     backgroundColor: 'white',
-    paddingVertical: Scale(10),
-    paddingHorizontal: Scale(20),
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
@@ -529,12 +529,12 @@ const styles = StyleSheet.create({
   modalCancelText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: Scale(14),
+    fontSize: 14,
   },
   modalLogoutText: {
     color: 'red',
     fontWeight: 'bold',
-    fontSize: Scale(14),
+    fontSize: 14,
   },
 });
 

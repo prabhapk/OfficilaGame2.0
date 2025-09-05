@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import MobileContainer from "./Components/MobileContainer";
+import MobileContainer from "./Src/Components/MobileContainer";
 import React from "react";
 
 import { NavigationContainer } from '@react-navigation/native';
