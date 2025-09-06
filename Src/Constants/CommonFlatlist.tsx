@@ -1,4 +1,4 @@
-import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, homeActiveTab, homeTab, hot, inviteActiveTab, inviteTab, jdb, Jili, lottery1, meActiveTab, meTab, pg, quick3dMenu, quick3min, resultActiveTab, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threePatti } from "../../assets/assets";
+import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, fiveMin3DImage, homeActiveTab, homeTab, hot, inviteActiveTab, inviteTab, jdb, Jili, lottery1, meActiveTab, meTab, oneMin3DImage, pg, quick3dMenu, quick3min, resultActiveTab, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
 import CasinoScreen from "../Screens/CasinoScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import InviteScreen from "../Screens/InviteScreen";
@@ -6,11 +6,11 @@ import Profile from "../Screens/Profile";
 import ResultScreen from "../Screens/ResultScreen";
 
 export const HomeScreenFlatlist = [
-    {id: 1, isSelected:true, image:casino},
-    {id: 2, isSelected:false, image:lottery1},
-    {id:3, isSelected:false, image:scratch},
-    {id:4, isSelected:false, image:rummy},
-    {id:5, isSelected:false, image:sports}
+    // {id: 1, isSelected:true, image:casino},
+    {id: 1, isSelected:true, image:lottery1},
+    // {id:3, isSelected:false, image:scratch},
+    // {id:4, isSelected:false, image:rummy},
+    // {id:5, isSelected:false, image:sports}
 ]
 
 export const CasionHeadersList = [
@@ -28,9 +28,15 @@ export const CasionGamesList = [
 ]
 
 export const lotteryGamesList = [
-    {id: 1, name:"color", image:color},
-    {id: 2, name:"dice", image:dice},
+    {id: 1, name:"color", image:digit},
+    {id: 2, name:"dice", image:digit},
     {id:3, name:"3digit", image:digit}
+]
+
+export const ThreeDigitsLottery = [
+       {id: 1, name:"1minGame", image:oneMin3DImage},
+    {id: 2, name:"3minGame", image:threeMin3DImage},
+    {id:3, name:"5minGame", image:fiveMin3DImage}
 ]
 
  export const ThreeDigits = [
@@ -131,13 +137,13 @@ export const lotteryGamesList = [
     focusedIcon: homeActiveTab,
     unfocusedIcon: homeTab,
   },
-  {
-    name: 'Casino',
-    component: CasinoScreen,
-    label: 'Casino',
-    focusedIcon:casinoActiveTab,
-    unfocusedIcon: casinoTab,
-  },
+  // {
+  //   name: 'Casino',
+  //   component: CasinoScreen,
+  //   label: 'Casino',
+  //   focusedIcon:casinoActiveTab,
+  //   unfocusedIcon: casinoTab,
+  // },
    {
     name: 'Result',
     component: ResultScreen,

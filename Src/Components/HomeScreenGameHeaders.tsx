@@ -23,7 +23,7 @@ const HomeScreenGameHeaders: React.FC<HeaderProps> = ({
   return (
     <FlatList
       contentContainerStyle={{
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         flex: 1,
         marginHorizontal: Scale(10),
         marginVertical: Scale(10),

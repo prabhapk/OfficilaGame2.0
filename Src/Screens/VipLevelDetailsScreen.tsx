@@ -130,7 +130,7 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
         } more to reach level VIP${selectedVipIndex + 1}`}
         badgeImage={vipCardDatas[selectedVipIndex].image}
       />
-      <ScrollView>
+      <ScrollView  showsVerticalScrollIndicator={false}>
         <View style={{marginTop: Scale(10), marginHorizontal: Scale(10)}}>
           <View style={styles.vipHeaderContainer}>
             <Text style={[styles.vipHeaderText, {flex: 1}]}>VIP LEVEL</Text>
@@ -146,6 +146,7 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
               flexGrow: 1,
             }}
             contentContainerStyle={{paddingBottom: 100}}
+            showsVerticalScrollIndicator={false}
           />
         </View>
       </ScrollView>

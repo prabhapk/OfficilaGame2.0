@@ -53,15 +53,15 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     switch (selectedGameId) {
       case 1:
         return (
-          <View style={{ marginTop: Scale(10) }}>
-            <CasinoScreen showHeader={false} />
-          </View>
+           <>
+            <LotteryScreen />
+          </>
         );
       case 2:
         return (
-          <>
-            <LotteryScreen />
-          </>
+          <View style={{ marginTop: Scale(10) }}>
+            <CasinoScreen showHeader={false} />
+          </View>
         );
       case 3:
         return (

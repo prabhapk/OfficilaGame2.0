@@ -136,6 +136,7 @@ import {
       flex: 1,
       fontSize: Scale(14),
       color: 'black',
+      outlineWidth: 0,
     },
     disabledContainer: {
       backgroundColor: '#f5f5f5',

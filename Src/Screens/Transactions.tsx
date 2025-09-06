@@ -302,6 +302,7 @@ const Transactions = ({navigation}: any) => {
   renderItem={renderItem}
   keyExtractor={(item, index) => index.toString()}
   ListEmptyComponent={() => <Text style={{color: 'white', textAlign: 'center'}}>No data available</Text>}
+  showsVerticalScrollIndicator={false}
 />
   </View>
   );

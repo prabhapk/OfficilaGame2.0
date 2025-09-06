@@ -23,7 +23,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
 import { useNavigation } from '@react-navigation/native';
 import { useContainerScale } from '../hooks/useContainerScale';
-const InviteScreen = () => {
+import NewAppHeader from '../Components/NewAppHeader';
+const InviteScreen = ({route}: any) => {
   const [dateRange, setDateRange] = useState({
     start: new Date(),
     end: new Date(),
@@ -55,8 +56,14 @@ const InviteScreen = () => {
       navigation.navigate('SignInScreen');
     }
   };
+
+  const isProfile = route?.params?.isProfile;
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#380100' }} showsVerticalScrollIndicator={false}>
+     {isProfile &&  <NewAppHeader
+        leftIconPress={() => navigation.goBack()}
+        centerText={'Invite'}
+      />}
       <ImageBackground
         source={invitetop}
         style={{ width: '100%', height: '70%' }}
@@ -120,33 +127,33 @@ const InviteScreen = () => {
               <Text style={styles.heading}>Team data</Text>
             </View>
 
-           <View style={styles.statsRow}>
-  {/* Commission Card */}
-  <View style={styles.statCard}>
-    <Image
-      source={CommissionIcon}
-      style={styles.statBox}
-      contentFit="contain"
-    />
-    <View style={styles.statContent}>
-      <Text style={styles.statAmount}>₹0</Text>
-      <Text style={styles.statLabel}>Commission</Text>
-    </View>
-  </View>
+            <View style={styles.statsRow}>
+              {/* Commission Card */}
+              <View style={styles.statCard}>
+                <Image
+                  source={CommissionIcon}
+                  style={styles.statBox}
+                  contentFit="contain"
+                />
+                <View style={styles.statContent}>
+                  <Text style={styles.statAmount}>₹0</Text>
+                  <Text style={styles.statLabel}>Commission</Text>
+                </View>
+              </View>
 
-  {/* Recharge Card */}
-  <View style={styles.statCard}>
-    <Image
-      source={inviteRecharge}
-      style={styles.statBox}
-      contentFit="contain"
-    />
-    <View style={styles.statContent}>
-      <Text style={styles.statAmount}>₹0</Text>
-      <Text style={styles.statLabel}>Recharges</Text>
-    </View>
-  </View>
-</View>
+              {/* Recharge Card */}
+              <View style={styles.statCard}>
+                <Image
+                  source={inviteRecharge}
+                  style={styles.statBox}
+                  contentFit="contain"
+                />
+                <View style={styles.statContent}>
+                  <Text style={styles.statAmount}>₹0</Text>
+                  <Text style={styles.statLabel}>Recharges</Text>
+                </View>
+              </View>
+            </View>
 
             <View style={styles.settlementBox}>
               <Text style={styles.settlementText}>
@@ -280,33 +287,33 @@ const createStyles = (Scale: any) => StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
   },
-statsRow: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  marginTop: Scale(10),
-},
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: Scale(10),
+  },
 
-statCard: {
-  position: "relative", // important for absolute children
-  marginHorizontal: 5,
-},
+  statCard: {
+    position: "relative", // important for absolute children
+    marginHorizontal: 5,
+  },
 
-statBox: {
-  borderRadius: 10,
-  width: Scale(160),
-  height: Scale(110),
-},
+  statBox: {
+    borderRadius: 10,
+    width: Scale(160),
+    height: Scale(110),
+  },
 
-statContent: {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  padding: 10,
-  justifyContent: "center",
-  alignItems: "center",
-},
+  statContent: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 
 
   statAmount: {

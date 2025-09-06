@@ -136,7 +136,7 @@ const ProfileScreen = ({ navigation }: any) => {
               style={styles.actionButton}
             >
               <TouchableOpacity
-               onPress={() => {!isLoggedIn ? navigation.navigate(btn.route) : navigation.navigate('SignInScreen')}}>
+               onPress={() => {isLoggedIn ? navigation.navigate(btn.route) : navigation.navigate('SignInScreen')}}>
                 <View style={styles.rowCenter}>
                   <Text style={styles.buttonText}>{btn.label}</Text>
                   <Image source={wallet} resizeMode="contain" style={styles.buttonIcon} />
@@ -148,7 +148,7 @@ const ProfileScreen = ({ navigation }: any) => {
         </View>
 
         {/* VIP Badge */}
-        {!isLoggedIn ? (
+        {isLoggedIn ? (
         <TouchableOpacity
           onPress={() => navigation.navigate('VipLevelDetailsScreen')}
           style={styles.vipTouchable}
@@ -172,7 +172,7 @@ const ProfileScreen = ({ navigation }: any) => {
         <View style={styles.bottomTabs}>
           {tabItems.map(item => (
             <TouchableOpacity 
-            onPress={() => {!isLoggedIn ? navigation.navigate(item.route) : navigation.navigate('SignInScreen')}}
+            onPress={() => {isLoggedIn ? navigation.navigate(item.route,{isProfile:true}) : navigation.navigate('SignInScreen')}}
             key={item.label} style={styles.tabCenter}>
               <View>
                 <Image source={item.image} style={styles.tabIcon} />

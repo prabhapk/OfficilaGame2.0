@@ -16,7 +16,7 @@ import {
   lotteryHeader,
 } from '../../../assets/assets';
 import Scale from '../../Components/Scale';
-import { lotteryGamesList, ThreeDigits } from '../../Constants/CommonFlatlist';
+import { lotteryGamesList, ThreeDigits, ThreeDigitsLottery } from '../../Constants/CommonFlatlist';
 import CommonDigits from '../../Components/CommonDigits';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
@@ -38,7 +38,7 @@ const LotteryScreen = () => {
         />
 
         <FlatList
-          data={lotteryGamesList}
+          data={ThreeDigitsLottery}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{
             flexDirection: 'row',

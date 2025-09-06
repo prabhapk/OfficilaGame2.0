@@ -239,6 +239,7 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
                 status="NO WON"
                 imageSource={hot}
               />
+              
             </>
           )}
         </View>

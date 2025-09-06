@@ -71,6 +71,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     // dark input bg
     borderRadius: 8,
+    padding:10,
+    outlineWidth: 0, 
   },
   errorBorder: {
     borderColor: 'red',

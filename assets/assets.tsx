@@ -129,3 +129,8 @@ export const graphIcon= require('./InviteScreen/graph-icon.webp')
 export const CommissionIcon= require('./InviteScreen/commision.webp')
 export const inviteRecharge= require('./InviteScreen/inviteRecharge.webp')
 export const wallet3dImage1 = require('./ProfileScreen/wallet3dImage1.webp')
+
+export const oneMin3DImage = require('./LotteryImages/1min3D.png')
+export const threeMin3DImage = require('./LotteryImages/3min3D.png')
+export const fiveMin3DImage = require('./LotteryImages/5min3D.png')
+export const vipBadgeBackground = require('./vipBadgeBackground.webp')

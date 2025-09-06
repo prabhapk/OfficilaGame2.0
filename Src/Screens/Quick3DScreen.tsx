@@ -104,31 +104,31 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     console.log('Received from DigitComponent:', updatedValue);
     setCartValues(updatedValue);
   };
-  const {allResultData,individualGameResults} = useSelector((state: RootState) => state.resultSlice);
+  const { allResultData, individualGameResults } = useSelector((state: RootState) => state.resultSlice);
 
-console.log("individualGameResults==>", individualGameResults);
+  console.log("individualGameResults==>", individualGameResults);
 
-const transformedData = individualGameResults.map((item: any) => ({
-  ...item,
-  balls: item.winningNumber
-  .split(''),
-}));
- console.log("transformedData==>", transformedData);
- 
+  const transformedData = individualGameResults.map((item: any) => ({
+    ...item,
+    balls: item.winningNumber
+      .split(''),
+  }));
 
-  const ganeData = route.params.gameData;
-  console.log("ganeData", ganeData);
+  console.log("transformedData==>", transformedData);
+
+
+  const gameData = route.params.gameData;
   useEffect(() => {
-    if (ganeData.id === "1minGame") {
+    if (gameData.name === "1minGame") {
       setSelectedOption("1 Mins");
     }
-    else if (ganeData.id === "3minGame") {
+    else if (gameData.name === "3minGame") {
       setSelectedOption("3 Mins");
     }
-    else if (ganeData.id === "5minGame") {
+    else if (gameData.name === "5minGame") {
       setSelectedOption("5 Mins");
     }
-  }, [ganeData])
+  }, [gameData])
   const renderContent = () => {
     switch (selectedOption) {
       case '1 Mins':
@@ -219,21 +219,21 @@ const transformedData = individualGameResults.map((item: any) => ({
   };
 
 
-const handleTimerComplete = () => {
- let updatedTime=""
- if(selectedOption==="1 Mins"){
-  updatedTime = new Date(new Date(min1TargetDate).getTime() + 1 * 60 * 1000).toISOString();
-  dispatch(setMin1TargetDate(updatedTime));
- }
- else if(selectedOption==="3 Mins"){
-  updatedTime = new Date(new Date(min3TargetDate).getTime() + 3 * 60 * 1000).toISOString();
-  dispatch(setMin3TargetDate(updatedTime));
- }
- else if(selectedOption==="5 Mins"){
- updatedTime = new Date(new Date(min5TargetDate).getTime() + 5 * 60 * 1000).toISOString();
- dispatch(setMin5TargetDate(updatedTime));
- }
-console.log(updatedTime,"kokokokokok");
+  const handleTimerComplete = () => {
+    let updatedTime = ""
+    if (selectedOption === "1 Mins") {
+      updatedTime = new Date(new Date(min1TargetDate).getTime() + 1 * 60 * 1000).toISOString();
+      dispatch(setMin1TargetDate(updatedTime));
+    }
+    else if (selectedOption === "3 Mins") {
+      updatedTime = new Date(new Date(min3TargetDate).getTime() + 3 * 60 * 1000).toISOString();
+      dispatch(setMin3TargetDate(updatedTime));
+    }
+    else if (selectedOption === "5 Mins") {
+      updatedTime = new Date(new Date(min5TargetDate).getTime() + 5 * 60 * 1000).toISOString();
+      dispatch(setMin5TargetDate(updatedTime));
+    }
+    console.log(updatedTime, "kokokokokok");
 
   };
 
@@ -489,18 +489,18 @@ console.log(updatedTime,"kokokokokok");
 
   const renderHeader = ({ item }: any) => {
     return (
-     
-        <LinearGradient
-          colors={[
-            selectedOption === item.name ? '#FF4242' : COLORS.secondary, // fallback color
-            selectedOption === item.name ? '#f6c976ff' : COLORS.secondary,
-          ]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={[styles.headerBtn, { backgroundColor: selectedOption === item.name ? 'pink' : 'white', }]}>
-              <TouchableOpacity
-      style={{justifyContent:"center", alignItems:"center"}}
-              onPress={() => handleHeader(item)}>
+
+      <LinearGradient
+        colors={[
+          selectedOption === item.name ? '#FF4242' : COLORS.secondary, // fallback color
+          selectedOption === item.name ? '#f6c976ff' : COLORS.secondary,
+        ]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={[styles.headerBtn, { backgroundColor: selectedOption === item.name ? 'pink' : 'white', }]}>
+        <TouchableOpacity
+          style={{ justifyContent: "center", alignItems: "center" }}
+          onPress={() => handleHeader(item)}>
 
           <Image
             source={sameClock}
@@ -509,7 +509,7 @@ console.log(updatedTime,"kokokokokok");
           />
           <Text
             style={{
-              color: 'white' ,
+              color: 'white',
               marginLeft: 5,
               fontSize: Scale(14),
               fontWeight: 'bold',
@@ -517,9 +517,9 @@ console.log(updatedTime,"kokokokokok");
             }}>
             {item.name}
           </Text>
-            </TouchableOpacity>
-        </LinearGradient>
-    
+        </TouchableOpacity>
+      </LinearGradient>
+
     )
   }
 
@@ -530,7 +530,7 @@ console.log(updatedTime,"kokokokokok");
       }
     ));
   }, []);
-  
+
 
   return (
     <View style={styles.mainContainer}>
@@ -560,7 +560,7 @@ console.log(updatedTime,"kokokokokok");
             keyExtractor={item => item.id.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
-             contentContainerStyle={styles.startView}
+            contentContainerStyle={styles.startView}
             renderItem={renderHeader}
           />
 
@@ -721,117 +721,117 @@ console.log(updatedTime,"kokokokokok");
 };
 const createStyles = (Scale: any) =>
   StyleSheet.create({
-  mainContainer: {
-    backgroundColor: '#3e0d0d',
-    flex: 1,
-    marginBottom: Scale(0),
-  },
-  subContainer: {
-    marginHorizontal: 10,
-    height:verticalScale(100)
-  },
-  container: {
-    flex: 1,
-  },
-  card: {
-    marginTop: Scale(20),
-    backgroundColor: '#5A1C1C',
-    width: '100%',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
-  },
-  cancelImage: {
-    height: Scale(24),
-    width: Scale(24),
-    marginTop: Scale(10),
-  },
-  startView: {
-    // flexDirection: 'row',
-    // borderRadius: 10,
-    // width: '100%',
-    justifyContent: 'center',
-    flex: 1,
-  },
-  renderDataView: {
-    padding: 10,
-    backgroundColor: '#3e0d0d',
-    flex: 1,
-    borderRadius: 10,
-  },
-  gameDetailView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    marginTop: 10,
-    backgroundColor: '#DBCEFB',
-    overflow: 'hidden',
-  },
-  showCountContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#EEF0F6',
-    borderRadius: 30,
-    paddingHorizontal: 5,
-    height: 40,
-    marginLeft: 30,
-  },
-  button: {
-    backgroundColor: '#F5F7FB',
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // marginHorizontal: 20,
-  },
-  symbol: {
-    fontSize: 15,
-    color: 'black',
-  },
-  input: {
-    width: 50, // Set an explicit width to ensure visibility
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000', // Ensure text is visible
-    textAlign: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  valueText: {
-    marginTop: 20,
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  boxButton: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-  },
-  DigitTitleText: {
-    color: '#000',
-    fontWeight: 'bold',
-    fontSize: Scale(16),
-  },
-  DigitTitleText1: {
-    color: '#000',
-    fontWeight: 'bold',
-    fontSize: Scale(14),
-    top: 1,
-  },
-  headerBtn: {
-    alignItems: 'center',
-    borderRadius: Scale(10),
-    padding: Scale(10),
-    justifyContent: 'center',
-    marginHorizontal: Scale(5),
-  },
-  headerImg: { width: Scale(30), height: Scale(30) }
-});
+    mainContainer: {
+      backgroundColor: '#3e0d0d',
+      flex: 1,
+      marginBottom: Scale(0),
+    },
+    subContainer: {
+      marginHorizontal: 10,
+      height: verticalScale(100)
+    },
+    container: {
+      flex: 1,
+    },
+    card: {
+      marginTop: Scale(20),
+      backgroundColor: '#5A1C1C',
+      width: '100%',
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      elevation: 3,
+    },
+    cancelImage: {
+      height: Scale(24),
+      width: Scale(24),
+      marginTop: Scale(10),
+    },
+    startView: {
+      // flexDirection: 'row',
+      // borderRadius: 10,
+      // width: '100%',
+      justifyContent: 'center',
+      flex: 1,
+    },
+    renderDataView: {
+      padding: 10,
+      backgroundColor: '#3e0d0d',
+      flex: 1,
+      borderRadius: 10,
+    },
+    gameDetailView: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingHorizontal: 10,
+      marginTop: 10,
+      backgroundColor: '#DBCEFB',
+      overflow: 'hidden',
+    },
+    showCountContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: '#EEF0F6',
+      borderRadius: 30,
+      paddingHorizontal: 5,
+      height: 40,
+      marginLeft: 30,
+    },
+    button: {
+      backgroundColor: '#F5F7FB',
+      width: 30,
+      height: 30,
+      borderRadius: 15,
+      justifyContent: 'center',
+      alignItems: 'center',
+      // marginHorizontal: 20,
+    },
+    symbol: {
+      fontSize: 15,
+      color: 'black',
+    },
+    input: {
+      width: 50, // Set an explicit width to ensure visibility
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#000', // Ensure text is visible
+      textAlign: 'center',
+    },
+    buttonText: {
+      color: '#fff',
+      fontSize: 16,
+    },
+    valueText: {
+      marginTop: 20,
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
+    boxButton: {
+      backgroundColor: '#007AFF',
+      paddingVertical: 12,
+      paddingHorizontal: 20,
+      borderRadius: 10,
+    },
+    DigitTitleText: {
+      color: '#000',
+      fontWeight: 'bold',
+      fontSize: Scale(16),
+    },
+    DigitTitleText1: {
+      color: '#000',
+      fontWeight: 'bold',
+      fontSize: Scale(14),
+      top: 1,
+    },
+    headerBtn: {
+      alignItems: 'center',
+      borderRadius: Scale(10),
+      padding: Scale(10),
+      justifyContent: 'center',
+      marginHorizontal: Scale(5),
+    },
+    headerImg: { width: Scale(30), height: Scale(30) }
+  });
 export default Quick3DScreen;

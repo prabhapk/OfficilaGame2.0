@@ -30,7 +30,7 @@ import TableCommonBall from '../Components/TableCommonBall';
 import MyBets3DigitsCard from '../Components/MyBets3DigitsCard';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useContainerScale } from '../hooks/useContainerScale';
-const MyBetsScreen = ({navigation}: any) => {
+const MyBetsScreen = ({ navigation }: any) => {
     const { Scale, verticalScale } = useContainerScale();
     const styles = createStyles(Scale);
     const [selectedHeaderId, setSelectedHeaderId] = useState(1);
@@ -75,22 +75,22 @@ const MyBetsScreen = ({navigation}: any) => {
         >
             <View style={{ backgroundColor: COLORS.primary, elevation: 10, }}>
                 <View style={styles.headrrcontainer}>
-                <TouchableOpacity
+                    <TouchableOpacity
                         style={{
                             flexDirection: 'row',
                             alignItems: 'center',
                             paddingHorizontal: 10,
                             paddingVertical: 5,
                         }}
-                        onPress={() => navigation.navigate('ProfileScreen')}
+                        onPress={() => navigation.pop()}
                     >
-                     <Image
-          source={lefArrow}
-          tintColor={'#fff'}
-          resizeMode="contain"
-          style={{width: Scale(20), height: Scale(20)}} 
-        />
-                     
+                        <Image
+                            source={lefArrow}
+                            tintColor={'#fff'}
+                            resizeMode="contain"
+                            style={{ width: Scale(20), height: Scale(20) }}
+                        />
+
                     </TouchableOpacity>
                     <View style={{ width: Scale(100) }} />
                     <Text style={styles.resultText}>My Bets</Text>
@@ -167,98 +167,98 @@ export default MyBetsScreen;
 
 const createStyles = (Scale: any) =>
     StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginHorizontal: Scale(10),
-        padding: 5,
-        justifyContent: 'center',
-        paddingHorizontal: Scale(12),
-    },
-    selectedContainer: {
-        borderTopColor: '#FF5A5A',
-        borderTopLeftRadius: Scale(5),
-        borderTopRightRadius: Scale(5),
-        borderTopWidth: Scale(3),
-        width: Scale(30),
-    },
-    headerText: { fontSize: Scale(16), color: '#987E7E', top: 3 },
-    selectedHeaderText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: Scale(16),
-    },
-    menuContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    loginButton: {
-        padding: 8,
-        paddingHorizontal: 20,
-        backgroundColor: '#ccc',
-        borderRadius: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    refImage: { width: Scale(30), height: Scale(30) },
-    headrrcontainer: {
-        backgroundColor: '#3C0D0D', // Dark maroon
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 16,
-        paddingVertical: 16,
-    },
-    resultText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'white',
-        textAlign: 'center',
-    },
-    filterButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'white',
-        borderRadius: 6,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-    },
-    filterText: {
-        color: 'white',
-        fontSize: 14,
-    },
-    modalBackdrop: {
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.4)',
-    },
-    modalContainer: {
-        position: 'absolute',
-        top: Scale(100), // Adjust based on your layout
-        width: '100%',
-        alignSelf: 'center',
-        maxHeight: Scale(250),
-        backgroundColor: '#481616',
-        borderRadius: Scale(5),
-        paddingVertical: Scale(10),
-    },
-    scrollContent: {
-        marginHorizontal: Scale(5),
-    },
-    optionItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: Scale(5),
-        backgroundColor: '#481616',
-        justifyContent: 'space-between',
-    },
-    optionText: {
-        fontSize: 16,
-        color: 'white',
-        padding: Scale(10),
-        fontWeight: '400',
-    },
-    selectedText: {
-        fontWeight: 'bold',
-    },
-});
+        container: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginHorizontal: Scale(10),
+            padding: 5,
+            justifyContent: 'center',
+            paddingHorizontal: Scale(12),
+        },
+        selectedContainer: {
+            borderTopColor: '#FF5A5A',
+            borderTopLeftRadius: Scale(5),
+            borderTopRightRadius: Scale(5),
+            borderTopWidth: Scale(3),
+            width: Scale(30),
+        },
+        headerText: { fontSize: Scale(16), color: '#987E7E', top: 3 },
+        selectedHeaderText: {
+            color: '#fff',
+            fontWeight: 'bold',
+            fontSize: Scale(16),
+        },
+        menuContainer: {
+            flexDirection: 'row',
+            alignItems: 'center',
+        },
+        loginButton: {
+            padding: 8,
+            paddingHorizontal: 20,
+            backgroundColor: '#ccc',
+            borderRadius: 50,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        refImage: { width: Scale(30), height: Scale(30) },
+        headrrcontainer: {
+            backgroundColor: '#3C0D0D', // Dark maroon
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 16,
+            paddingVertical: 16,
+        },
+        resultText: {
+            fontSize: 16,
+            fontWeight: 'bold',
+            color: 'white',
+            textAlign: 'center',
+        },
+        filterButton: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderWidth: 1,
+            borderColor: 'white',
+            borderRadius: 6,
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+        },
+        filterText: {
+            color: 'white',
+            fontSize: 14,
+        },
+        modalBackdrop: {
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.4)',
+        },
+        modalContainer: {
+            position: 'absolute',
+            top: Scale(100), // Adjust based on your layout
+            width: '100%',
+            alignSelf: 'center',
+            maxHeight: Scale(250),
+            backgroundColor: '#481616',
+            borderRadius: Scale(5),
+            paddingVertical: Scale(10),
+        },
+        scrollContent: {
+            marginHorizontal: Scale(5),
+        },
+        optionItem: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingVertical: Scale(5),
+            backgroundColor: '#481616',
+            justifyContent: 'space-between',
+        },
+        optionText: {
+            fontSize: 16,
+            color: 'white',
+            padding: Scale(10),
+            fontWeight: '400',
+        },
+        selectedText: {
+            fontWeight: 'bold',
+        },
+    });

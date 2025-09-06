@@ -435,6 +435,7 @@ const createStyles = (Scale: any) =>
     fontSize: Scale(16),
     color: 'white',
     fontWeight: 'bold',
+    outlineWidth: 0,
   },
   optionContent: {
     flexDirection: 'row',
