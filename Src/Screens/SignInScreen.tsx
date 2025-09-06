@@ -124,7 +124,7 @@ const SignInScreen = ({ navigation }: any) => {
   const styles = createStyles(Scale);
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={{ paddingBottom: Scale(30) }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: Scale(30) }} showsVerticalScrollIndicator={false}>
         {/* <Image source={loginImageBackground} style={styles.topImage} /> */}
         <ImageBackground source={loginImageBackground} style={styles.topImage}>
           <TouchableOpacity

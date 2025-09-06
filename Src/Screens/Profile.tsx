@@ -70,7 +70,7 @@ const ProfileScreen = ({ navigation }: any) => {
 
   return (
     <View style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         {!isLoggedIn ? (
           <TouchableOpacity
             onPress={() => navigation.navigate('SignInScreen')}

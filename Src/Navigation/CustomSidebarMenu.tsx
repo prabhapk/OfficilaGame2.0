@@ -83,9 +83,8 @@ const CustomSidebarMenu = ({ navigation }: any) => {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image
             source={homeAppIcon}
-            // tintColor={'#fff'}
             contentFit='contain'
-            style={{ width: Scale(120), backgroundColor:"white" }}
+            style={{ width: Scale(140),height:Scale(60)}}
           />
           {/* <Text style={{ color: '#fff' }}>AppName</Text> */}
           {!isLoggedIn && (
