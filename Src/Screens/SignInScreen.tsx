@@ -10,7 +10,6 @@ import {
   ImageBackground,
   Alert,
 } from 'react-native';
-import Scale from '../Components/Scale';
 import CommonTextInput from '../Components/CommonTextInput';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -26,6 +25,7 @@ import Toast from 'react-native-toast-message';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { RootState } from '../Redux/store';
 import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
+import { useContainerScale } from '../hooks/useContainerScale';
 
 const SignInScreen = ({ navigation }: any) => {
   const [selectedTab, setSelectedTab] = useState<'password' | 'otp'>('password');
@@ -120,6 +120,8 @@ const SignInScreen = ({ navigation }: any) => {
     }
   };
 
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={{ paddingBottom: Scale(30) }}>
@@ -266,7 +268,8 @@ const SignInScreen = ({ navigation }: any) => {
 
 export default SignInScreen;
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#360400',

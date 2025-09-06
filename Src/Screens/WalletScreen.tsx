@@ -12,12 +12,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Scale from '../Components/Scale';
 import { walletMini, refresh, lefArrow, checkBox } from '../../assets/assets';
 import NewAppHeader from '../Components/NewAppHeader';
-
+import { useContainerScale } from '../hooks/useContainerScale';
 const WalletScreenUI = ({navigation}: any) => {
   const [walletAmount, setWalletAmount] = useState(0);
   const [selectedAmount, setSelectedAmount] = useState('');
   const amounts = ['500', '1000', '2000', '5000', '10000', '20000', '50000', '300'];
   const [selectedRechargeOption, setSelectedRechargeOption] = useState<'option1' | 'option2' | null>(null);
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <View style={{flex: 1, backgroundColor: '#360400'}}>
       <NewAppHeader
@@ -227,7 +229,8 @@ const WalletScreenUI = ({navigation}: any) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#360400',

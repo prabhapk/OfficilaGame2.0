@@ -36,7 +36,7 @@ export default function MobileContainer({ children }: { children: React.ReactNod
 const styles = StyleSheet.create({
   webWrapper: {
     flex: 1,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#250f0fff",
     alignItems: "center",
     justifyContent: "center",
   },

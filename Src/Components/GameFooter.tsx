@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
 import { useNavigation } from '@react-navigation/native';
+import { useContainerScale } from '../hooks/useContainerScale';
 
 interface Props {
   openSheet: (event: GestureResponderEvent) => void;
@@ -29,6 +30,7 @@ const GameFooter: React.FC<Props> = ({
   isDisabled,
   handlePayNow,
 }) => {
+  const { Scale, verticalScale } = useContainerScale();
   const { isLoggedIn, mainWalletBalance } = useSelector(
     (state: RootState) => state.signInSlice,
   );

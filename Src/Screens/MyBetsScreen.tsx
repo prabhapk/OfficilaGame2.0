@@ -21,16 +21,18 @@ import {
 import { COLORS } from '../Constants/Theme';
 import ResultTable from '../Components/ResultTable';
 import { tableData } from '../Utils/Constants';
-import Scale from '../Components/Scale';
 import Icon from 'react-native-vector-icons/Feather'; // for filter icon
 import Entypo from 'react-native-vector-icons/Entypo';
-import { checked, hot, unchecked } from '../../assets/assets';
+import { checked, hot, lefArrow, unchecked } from '../../assets/assets';
 import CustomTabs from '../Components/CustomTabsHeader';
 import CommonBall from '../Components/CommonBall';
 import TableCommonBall from '../Components/TableCommonBall';
 import MyBets3DigitsCard from '../Components/MyBets3DigitsCard';
 import DateTimePicker from '@react-native-community/datetimepicker';
-const MyBetsScreen = () => {
+import { useContainerScale } from '../hooks/useContainerScale';
+const MyBetsScreen = ({navigation}: any) => {
+    const { Scale, verticalScale } = useContainerScale();
+    const styles = createStyles(Scale);
     const [selectedHeaderId, setSelectedHeaderId] = useState(1);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedFilerId, setSelectedFilerId] = useState(1);
@@ -73,6 +75,23 @@ const MyBetsScreen = () => {
         >
             <View style={{ backgroundColor: COLORS.primary, elevation: 10, }}>
                 <View style={styles.headrrcontainer}>
+                <TouchableOpacity
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            paddingHorizontal: 10,
+                            paddingVertical: 5,
+                        }}
+                        onPress={() => navigation.navigate('ProfileScreen')}
+                    >
+                     <Image
+          source={lefArrow}
+          tintColor={'#fff'}
+          resizeMode="contain"
+          style={{width: Scale(20), height: Scale(20)}} 
+        />
+                     
+                    </TouchableOpacity>
                     <View style={{ width: Scale(100) }} />
                     <Text style={styles.resultText}>My Bets</Text>
                     <TouchableOpacity
@@ -146,7 +165,8 @@ const MyBetsScreen = () => {
 
 export default MyBetsScreen;
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+    StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',

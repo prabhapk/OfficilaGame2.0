@@ -35,7 +35,10 @@ import {
 import { unwrapResult } from '@reduxjs/toolkit';
 import Toast from 'react-native-toast-message';
 import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
+import { useContainerScale } from '../hooks/useContainerScale';
 const SignUpScreen = ({ navigation }: any) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   const dispatch = useDispatch();
   const {
     mobileNumber,
@@ -338,7 +341,8 @@ const SignUpScreen = ({ navigation }: any) => {
 
 export default SignUpScreen;
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#360400',

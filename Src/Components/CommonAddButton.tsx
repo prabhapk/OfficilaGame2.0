@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, GestureResponderEvent, StyleSheet, ViewSt
 import React from 'react'
 import Scale from './Scale'
 import { COLORS } from '../Constants/Theme';
+import { useContainerScale } from '../hooks/useContainerScale';
 
 interface Props {
   innerText: string;
@@ -13,6 +14,8 @@ interface Props {
 }
 
 const CommonAddButton: React.FC<Props> = ({ innerText, onPress, opacity, isDisabled, customStyle }) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <View>
       <TouchableOpacity
@@ -31,7 +34,9 @@ const CommonAddButton: React.FC<Props> = ({ innerText, onPress, opacity, isDisab
 
 export default CommonAddButton
 
-const styles = StyleSheet.create({
+
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   btnContainer: {
     
     // backgroundColor: isDisabled ? '#D9D9D9' : '#9800F5',

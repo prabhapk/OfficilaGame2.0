@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import React from 'react';
+import { useContainerScale } from '../hooks/useContainerScale';
 
 interface CountButtonsProps {
   count: number;
@@ -31,6 +32,8 @@ const CountButtons: React.FC<CountButtonsProps> = ({ count, setCount, onHide, mi
       setCount(minValue);
     }
   };
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
 
   return (
     <View style={styles.showCountContainer}>
@@ -51,7 +54,8 @@ const CountButtons: React.FC<CountButtonsProps> = ({ count, setCount, onHide, mi
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   showCountContainer: {
     flexDirection: 'row',
     alignItems: 'center',

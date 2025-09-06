@@ -19,7 +19,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { showHowToPlay } from '../Redux/Slice/commonSlice';
 import HowToPlayModal from '../Components/HowToPlayModal';
 import CommonBall from '../Components/CommonBall';
-import Scale from '../Components/Scale';
 import SingleIntegerTextInput from '../Components/SingleIntegerTextInput';
 import GameFooter from '../Components/GameFooter';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -62,8 +61,10 @@ import DigitComponent from '../Components/DigitComponent';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '../Constants/Theme';
 import { getIndividualGameResult } from '../Redux/Slice/resultSlice';
-
+import { useContainerScale } from '../hooks/useContainerScale';
 const Quick3DScreen = ({ navigation, route }: any) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   const {
     threeDigitA,
     threeDigitB,
@@ -528,7 +529,7 @@ console.log(updatedTime,"kokokokokok");
       }
     ));
   }, []);
-
+  
 
   return (
     <View style={styles.mainContainer}>
@@ -717,14 +718,15 @@ console.log(updatedTime,"kokokokokok");
     </View>
   );
 };
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   mainContainer: {
     backgroundColor: '#3e0d0d',
     flex: 1,
     marginBottom: Scale(0),
   },
   subContainer: {
-    flex: 1,
+    // flex: 1,
     marginHorizontal: 10
   },
   container: {
@@ -824,11 +826,11 @@ const styles = StyleSheet.create({
   },
   headerBtn: {
     alignItems: 'center',
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: Scale(10),
+    padding: Scale(10),
     justifyContent: 'center',
-    marginHorizontal: 5,
+    marginHorizontal: Scale(5),
   },
-  headerImg: { width: 30, height: 30 }
+  headerImg: { width: Scale(30), height: Scale(30) }
 });
 export default Quick3DScreen;

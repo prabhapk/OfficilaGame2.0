@@ -19,19 +19,21 @@ import { lotteryGamesList, ThreeDigits } from '../../Constants/CommonFlatlist';
 import CommonDigits from '../../Components/CommonDigits';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { useContainerScale } from '../../hooks/useContainerScale';
 
 const LotteryScreen = () => {
   const navigation = useNavigation();
   const { allGamesList } = useSelector((state: any) => state.homeSlice);
   console.log("allGamesList", allGamesList);
-  
+  const { Scale, verticalScale } = useContainerScale();
   return (
+    
     <>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Image
           source={lotteryHeader}
           style={{ width: 150, height: 50 }}
-          resizeMode="contain"
+           contentFit='contain'
         />
 
         <FlatList
@@ -51,7 +53,7 @@ const LotteryScreen = () => {
                 <Image
                   source={item.image}
                   style={{ width: Scale(100), height: Scale(100) }}
-                  resizeMode="contain"
+                   contentFit='contain'
                 />
               </TouchableOpacity>
             );
@@ -81,7 +83,7 @@ const LotteryScreen = () => {
           <Image
             source={chipIcon}
             style={{ width: Scale(25), height: Scale(25) }}
-            resizeMode="contain"
+           contentFit='contain'
           />
           <Text
             style={{ fontSize: Scale(16), fontWeight: 'bold', color: 'white' }}

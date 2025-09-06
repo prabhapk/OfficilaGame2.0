@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
 import Scale from './Scale';
 import { betIconCard } from '../../assets/assets';
-
+import { useContainerScale } from '../hooks/useContainerScale';
 interface Props {
     betAmount: number;
     beforeBalance: number;
@@ -21,6 +21,8 @@ const BetsCard : React.FC<Props> = (
           orderNumber}
     : Props
 ) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <View>
        <View style={styles.cardContainer}>
@@ -63,7 +65,8 @@ const BetsCard : React.FC<Props> = (
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
     cardContainer: {
       backgroundColor: '#442727',
       borderRadius: Scale(10),

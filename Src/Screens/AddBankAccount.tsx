@@ -10,7 +10,7 @@ import {
 import CustomInput from '../Components/CustomInput';
 import NewAppHeader from '../Components/NewAppHeader';
 import { LinearGradient } from 'expo-linear-gradient';
-import Scale from '../Components/Scale';
+import { useContainerScale } from '../hooks/useContainerScale';
 
 const AddBankCardScreen = ({ navigation }: any) => {
   const [form, setForm] = useState({
@@ -36,6 +36,8 @@ const AddBankCardScreen = ({ navigation }: any) => {
     form.upi.trim() &&
     form.upiAgain.trim() &&
     form.otp.trim();
+    const { Scale, verticalScale } = useContainerScale();
+    const styles = createStyles(Scale);
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -128,7 +130,8 @@ const AddBankCardScreen = ({ navigation }: any) => {
 
 export default AddBankCardScreen;
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#360400',

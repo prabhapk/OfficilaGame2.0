@@ -11,7 +11,7 @@ import {
   import React, {useState} from 'react';
   import Ionicons from 'react-native-vector-icons/Ionicons';
   import Scale from './Scale';
-  
+  import { useContainerScale } from '../hooks/useContainerScale';
   interface Props {
     isDisabled: boolean;
     value: any;
@@ -45,6 +45,8 @@ import {
   }) => {
     const [isOnFocus, setIsOnFocus] = useState(false);
     const [isTextSecure, setIsTextSecure] = useState(secureTextEntry);
+    const { Scale, verticalScale } = useContainerScale();
+    const styles = createStyles(Scale);
   
     const toggleSecureEntry = () => {
       setIsTextSecure(prev => !prev);
@@ -110,7 +112,8 @@ import {
     );
   };
   
-  const styles = StyleSheet.create({
+  const createStyles = (Scale: any) =>
+    StyleSheet.create({
     container: {
       marginBottom: Scale(20),
       flex: 1,

@@ -6,10 +6,10 @@ import CountButtons from './CountButtons';
 import CommonAddButton from './CommonAddButton';
 import CommonQuickGuess from './CommonQuickGuess';
 import ResultTable from './ResultTable';
-import Scale from './Scale';
 import CountdownTimer from './CountdownTimer';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
+import { useContainerScale } from '../hooks/useContainerScale';
 import {
   setDoubleDigitA1,
   setDoubleDigitA2,
@@ -100,6 +100,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
   doubleDigitGameId,
   threeDigitGameId,
 }) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   const [targetDate, setTargetDate] = useState('2025-07-03T18:35:27.123Z');
 
   const [showAlert, setShowAlert] = useState(false);
@@ -237,8 +239,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
         <View style={styles.gameDetailView}>
           <View
             style={{
-              paddingHorizontal: 10,
-              paddingVertical: 20,
+              paddingHorizontal: Scale(10),
+              paddingVertical: Scale(20),
               flexDirection: 'column',
               flex: 1,
               justifyContent: 'center',
@@ -882,7 +884,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   mainContainer: {
     backgroundColor: '#f7fbff',
     flex: 1,

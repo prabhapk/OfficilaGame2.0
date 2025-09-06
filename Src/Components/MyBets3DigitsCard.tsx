@@ -4,7 +4,7 @@ import Scale from "./Scale"; // adjust path
 import CommonBall from "./CommonBall"; // adjust path
 import TableCommonBall from "./TableCommonBall"; // adjust path
 import { COLORS } from "../Constants/Theme";
-
+import { useContainerScale } from '../hooks/useContainerScale';
 
 type BetData = {
     type: string;
@@ -40,6 +40,8 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
     status,
     imageSource
 }) => {
+    const { Scale, verticalScale } = useContainerScale();
+    const styles = createStyles(Scale);
     return (
         <View style={styles.cardContainer}>
             {/* Header with Image */}
@@ -190,7 +192,8 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
     );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+    StyleSheet.create({
     cardContainer: {
         marginTop: Scale(10),
         // marginHorizontal: Scale(10),

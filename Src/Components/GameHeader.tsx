@@ -16,7 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Theme, { COLORS, Fonts } from '../Constants/Theme';
 import { Image } from 'expo-image';
 import CommonAddButton from './CommonAddButton';
-
+import { useContainerScale } from '../hooks/useContainerScale';
 interface Props {
   HeaderText: string;
   leftonPress: (event: GestureResponderEvent) => void;
@@ -34,6 +34,9 @@ const GameHeader: React.FC<Props> = ({
   onPressWithdraw,
   onPressRecharge,
 }) => {
+
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
 
   return (
     <View style={styles.mainContainer}>
@@ -153,7 +156,9 @@ const GameHeader: React.FC<Props> = ({
   );
 };
 
-const styles = StyleSheet.create({
+
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   mainContainer: {
     height: Scale(270),
   },

@@ -3,13 +3,14 @@ import { View, Text, TouchableOpacity, GestureResponderEvent } from 'react-nativ
 import React from 'react'
 import Scale from './Scale'
 import { COLORS } from '../Constants/Theme';
-
+import { useContainerScale } from '../hooks/useContainerScale';
 interface Props {
   innerText: string;
   onPress: () => void;
 }
 
 const CommonQuickGuess: React.FC<Props> = ({ innerText, onPress }) => {
+  const { Scale, verticalScale } = useContainerScale();
   return (
     <View>
       <TouchableOpacity

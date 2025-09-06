@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { HeaderButton } from '../types'
 import Scale from "./Scale"
-
+import { useContainerScale } from '../hooks/useContainerScale';
 interface Props {
   buttonList: HeaderButton[]
   onButtonPressed: (button: HeaderButton) => void
@@ -19,6 +19,8 @@ const HeaderButtonList: React.FC<Props> = ({
   const [selectedButton, setSelectedButton] = useState<number | null>(
     selectedButtonObject ? selectedButtonObject.id : null,
   )
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   useEffect(() => {
     if (selectedButtonObject) {
       setSelectedButton(selectedButtonObject.id)
@@ -98,7 +100,8 @@ const HeaderButtonList: React.FC<Props> = ({
     </View>
   )
 }
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   buttonsContainer: {
     backgroundColor: "transparent",
   },

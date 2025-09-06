@@ -1,12 +1,11 @@
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import React, { useState } from 'react';
-import Scale from './Scale';
 import TableCommonBall from './TableCommonBall';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { COLORS } from '../Constants/Theme';
 import MyBets3DigitsCard from './MyBets3DigitsCard';
 import { hot } from '../../assets/assets';
-
+import { useContainerScale } from '../hooks/useContainerScale';
 interface ResultTableProps {
   tableData: any[];
   showHeader?: boolean;
@@ -15,6 +14,7 @@ interface ResultTableProps {
 }
 
 const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, customStyle, hidePages = false }) => {
+  const { Scale, verticalScale } = useContainerScale();
   const [onTableSelect, setOnTableSelect] = useState('ResultHistory');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;

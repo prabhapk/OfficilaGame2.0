@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Scale from './Scale';
+import { useContainerScale } from '../hooks/useContainerScale';
 
 type VipCardProps = {
   headerText: string;
@@ -10,6 +10,8 @@ type VipCardProps = {
 };
 
 const VipCard = ({headerText, bottomText, badgeImage}: VipCardProps) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -60,7 +62,8 @@ const VipCard = ({headerText, bottomText, badgeImage}: VipCardProps) => {
     </View>
   );
 };
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
     container: {
       marginTop: Scale(20),
       marginHorizontal: Scale(10),

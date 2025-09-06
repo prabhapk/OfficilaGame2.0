@@ -18,7 +18,7 @@ import { Divider } from '@rneui/base';
 import Modal from 'react-native-modal';
 import CommonTextInput from '../Components/CommonTextInput';
 import NewAppHeader from '../Components/NewAppHeader';
-
+import { useContainerScale } from '../hooks/useContainerScale';
 
 const Withdraw = ({navigation}: any) => {
   const [walletAmount, setWalletAmount] = useState(0);
@@ -28,6 +28,8 @@ const Withdraw = ({navigation}: any) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [withdrawableAmount, setWithdrawableAmount] = useState('');
   const [BankAccountModalVisible, setBankAccountModalVisible] = useState(false);
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <View style={{flex: 1, backgroundColor: '#360400'}}>
       <NewAppHeader
@@ -433,7 +435,8 @@ const Withdraw = ({navigation}: any) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#360400',

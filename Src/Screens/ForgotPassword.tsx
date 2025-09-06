@@ -30,8 +30,11 @@ import {unwrapResult} from '@reduxjs/toolkit';
 import AlertErrorModal from '../Components/Modal/AlertErrorModal';
 import AlertSuccessModal from '../Components/Modal/AlertSuccessModal';
 import Toast from 'react-native-toast-message';
+import { useContainerScale } from '../hooks/useContainerScale';
 
 const ForgotPassword = ({navigation}: any) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   const dispatch = useDispatch();
   const {mobileNumber, otp, newPassword} = useSelector(
     (state: RootState) => state.signInSlice,
@@ -244,7 +247,8 @@ const ForgotPassword = ({navigation}: any) => {
 
 export default ForgotPassword;
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#360400',

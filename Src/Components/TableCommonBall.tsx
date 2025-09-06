@@ -4,8 +4,7 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-import Scale from './Scale';
-
+import { useContainerScale } from '../hooks/useContainerScale';
 interface Props {
   backgroundColor: string;
   innerText: string;
@@ -13,7 +12,8 @@ interface Props {
 }
 
 const TableCommonBall: React.FC<Props> = ({ backgroundColor, innerText, borderColor}) => {
-
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <View
                     style={{
@@ -33,8 +33,8 @@ const TableCommonBall: React.FC<Props> = ({ backgroundColor, innerText, borderCo
                   </View>
   );
 };
-
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   innerTextStyle:{
     color: 'white',
     fontSize: Scale(12),

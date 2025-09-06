@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { useContainerScale } from '../hooks/useContainerScale';
 
 interface CountdownTimerProps {
   targetDate?: string;
@@ -13,6 +14,8 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
   onComplete,
   onThirtySecondsLeft,
 }) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   const isFocused = useIsFocused();
 
   const calculateTimeLeft = () => {
@@ -91,8 +94,8 @@ const now = new Date().toISOString(); // returns ISO 8601 with milliseconds and 
     </View>
   );
 };
-
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",

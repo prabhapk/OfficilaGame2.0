@@ -7,6 +7,7 @@ import BetsCard from '../Components/BetsCard';
 import RechargeCard from '../Components/RechargeCard';
 import { leftArrowHeader } from '../../assets/assets';
 import NewAppHeader from '../Components/NewAppHeader';
+import { useContainerScale } from '../hooks/useContainerScale';
 
 const Transactions = ({navigation}: any) => {
   const [allData, setAllData] = useState<AllData[]>([]);
@@ -18,6 +19,7 @@ const Transactions = ({navigation}: any) => {
   const [rebateData, setRebateData] = useState<RechargeData[]>([]);
   const [transferData, setTransferData] = useState<RechargeData[]>([]);
   const [vipData, setVipData] = useState<RechargeData[]>([]);
+  const { Scale, verticalScale } = useContainerScale();
   const buttons = [
     {id: 1, name: 'All'},
     {id: 2, name: 'WIN'},

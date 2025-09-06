@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {StyleSheet, View, ColorValue, Animated, Easing} from 'react-native';
-
+import { useContainerScale } from '../hooks/useContainerScale';
 interface Props {
   color: ColorValue;
   durationMs?: number;
@@ -31,6 +31,8 @@ const LoadingSpinnerButton = ({color, durationMs = 1000}: Props): JSX.Element =>
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
   });
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
 
   return (
     <View style={styles.container} accessibilityRole="progressbar">
@@ -48,7 +50,8 @@ const LoadingSpinnerButton = ({color, durationMs = 1000}: Props): JSX.Element =>
 
 const height = 24;
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   container: {
     width: height,
     height: height,

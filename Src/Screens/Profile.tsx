@@ -29,6 +29,7 @@ import { persistor, resetState, RootState } from '../Redux/store';
 import { setIsLoggedIn } from '../Redux/Slice/signInSlice';
 import { useSelector } from 'react-redux';
 import { formatToDecimal } from '../Utils/Common';
+import { useContainerScale } from '../hooks/useContainerScale';
 
 const ProfileScreen = ({ navigation }: any) => {
   const { isLoggedIn,mainWalletBalance, withdrawBalance } = useSelector((state: RootState) => state.signInSlice);
@@ -63,6 +64,9 @@ const ProfileScreen = ({ navigation }: any) => {
       console.error('Error resetting state:', error);
     }
   };
+
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
 
   return (
     <View style={styles.safeArea}>
@@ -132,7 +136,7 @@ const ProfileScreen = ({ navigation }: any) => {
               style={styles.actionButton}
             >
               <TouchableOpacity
-               onPress={() => {isLoggedIn ? navigation.navigate(btn.route) : navigation.navigate('SignInScreen')}}>
+               onPress={() => {!isLoggedIn ? navigation.navigate(btn.route) : navigation.navigate('SignInScreen')}}>
                 <View style={styles.rowCenter}>
                   <Text style={styles.buttonText}>{btn.label}</Text>
                   <Image source={wallet} resizeMode="contain" style={styles.buttonIcon} />
@@ -144,7 +148,7 @@ const ProfileScreen = ({ navigation }: any) => {
         </View>
 
         {/* VIP Badge */}
-        {isLoggedIn ? (
+        {!isLoggedIn ? (
         <TouchableOpacity
           onPress={() => navigation.navigate('VipLevelDetailsScreen')}
           style={styles.vipTouchable}
@@ -168,7 +172,7 @@ const ProfileScreen = ({ navigation }: any) => {
         <View style={styles.bottomTabs}>
           {tabItems.map(item => (
             <TouchableOpacity 
-            onPress={() => {isLoggedIn ? navigation.navigate(item.route) : navigation.navigate('SignInScreen')}}
+            onPress={() => {!isLoggedIn ? navigation.navigate(item.route) : navigation.navigate('SignInScreen')}}
             key={item.label} style={styles.tabCenter}>
               <View>
                 <Image source={item.image} style={styles.tabIcon} />
@@ -193,7 +197,7 @@ const ProfileScreen = ({ navigation }: any) => {
   
           <View style={styles.inputRow}>
             <TouchableOpacity
-            onPress={() => {isLoggedIn ? navigation.navigate('ForgotPassword') : navigation.navigate('SignInScreen')}}
+            onPress={() => {!isLoggedIn ? navigation.navigate('ForgotPassword') : navigation.navigate('SignInScreen')}}
             style={styles.inputButton}>
               <Text style={styles.inputLabel}>Password</Text>
               <Entypo name="chevron-right" size={Scale(20)} color="white" />
@@ -202,7 +206,7 @@ const ProfileScreen = ({ navigation }: any) => {
   
 
         {/* Logout */}
-        {isLoggedIn ? (
+        {!isLoggedIn ? (
           <View style={styles.logoutWrapper}>
             <TouchableOpacity style={styles.logoutButton} onPress={() => setShowModal(true)}>
               <Text style={styles.logoutText}>LOG OUT</Text>
@@ -251,7 +255,8 @@ export default ProfileScreen;
 
 
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#360400',

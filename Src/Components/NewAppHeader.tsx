@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, TouchableOpacity, Image, GestureResponderEvent} 
 import Scale from './Scale';
 import React from 'react';
 import { lefArrow } from '../../assets/assets';
-
+import { useContainerScale } from '../hooks/useContainerScale';
 interface customHeaderProps {
   leftIconPress: (event: GestureResponderEvent) => void;
   rightIconPress?:(event: GestureResponderEvent) => void;
@@ -16,6 +16,8 @@ const NewAppHeader: React.FC<customHeaderProps> = ({
   rightIcon,
   centerText,
 }) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -51,7 +53,8 @@ const NewAppHeader: React.FC<customHeaderProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',

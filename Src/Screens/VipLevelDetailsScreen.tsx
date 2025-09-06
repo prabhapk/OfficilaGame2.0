@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import Scale from '../Components/Scale';
 import {
   bonusCash,
   levelEightBadge,
@@ -27,7 +26,10 @@ import {
 } from '../../assets/assets';
 import VipCard from '../Components/VipCard';
 import NewAppHeader from '../Components/NewAppHeader';
+import { useContainerScale } from '../hooks/useContainerScale';
 const VipLevelDetailsScreen = ({navigation}: any) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   const [selectedVipIndex, setSelectedVipIndex] = useState(0);
   const tableDatas = [
     {id: 1, bonus: '0', spin: 'x0', image: levelZeroBadge},
@@ -162,7 +164,8 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   walletCard: {
     borderRadius: Scale(14),
     backgroundColor: '#fff',

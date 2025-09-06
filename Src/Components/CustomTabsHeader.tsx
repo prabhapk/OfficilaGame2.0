@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView, Text } from 'react-native';
+import { useContainerScale } from '../hooks/useContainerScale';
 
 interface TabItem {
   id: number | string;
@@ -16,6 +17,7 @@ interface CustomTabsProps {
 const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, index, onIndexChange, style }) => {
   const scrollRef = useRef<ScrollView>(null);
   const [tabLayouts, setTabLayouts] = useState<{ x: number; width: number }[]>([]);
+  const { Scale, verticalScale } = useContainerScale();
 
   useEffect(() => {
     if (tabLayouts[index] && scrollRef.current) {

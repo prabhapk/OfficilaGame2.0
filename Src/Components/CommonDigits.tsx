@@ -8,7 +8,7 @@ import {
 } from '../Redux/Slice/threeDigitSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
-
+import { useContainerScale } from '../hooks/useContainerScale';
 interface Props {
   data: any;
   onPress3Digits: () => void;
@@ -40,6 +40,8 @@ const CommonDigits: React.FC<Props> = ({ data, onPress3Digits }) => {
     console.log(updatedTime, 'kokokokokok');
   };
   const baseURL=  'http://47.250.52.220'
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <TouchableOpacity onPress={onPress3Digits} style={styles.container}>
       <Image source={{
@@ -65,7 +67,8 @@ const CommonDigits: React.FC<Props> = ({ data, onPress3Digits }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   container: {
     margin: 5,
     width: '47%',

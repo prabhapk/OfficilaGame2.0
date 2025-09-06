@@ -6,8 +6,7 @@ import {
     View,
   } from 'react-native';
   import React, {useState} from 'react';
-  import Scale from './Scale';
-  
+  import { useContainerScale } from '../hooks/useContainerScale';
   interface Props {
     isDisabled: boolean;
     value: any;
@@ -28,6 +27,8 @@ import {
     maxChar,
   }) => {
     const [isOnFocus, setIsOnFocus] = useState(false);
+    const { Scale, verticalScale } = useContainerScale();
+    const styles = createStyles(Scale);
   
     return (
       <KeyboardAvoidingView
@@ -63,7 +64,8 @@ import {
     );
   };
   
-  const styles = StyleSheet.create({
+  const createStyles = (Scale: any) =>
+    StyleSheet.create({
     container: {
       alignItems: 'center',
       justifyContent: 'center',
