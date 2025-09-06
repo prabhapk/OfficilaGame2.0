@@ -62,6 +62,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '../Constants/Theme';
 import { getIndividualGameResult } from '../Redux/Slice/resultSlice';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { verticalScale } from '../Components/Scale';
 const Quick3DScreen = ({ navigation, route }: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -559,7 +560,7 @@ console.log(updatedTime,"kokokokokok");
             keyExtractor={item => item.id.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.startView}
+             contentContainerStyle={styles.startView}
             renderItem={renderHeader}
           />
 
@@ -726,8 +727,8 @@ const createStyles = (Scale: any) =>
     marginBottom: Scale(0),
   },
   subContainer: {
-    // flex: 1,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    height:verticalScale(100)
   },
   container: {
     flex: 1,

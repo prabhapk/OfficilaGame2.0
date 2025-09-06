@@ -22,6 +22,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
 import { useNavigation } from '@react-navigation/native';
+import { useContainerScale } from '../hooks/useContainerScale';
 const InviteScreen = () => {
   const [dateRange, setDateRange] = useState({
     start: new Date(),
@@ -40,6 +41,8 @@ const InviteScreen = () => {
     }
     type === 'start' ? setShowStartPicker(false) : setShowEndPicker(false);
   };
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
 
   const dateOptions = ['Today', 'Yesterday', '3days', '7days', '14days'];
   const { isLoggedIn, userDetails } = useSelector(
@@ -53,7 +56,7 @@ const InviteScreen = () => {
     }
   };
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#380100' }}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#380100' }} showsVerticalScrollIndicator={false}>
       <ImageBackground
         source={invitetop}
         style={{ width: '100%', height: '70%' }}
@@ -112,29 +115,38 @@ const InviteScreen = () => {
               <Image
                 source={graphIcon}
                 style={{ width: Scale(30), height: Scale(30) }}
-                resizeMode="contain"
+                contentFit='contain'
               />
               <Text style={styles.heading}>Team data</Text>
             </View>
 
-            <View style={styles.statsRow}>
-              <ImageBackground
-                source={CommissionIcon}
-                style={styles.statBox}
-                resizeMode="contain"
-              >
-                <Text style={styles.statAmount}>₹0</Text>
-                <Text style={styles.statLabel}>Commission</Text>
-              </ImageBackground>
-              <ImageBackground
-                source={inviteRecharge}
-                style={styles.statBox}
-                resizeMode="contain"
-              >
-                <Text style={styles.statAmount}>₹0</Text>
-                <Text style={styles.statLabel}>Recharges</Text>
-              </ImageBackground>
-            </View>
+           <View style={styles.statsRow}>
+  {/* Commission Card */}
+  <View style={styles.statCard}>
+    <Image
+      source={CommissionIcon}
+      style={styles.statBox}
+      contentFit="contain"
+    />
+    <View style={styles.statContent}>
+      <Text style={styles.statAmount}>₹0</Text>
+      <Text style={styles.statLabel}>Commission</Text>
+    </View>
+  </View>
+
+  {/* Recharge Card */}
+  <View style={styles.statCard}>
+    <Image
+      source={inviteRecharge}
+      style={styles.statBox}
+      contentFit="contain"
+    />
+    <View style={styles.statContent}>
+      <Text style={styles.statAmount}>₹0</Text>
+      <Text style={styles.statLabel}>Recharges</Text>
+    </View>
+  </View>
+</View>
 
             <View style={styles.settlementBox}>
               <Text style={styles.settlementText}>
@@ -250,7 +262,7 @@ const InviteScreen = () => {
 
 export default InviteScreen;
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#240101',
@@ -268,17 +280,35 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
   },
-  statsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: Scale(10),
-  },
-  statBox: {
-    borderRadius: 10,
-    flex: 1,
-    padding: 15,
-    marginHorizontal: 5,
-  },
+statsRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginTop: Scale(10),
+},
+
+statCard: {
+  position: "relative", // important for absolute children
+  marginHorizontal: 5,
+},
+
+statBox: {
+  borderRadius: 10,
+  width: Scale(160),
+  height: Scale(110),
+},
+
+statContent: {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  padding: 10,
+  justifyContent: "center",
+  alignItems: "center",
+},
+
+
   statAmount: {
     fontSize: 18,
     color: '#fff',

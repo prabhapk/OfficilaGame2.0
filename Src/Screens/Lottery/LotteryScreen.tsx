@@ -4,6 +4,7 @@ import {
   FlatList,
   Touchable,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import React from 'react';
 import { Image } from 'expo-image';
@@ -27,13 +28,13 @@ const LotteryScreen = () => {
   console.log("allGamesList", allGamesList);
   const { Scale, verticalScale } = useContainerScale();
   return (
-    
-    <>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+
+    <ScrollView>
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Image
           source={lotteryHeader}
           style={{ width: 150, height: 50 }}
-           contentFit='contain'
+          contentFit='contain'
         />
 
         <FlatList
@@ -53,7 +54,7 @@ const LotteryScreen = () => {
                 <Image
                   source={item.image}
                   style={{ width: Scale(100), height: Scale(100) }}
-                   contentFit='contain'
+                  contentFit='contain'
                 />
               </TouchableOpacity>
             );
@@ -83,7 +84,7 @@ const LotteryScreen = () => {
           <Image
             source={chipIcon}
             style={{ width: Scale(25), height: Scale(25) }}
-           contentFit='contain'
+            contentFit='contain'
           />
           <Text
             style={{ fontSize: Scale(16), fontWeight: 'bold', color: 'white' }}
@@ -91,7 +92,6 @@ const LotteryScreen = () => {
             3 Digit Games
           </Text>
         </View>
-
         <FlatList
           data={allGamesList}
           keyExtractor={(subItem, index) => index.toString()}
@@ -110,14 +110,14 @@ const LotteryScreen = () => {
                   // } else if (item.gameTye === 'RealGame') {
                   //   // navigation.navigate('ThreeDigitMain',{gameDat:item});
                   // }
-                  navigation.navigate('ThreeDigitMain', { gameData: item.groupId});
+                  navigation.navigate('ThreeDigitMain', { gameData: item.groupId });
                 }}
               />
             );
           }}
         />
       </View>
-    </>
+    </ScrollView>
   );
 };
 

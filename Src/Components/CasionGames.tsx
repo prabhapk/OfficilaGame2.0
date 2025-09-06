@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Scale from './Scale';
 import { gameTypeAct } from '../../assets/assets';
 import { Image } from 'expo-image';
+import { useContainerScale } from '../hooks/useContainerScale';
 interface HeaderProps {
   onPress: () => void;
   headerList: any[];
@@ -13,6 +13,10 @@ const CasionGames: React.FC<HeaderProps> = ({
   onPress,
   headerList,
 }) => {
+
+    const { Scale, verticalScale } = useContainerScale();
+    const styles = createStyles(Scale);
+    
   return (
     <FlatList
       contentContainerStyle={{
@@ -43,7 +47,7 @@ const CasionGames: React.FC<HeaderProps> = ({
 };
 
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>StyleSheet.create({
   container: {
     alignItems: 'center',
     padding: 5, justifyContent: "center",

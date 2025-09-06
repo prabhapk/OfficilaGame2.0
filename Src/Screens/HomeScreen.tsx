@@ -11,6 +11,7 @@ import LotteryScreen from './Lottery/LotteryScreen';
 import CustomLoader from '../Components/CustomLoader';
 import { useDispatch } from 'react-redux';
 import { getAllGamesList } from '../Redux/Slice/HomeSlice';
+import { useContainerScale } from '../hooks/useContainerScale';
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
   const dispatch = useDispatch();
@@ -25,6 +26,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     // {id: 3, name: banner3},
     // {id: 4, name: banner4},
   ];
+
+  const { Scale, verticalScale } = useContainerScale();
+    const styles = createStyles(Scale);
+    
 
   useEffect(() => {
     dispatch(getAllGamesList());
@@ -97,6 +102,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
         ref={scrollViewRef}
         style={styles.container}
         scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
       >
         <CommonBanner banners={banners} />
 
@@ -112,7 +118,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) => StyleSheet.create({
   container: { flex: 1 },
 });
 

@@ -48,17 +48,17 @@ const CasinoScreen: React.FC<CasinoScreenProps> = ({ showHeader =true}) => {
     }
 
     return (
-        <ScrollView style={{ flex: 1, backgroundColor: '#250f0fff' }}>
+        <ScrollView style={{ flex: 1, backgroundColor: '#250f0fff' }} showsVerticalScrollIndicator={false}>
            {showHeader&& <View style={{ backgroundColor: COLORS.primary, elevation: 10, }}>
                 <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', padding: 10, textAlign: 'center' }}>Casino</Text>
             </View>}
             <View style={{ flex: 0.1, }}>
-                <CasionHeaders
+                {/* <CasionHeaders
                     headerList={gameList}
                     selectedId={selectedHeaderId}
                     onPress={() => { }}
                     onSelect={handleSelectCasinoHeader}
-                />
+                /> */}
             </View>
             {renderCasinoGame()}
         </ScrollView>

@@ -4,9 +4,10 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
 import { amountIcon, hIcon, homeAppIcon } from '../../assets/assets';
-import Scale from './Scale';
+
 import { LinearGradient } from 'expo-linear-gradient';
 import { formatToDecimal } from '../Utils/Common';
+import { useContainerScale } from '../hooks/useContainerScale';
 interface CountdownTimerProps {
   onLoginPress: () => void;
   onMenuPress: () => void;
@@ -20,6 +21,9 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
 }) => {
   const { isLoggedIn,mainWalletBalance } = useSelector((state: RootState) => state.signInSlice);
   
+    const { Scale, verticalScale } = useContainerScale();
+    const styles = createStyles(Scale);
+
   return (
     <View style={styles.container}>
       <View style ={{flexDirection: 'row', alignItems: 'center'}}>
@@ -79,7 +83,7 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) => StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',

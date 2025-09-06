@@ -21,6 +21,7 @@ import {
   gifLottery,
   gifPromotion,
   gifRefer,
+  homeAppIcon,
   promotions,
   rebateMenu,
   robMoney,
@@ -36,12 +37,14 @@ import { ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
 import { formatToDecimal } from '../Utils/Common';
+import { useContainerScale } from '../hooks/useContainerScale';
 const CustomSidebarMenu = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const logoutFunction = async () => {
     setModalVisible(true);
   };
-
+    const { Scale, verticalScale } = useContainerScale();
+    const styles = createStyles(Scale);
   const { isLoggedIn, userDetails } = useSelector(
     (state: RootState) => state.signInSlice,
   );
@@ -79,10 +82,10 @@ const CustomSidebarMenu = ({ navigation }: any) => {
       <View style={styles.container}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image
-            source={drawerHeader}
+            source={homeAppIcon}
             // tintColor={'#fff'}
-            resizeMode="contain"
-            style={{ width: Scale(120) }}
+            contentFit='contain'
+            style={{ width: Scale(120), backgroundColor:"white" }}
           />
           {/* <Text style={{ color: '#fff' }}>AppName</Text> */}
           {!isLoggedIn && (
@@ -287,7 +290,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) => StyleSheet.create({
   profileImg: {
     width: 80,
     height: 80,

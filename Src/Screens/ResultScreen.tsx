@@ -24,6 +24,7 @@ import Icon from 'react-native-vector-icons/Feather'; // for filter icon
 import Entypo from 'react-native-vector-icons/Entypo';
 import { checked, hot, lottery1, unchecked } from '../../assets/assets';
 import CustomTabs from '../Components/CustomTabsHeader';
+import { useContainerScale } from '../hooks/useContainerScale';
 const ResultScreen = ({ navigation }: any) => {
   const [selectedHeaderId, setSelectedHeaderId] = useState(1);
   const [selectedFilerId, setSelectedFilerId] = useState(1);
@@ -32,6 +33,8 @@ const ResultScreen = ({ navigation }: any) => {
   const onClose = () => setShowFilter(false);
 
   const selectedTabName = resultHeaderList[selectedIndex].name;
+    const { Scale, verticalScale } = useContainerScale();
+    const styles = createStyles(Scale);
 
   const filteredData = useMemo(() => {
     const allCategories: any = resultTableData[0]; // since your array has 1 main object
@@ -64,6 +67,7 @@ const ResultScreen = ({ navigation }: any) => {
       stickyHeaderIndices={[0]}
       nestedScrollEnabled={true}
       keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
     >
       <View style={{ backgroundColor: COLORS.primary, elevation: 10 }}>
         <View style={styles.headrrcontainer}>
@@ -196,7 +200,7 @@ const ResultScreen = ({ navigation }: any) => {
 
 export default ResultScreen;
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) => StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
