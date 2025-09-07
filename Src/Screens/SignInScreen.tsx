@@ -79,8 +79,8 @@ const SignInScreen = ({ navigation }: any) => {
     console.log('Sign In clicked');
     // setIsShowAlert(true);
     try {
-      // const resultAction = await dispatch(SignInPassword({ mobileNumber, password,navigation: navigation }));
-      // unwrapResult(resultAction);
+      const resultAction = await dispatch(SignInPassword({ mobileNumber, password,navigation: navigation }));
+      unwrapResult(resultAction);
       navigation.navigate("DrawerNavigation")
       dispatch(setIsLoggedIn(true))
       Toast.show({
@@ -180,6 +180,7 @@ const SignInScreen = ({ navigation }: any) => {
               onChange={setMobileNumber}
               isDisabled={false}
               secureTextEntry={false}
+              leftText={true}
               leftIcon={<Ionicons name="call-outline" size={Scale(18)} color="#999" />}
             />
 

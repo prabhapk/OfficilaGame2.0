@@ -169,10 +169,10 @@ const SignUpScreen = ({ navigation }: any) => {
               isDisabled={false}
               secureTextEntry={false}
               maxChar={10}
+              leftText={true}
               leftIcon={
                 <Ionicons name="call-outline" size={Scale(18)} color="#999" />
               }
-              leftText={true}
             />
             {mobileNumber && !mobileRegex.test(mobileNumber) && (
               <Text
@@ -300,14 +300,14 @@ const SignUpScreen = ({ navigation }: any) => {
 
           {/* Login Button */}
           <TouchableOpacity
-            // disabled={
-            //   !mobileNumber ||
-            //   !otp ||
-            //   !isEighteenPlus ||
-            //   !isNotify ||
-            //   nextButtonLoader
-            // }
-            onPress={() => navigation.navigate('SignUpSetPassword')}
+            disabled={
+              !mobileNumber ||
+              !otp ||
+              !isEighteenPlus ||
+              !isNotify ||
+              nextButtonLoader
+            }
+            onPress={() => handleVerifyOtp()}
             style={[styles.buttonWrapper, { opacity: isFormValid ? 1 : 0.5 }]}
           >
             <LinearGradient

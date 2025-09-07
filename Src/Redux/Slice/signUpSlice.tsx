@@ -100,8 +100,8 @@ export const RegisterUSer = createAsyncThunk<
   ) => {
     const state = thunkAPI.getState() as RootState;
     const ipAddress = state.signUpSlice.ipAddress;
-    const deviceInfo = state.signUpSlice?.deviceInfo?.deviceId;
-    console.log("deviceInfoApiData==>",deviceInfo);
+    const deviceInfo = JSON.stringify(state.signUpSlice.deviceInfo);
+    console.log("deviceInfoApiData==>", deviceInfo);
     const registrationType = state.signUpSlice.registrationType;
     const paramsData = {
       ipAddress,

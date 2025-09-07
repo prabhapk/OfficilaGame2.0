@@ -206,7 +206,7 @@ const ProfileScreen = ({ navigation }: any) => {
   
 
         {/* Logout */}
-        {!isLoggedIn ? (
+        {isLoggedIn ? (
           <View style={styles.logoutWrapper}>
             <TouchableOpacity style={styles.logoutButton} onPress={() => setShowModal(true)}>
               <Text style={styles.logoutText}>LOG OUT</Text>

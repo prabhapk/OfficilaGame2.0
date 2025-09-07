@@ -130,7 +130,7 @@ import {
       width: '95%',
     },
     focusedBorder: {
-      borderColor: '#4DA1FF',
+      // borderColor: '#',
     },
     textInput: {
       flex: 1,
