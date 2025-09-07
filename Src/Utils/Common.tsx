@@ -25,3 +25,10 @@ export const goBack = ({navigation}: any) => {
     // Replace ":" with "." => "11.30 PM"
     return formatted.replace(':', '.').toLowerCase();
   };
+
+  export const formatTime24to12 =(time: string)=> {
+  const [h, m] = time.split(":").map(Number);
+  const period = h >= 12 ? "PM" : "AM";
+  const hour = h % 12 || 12;
+  return `${hour.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")} ${period}`;
+}

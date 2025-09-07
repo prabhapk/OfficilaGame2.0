@@ -12,9 +12,10 @@ import CustomLoader from '../Components/CustomLoader';
 import { useDispatch } from 'react-redux';
 import { getAllGamesList } from '../Redux/Slice/HomeSlice';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { AppDispatch } from '../Redux/store';
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
-  const dispatch = useDispatch();
+const dispatch = useDispatch<AppDispatch>();
   const [gameList, setGameList] = useState(HomeScreenFlatlist);
   const [selectedGameId, setSelectedGameId] = useState(1);
 

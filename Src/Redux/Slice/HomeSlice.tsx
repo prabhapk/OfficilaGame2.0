@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { homeSliceState} from './types'
+import { homeSliceState } from './types'
 import axios from 'axios';
 import { BaseURL, serviceUrls } from '../../Utils/serviceUrls';
 import axiosInstance from '../../Utils/axiosClient';
@@ -7,27 +7,28 @@ import { RootState } from '../store';
 
 const initialValues: homeSliceState = {
   howScreenCommonLoader: false,
-  allGamesList:[],
-  individualGameData:[],
-  individualGameDataLoader:false
+  allGamesList: [],
+  individualGameData: [],
+  individualGameDataLoader: false
 }
 
 
 
 
 export const getAllGamesList = createAsyncThunk<
-  any,
-  { rejectValue: string }
+  any, // Returned type
+  void, // ThunkArg (no argument expected)
+  { rejectValue: string } // ThunkApiConfig
 >(
   'games/getAllGamesList',
   async (_, thunkAPI) => {
     try {
-
-      const response = await axiosInstance.get(serviceUrls.games.getAllGamesList,
-
-      );
+      const response = await axiosInstance.get(serviceUrls.games.getAllGamesList);
       console.log('getAllGamesListResponse', response.data);
-      return response.data;
+      const filteredGames = response.data.filter(
+  game => !game.name.toLowerCase().includes("quick3d")
+);
+      return filteredGames;
     } catch (error: any) {
       console.log('getAllGamesListApiError', error);
       return thunkAPI.rejectWithValue(
@@ -37,24 +38,25 @@ export const getAllGamesList = createAsyncThunk<
   }
 );
 
+
 export const getIndividualGameData = createAsyncThunk<
   any,
   {
-    groupId: number;
+    typeId: number;
   },
   { rejectValue: string }
->('games/getIndividualGameData', async ({ groupId }, thunkAPI) => {
+>('games/getIndividualGameData', async ({ typeId }, thunkAPI) => {
   try {
-    console.log('groupId==>', groupId);
-   
-    
+    console.log('typeId==> in api call', typeId);
+
+
     const response = await axiosInstance.get(
-        serviceUrls.results.getIndividualGameData,
-        {
-              params: {
-                groupId,
-              },
-            },
+      serviceUrls.results.getIndividualGameData,
+      {
+        params: {
+          typeId,
+        },
+      },
     );
     console.log('getIndividualGameDataResponse', response.data);
     return response.data;
@@ -93,17 +95,17 @@ export const homeSlice = createSlice({
     // setMobileNumber: (state, action: PayloadAction<string>) => {
     //   state.mobileNumber = action.payload;
     // },
- 
+
   },
   extraReducers: builder => {
     // Pending
     builder.addCase(getAllGamesList.pending, (state, action) => {
       state.howScreenCommonLoader = true;
-      
+
     });
     builder.addCase(getIndividualGameData.pending, (state, action) => {
       state.individualGameDataLoader = true;
-      
+
     });
     // Fulfilled
     builder.addCase(getAllGamesList.fulfilled, (state, action) => {
@@ -111,12 +113,12 @@ export const homeSlice = createSlice({
       const seenGroups = new Set<number>();
       const uniqueGames = action.payload.filter((game: any) => {
         if (seenGroups.has(game.groupId)) {
-          return false; 
+          return false;
         }
         seenGroups.add(game.groupId);
         return true;
       });
-    
+
       state.allGamesList = uniqueGames;
     });
     builder.addCase(getIndividualGameData.fulfilled, (state, action) => {
@@ -126,11 +128,11 @@ export const homeSlice = createSlice({
     // Rejected
     builder.addCase(getAllGamesList.rejected, (state, action) => {
       state.howScreenCommonLoader = true;
-      
+
     });
     builder.addCase(getIndividualGameData.rejected, (state, action) => {
       state.individualGameDataLoader = true;
-      
+
     });
   },
 })

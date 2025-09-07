@@ -13,14 +13,14 @@ export const serviceUrls = {
     resetPassword: '/api/Auth/reset-password',
   },
   games:{
-    getAllGamesList:'/api/Game/list',
+    getAllGamesList:'/api/HomeGame/groups',
     orderPlace:'/api/Bet/place',
   },
   results:{
     getAllResults:'api/ResultHistory/all-result',
 
     getIndividualGameResult:'/api/ResultHistory/game-result',
-    getIndividualGameData:'/api/Game/by-interval',
+    getIndividualGameData:'/api/Game/by-typeid',
   }
 };
 

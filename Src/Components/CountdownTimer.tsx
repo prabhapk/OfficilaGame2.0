@@ -18,54 +18,50 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
   const styles = createStyles(Scale);
   const isFocused = useIsFocused();
 
-  const calculateTimeLeft = () => {
-    const now = new Date().getTime();
-    const targetDateTime = new Date(targetDate).getTime();
-    // console.log("targetDateTime1212",targetDateTime, targetDate, now);
-    const difference = targetDateTime - now;
+const calculateTimeLeft = () => {
+  const now = new Date().getTime();
+  const targetDateTime = new Date(targetDate!).getTime();
+  
+  const difference = targetDateTime - now;
 
-    if (difference > 0) {
-      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((difference / (1000 * 60)) % 60);
-      const seconds = Math.floor((difference / 1000) % 60);
-      return { hours, minutes, seconds };
-    } else {
-      return { hours: 0, minutes: 0, seconds: 0 };
-    }
-  };
+  if (difference > 0) {
+    const hours = Math.floor(difference / (1000 * 60 * 60)); // ✅ total hours
+    const minutes = Math.floor((difference / (1000 * 60)) % 60);
+    const seconds = Math.floor((difference / 1000) % 60);
+    return { hours, minutes, seconds, difference };
+  } else {
+    return { hours: 0, minutes: 0, seconds: 0, difference: 0 };
+  }
+};
+
+
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   const [alertTriggered, setAlertTriggered] = useState(false);
 
-  useEffect(() => {
-    if (!isFocused) return;
-console.log("targetDatetargetDate");
+ useEffect(() => {
+  if (!isFocused) return;
 
-    const timer = setInterval(() => {
-      const newTimeLeft = calculateTimeLeft();
-      setTimeLeft(newTimeLeft);
-// console.log("newTimeLeftqwqwq",newTimeLeft);
-const now = new Date().toISOString(); // returns ISO 8601 with milliseconds and 'Z'
-// console.log(now,newTimeLeft);
-// console.log(now,"newTimeLeft");
+  const timer = setInterval(() => {
+    const newTimeLeft = calculateTimeLeft();
+    setTimeLeft(newTimeLeft);
 
-      if (!alertTriggered && newTimeLeft.minutes === 0 && newTimeLeft.seconds === 30) {
-        setAlertTriggered(true);
-        onThirtySecondsLeft?.();
-      }
+    // Trigger 30s alert
+    if (!alertTriggered && newTimeLeft.difference <= 30000 && newTimeLeft.difference > 0) {
+      setAlertTriggered(true);
+      onThirtySecondsLeft?.();
+    }
 
-      if (
-        newTimeLeft.hours === 0 &&
-        newTimeLeft.minutes === 0 &&
-        newTimeLeft.seconds === 0
-      ) {
-        clearInterval(timer);
-        onComplete?.();
-      }
-    }, 1000);
+    // Complete
+    if (newTimeLeft.difference <= 0) {
+      clearInterval(timer);
+      onComplete?.();
+    }
+  }, 1000);
 
-    return () => clearInterval(timer);
-  }, [targetDate, isFocused]);
+  return () => clearInterval(timer);
+}, [targetDate, isFocused]);
+
 
   useEffect(() => {
     setAlertTriggered(false);
@@ -96,32 +92,32 @@ const now = new Date().toISOString(); // returns ISO 8601 with milliseconds and 
 };
 const createStyles = (Scale: any) =>
   StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: 10,
-    marginTop: 5,
-  },
-  timerBlock: {
-    backgroundColor: "#000",
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: 2,
-    flexDirection: "row",
-  },
-  timerText: {
-    color: "#FFF",
-    fontSize: 12,
-    fontWeight: "bold",
-  },
-  separator: {
-    fontSize: 12,
-    fontWeight: "bold",
-    color: "white",
-  },
-});
+    container: {
+      flexDirection: "row",
+      alignItems: "center",
+      borderRadius: 10,
+      marginTop: 5,
+    },
+    timerBlock: {
+      backgroundColor: "#000",
+      paddingVertical: 8,
+      paddingHorizontal: 8,
+      borderRadius: 5,
+      alignItems: "center",
+      justifyContent: "center",
+      marginHorizontal: 2,
+      flexDirection: "row",
+    },
+    timerText: {
+      color: "#FFF",
+      fontSize: 12,
+      fontWeight: "bold",
+    },
+    separator: {
+      fontSize: 12,
+      fontWeight: "bold",
+      color: "white",
+    },
+  });
 
 export default CountdownTimer;

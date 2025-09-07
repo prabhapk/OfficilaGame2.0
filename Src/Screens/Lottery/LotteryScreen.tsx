@@ -110,7 +110,7 @@ const LotteryScreen = () => {
                   // } else if (item.gameTye === 'RealGame') {
                   //   // navigation.navigate('ThreeDigitMain',{gameDat:item});
                   // }
-                  navigation.navigate('ThreeDigitMain', { gameData: item.groupId });
+                  navigation.navigate('ThreeDigitMain', { gameData: item });
                 }}
               />
             );

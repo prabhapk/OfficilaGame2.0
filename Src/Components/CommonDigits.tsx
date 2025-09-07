@@ -39,27 +39,29 @@ const CommonDigits: React.FC<Props> = ({ data, onPress3Digits }) => {
     }
     console.log(updatedTime, 'kokokokokok');
   };
-  const baseURL=  'http://47.250.52.220'
+  const baseURL=  'http://8.148.148.185'
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
+  
   return (
     <TouchableOpacity onPress={onPress3Digits} style={styles.container}>
       <Image source={{
-         uri: baseURL + data.bgImage
+         uri: baseURL + data.cardImageUrl
         }} style={styles.subConatiner} />
       <View style={{ margin: 5 }}>
         <Text style={styles.digitTitle}>{data.name}</Text>
       </View>
+      <Text style={styles.win_priceText}>WIN ₹{data.prizeAmount}</Text>
       <View style={{ position: 'absolute', bottom: 40, left: 10 }}>
         <Text style={styles.digitTitle}>{'Time for Next booking'}</Text>
         <CountdownTimer
-          targetDate={data.nextresulttime}
+          targetDate={data.nextResultTime}
           onComplete={() => handleTimerComplete()}
         />
       </View>
       <View style={{ position: 'absolute', bottom: 0 }}>
         <Text style={{ margin: 5 }}>
-          ₹{data.ticketprize}
+          ₹{data.ticketPrice}{"/"}
           <Text style={{ color: 'grey', fontSize: 10 }}>Ticket</Text>
         </Text>
       </View>
@@ -85,8 +87,8 @@ const createStyles = (Scale: any) =>
     resizeMode: 'stretch',
     position: 'absolute',
   },
-  digitTitle: { fontSize: 8, color: 'black', fontWeight: '600' },
-  win_priceText: { fontSize: 16, color: 'gold', fontWeight: 'bold' },
+  digitTitle: { fontSize: 12, color: '#350e0eff', fontWeight: '600' },
+  win_priceText: { marginLeft:15,fontSize: 16, color: '#f0f879ff', fontWeight: 'bold' },
   priceText: { fontSize: 30, color: 'white', fontWeight: 'bold', bottom: 10 },
 });
 

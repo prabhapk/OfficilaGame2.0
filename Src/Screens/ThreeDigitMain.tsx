@@ -63,7 +63,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '../Constants/Theme';
 import { getIndividualGameResult } from '../Redux/Slice/resultSlice';
 import { getIndividualGameData, payNow } from '../Redux/Slice/HomeSlice';
-import { formatToTime } from '../Utils/Common';
+import { formatTime24to12, formatToTime } from '../Utils/Common';
 import { unwrapResult } from '@reduxjs/toolkit';
 import CustomLoader from '../Components/CustomLoader';
 
@@ -85,19 +85,21 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const {
     isLoggedIn
   } = useSelector((state: RootState) => state.signInSlice);
-  console.log("individualGameData==>",individualGameData);
+  console.log("individualGameData==>", individualGameData);
   const dispatch = useDispatch();
 
-  const OPTIONS = [
-    { id: 1, name: '01:00 PM', isSelected: true },
-    { id: 2, name: '03:00 PM', isSelected: false },
-    { id: 3, name: '05:00 PM', isSelected: false },
-    { id: 4, name: '07:00 PM', isSelected: false },
-    { id: 5, name: '09:00 PM', isSelected: false },
-    { id: 6, name: '11:00 PM', isSelected: false },
-  ];
+  // const OPTIONS = [
+  //   { id: 1, name: '01:00 PM', isSelected: true },
+  //   { id: 2, name: '03:00 PM', isSelected: false },
+  //   { id: 3, name: '05:00 PM', isSelected: false },
+  //   { id: 4, name: '07:00 PM', isSelected: false },
+  //   { id: 5, name: '09:00 PM', isSelected: false },
+  //   { id: 6, name: '11:00 PM', isSelected: false },
+  // ];
 
-  const [selectedOption, setSelectedOption] = useState(OPTIONS[0].name);
+
+
+
   const now = new Date();
   const [targetDate, setTargetDate] = useState(
     new Date(new Date().getTime() + 3 * 60 * 1000).toISOString(),
@@ -128,6 +130,25 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     (state: RootState) => state.resultSlice,
   );
 
+  console.log('individualGameResults==> asasas', individualGameData);
+
+  const OPTIONS: any = Object.values(
+    individualGameData?.reduce((acc, item, index) => {
+      if (!acc[item.groupId]) {
+        acc[item.groupId] = {
+          id: item.groupId, // ✅ use groupId as id
+          name: formatTime24to12(item.endtime),
+          isSelected: Object.keys(acc).length === 0, // first one true
+        };
+      }
+      return acc;
+    }, {} as Record<number, { id: number; name: string; isSelected: boolean }>)
+  );
+
+
+
+  const [selectedOption, setSelectedOption] = useState(OPTIONS[0]?.id);
+
   console.log('individualGameResults==>', individualGameResults);
 
   const transformedData = individualGameResults.map((item: any) => ({
@@ -137,10 +158,11 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   console.log('transformedData==>', transformedData);
 
 
-  const groupId = route.params.gameData;
-  console.log("groupId==>", groupId);
-  // const WinningBalls = individualGameData[0]?.lastResult?.winningNumber.split('');
-const WinningBalls = "123"
+  const groupId = route.params.gameData?.groupId;
+  const gameTypeId = route.params.gameData?.gameTypeId;
+  console.log("groupId==>", groupId, gameTypeId);
+  const WinningBalls = individualGameData[0]?.lastResult?.winningNumber.split('');
+  // const WinningBalls = "123"
 
   const renderContent = () => {
     return (
@@ -169,13 +191,13 @@ const WinningBalls = "123"
           doubleDigitGameId={individualGameData[1]?.id}
           threeDigitGameId={individualGameData[2]?.id}
           groupId={groupId}
-          
+
         />
       </>
     );
   };
 
-  const handleTimerComplete = () => {};
+  const handleTimerComplete = () => { };
   const filterNumericInput = (value: string) => {
     return value.replace(/[^0-9]/g, '');
   };
@@ -247,7 +269,7 @@ const WinningBalls = "123"
   ) => {
     console.log('testttt', label, value, count, selectedOption, price, groupId, gameId);
 
-    
+
     if (value === '') {
       Alert.alert('Error', 'Please enter a value');
       return;
@@ -319,7 +341,7 @@ const WinningBalls = "123"
       return;
     }
 
-    setSelectedOption(value.name);
+    setSelectedOption(value.id);
   };
 
   const getRandomNumber = () => Math.floor(Math.random() * 10);
@@ -430,8 +452,8 @@ const WinningBalls = "123"
     return (
       <LinearGradient
         colors={[
-          selectedOption === item.name ? '#FF4242' : COLORS.secondary, // fallback color
-          selectedOption === item.name ? '#f6c976ff' : COLORS.secondary,
+          selectedOption === item.id ? '#FF4242' : COLORS.secondary, // fallback color
+          selectedOption === item.id ? '#f6c976ff' : COLORS.secondary,
         ]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -465,7 +487,7 @@ const WinningBalls = "123"
   };
 
 
-  
+
   useEffect(() => {
     dispatch(
       getIndividualGameResult({
@@ -474,7 +496,7 @@ const WinningBalls = "123"
     );
     dispatch(
       getIndividualGameData({
-        groupId: groupId,
+        typeId: gameTypeId
       }),
     );
   }, []);
@@ -486,13 +508,13 @@ const WinningBalls = "123"
           bets: numbers.map(item => ({
             gameId: item.gameId,
             groupId: item.groupId,
-            betType: item.label,        
+            betType: item.label,
             selectedNumber: String(item.value), // ensure it's a string
-            betCount: item.count,     
-            amount: item.price, 
+            betCount: item.count,
+            amount: item.price,
           }))
         };
-  
+
         const resultAction = dispatch(payNow(apiData));  // 👈 no extra wrapper
         unwrapResult(resultAction);
       } catch (error: any) {
@@ -502,7 +524,7 @@ const WinningBalls = "123"
       navigation.navigate('SignInScreen');
     }
   };
-  
+
 
 
   return (
@@ -515,7 +537,7 @@ const WinningBalls = "123"
         nestedScrollEnabled
         contentContainerStyle={{ paddingBottom: Scale(100) }}
       >
-         {/* <CustomLoader visible={individualGameDataLoader} /> */}
+        {/* <CustomLoader visible={individualGameDataLoader} /> */}
         <GameHeader
           HeaderText={individualGameData[0]?.name}// {gameData.name}
           leftonPress={goBack}

@@ -45,13 +45,13 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
         borderBottomWidth: 1,
         borderColor: '#5C1818',
       }}>
-      <View style={{ flex: 1, paddingLeft: Scale(10) }}>
-        <Text style={{ color: COLORS.white }}>{item.name}</Text>
+      <View style={{ flex: 1.5, paddingLeft: Scale(10) }}>
+        <Text style={{ color: COLORS.white }}>{item.uid}</Text>
       </View>
-      <View style={{ flex: 1, alignItems: 'center' }}>
-        <Text style={{ color: COLORS.white }}>{item.time}</Text>
+      <View style={{ flex: 1.3,alignItems: 'center' }}>
+        <Text style={{ color: COLORS.white }}>{item.gameTime}</Text>
       </View>
-      <View style={{ flex: 1.5, flexDirection: 'row', justifyContent: 'center' }}>
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
         <TableCommonBall backgroundColor="#DE3C3F" innerText={item.balls[0]} borderColor={'#DE3C3F'} />
         <TableCommonBall backgroundColor="#EC8204" innerText={item.balls[1]} borderColor={'#EC8204'} />
         <TableCommonBall backgroundColor="#066FEA" innerText={item.balls[2]} borderColor={'#066FEA'} />
@@ -102,13 +102,13 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
                   backgroundColor: '#812B2B',
                   paddingVertical: Scale(5),
                 }}>
-                <View style={{ flex: 1, paddingLeft: Scale(10) }}>
-                  <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Name</Text>
+                <View style={{ flex: 1.5, paddingLeft: Scale(10) }}>
+                  <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Issue</Text>
                 </View>
-                <View style={{ flex: 1, alignItems: 'center' }}>
+                <View style={{ flex: 1.3, alignItems: 'center' }}>
                   <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Time</Text>
                 </View>
-                <View style={{ flex: 1.5, flexDirection: 'row', justifyContent: 'center' }}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
                   <TableCommonBall backgroundColor="#DE3C3F" innerText="A" borderColor={'#DE3C3F'} />
                   <TableCommonBall backgroundColor="#EC8204" innerText="B" borderColor={'#EC8204'} />
                   <TableCommonBall backgroundColor="#066FEA" innerText="C" borderColor={'#066FEA'} />

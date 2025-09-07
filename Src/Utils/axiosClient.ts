@@ -8,7 +8,7 @@ import Toast from 'react-native-toast-message';
 const axiosInstance = axios.create({
   // baseURL: process.env.API_BASE_URL,
   // baseURL: process.env.urlOne,
-  baseURL: 'http://47.250.52.220',
+   baseURL: 'http://8.148.148.185',
 });
 
 const resetAction = CommonActions.reset({
