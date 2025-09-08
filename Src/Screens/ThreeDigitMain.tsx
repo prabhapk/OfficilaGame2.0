@@ -12,7 +12,7 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { cancel, lefArrow, quick3min, sameClock } from '../../assets/assets';
 import CountdownTimer from '../Components/CountdownTimer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -88,18 +88,6 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   console.log("individualGameData==>", individualGameData);
   const dispatch = useDispatch();
 
-  // const OPTIONS = [
-  //   { id: 1, name: '01:00 PM', isSelected: true },
-  //   { id: 2, name: '03:00 PM', isSelected: false },
-  //   { id: 3, name: '05:00 PM', isSelected: false },
-  //   { id: 4, name: '07:00 PM', isSelected: false },
-  //   { id: 5, name: '09:00 PM', isSelected: false },
-  //   { id: 6, name: '11:00 PM', isSelected: false },
-  // ];
-
-
-
-
   const now = new Date();
   const [targetDate, setTargetDate] = useState(
     new Date(new Date().getTime() + 3 * 60 * 1000).toISOString(),
@@ -132,22 +120,75 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
 
   console.log('individualGameResults==> asasas', individualGameData);
 
-  const OPTIONS: any = Object.values(
-    individualGameData?.reduce((acc, item, index) => {
-      if (!acc[item.groupId]) {
-        acc[item.groupId] = {
-          id: item.groupId, // ✅ use groupId as id
-          name: formatTime24to12(item.endtime),
-          isSelected: Object.keys(acc).length === 0, // first one true
-        };
-      }
-      return acc;
-    }, {} as Record<number, { id: number; name: string; isSelected: boolean }>)
-  );
+  // helper: convert "HH:mm:ss" → total minutes
+  function timeToMinutes(time: string) {
+    const [h, m, s] = time.split(":").map(Number);
+    return h * 60 + m + (s > 0 ? 1 : 0);
+  }
+
+  // helper: convert minutes → "hh:mm AM/PM"
+  function minutesTo12Hr(mins: number) {
+    const h = Math.floor(mins / 60) % 24;
+    const m = mins % 60;
+    const period = h >= 12 ? "PM" : "AM";
+    const hour = h % 12 || 12;
+    return `${hour.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")} ${period}`;
+  }
+
+  function buildOptions(individualGameData: any[]) {
+    if (!individualGameData?.length) return [];
+
+    const first = individualGameData[0];
+
+    // ✅ CASE 1: no interval
+    if (first.intervaltime === "00:00:00") {
+      return Object.values(
+        individualGameData.reduce((acc, item) => {
+          if (!acc[item.groupId]) {
+            acc[item.groupId] = {
+              id: item.groupId,
+              groupedId: item.groupedId,
+              name: minutesTo12Hr(timeToMinutes(item.endtime)),
+              isSelected: Object.keys(acc).length === 0,
+            };
+          }
+          return acc;
+        }, {} as Record<number, { id: number; name: string; isSelected: boolean }>)
+      );
+    }
+
+    // ✅ CASE 2: interval available
+    const start = timeToMinutes(first.starttime);
+    const end = timeToMinutes(first.endtime);
+    const step = timeToMinutes(first.intervaltime);
+
+    const slots: { id: number; groupedId: number; name: string; isSelected: boolean }[] = [];
+
+    for (let t = start, i = 0; t <= end; t += step, i++) {
+      slots.push({
+        id: i + 1,
+        groupedId: first.groupId,
+        name: minutesTo12Hr(t),
+        isSelected: i === 0,
+      });
+    }
+
+    return slots;
+  }
 
 
+const OPTIONS :any = useMemo(() => buildOptions(individualGameData), [individualGameData]);
 
-  const [selectedOption, setSelectedOption] = useState(OPTIONS[0]?.id);
+const [selectedOption, setSelectedOption] = useState<number | null>(
+  OPTIONS.length > 0 ? OPTIONS[0].id : null
+);
+
+// If OPTIONS change (new API response), update selectedOption
+useEffect(() => {
+  if (OPTIONS.length > 0) {
+    setSelectedOption(OPTIONS[0].id);
+  }
+}, [OPTIONS]);
 
   console.log('individualGameResults==>', individualGameResults);
 
@@ -161,18 +202,19 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const groupId = route.params.gameData?.groupId;
   const gameTypeId = route.params.gameData?.gameTypeId;
   console.log("groupId==>", groupId, gameTypeId);
-  const WinningBalls = individualGameData[0]?.lastResult?.winningNumber.split('');
+  const WinningBalls = individualGameData[0]?.lastResult?.winningNumber.split('') || ["1", "2", "3"];
+  console.log("WinningBalls==>", WinningBalls, individualGameData);
   // const WinningBalls = "123"
 
   const renderContent = () => {
     return (
       <>
         <DigitComponent
-          lastGameWiiningId="12345678890"
+          lastGameWiiningId={"12455"}
           nextGameId={formatToTime(individualGameData[0]?.nextresulttime)}
-          latGameWinningA={WinningBalls[0]}
-          lastGameWinningB={WinningBalls[1]}
-          lastGameWinningC={WinningBalls[2]}
+          latGameWinningA={WinningBalls[0] || "1"}
+          lastGameWinningB={WinningBalls[1] || "2"}
+          lastGameWinningC={WinningBalls[2] || "3"}
           singleDigitPrice={Number(individualGameData[0]?.ticketprize)}
           singleDigitWinningPrice={Number(individualGameData[0]?.prizeamount)}
           handleAdd={handleAdd}
@@ -315,34 +357,35 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       onChangeThreeDigitB(''), onChangeThreeDigitC('');
     }
   };
-  const handleHeader = (value: any) => {
-    const isAdded = numbers.find((item: any) => item.type !== value.name);
+const handleHeader = (value: any) => {
+  const isAdded = numbers.find((item: any) => item.type !== value.name);
 
-    if (isAdded) {
-      Alert.alert(
-        'Confirmation Reminder',
-        `You have placed an order for the Text\n${selectedOption} time.\nAre you sure you want to remove your previous selections?`,
-        [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
+  if (isAdded) {
+    Alert.alert(
+      'Confirmation Reminder',
+      `You have placed an order for the Text\n${selectedOption} time.\nAre you sure you want to remove your previous selections?`,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Confirm',
+          onPress: () => {
+            setNumbers([]);
+            setSelectedOption(value.id); // ✅ always store id
           },
-          {
-            text: 'Confirm',
-            onPress: () => {
-              setNumbers([]), setSelectedOption(value);
-            },
-          },
-        ],
-        { cancelable: false },
-      );
+        },
+      ],
+      { cancelable: false },
+    );
 
-      return;
-    }
+    return;
+  }
 
-    setSelectedOption(value.id);
-  };
+  setSelectedOption(value.id); // ✅ always store id
+};
 
   const getRandomNumber = () => Math.floor(Math.random() * 10);
   const removeNumber = (id: number) => {
@@ -449,6 +492,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   };
 
   const renderHeader = ({ item }: any) => {
+    console.log("item==>asasa", item);
     return (
       <LinearGradient
         colors={[
@@ -489,17 +533,17 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
 
 
   useEffect(() => {
-    dispatch(
-      getIndividualGameResult({
-        groupId: groupId,
-      }),
-    );
+    // dispatch(
+    //   getIndividualGameResult({
+    //     groupId: groupId,
+    //   }),
+    // );
     dispatch(
       getIndividualGameData({
         typeId: gameTypeId
       }),
     );
-  }, []);
+  }, [gameTypeId, groupId]);
 
   const handlePayNow = () => {
     if (isLoggedIn) {
@@ -537,7 +581,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
         nestedScrollEnabled
         contentContainerStyle={{ paddingBottom: Scale(100) }}
       >
-        {/* <CustomLoader visible={individualGameDataLoader} /> */}
+        <CustomLoader visible={individualGameDataLoader} />
         <GameHeader
           HeaderText={individualGameData[0]?.name}// {gameData.name}
           leftonPress={goBack}

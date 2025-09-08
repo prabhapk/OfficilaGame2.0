@@ -26,8 +26,8 @@ export const getAllGamesList = createAsyncThunk<
       const response = await axiosInstance.get(serviceUrls.games.getAllGamesList);
       console.log('getAllGamesListResponse', response.data);
       const filteredGames = response.data.filter(
-  game => !game.name.toLowerCase().includes("quick3d")
-);
+        game => !game.name.toLowerCase().includes("quick3d")
+      );
       return filteredGames;
     } catch (error: any) {
       console.log('getAllGamesListApiError', error);
@@ -47,9 +47,6 @@ export const getIndividualGameData = createAsyncThunk<
   { rejectValue: string }
 >('games/getIndividualGameData', async ({ typeId }, thunkAPI) => {
   try {
-    console.log('typeId==> in api call', typeId);
-
-
     const response = await axiosInstance.get(
       serviceUrls.results.getIndividualGameData,
       {

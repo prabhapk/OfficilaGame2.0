@@ -247,10 +247,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
               alignItems: 'flex-start',
             }}
           >
+                <View style={{ flexDirection: 'row' }}>
             <Text style={styles.gameNameText}>{gameName}</Text>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={[styles.gameNameText, { flex:1, flexWrap:'wrap'}]}>{lastGameWiiningId}</Text>
-              <TouchableOpacity
+             <TouchableOpacity
                 onPress={() => {
                   dispatch(showHowToPlay());
                 }}
@@ -258,7 +257,10 @@ const DigitComponent: React.FC<IDigitProps> = ({
               >
                 <Text style={styles.howtoPlayTxt}>How to Play</Text>
               </TouchableOpacity>
-            </View>
+             </View>
+              <Text style={[styles.gameNameText, { flex:1, flexWrap:'wrap'}]}>{lastGameWiiningId}</Text>
+             
+       
             <View style={styles.ballsView}>
               <CommonBall
                 backgroundColor="#DE3C3F"
@@ -994,7 +996,7 @@ const createStyles = (Scale: any) =>
     backgroundColor: COLORS.primary,
     marginHorizontal: 10,
     borderRadius: 5,
-    bottom: 10,
+  
   },
   howtoPlayTxt: {
     fontSize: 14,
@@ -1002,6 +1004,7 @@ const createStyles = (Scale: any) =>
     paddingHorizontal: 5,
     paddingVertical: 5,
     color: '#fff',
+   
   },
   gameNameText: { fontSize: 14, fontWeight: 'bold', color: 'white' },
   ballsView: {
