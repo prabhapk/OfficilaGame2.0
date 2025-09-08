@@ -24,6 +24,8 @@ interface Props {
   rightImage: any;
   onPressWithdraw: (event: GestureResponderEvent) => void;
   onPressRecharge: (event: GestureResponderEvent) => void;
+  onPressRefresh: (event: GestureResponderEvent) => void;
+  walletBalance: any;
 }
 
 const GameHeader: React.FC<Props> = ({
@@ -33,6 +35,8 @@ const GameHeader: React.FC<Props> = ({
   rightImage,
   onPressWithdraw,
   onPressRecharge,
+  walletBalance,
+  onPressRefresh
 }) => {
 
   const { Scale, verticalScale } = useContainerScale();
@@ -93,9 +97,11 @@ const GameHeader: React.FC<Props> = ({
                 <Image source={walletIcon} style={{ width: Scale(30), height: Scale(30), }} />
                 <Text style={{ marginLeft: Scale(5), color: "#fff", fontSize: Scale(14) }}>Total Wallet</Text>
               </View>
-              <Text style={{ marginLeft: Scale(5), fontSize: Scale(26), color: "#fff", fontWeight: "bold", }}>₹ 0.00</Text>
+              <Text style={{ marginLeft: Scale(5), fontSize: Scale(26), color: "#fff", fontWeight: "bold", }}>{walletBalance}</Text>
             </View>
-            <TouchableOpacity >
+            <TouchableOpacity 
+            onPress={onPressRefresh}
+            >
               <Image source={refreshIcon} style={{ width: Scale(40), height: Scale(40), }} />
             </TouchableOpacity>
           </View>

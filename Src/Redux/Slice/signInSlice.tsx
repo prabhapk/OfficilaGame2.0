@@ -20,6 +20,7 @@ const initialValues: signInSliceState = {
   isLoggedIn: false,
   mainWalletBalance: 0,
   withdrawBalance: 1,
+  walletBalanceLoader: false,
 }
 
 
@@ -209,6 +210,28 @@ export const resetPassword = createAsyncThunk<
   }
 );
 
+export const getWalletBalance = createAsyncThunk<
+  any,
+  { rejectValue: string }
+>(
+  'games/getWalletBalance',
+  async (_, thunkAPI) => {
+    try {
+
+      const response = await axiosInstance.get(serviceUrls.games.walletBalance,
+
+      );
+      console.log('getWalletBalance', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.log('walletBalanceApiError', error);
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || error.message || error.toString()
+      );
+    }
+  }
+);
+
 export const signInSlice = createSlice({
   name: 'signInSlice',
   initialState: initialValues,
@@ -236,10 +259,18 @@ export const signInSlice = createSlice({
     },
   },
   extraReducers: builder => {
+
+    // Pending 
     builder.addCase(SignInPassword.pending, (state, action) => {
       state.isLoading = true;
       
     });
+    builder.addCase(getWalletBalance.pending, (state, action) => {
+      state.walletBalanceLoader = true;
+      
+    });
+
+    // Fulfilled
     builder.addCase(SignInPassword.fulfilled, (state, action) => {
       state.token = action.payload.token;
       state.refreshAccessToken = action.payload.refreshToken;
@@ -252,8 +283,23 @@ export const signInSlice = createSlice({
       state.isLoading = false;
       
     });
+
+    builder.addCase(getWalletBalance.fulfilled, (state, action) => {
+      state.walletBalanceLoader = false;
+      state.mainWalletBalance= action.payload.rechargeBalance
+      state.withdrawBalance = action.payload.withdrawBalance
+      console.log("state.mainWalletBalance", state.mainWalletBalance);
+      console.log("state.withdrawBalance", state.withdrawBalance);
+      
+    });
+    // Rejected
+
     builder.addCase(SignInPassword.rejected, (state, action) => {
       state.isLoading = false;
+      
+    });
+    builder.addCase(getWalletBalance.rejected, (state, action) => {
+      state.walletBalanceLoader = false;
       
     });
   },

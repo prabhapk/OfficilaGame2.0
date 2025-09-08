@@ -11,24 +11,24 @@ import {
   SafeAreaView,
   Platform,
   Dimensions,
-} from 'react-native';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { cancel, lefArrow, quick3min, sameClock } from '../../assets/assets';
-import CountdownTimer from '../Components/CountdownTimer';
-import { useDispatch, useSelector } from 'react-redux';
-import { showHowToPlay } from '../Redux/Slice/commonSlice';
-import HowToPlayModal from '../Components/HowToPlayModal';
-import CommonBall from '../Components/CommonBall';
-import Scale from '../Components/Scale';
-import SingleIntegerTextInput from '../Components/SingleIntegerTextInput';
-import GameFooter from '../Components/GameFooter';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import GameHeader from '../Components/GameHeader';
-import ResultTable from '../Components/ResultTable';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import CommonAddButton from '../Components/CommonAddButton';
-import CommonQuickGuess from '../Components/CommonQuickGuess';
-import { RootState } from '../Redux/store';
+} from "react-native";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { cancel, lefArrow, quick3min, sameClock } from "../../assets/assets";
+import CountdownTimer from "../Components/CountdownTimer";
+import { useDispatch, useSelector } from "react-redux";
+import { setPaymentSuccessModalVisible, showHowToPlay } from "../Redux/Slice/commonSlice";
+import HowToPlayModal from "../Components/HowToPlayModal";
+import CommonBall from "../Components/CommonBall";
+import Scale from "../Components/Scale";
+import SingleIntegerTextInput from "../Components/SingleIntegerTextInput";
+import GameFooter from "../Components/GameFooter";
+import RBSheet from "react-native-raw-bottom-sheet";
+import GameHeader from "../Components/GameHeader";
+import ResultTable from "../Components/ResultTable";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import CommonAddButton from "../Components/CommonAddButton";
+import CommonQuickGuess from "../Components/CommonQuickGuess";
+import { RootState } from "../Redux/store";
 import {
   setDoubleDigitA1,
   setDoubleDigitA2,
@@ -52,21 +52,26 @@ import {
   setMin1TargetDate,
   setMin3TargetDate,
   setMin5TargetDate,
-} from '../Redux/Slice/threeDigitSlice';
-import { handleShowAlert } from '../Redux/Slice/commonSlice';
-import CountButtons from '../Components/CountButtons';
-import Show30SecondsModal from '../Components/Show30SecondsModal';
-import AnimatedText from '../Components/AnimatedText';
-import { tableData } from '../Utils/Constants';
-import DigitComponent from '../Components/DigitComponent';
-import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS } from '../Constants/Theme';
-import { getIndividualGameResult } from '../Redux/Slice/resultSlice';
-import { getIndividualGameData, payNow } from '../Redux/Slice/HomeSlice';
-import { formatTime24to12, formatToTime } from '../Utils/Common';
-import { unwrapResult } from '@reduxjs/toolkit';
-import CustomLoader from '../Components/CustomLoader';
-
+} from "../Redux/Slice/threeDigitSlice";
+import { handleShowAlert } from "../Redux/Slice/commonSlice";
+import CountButtons from "../Components/CountButtons";
+import Show30SecondsModal from "../Components/Show30SecondsModal";
+import AnimatedText from "../Components/AnimatedText";
+import { tableData } from "../Utils/Constants";
+import DigitComponent from "../Components/DigitComponent";
+import { LinearGradient } from "expo-linear-gradient";
+import { COLORS } from "../Constants/Theme";
+import { getIndividualGameResult } from "../Redux/Slice/resultSlice";
+import { getIndividualGameData, payNow } from "../Redux/Slice/HomeSlice";
+import {
+  formatToDecimal,
+  formatToTime,
+  generateOptions,
+} from "../Utils/Common";
+import { unwrapResult } from "@reduxjs/toolkit";
+import CustomLoader from "../Components/CustomLoader";
+import { getWalletBalance } from "../Redux/Slice/signInSlice";
+import PaymentSuccessModal from "../Components/Modal/PaymentSuccessModal";
 
 const ThreeDigitMain = ({ navigation, route }: any) => {
   const {
@@ -78,19 +83,21 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     min3TargetDate,
     min5TargetDate,
   } = useSelector((state: RootState) => state.threeDigit);
-  const {
-    individualGameData,
-    individualGameDataLoader
-  } = useSelector((state: RootState) => state.homeSlice);
-  const {
-    isLoggedIn
-  } = useSelector((state: RootState) => state.signInSlice);
+  const { individualGameData, individualGameDataLoader } = useSelector(
+    (state: RootState) => state.homeSlice
+  );
+  const { isLoggedIn, mainWalletBalance } = useSelector(
+    (state: RootState) => state.signInSlice
+  );
+  const {paymentSuccessModalVisible } = useSelector(
+    (state: RootState) => state.commonSlice
+  );
   console.log("individualGameData==>", individualGameData);
   const dispatch = useDispatch();
 
   const now = new Date();
   const [targetDate, setTargetDate] = useState(
-    new Date(new Date().getTime() + 3 * 60 * 1000).toISOString(),
+    new Date(new Date().getTime() + 3 * 60 * 1000).toISOString()
   );
   const [valueOne, setValueOne] = useState(null);
   const [isOnFocus, setIsOnFocus] = useState(false);
@@ -107,18 +114,18 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const threeDigitWinningPrice = 330.0;
 
   const [targetDateProp, setTargetDateProp] = useState(
-    new Date(new Date().getTime() + 1 * 60 * 1000).toISOString(),
+    new Date(new Date().getTime() + 1 * 60 * 1000).toISOString()
   );
 
   const handleChildStateChange = (updatedValue: any) => {
-    console.log('Received from DigitComponent:', updatedValue);
+    console.log("Received from DigitComponent:", updatedValue);
     setCartValues(updatedValue);
   };
   const { allResultData, individualGameResults } = useSelector(
-    (state: RootState) => state.resultSlice,
+    (state: RootState) => state.resultSlice
   );
 
-  console.log('individualGameResults==> asasas', individualGameData);
+  console.log("individualGameResults==> asasas", individualGameData);
 
   // helper: convert "HH:mm:ss" → total minutes
   function timeToMinutes(time: string) {
@@ -132,7 +139,9 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     const m = mins % 60;
     const period = h >= 12 ? "PM" : "AM";
     const hour = h % 12 || 12;
-    return `${hour.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")} ${period}`;
+    return `${hour.toString().padStart(2, "0")}:${m
+      .toString()
+      .padStart(2, "0")} ${period}`;
   }
 
   function buildOptions(individualGameData: any[]) {
@@ -162,7 +171,12 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     const end = timeToMinutes(first.endtime);
     const step = timeToMinutes(first.intervaltime);
 
-    const slots: { id: number; groupedId: number; name: string; isSelected: boolean }[] = [];
+    const slots: {
+      id: number;
+      groupedId: number;
+      name: string;
+      isSelected: boolean;
+    }[] = [];
 
     for (let t = start, i = 0; t <= end; t += step, i++) {
       slots.push({
@@ -176,33 +190,36 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     return slots;
   }
 
+  const OPTIONS: any = useMemo(
+    () => buildOptions(individualGameData),
+    [individualGameData]
+  );
 
-const OPTIONS :any = useMemo(() => buildOptions(individualGameData), [individualGameData]);
+  const [selectedOption, setSelectedOption] = useState<number | null>(
+    OPTIONS.length > 0 ? OPTIONS[0].id : null
+  );
 
-const [selectedOption, setSelectedOption] = useState<number | null>(
-  OPTIONS.length > 0 ? OPTIONS[0].id : null
-);
+  // If OPTIONS change (new API response), update selectedOption
+  useEffect(() => {
+    if (OPTIONS.length > 0) {
+      setSelectedOption(OPTIONS[0].id);
+    }
+  }, [OPTIONS]);
 
-// If OPTIONS change (new API response), update selectedOption
-useEffect(() => {
-  if (OPTIONS.length > 0) {
-    setSelectedOption(OPTIONS[0].id);
-  }
-}, [OPTIONS]);
-
-  console.log('individualGameResults==>', individualGameResults);
+  console.log("individualGameResults==>", individualGameResults);
 
   const transformedData = individualGameResults.map((item: any) => ({
     ...item,
-    balls: item.winningNumber.split(''),
+    balls: item.winningNumber.split(""),
   }));
-  console.log('transformedData==>', transformedData);
-
+  console.log("transformedData==>", transformedData);
 
   const groupId = route.params.gameData?.groupId;
   const gameTypeId = route.params.gameData?.gameTypeId;
   console.log("groupId==>", groupId, gameTypeId);
-  const WinningBalls = individualGameData[0]?.lastResult?.winningNumber.split('') || ["1", "2", "3"];
+  const WinningBalls = individualGameData[0]?.lastResult?.winningNumber.split(
+    ""
+  ) || ["1", "2", "3"];
   console.log("WinningBalls==>", WinningBalls, individualGameData);
   // const WinningBalls = "123"
 
@@ -233,15 +250,14 @@ useEffect(() => {
           doubleDigitGameId={individualGameData[1]?.id}
           threeDigitGameId={individualGameData[2]?.id}
           groupId={groupId}
-
         />
       </>
     );
   };
 
-  const handleTimerComplete = () => { };
+  const handleTimerComplete = () => {};
   const filterNumericInput = (value: string) => {
-    return value.replace(/[^0-9]/g, '');
+    return value.replace(/[^0-9]/g, "");
   };
   const onChangeSingleDigitA = (value: any) => {
     const filteredValue = filterNumericInput(value);
@@ -297,7 +313,7 @@ useEffect(() => {
   const refRBSheet: any = useRef();
   // const navigation = useNavigation();
   const goBack = () => {
-    navigation.navigate('DrawerNavigation');
+    navigation.navigate("DrawerNavigation");
   };
 
   const handleAdd = (
@@ -307,17 +323,25 @@ useEffect(() => {
     selectedOption: string,
     price: number,
     groupId: number,
-    gameId: number,
+    gameId: number
   ) => {
-    console.log('testttt', label, value, count, selectedOption, price, groupId, gameId);
+    console.log(
+      "testttt",
+      label,
+      value,
+      count,
+      selectedOption,
+      price,
+      groupId,
+      gameId
+    );
 
-
-    if (value === '') {
-      Alert.alert('Error', 'Please enter a value');
+    if (value === "") {
+      Alert.alert("Error", "Please enter a value");
       return;
     }
 
-    setNumbers(prevNumbers => [
+    setNumbers((prevNumbers) => [
       ...prevNumbers,
       {
         id: prevNumbers.length + 1,
@@ -330,66 +354,66 @@ useEffect(() => {
         gameId,
       },
     ]);
-    console.log('Label==>', label);
+    console.log("Label==>", label);
 
     // Clear input after adding data
     clearInputs(label);
   };
 
   const clearInputs = (label: string) => {
-    if (label === 'A') {
-      onChangeSingleDigitA(''), dispatch(setSingleACount(3));
-    } else if (label === 'B') {
-      onChangeSingleDigitB(''), dispatch(setSingleBCount(3));
-    } else if (label === 'C') {
-      onChangeSingleDigitC(''), dispatch(setSingleCCount(3));
-    } else if (label === 'AB') {
-      doubleDigitA1OnChange(''), dispatch(setDoubleABCount(3));
-      doubleDigitB1OnChange('');
-    } else if (label === 'AC') {
-      doubleDigitA2OnChange(''), dispatch(setDoubleACCount(3));
-      doubleDigitC1OnChange('');
-    } else if (label === 'BC') {
-      doubleDigitB2OnChange(''), dispatch(setDoubleBCCount(3));
-      doubleDigitC2OnChange('');
-    } else if (label === 'ABC') {
-      onChangeThreeDigitA(''), dispatch(setThreeDigitCount(3));
-      onChangeThreeDigitB(''), onChangeThreeDigitC('');
+    if (label === "A") {
+      onChangeSingleDigitA(""), dispatch(setSingleACount(3));
+    } else if (label === "B") {
+      onChangeSingleDigitB(""), dispatch(setSingleBCount(3));
+    } else if (label === "C") {
+      onChangeSingleDigitC(""), dispatch(setSingleCCount(3));
+    } else if (label === "AB") {
+      doubleDigitA1OnChange(""), dispatch(setDoubleABCount(3));
+      doubleDigitB1OnChange("");
+    } else if (label === "AC") {
+      doubleDigitA2OnChange(""), dispatch(setDoubleACCount(3));
+      doubleDigitC1OnChange("");
+    } else if (label === "BC") {
+      doubleDigitB2OnChange(""), dispatch(setDoubleBCCount(3));
+      doubleDigitC2OnChange("");
+    } else if (label === "ABC") {
+      onChangeThreeDigitA(""), dispatch(setThreeDigitCount(3));
+      onChangeThreeDigitB(""), onChangeThreeDigitC("");
     }
   };
-const handleHeader = (value: any) => {
-  const isAdded = numbers.find((item: any) => item.type !== value.name);
+  const handleHeader = (value: any) => {
+    const isAdded = numbers.find((item: any) => item.type !== value.name);
 
-  if (isAdded) {
-    Alert.alert(
-      'Confirmation Reminder',
-      `You have placed an order for the Text\n${selectedOption} time.\nAre you sure you want to remove your previous selections?`,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Confirm',
-          onPress: () => {
-            setNumbers([]);
-            setSelectedOption(value.id); // ✅ always store id
+    if (isAdded) {
+      Alert.alert(
+        "Confirmation Reminder",
+        `You have placed an order for the Text\n${selectedOption} time.\nAre you sure you want to remove your previous selections?`,
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
           },
-        },
-      ],
-      { cancelable: false },
-    );
+          {
+            text: "Confirm",
+            onPress: () => {
+              setNumbers([]);
+              setSelectedOption(value.id); // ✅ always store id
+            },
+          },
+        ],
+        { cancelable: false }
+      );
 
-    return;
-  }
+      return;
+    }
 
-  setSelectedOption(value.id); // ✅ always store id
-};
+    setSelectedOption(value.id); // ✅ always store id
+  };
 
   const getRandomNumber = () => Math.floor(Math.random() * 10);
   const removeNumber = (id: number) => {
-    setNumbers(prevNumbers => prevNumbers.filter(item => item.id !== id));
+    setNumbers((prevNumbers) => prevNumbers.filter((item) => item.id !== id));
   };
 
   const generateRandomNumbers = () => {
@@ -412,7 +436,7 @@ const handleHeader = (value: any) => {
   };
 
   useEffect(() => {
-    console.log('Updated Numbers:', numbers);
+    console.log("Updated Numbers:", numbers);
   }, [numbers]);
 
   const toggleSheet = () => {
@@ -425,21 +449,21 @@ const handleHeader = (value: any) => {
 
   const sum = numbers.reduce(
     (acc: any, item: any) => acc + item.count * item.price,
-    0,
+    0
   );
   const sum1 = numbers.reduce((acc: any, item: any) => acc + item.count, 0);
-  console.log('sum==>', sum);
-  console.log('sum1==>', sum1);
+  console.log("sum==>", sum);
+  console.log("sum1==>", sum1);
 
   const handleAddPermutations = (
     label: string,
     values: string[],
     count: number,
     selectedOption: string,
-    price: number,
+    price: number
   ) => {
     if (values.length === 0) {
-      Alert.alert('Error', 'Please enter a value');
+      Alert.alert("Error", "Please enter a value");
       return;
     }
 
@@ -448,7 +472,7 @@ const handleHeader = (value: any) => {
 
     const permute = (arr: string[], m: string[] = []) => {
       if (arr.length === 0) {
-        results.add(m.join(''));
+        results.add(m.join(""));
       } else {
         for (let i = 0; i < arr.length; i++) {
           const current = [...arr];
@@ -461,7 +485,7 @@ const handleHeader = (value: any) => {
     permute(values);
 
     // Add generated values with ID to state
-    setNumbers(prevNumbers => [
+    setNumbers((prevNumbers) => [
       ...prevNumbers,
       ...Array.from(results).map((value, index) => ({
         id: prevNumbers.length + index + 1, // Unique ID based on array length
@@ -473,21 +497,21 @@ const handleHeader = (value: any) => {
       })),
     ]);
 
-    console.log('Label==>', label);
+    console.log("Label==>", label);
   };
 
   // Handle button press
   const handleGenerate = () => {
-    if (threeDigitA !== '' && threeDigitB !== '' && threeDigitC !== '') {
+    if (threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== "") {
       const values = [threeDigitA, threeDigitB, threeDigitC];
       handleAddPermutations(
-        'ABC',
+        "ABC",
         values,
         threeDigitCount,
         selectedOption,
-        threeDigitPrice,
+        threeDigitPrice
       );
-      clearInputs('ABC');
+      clearInputs("ABC");
     }
   };
 
@@ -496,17 +520,15 @@ const handleHeader = (value: any) => {
     return (
       <LinearGradient
         colors={[
-          selectedOption === item.id ? '#FF4242' : COLORS.secondary, // fallback color
-          selectedOption === item.id ? '#f6c976ff' : COLORS.secondary,
+          selectedOption === item.id ? "#FF4242" : COLORS.secondary, // fallback color
+          selectedOption === item.id ? "#f6c976ff" : COLORS.secondary,
         ]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
-        style={[
-          styles.headerBtn,
-        ]}
+        style={[styles.headerBtn]}
       >
         <TouchableOpacity
-          style={{ justifyContent: 'center', alignItems: 'center' }}
+          style={{ justifyContent: "center", alignItems: "center" }}
           onPress={() => handleHeader(item)}
         >
           <Image
@@ -516,10 +538,10 @@ const handleHeader = (value: any) => {
           />
           <Text
             style={{
-              color: 'white',
+              color: "white",
               marginLeft: 5,
               fontSize: Scale(14),
-              fontWeight: 'bold',
+              fontWeight: "bold",
               marginTop: Scale(5),
             }}
           >
@@ -530,8 +552,6 @@ const handleHeader = (value: any) => {
     );
   };
 
-
-
   useEffect(() => {
     // dispatch(
     //   getIndividualGameResult({
@@ -540,8 +560,8 @@ const handleHeader = (value: any) => {
     // );
     dispatch(
       getIndividualGameData({
-        typeId: gameTypeId
-      }),
+        typeId: gameTypeId,
+      })
     );
   }, [gameTypeId, groupId]);
 
@@ -549,27 +569,25 @@ const handleHeader = (value: any) => {
     if (isLoggedIn) {
       try {
         const apiData = {
-          bets: numbers.map(item => ({
+          bets: numbers.map((item) => ({
             gameId: item.gameId,
             groupId: item.groupId,
             betType: item.label,
             selectedNumber: String(item.value), // ensure it's a string
             betCount: item.count,
             amount: item.price,
-          }))
+          })),
         };
 
-        const resultAction = dispatch(payNow(apiData));  // 👈 no extra wrapper
+        const resultAction = dispatch(payNow(apiData)); // 👈 no extra wrapper
         unwrapResult(resultAction);
       } catch (error: any) {
-        console.log('error', error);
+        console.log("error", error);
       }
     } else {
-      navigation.navigate('SignInScreen');
+      navigation.navigate("SignInScreen");
     }
   };
-
-
 
   return (
     <View style={styles.mainContainer}>
@@ -583,21 +601,25 @@ const handleHeader = (value: any) => {
       >
         <CustomLoader visible={individualGameDataLoader} />
         <GameHeader
-          HeaderText={individualGameData[0]?.name}// {gameData.name}
+          HeaderText={individualGameData[0]?.name}
           leftonPress={goBack}
           leftImage={lefArrow}
           rightImage={lefArrow}
           onPressWithdraw={() => {
-            navigation.navigate('Withdraw');
+            navigation.navigate("Withdraw");
           }}
           onPressRecharge={() => {
-            navigation.navigate('WalletScreen');
+            navigation.navigate("WalletScreen");
+          }}
+          walletBalance={formatToDecimal(mainWalletBalance)}
+          onPressRefresh={() => {
+            dispatch(getWalletBalance());
           }}
         />
         <View style={styles.subContainer}>
           <FlatList
             data={OPTIONS}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={(item) => item.id.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.startView}
@@ -613,12 +635,12 @@ const handleHeader = (value: any) => {
       </ScrollView>
       <RBSheet
         ref={refRBSheet}
-        height={Platform.OS === 'ios' ? Scale(400) : Scale(350)} // Reduced height
+        height={Platform.OS === "ios" ? Scale(400) : Scale(350)} // Reduced height
         draggable={true}
         closeOnPressMask={true}
         customStyles={{
           wrapper: {
-            backgroundColor: 'transparent',
+            backgroundColor: "transparent",
           },
           container: {
             borderTopLeftRadius: Scale(20),
@@ -629,7 +651,7 @@ const handleHeader = (value: any) => {
           draggableIcon: {
             width: Scale(75),
             height: Scale(5),
-            backgroundColor: '#D9D9D9',
+            backgroundColor: "#D9D9D9",
             borderRadius: Scale(2.5),
             marginVertical: Scale(10),
           },
@@ -638,16 +660,16 @@ const handleHeader = (value: any) => {
         <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 20 }}>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
             <Text
               style={{
-                fontWeight: 'bold',
+                fontWeight: "bold",
                 fontSize: Scale(16),
-                color: 'black',
+                color: "black",
                 marginHorizontal: Scale(10),
               }}
             >
@@ -655,9 +677,9 @@ const handleHeader = (value: any) => {
             </Text>
             <TouchableOpacity onPress={() => setNumbers([])}>
               <AntDesign
-                name={'delete'}
+                name={"delete"}
                 size={Scale(18)}
-                color={'black'}
+                color={"black"}
                 style={{ marginRight: Scale(10) }}
               />
             </TouchableOpacity>
@@ -671,29 +693,29 @@ const handleHeader = (value: any) => {
             <View style={{ marginHorizontal: Scale(10), marginTop: Scale(20) }}>
               <View
                 style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
+                  flexDirection: "row",
+                  flexWrap: "wrap",
                   gap: Scale(10),
                 }}
               >
-                {numbers.map(item => (
+                {numbers.map((item) => (
                   <View
                     key={item.id}
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      backgroundColor: '#F1F1F3',
+                      flexDirection: "row",
+                      alignItems: "center",
+                      backgroundColor: "#F1F1F3",
                       borderRadius: Scale(20),
                       paddingHorizontal: Scale(15),
                       paddingVertical: Scale(8),
-                      position: 'relative',
+                      position: "relative",
                     }}
                   >
                     <Text
                       style={{
                         fontSize: Scale(14),
-                        fontWeight: 'bold',
-                        color: '#000',
+                        fontWeight: "bold",
+                        color: "#000",
                       }}
                     >
                       {item.label} = {item.value}
@@ -701,7 +723,7 @@ const handleHeader = (value: any) => {
 
                     <View
                       style={{
-                        backgroundColor: '#F27842',
+                        backgroundColor: "#F27842",
                         borderRadius: Scale(5),
                         paddingHorizontal: Scale(5),
                         marginLeft: Scale(5),
@@ -710,8 +732,8 @@ const handleHeader = (value: any) => {
                       <Text
                         style={{
                           fontSize: Scale(12),
-                          fontWeight: 'bold',
-                          color: 'white',
+                          fontWeight: "bold",
+                          color: "white",
                         }}
                       >
                         x{item.count}
@@ -722,16 +744,16 @@ const handleHeader = (value: any) => {
                     <TouchableOpacity
                       onPress={() => removeNumber(item.id)}
                       style={{
-                        position: 'absolute',
+                        position: "absolute",
                         top: Scale(-5),
                         right: Scale(-5),
-                        backgroundColor: 'white',
+                        backgroundColor: "white",
                         width: Scale(18),
                         height: Scale(18),
                         borderRadius: Scale(9),
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        shadowColor: '#000',
+                        justifyContent: "center",
+                        alignItems: "center",
+                        shadowColor: "#000",
                         shadowOpacity: 0.2,
                         shadowRadius: 3,
                         elevation: 3, // Android shadow
@@ -740,7 +762,7 @@ const handleHeader = (value: any) => {
                       <Image
                         source={cancel}
                         style={{ width: Scale(10), height: Scale(10) }}
-                        tintColor={'black'}
+                        tintColor={"black"}
                       />
                     </TouchableOpacity>
                   </View>
@@ -751,11 +773,11 @@ const handleHeader = (value: any) => {
         </View>
       </RBSheet>
       <SafeAreaView
-        style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
+        style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
       >
         <View
           style={{
-            backgroundColor: '#3e0d0d',
+            backgroundColor: "#3e0d0d",
             height: Scale(80),
             elevation: 10,
           }}
@@ -767,6 +789,16 @@ const handleHeader = (value: any) => {
             isDisabled={sum1 === 0 || islast30sec}
             handlePayNow={handlePayNow}
           />
+          <PaymentSuccessModal
+            headerImage
+            isVisible={paymentSuccessModalVisible}
+            toggleModal={() =>
+              dispatch(setPaymentSuccessModalVisible(false))
+            }
+            headerText="Paid successfully!"
+            bodyText="Your tickets have been successfully purchased. Please take note of the draw time and check the results
+            Three Digits promptly."
+          />
         </View>
       </SafeAreaView>
     </View>
@@ -774,7 +806,7 @@ const handleHeader = (value: any) => {
 };
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: '#3e0d0d',
+    backgroundColor: "#3e0d0d",
     flex: 1,
     marginBottom: Scale(0),
   },
@@ -787,10 +819,10 @@ const styles = StyleSheet.create({
   },
   card: {
     marginTop: Scale(20),
-    backgroundColor: '#5A1C1C',
-    width: '100%',
+    backgroundColor: "#5A1C1C",
+    width: "100%",
     borderRadius: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
@@ -810,78 +842,78 @@ const styles = StyleSheet.create({
   },
   renderDataView: {
     padding: 10,
-    backgroundColor: '#3e0d0d',
+    backgroundColor: "#3e0d0d",
     flex: 1,
     borderRadius: 10,
   },
   gameDetailView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingHorizontal: 10,
     marginTop: 10,
-    backgroundColor: '#DBCEFB',
-    overflow: 'hidden',
+    backgroundColor: "#DBCEFB",
+    overflow: "hidden",
   },
   showCountContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#EEF0F6',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#EEF0F6",
     borderRadius: 30,
     paddingHorizontal: 5,
     height: 40,
     marginLeft: 30,
   },
   button: {
-    backgroundColor: '#F5F7FB',
+    backgroundColor: "#F5F7FB",
     width: 30,
     height: 30,
     borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     // marginHorizontal: 20,
   },
   symbol: {
     fontSize: 15,
-    color: 'black',
+    color: "black",
   },
   input: {
     width: 50, // Set an explicit width to ensure visibility
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000', // Ensure text is visible
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "#000", // Ensure text is visible
+    textAlign: "center",
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
   valueText: {
     marginTop: 20,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   boxButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 10,
   },
   DigitTitleText: {
-    color: '#000',
-    fontWeight: 'bold',
+    color: "#000",
+    fontWeight: "bold",
     fontSize: Scale(16),
   },
   DigitTitleText1: {
-    color: '#000',
-    fontWeight: 'bold',
+    color: "#000",
+    fontWeight: "bold",
     fontSize: Scale(14),
     top: 1,
   },
   headerBtn: {
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 10,
     padding: 10,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginHorizontal: 5,
   },
   headerImg: { width: 30, height: 30 },

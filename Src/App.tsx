@@ -8,7 +8,7 @@ import { setDeviceInfo, setIpAddress } from './Redux/Slice/signUpSlice';
 import { RootState } from './Redux/store';
 import Toast from 'react-native-toast-message'
 import MobileContainer from './Components/MobileContainer';
-
+import { LogBox } from 'react-native';
 const App = () => {
   const dispatch = useDispatch();
 
@@ -16,6 +16,7 @@ const App = () => {
   const deviceInfo = useSelector(
     (state: RootState) => state.signUpSlice.deviceInfo,
   );
+  LogBox.ignoreAllLogs();
 
   // useEffect(() => {
   //   const fetchDeviceInfo = async () => {

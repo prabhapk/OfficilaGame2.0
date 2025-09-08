@@ -6,6 +6,7 @@ import { COLORS } from '../Constants/Theme';
 import MyBets3DigitsCard from './MyBets3DigitsCard';
 import { hot } from '../../assets/assets';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { getVisiblePages } from '../Utils/Common';
 interface ResultTableProps {
   tableData: any[];
   showHeader?: boolean;
@@ -129,10 +130,11 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
                   marginTop: Scale(10),
                   alignSelf: 'center',
                   backgroundColor: '#812B2B',
-                  width: '100%',
+                  width: '110%',
                   alignItems: 'center',
-                  justifyContent: 'center',
+                  justifyContent: 'space-evenly',
                   paddingVertical: Scale(10),
+                  marginBottom: Scale(20),
                 }}>
                 <Text
                   style={{
@@ -147,7 +149,7 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
                   }}>
                   Total {tableData.length}
                 </Text>
-
+{/* 
                 {[...Array(totalPages)].map((_, index) => (
                   <TouchableOpacity
                     key={index}
@@ -166,8 +168,40 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
                     }}>
                     <Text>{index + 1}</Text>
                   </TouchableOpacity>
-                ))}
-
+                ))} */}
+ {getVisiblePages(currentPage, totalPages).map((page, index) =>
+                    page === '...' ? (
+                      <Text
+                        key={index}
+                        style={{ color: 'white', marginHorizontal: Scale(5) ,
+                        minWidth: Scale(20),
+                        textAlign: 'center',
+                        }}
+                      >
+                        ...
+                      </Text>
+                    ) : (
+                      <TouchableOpacity
+                        key={page}
+                        onPress={() => changePage(page as number)}
+                        style={{
+                          backgroundColor:
+                            currentPage === page ? 'gold' : '#812B2B',
+                          borderRadius: Scale(10),
+                          padding: Scale(5),
+                          borderColor: '#812B2B',
+                          borderWidth: 1,
+                          height: Scale(40),
+                          width: Scale(40),
+                          marginHorizontal: Scale(1),
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Text>{page}</Text>
+                      </TouchableOpacity>
+                    ),
+                  )}
                 {/* Left Arrow */}
                 <TouchableOpacity
                   onPress={() => changePage(currentPage - 1)}
