@@ -17,19 +17,15 @@ const CustomLoader = ({visible}: Props): JSX.Element => {
   return (
     <Spinner
       visible={visible}
-      textContent={''}
-      color={'white'}
-      textStyle={{}}
+      overlayColor="rgba(0,0,0,0.5)"
+      textContent={""}     // disable default text
+      color="transparent"  // hide default spinner
       customIndicator={
-        <View style={styles.container}>
-          {/* <LottieView
-            // source={require('../../assets/RupeeCoin.json')}
+        <View style={styles.overlay}>
+          <Image
             source={rupeeCoinLoaderGif}
-            style={{height: Scale(500), width: Scale(570)}}
-            autoPlay
-            loop
-          /> */}
-          <Image source={rupeeCoinLoaderGif} style={{height: Scale(150), width: Scale(150)}} /> 
+            style={{ height: Scale(120), width: Scale(120) }}
+          />
         </View>
       }
     />
@@ -37,18 +33,12 @@ const CustomLoader = ({visible}: Props): JSX.Element => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'transparent',
-    // width: Scale(90),
-    // height: Scale(50),
-    borderRadius: 20 / 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: 10,
-    color: 'white',
+  overlay: {
+    ...StyleSheet.absoluteFillObject, // fill full screen
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
+
 
 export default CustomLoader;

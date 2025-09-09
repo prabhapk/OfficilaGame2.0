@@ -12,11 +12,11 @@ import {
   Platform,
   Dimensions,
 } from "react-native";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { use, useEffect, useMemo, useRef, useState } from "react";
 import { cancel, lefArrow, quick3min, sameClock } from "../../assets/assets";
 import CountdownTimer from "../Components/CountdownTimer";
 import { useDispatch, useSelector } from "react-redux";
-import { setPaymentSuccessModalVisible, showHowToPlay } from "../Redux/Slice/commonSlice";
+import { setInsufficientBalanceModalVisible, setPaymentSuccessModalVisible, showHowToPlay } from "../Redux/Slice/commonSlice";
 import HowToPlayModal from "../Components/HowToPlayModal";
 import CommonBall from "../Components/CommonBall";
 import Scale from "../Components/Scale";
@@ -73,6 +73,8 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import CustomLoader from "../Components/CustomLoader";
 import { getWalletBalance } from "../Redux/Slice/signInSlice";
 import PaymentSuccessModal from "../Components/Modal/PaymentSuccessModal";
+import AlertSuccessModal from "../Components/Modal/AlertSuccessModal";
+import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceModal";
 
 const ThreeDigitMain = ({ navigation, route }: any) => {
   const {
@@ -92,7 +94,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const { isLoggedIn, mainWalletBalance } = useSelector(
     (state: RootState) => state.signInSlice
   );
-  const {paymentSuccessModalVisible } = useSelector(
+  const {paymentSuccessModalVisible, InsufficientBalanceModalVisible} = useSelector(
     (state: RootState) => state.commonSlice
   );
   console.log("individualGameData==>", individualGameData);
@@ -438,6 +440,35 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     dispatch(setThreeDigitC(getRandomNumber()));
   };
 
+  const resetState = () => {
+    console.log("resetState");
+    setNumbers([]);
+    setCartValues([]);
+    // setSelectedOption(null);
+    setSingleACount(3);
+    setSingleBCount(3);
+    setSingleCCount(3);
+    setDoubleABCount(3);
+    setDoubleACCount(3);
+    setDoubleBCCount(3);
+    setThreeDigitCount(3);
+    dispatch(setSingleDigitA(""));
+    dispatch(setSingleDigitB(""));
+    dispatch(setSingleDigitC(""));
+    dispatch(setDoubleDigitA1(""));
+    dispatch(setDoubleDigitA2(""));
+    dispatch(setDoubleDigitB1(""));
+    dispatch(setDoubleDigitB2(""));
+    dispatch(setDoubleDigitC1(""));
+    dispatch(setDoubleDigitC2(""));
+    dispatch(setThreeDigitA(""));
+    dispatch(setThreeDigitB(""));
+    dispatch(setThreeDigitC(""));
+  };
+  useEffect(() => {
+    resetState();
+  }, []);
+
   useEffect(() => {
     console.log("Updated Numbers:", numbers);
   }, [numbers]);
@@ -569,7 +600,36 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     dispatch(getMyOrders());
   }, [gameTypeId, groupId,]);
 
-  const handlePayNow = () => {
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+  
+    if (paymentSuccessModalVisible) {
+      timer = setTimeout(() => {
+        dispatch(setPaymentSuccessModalVisible(false));
+      }, 3000); 
+    }
+  
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [paymentSuccessModalVisible, dispatch]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+  
+    if (InsufficientBalanceModalVisible) {
+      timer = setTimeout(() => {
+        dispatch(setInsufficientBalanceModalVisible(false));
+      }, 2000); 
+    }
+  
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [InsufficientBalanceModalVisible, dispatch]);
+
+
+  const handlePayNow = async () => {
     if (isLoggedIn) {
       try {
         const apiData = {
@@ -577,25 +637,33 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
             gameId: item.gameId,
             groupId: item.groupId,
             betType: item.label,
-            selectedNumber: String(item.value), // ensure it's a string
+            selectedNumber: String(item.value),
             betCount: item.count,
             amount: item.price,
           })),
         };
 
-        const resultAction = dispatch(payNow(apiData)); // 👈 no extra wrapper
-        unwrapResult(resultAction);
+        const resultAction = await dispatch(payNow(apiData));
+        const data = unwrapResult(resultAction);
+        console.log("data==>",data);
+        if (data.success === true) {
+         resetState();
+        dispatch(getWalletBalance());
+        }
       } catch (error: any) {
-        console.log("error", error);
+        console.log("handlePayNowError", error);
       }
     } else {
       navigation.navigate("SignInScreen");
     }
   };
 
+
   return (
     <View style={styles.mainContainer}>
       {islast30sec && <Show30SecondsModal />}
+      <CustomLoader visible={Boolean(individualGameDataLoader) &&
+          Boolean(myOrdersLoader)} />
       <ScrollView
         scrollEnabled
         showsVerticalScrollIndicator={false}
@@ -603,8 +671,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
         nestedScrollEnabled
         contentContainerStyle={{ paddingBottom: Scale(100) }}
       >
-        <CustomLoader visible={Boolean(individualGameDataLoader) && 
-          Boolean(myOrdersLoader)} />
+        
         <GameHeader
           HeaderText={individualGameData[0]?.name}
           leftonPress={goBack}
@@ -804,6 +871,11 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
             bodyText="Your tickets have been successfully purchased. Please take note of the draw time and check the results
             Three Digits promptly."
           />
+          <InsufficientBalanceModal
+            isVisible={InsufficientBalanceModalVisible}
+            headerText="Insufficient Balance!"
+            bodyText="Please add funds to your wallet to continue" 
+            />
         </View>
       </SafeAreaView>
     </View>

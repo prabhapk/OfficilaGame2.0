@@ -34,16 +34,18 @@ const dispatch = useDispatch<AppDispatch>();
     const styles = createStyles(Scale);
     
     const isFocused = useIsFocused();
-    const [isInitialLoad, setIsInitialLoad] = useState(true);
   useEffect(() => {
-    if (isFocused && !isInitialLoad) {
+    // always fetch on mount
     dispatch(getAllGamesList());
     dispatch(getWalletBalance());
-
-  } 
-  else {
-      setIsInitialLoad(false);
-    } }, [dispatch, isFocused]);
+  }, [dispatch]);
+  
+  useEffect(() => {
+    if (isFocused) {
+      dispatch(getAllGamesList());
+      dispatch(getWalletBalance());
+    }
+  }, [dispatch, isFocused]);
 
   const openDrawerdd = () => {
     console.log('openDrawerdd', navigation.toggleDrawer);
@@ -98,6 +100,7 @@ const dispatch = useDispatch<AppDispatch>();
 
   return (
     <View style={{ flex: 1, backgroundColor: '#250f0fff' }}>
+       <CustomLoader visible={loader} />
       <CustomHeader
         onMenuPress={openDrawerdd}
         onLoginPress={() => {
@@ -107,7 +110,6 @@ const dispatch = useDispatch<AppDispatch>();
           navigation.navigate('SignUpScreen');
         }}
       />
-      <CustomLoader visible={loader} />
       <ScrollView
         ref={scrollViewRef}
         style={styles.container}

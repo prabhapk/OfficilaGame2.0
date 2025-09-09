@@ -6,6 +6,7 @@ const initialValues: CommonSliceState = {
   howToPlayVisible: false,
   show30SecondsLeftAlert: false,
   paymentSuccessModalVisible: false,
+  InsufficientBalanceModalVisible: false,
 }
 
 export const CommonSlice = createSlice({
@@ -23,11 +24,16 @@ export const CommonSlice = createSlice({
     },
     setPaymentSuccessModalVisible:(state,action:PayloadAction<boolean>)=>{
       state.paymentSuccessModalVisible = action.payload
+    },
+    setInsufficientBalanceModalVisible:(state,action:PayloadAction<boolean>)=>{
+      state.InsufficientBalanceModalVisible = action.payload
     }
    
   },
 })
 
-export const { showHowToPlay, hideHowToPlay, handleShowAlert, setPaymentSuccessModalVisible } = CommonSlice.actions
+export const { showHowToPlay, hideHowToPlay, handleShowAlert, setPaymentSuccessModalVisible, 
+  setInsufficientBalanceModalVisible
+ } = CommonSlice.actions
 
 export default CommonSlice.reducer

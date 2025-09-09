@@ -1,7 +1,10 @@
+import InsufficientBalanceModal from "../../Components/Modal/InsufficientBalanceModal";
+
 export interface CommonSliceState {
     howToPlayVisible: boolean;
     show30SecondsLeftAlert:boolean
     paymentSuccessModalVisible:boolean
+    InsufficientBalanceModalVisible:boolean
   }
 
   export interface threeDigitState {
