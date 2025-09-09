@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   Platform,
   Dimensions,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { cancel, lefArrow, quick3min, sameClock } from "../../assets/assets";
@@ -147,51 +148,56 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       .padStart(2, "0")} ${period}`;
   }
 
-  function buildOptions(individualGameData: any[]) {
-    if (!individualGameData?.length) return [];
+function buildOptions(individualGameData: any[]) {
+  if (!individualGameData?.length) return [];
 
-    const first = individualGameData[0];
+  const first = individualGameData[0];
 
-    // ✅ CASE 1: no interval
-    if (first.intervaltime === "00:00:00") {
-      return Object.values(
-        individualGameData.reduce((acc, item) => {
-          if (!acc[item.groupId]) {
-            acc[item.groupId] = {
-              id: item.groupId,
-              groupedId: item.groupedId,
-              name: minutesTo12Hr(timeToMinutes(item.endtime)),
-              isSelected: Object.keys(acc).length === 0,
-            };
-          }
-          return acc;
-        }, {} as Record<number, { id: number; name: string; isSelected: boolean }>)
-      );
-    }
-
-    // ✅ CASE 2: interval available
-    const start = timeToMinutes(first.starttime);
-    const end = timeToMinutes(first.endtime);
-    const step = timeToMinutes(first.intervaltime);
-
-    const slots: {
-      id: number;
-      groupedId: number;
-      name: string;
-      isSelected: boolean;
-    }[] = [];
-
-    for (let t = start, i = 0; t <= end; t += step, i++) {
-      slots.push({
-        id: i + 1,
-        groupedId: first.groupId,
-        name: minutesTo12Hr(t),
-        isSelected: i === 0,
-      });
-    }
-
-    return slots;
+  // ✅ CASE 1: no interval
+  if (first.intervaltime === "00:00:00") {
+    return Object.values(
+      individualGameData.reduce((acc, item) => {
+        if (!acc[item.groupId]) {
+          acc[item.groupId] = {
+            id: item.groupId,
+            groupedId: item.groupedId,
+            name: minutesTo12Hr(timeToMinutes(item.endtime)),
+            isSelected: Object.keys(acc).length === 0,
+          };
+        }
+        return acc;
+      }, {} as Record<number, { id: number; name: string; isSelected: boolean }>)
+    );
   }
+
+  // ✅ CASE 2: interval available
+  const end = timeToMinutes(first.endtime);
+  const step = timeToMinutes(first.intervaltime);
+
+  // ⏰ Use nextresulttime instead of starttime
+  const nextResult = new Date(first.nextresulttime);
+  const nowMinutes =
+    nextResult.getHours() * 60 + nextResult.getMinutes(); // convert to minutes
+
+  const slots: {
+    id: number;
+    groupedId: number;
+    name: string;
+    isSelected: boolean;
+  }[] = [];
+
+  for (let t = nowMinutes, i = 0; t <= end; t += step, i++) {
+    slots.push({
+      id: i + 1,
+      groupedId: first.groupId,
+      name: minutesTo12Hr(t),
+      isSelected: i === 0, // first slot = upcoming game
+    });
+  }
+
+  return slots;
+}
+
 
   const OPTIONS: any = useMemo(
     () => buildOptions(individualGameData),
@@ -258,7 +264,14 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     );
   };
 
-  const handleTimerComplete = () => {};
+  const handleTimerComplete = () => {
+     dispatch(
+      getIndividualGameData({
+        typeId: gameTypeId,
+      })
+    );
+    dispatch(getMyOrders());
+  };
   const filterNumericInput = (value: string) => {
     return value.replace(/[^0-9]/g, "");
   };
@@ -600,9 +613,12 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
         scrollEnabled
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
-        nestedScrollEnabled
+         nestedScrollEnabled={true}
         contentContainerStyle={{ paddingBottom: Scale(100) }}
       >
+        <TouchableWithoutFeedback>
+          <>
+          
         <CustomLoader visible={Boolean(individualGameDataLoader) && 
           Boolean(myOrdersLoader)} />
         <GameHeader
@@ -629,6 +645,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.startView}
             renderItem={renderHeader}
+            nestedScrollEnabled={true}
           />
 
           {/* Conditionally Render UI Based on Selection */}
@@ -637,6 +654,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
             <HowToPlayModal />
           </View>
         </View>
+        </>
+        </TouchableWithoutFeedback>
       </ScrollView>
       <RBSheet
         ref={refRBSheet}
