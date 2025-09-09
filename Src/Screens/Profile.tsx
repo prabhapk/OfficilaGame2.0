@@ -158,7 +158,7 @@ const ProfileScreen = ({ navigation }: any) => {
               <Image source={vipBadgeZero} resizeMode="contain" style={styles.vipBadgeImage} />
               <View style={styles.vipTopRight}>
                 <Text style={styles.vipText}>VIP 1</Text>
-                <Text style={styles.vipText}>$500 / $1000</Text>
+                <Text style={styles.vipText}>₹500 / ₹1000</Text>
               </View>
             </View>
             <View style={styles.vipProgressBackground}>

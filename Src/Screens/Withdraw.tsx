@@ -139,7 +139,7 @@ const Withdraw = ({navigation}: any) => {
           maxLength={10}
         />
       </View>
-      <Text style={[styles.sectionTitle, {marginVertical: Scale(20)}]}>Actual amount received:$ {actualAmount} </Text>
+      <Text style={[styles.sectionTitle, {marginVertical: Scale(20)}]}>Actual amount received:₹ {actualAmount} </Text>
       <Divider style={{marginVertical: Scale(10)}} />
       <Text style ={{fontSize: Scale(16), fontWeight: 'bold', color: '#fff', marginVertical: Scale(10)}}>
           Withdrawal will be charged with 3% of withdraw fee will be charged.

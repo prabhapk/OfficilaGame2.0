@@ -263,18 +263,21 @@ function buildOptions(individualGameData: any[]) {
           doubleDigitGameId={individualGameData[1]?.id}
           threeDigitGameId={individualGameData[2]?.id}
           groupId={groupId}
+          onThirtySecondsRemaining={() => setLast30sec(true)}
         />
       </>
     );
   };
 
   const handleTimerComplete = () => {
+   
      dispatch(
       getIndividualGameData({
         typeId: gameTypeId,
       })
     );
     dispatch(getMyOrders());
+    setLast30sec(false);
   };
   const filterNumericInput = (value: string) => {
     return value.replace(/[^0-9]/g, "");
@@ -676,7 +679,7 @@ function buildOptions(individualGameData: any[]) {
 
   return (
     <View style={styles.mainContainer}>
-      {islast30sec && <Show30SecondsModal />}
+      {/* {islast30sec && <Show30SecondsModal />} */}
       <CustomLoader visible={Boolean(individualGameDataLoader) &&
           Boolean(myOrdersLoader)} />
       <ScrollView

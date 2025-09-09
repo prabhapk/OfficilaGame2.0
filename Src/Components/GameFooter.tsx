@@ -66,7 +66,7 @@ const GameFooter: React.FC<Props> = ({
           <Text
             style={{ fontSize: Scale(20), fontWeight: 'bold', color: '#fff' }}
           >
-            $ {totalAmount}
+            ₹ {totalAmount.toFixed(2)}
           </Text>
           <Text style={{ fontSize: Scale(14), color: '#fff' }}>
             {totalCount} numbers

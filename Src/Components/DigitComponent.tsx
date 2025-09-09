@@ -303,7 +303,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               <Text
                 style={[styles.DigitTitleText, { marginVertical: Scale(5) }]}
               >
-                ${singleDigitPrice.toFixed(2)}
+                ₹{singleDigitPrice.toFixed(2)}
               </Text>
             </View>
 
@@ -477,7 +477,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               <Text
                 style={[styles.DigitTitleText, { marginVertical: Scale(5) }]}
               >
-                ${doubleDigitPrice.toFixed(2)}
+                ₹{doubleDigitPrice.toFixed(2)}
               </Text>
             </View>
 
@@ -715,7 +715,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               <Text
                 style={[styles.DigitTitleText, { marginVertical: Scale(5) }]}
               >
-                ${threeDigitPrice.toFixed(2)}
+                ₹{threeDigitPrice.toFixed(2)}
               </Text>
             </View>
 

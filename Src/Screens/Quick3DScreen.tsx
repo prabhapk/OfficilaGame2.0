@@ -318,7 +318,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   };
 
   const triggerAPI = (selectedOption: string) => {
-    setLast30sec(false);
+    
     if (selectedOption == "1 Mins") {
       dispatch(
         fetchQuick3DGamesData({
@@ -340,6 +340,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         })
       );
     }
+    setLast30sec(false);
   }
 
   const getRandomNumber = () => Math.floor(Math.random() * 10);
@@ -678,7 +679,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   return (
     <View style={styles.mainContainer}>
 
-      {islast30sec && <Show30SecondsModal />}
+      {/* {islast30sec && <Show30SecondsModal />} */}
       <ScrollView
         scrollEnabled
         showsVerticalScrollIndicator={false}
