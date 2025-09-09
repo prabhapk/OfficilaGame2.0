@@ -39,7 +39,6 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
 
   useEffect(() => {
     if (!isFocused) return;
-    console.log("targetDatetargetDate");
 
     const timer = setInterval(() => {
       const newTimeLeft = calculateTimeLeft();

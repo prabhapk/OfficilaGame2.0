@@ -224,14 +224,10 @@ const DigitComponent: React.FC<IDigitProps> = ({
   }, [showAlert]);
 
   useEffect(() => {
-    console.log('Target Date Prop', targetDateProp);
     if (targetDateProp) {
-      console.log('targetDatePropasas', targetDateProp);
       setTargetDate(targetDateProp);
     }
   }, [targetDateProp]);
-
-  console.log('targetDate', targetDate);
 
   return (
     <>

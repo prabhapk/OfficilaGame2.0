@@ -10,23 +10,15 @@ import {
   FlatList,
   SafeAreaView,
   Platform,
-  Dimensions,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { cancel, lefArrow, quick3min, sameClock } from '../../assets/assets';
-import CountdownTimer from '../Components/CountdownTimer';
+import { cancel, lefArrow, sameClock } from '../../assets/assets';
 import { useDispatch, useSelector } from 'react-redux';
-import { showHowToPlay } from '../Redux/Slice/commonSlice';
 import HowToPlayModal from '../Components/HowToPlayModal';
-import CommonBall from '../Components/CommonBall';
-import SingleIntegerTextInput from '../Components/SingleIntegerTextInput';
 import GameFooter from '../Components/GameFooter';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import GameHeader from '../Components/GameHeader';
-import ResultTable from '../Components/ResultTable';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import CommonAddButton from '../Components/CommonAddButton';
-import CommonQuickGuess from '../Components/CommonQuickGuess';
 import { RootState } from '../Redux/store';
 import {
   setDoubleDigitA1,
@@ -48,197 +40,129 @@ import {
   setThreeDigitB,
   setThreeDigitC,
   setThreeDigitCount,
-  setMin1TargetDate,
-  setMin3TargetDate,
-  setMin5TargetDate,
 } from '../Redux/Slice/threeDigitSlice';
 import { handleShowAlert } from '../Redux/Slice/commonSlice';
-import CountButtons from '../Components/CountButtons';
 import Show30SecondsModal from '../Components/Show30SecondsModal';
-import AnimatedText from '../Components/AnimatedText';
-import { tableData } from '../Utils/Constants';
 import DigitComponent from '../Components/DigitComponent';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '../Constants/Theme';
-import { getIndividualGameResult } from '../Redux/Slice/resultSlice';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { fetchQuick3DGamesData } from '../Redux/Slice/Quick3DSlice';
+import { formatToDecimal } from '../Utils/Common';
+import { getWalletBalance } from '../Redux/Slice/signInSlice';
+
+
 const Quick3DScreen = ({ navigation, route }: any) => {
   const { Scale } = useContainerScale();
   const styles = createStyles(Scale);
+  const gameData = route.params.gameData;
+  const dispatch = useDispatch();
+  const refRBSheet: any = useRef();
+
+
+  const [selectedOption, setSelectedOption] = useState('1 Mins');
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [islast30sec, setLast30sec] = useState(false);
+  const [numbers, setNumbers] = useState([]);
+  const [cartValues, setCartValues] = useState([]);
+
   const {
     threeDigitA,
     threeDigitB,
     threeDigitC,
     threeDigitCount,
-    min1TargetDate,
-    min3TargetDate,
-    min5TargetDate,
   } = useSelector((state: RootState) => state.threeDigit);
-  const dispatch = useDispatch();
-  const [selectedOption, setSelectedOption] = useState('1 Mins');
-  const now = new Date();
-  const [targetDate, setTargetDate] = useState(
-    new Date(new Date().getTime() + 3 * 60 * 1000).toISOString(),
-  );
-  const [valueOne, setValueOne] = useState(null);
-  const [isOnFocus, setIsOnFocus] = useState(false);
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [islast30sec, setLast30sec] = useState(false);
-  const [numbers, setNumbers] = useState([]);
-  const [cartValues, setCartValues] = useState([]);
-  const singleDigitPrice = 10.0;
-  const doubleDigitPrice = 11.0;
-  const threeDigitPrice = 21.0;
 
-
-  const singleDigitWinningPrice = 110.0;
-  const doubleDigitWinningPrice = 220.0;
-  const threeDigitWinningPrice = 330.0;
-
-  const [targetDateProp, setTargetDateProp] = useState(
-    new Date(new Date().getTime() + 1 * 60 * 1000).toISOString(),
-  );
-
-  const handleChildStateChange = (updatedValue: any) => {
-    console.log('Received from DigitComponent:', updatedValue);
-    setCartValues(updatedValue);
-  };
   const { allResultData, individualGameResults } = useSelector((state: RootState) => state.resultSlice);
+  const { quick3dGamesList } = useSelector((state: RootState) => state.quick3DSlice);
+  const { isLoggedIn, mainWalletBalance } = useSelector(
+    (state: RootState) => state.signInSlice
+  );
 
-  console.log("individualGameResults==>", individualGameResults);
-
-  const transformedData = individualGameResults.map((item: any) => ({
+  const transformedResultData = individualGameResults.map((item: any) => ({
     ...item,
     balls: item.winningNumber
       .split(''),
   }));
 
-  console.log("transformedData==>", transformedData);
+  const handleChildStateChange = (updatedValue: any) => {
+    setCartValues(updatedValue);
+  };
 
 
-  const gameData = route.params.gameData;
   useEffect(() => {
     if (gameData.name === "1minGame") {
       setSelectedOption("1 Mins");
+      dispatch(
+        fetchQuick3DGamesData({
+          quickythree: "Q3D-1M",
+        })
+      );
     }
     else if (gameData.name === "3minGame") {
       setSelectedOption("3 Mins");
+      dispatch(
+        fetchQuick3DGamesData({
+          quickythree: "Q3D-3M",
+        })
+      );
     }
     else if (gameData.name === "5minGame") {
       setSelectedOption("5 Mins");
+      dispatch(
+        fetchQuick3DGamesData({
+          quickythree: "Q3D-5M",
+        })
+      );
     }
   }, [gameData])
-  const renderContent = () => {
-    switch (selectedOption) {
-      case '1 Mins':
-        return (
-          <>
-            <DigitComponent
-              lastGameWiiningId="12345678891000000000"
-              nextGameId="678976567"
-              latGameWinningA='1'
-              lastGameWinningB='2'
-              lastGameWinningC='3'
-              singleDigitPrice={singleDigitPrice}
-              singleDigitWinningPrice={singleDigitWinningPrice}
-              handleAdd={handleAdd}
-              selectedOption={selectedOption}
-              doubleDigitPrice={doubleDigitPrice}
-              doubleDigitWinningPrice={doubleDigitWinningPrice}
-              tableData={transformedData}
-              handleGenerate={handleGenerate}
-              threeDigitWinningPrice={threeDigitWinningPrice}
-              threeDigitPrice={threeDigitPrice}
-              onStateChange={handleChildStateChange}
-              targetDateProp={min1TargetDate}
-              onTimerComplete={handleTimerComplete} 
-              gameName={''} 
-              groupId={0} 
-              singleDigitGameId={0} 
-              doubleDigitGameId={0} 
-              threeDigitGameId={0}            />
-          </>)
-      case '3 Mins':
-        return (
-          <>
-            <DigitComponent
-              lastGameWiiningId="222222222"
-              nextGameId="12312122"
-              latGameWinningA='3'
-              lastGameWinningB='2'
-              lastGameWinningC='3'
-              singleDigitPrice={singleDigitPrice}
-              singleDigitWinningPrice={singleDigitWinningPrice}
-              handleAdd={handleAdd}
-              selectedOption={selectedOption}
-              doubleDigitPrice={doubleDigitPrice}
-              doubleDigitWinningPrice={doubleDigitWinningPrice}
-              tableData={transformedData}
-              handleGenerate={handleGenerate}
-              threeDigitWinningPrice={threeDigitWinningPrice}
-              threeDigitPrice={threeDigitPrice}
-              onStateChange={handleChildStateChange}
-              targetDateProp={min3TargetDate}
-              onTimerComplete={handleTimerComplete}
-            />
-          </>
-        )
-      case '5 Mins':
-        return (
-          <>
-            <DigitComponent
-              lastGameWiiningId="111111111"
-              nextGameId="12312122"
-              latGameWinningA='3'
-              lastGameWinningB='2'
-              lastGameWinningC='3'
-              singleDigitPrice={singleDigitPrice}
-              singleDigitWinningPrice={singleDigitWinningPrice}
-              handleAdd={handleAdd}
-              selectedOption={selectedOption}
-              doubleDigitPrice={doubleDigitPrice}
-              doubleDigitWinningPrice={doubleDigitWinningPrice}
-              tableData={transformedData}
-              handleGenerate={handleGenerate}
-              threeDigitWinningPrice={threeDigitWinningPrice}
-              threeDigitPrice={threeDigitPrice}
-              onStateChange={handleChildStateChange}
-              targetDateProp={min5TargetDate}
-              onTimerComplete={handleTimerComplete}
-            />
-          </>
-        )
-      default:
-        return <Text style={{ color: 'red' }}>Invalid Option</Text>;
-    }
-  }
-  const handleThirtySecondsLeft = () => {
-    setLast30sec(true);
-    dispatch(handleShowAlert());
-    setTimeout(() => {
-      setLast30sec(false);
-      dispatch(handleShowAlert());
-    }, 2000);
+
+
+
+  const transformApiResponse = (response: any) => {
+    const key = Object.keys(response)[0]; // "23:59:59"
+    const games = response[key];
+
+    const single = games?.find((g: any) => g.sectiontype === "Single");
+    const double = games?.find((g: any) => g.sectiontype === "Double");
+    const triple = games?.find((g: any) => g.sectiontype === "Triple");
+
+    const lastWinningNumber = triple?.lastResult?.winningNumber || "";
+    const [a = "", b = "", c = ""] = lastWinningNumber.split("");
+
+    return {
+      lastGameWiiningId: triple?.lastResult?.winningNumber || "",
+      nextGameId: triple?.id || 0,
+      lastGameWinningA: a,
+      lastGameWinningB: b,
+      lastGameWinningC: c,
+
+      // Prices
+      singleDigitPrice: Number(single?.ticketprize) || 0,
+      doubleDigitPrice: Number(double?.ticketprize) || 0,
+      threeDigitPrice: Number(triple?.ticketprize) || 0,
+
+      // Winning amounts
+      singleDigitWinningPrice: Number(single?.prizeamount) || 0,
+      doubleDigitWinningPrice: Number(double?.prizeamount) || 0,
+      threeDigitWinningPrice: Number(triple?.prizeamount) || 0,
+
+      // IDs
+      groupId: triple?.groupId || 0,
+      singleDigitGameId: single?.id || 0,
+      doubleDigitGameId: double?.id || 0,
+      threeDigitGameId: triple?.id || 0,
+
+      // Timer
+      targetDateProp: triple?.nextresulttime || null,
+
+      // Raw data if needed
+      tableData: games,
+      gameName: "Quick 3D"
+    };
   };
 
 
-  const handleTimerComplete = () => {
-    let updatedTime = ""
-    if (selectedOption === "1 Mins") {
-      updatedTime = new Date(new Date(min1TargetDate).getTime() + 1 * 60 * 1000).toISOString();
-      dispatch(setMin1TargetDate(updatedTime));
-    }
-    else if (selectedOption === "3 Mins") {
-      updatedTime = new Date(new Date(min3TargetDate).getTime() + 3 * 60 * 1000).toISOString();
-      dispatch(setMin3TargetDate(updatedTime));
-    }
-    else if (selectedOption === "5 Mins") {
-      updatedTime = new Date(new Date(min5TargetDate).getTime() + 5 * 60 * 1000).toISOString();
-      dispatch(setMin5TargetDate(updatedTime));
-    }
-    console.log(updatedTime, "kokokokokok");
-
-  };
 
   const filterNumericInput = (value: string) => {
     return value.replace(/[^0-9]/g, '');
@@ -291,11 +215,8 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setThreeDigitC(filteredValue));
   };
-  const onBlurOne = () => {
-    setIsOnFocus(false);
-  };
-  const refRBSheet: any = useRef();
-  // const navigation = useNavigation();
+
+
   const goBack = () => {
     navigation.navigate('DrawerNavigation');
   };
@@ -325,7 +246,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         price,
       },
     ]);
-    console.log('Label==>', label);
+
 
     // Clear input after adding data
     clearInputs(label);
@@ -353,9 +274,9 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     }
   }
   const handleHeader = (value: any) => {
-    const isAdded = numbers.find((item: any) => item.type !== value.name);
+    const isAdded = numbers.some((item: any) => item.type === value.name);
 
-    if (isAdded) {
+    if (!isAdded && numbers.length > 0) {
       Alert.alert(
         'Confirmation Reminder',
         `You have placed an order for the Text\n${selectedOption} time.\nAre you sure you want to remove your previous selections?`,
@@ -368,18 +289,46 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           {
             text: 'Confirm',
             onPress: () => {
-              setNumbers([]), setSelectedOption(value);
+              setNumbers([]);
+              setSelectedOption(value.name);
+
+              triggerAPI(value.name);
             },
           },
         ],
         { cancelable: false },
       );
-
       return;
     }
 
     setSelectedOption(value.name);
+    triggerAPI(value.name);
+
   };
+
+  const triggerAPI = (selectedOption: string) => {
+    if (selectedOption == "1 Mins") {
+      dispatch(
+        fetchQuick3DGamesData({
+          quickythree: "Q3D-1M",
+        })
+      );
+    }
+    else if (selectedOption == "3 Mins") {
+      dispatch(
+        fetchQuick3DGamesData({
+          quickythree: "Q3D-3M",
+        })
+      );
+    }
+    else if (selectedOption == "5 Mins") {
+      dispatch(
+        fetchQuick3DGamesData({
+          quickythree: "Q3D-5M",
+        })
+      );
+    }
+  }
 
   const getRandomNumber = () => Math.floor(Math.random() * 10);
   const removeNumber = (id: number) => {
@@ -405,9 +354,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     dispatch(setThreeDigitC(getRandomNumber()));
   };
 
-  useEffect(() => {
-    console.log('Updated Numbers:', numbers);
-  }, [numbers]);
+
 
   const toggleSheet = () => {
     if (isSheetOpen) {
@@ -422,8 +369,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     0,
   );
   const sum1 = numbers.reduce((acc: any, item: any) => acc + item.count, 0);
-  console.log('sum==>', sum);
-  console.log('sum1==>', sum1);
+
 
   const handleAddPermutations = (
     label: string,
@@ -466,10 +412,6 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         price,
       })),
     ]);
-
-    console.log('Label==>', label);
-
-
   };
 
   // Handle button press
@@ -481,11 +423,20 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         values,
         threeDigitCount,
         selectedOption,
-        threeDigitPrice,
+        transformedResultData.threeDigitPrice,
       )
       clearInputs('ABC');
     }
   }
+
+  const handlePayNow = () => {
+    if (isLoggedIn) {
+
+    } else {
+      navigation.navigate("SignInScreen");
+    }
+  };
+
   const OPTIONS = [{ id: 1, name: '1 Mins', isSelected: true },
   { id: 2, name: '3 Mins', isSelected: false },
   { id: 3, name: '5 Mins', isSelected: false }];
@@ -526,13 +477,100 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     )
   }
 
-  useEffect(() => {
-    dispatch(getIndividualGameResult(
-      {
-        groupId: 1,
-      }
-    ));
-  }, []);
+  const renderContent = () => {
+    const transformedGameData = transformApiResponse(quick3dGamesList);
+    switch (selectedOption) {
+      case '1 Mins':
+        return (
+          <>
+            <DigitComponent
+              lastGameWiiningId={transformedGameData.lastGameWiiningId}
+              nextGameId={transformedGameData.nextGameId}
+              latGameWinningA={transformedGameData.lastGameWinningA}
+              lastGameWinningB={transformedGameData.lastGameWinningB}
+              lastGameWinningC={transformedGameData.lastGameWinningC}
+              singleDigitPrice={transformedGameData.singleDigitPrice}
+              singleDigitWinningPrice={transformedGameData.singleDigitWinningPrice}
+              handleAdd={handleAdd}
+              selectedOption={selectedOption}
+              doubleDigitPrice={transformedGameData.doubleDigitPrice}
+              doubleDigitWinningPrice={transformedGameData.doubleDigitWinningPrice}
+              tableData={transformedResultData}
+              handleGenerate={handleGenerate}
+              threeDigitWinningPrice={transformedGameData.threeDigitWinningPrice}
+              threeDigitPrice={transformedGameData.threeDigitPrice}
+              onStateChange={handleChildStateChange}
+              targetDateProp={transformedGameData.targetDateProp}
+              onTimerComplete={() => triggerAPI(selectedOption)}
+              gameName={transformedGameData.gameName}
+              groupId={transformedGameData.groupId}
+              singleDigitGameId={transformedGameData.singleDigitGameId}
+              doubleDigitGameId={transformedGameData.doubleDigitGameId}
+              threeDigitGameId={transformedGameData.threeDigitGameId} />
+          </>)
+      case '3 Mins':
+        return (
+          <>
+            <DigitComponent
+              lastGameWiiningId={transformedGameData.lastGameWiiningId}
+              nextGameId={transformedGameData.nextGameId}
+              latGameWinningA={transformedGameData.lastGameWinningA}
+              lastGameWinningB={transformedGameData.lastGameWinningB}
+              lastGameWinningC={transformedGameData.lastGameWinningC}
+              singleDigitPrice={transformedGameData.singleDigitPrice}
+              singleDigitWinningPrice={transformedGameData.singleDigitWinningPrice}
+              handleAdd={handleAdd}
+              selectedOption={selectedOption}
+              doubleDigitPrice={transformedGameData.doubleDigitPrice}
+              doubleDigitWinningPrice={transformedGameData.doubleDigitWinningPrice}
+              tableData={transformedResultData}
+              handleGenerate={handleGenerate}
+              threeDigitWinningPrice={transformedGameData.threeDigitWinningPrice}
+              threeDigitPrice={transformedGameData.threeDigitPrice}
+              onStateChange={handleChildStateChange}
+              targetDateProp={transformedGameData.targetDateProp}
+              onTimerComplete={() => triggerAPI(selectedOption)}
+              gameName={transformedGameData.gameName}
+              groupId={transformedGameData.groupId}
+              singleDigitGameId={transformedGameData.singleDigitGameId}
+              doubleDigitGameId={transformedGameData.doubleDigitGameId}
+              threeDigitGameId={transformedGameData.threeDigitGameId} />
+          </>
+        )
+      case '5 Mins':
+        return (
+          <>
+            <DigitComponent
+              lastGameWiiningId={transformedGameData.lastGameWiiningId}
+              nextGameId={transformedGameData.nextGameId}
+              latGameWinningA={transformedGameData.lastGameWinningA}
+              lastGameWinningB={transformedGameData.lastGameWinningB}
+              lastGameWinningC={transformedGameData.lastGameWinningC}
+              singleDigitPrice={transformedGameData.singleDigitPrice}
+              singleDigitWinningPrice={transformedGameData.singleDigitWinningPrice}
+              handleAdd={handleAdd}
+              selectedOption={selectedOption}
+              doubleDigitPrice={transformedGameData.doubleDigitPrice}
+              doubleDigitWinningPrice={transformedGameData.doubleDigitWinningPrice}
+              tableData={transformedResultData}
+              handleGenerate={handleGenerate}
+              threeDigitWinningPrice={transformedGameData.threeDigitWinningPrice}
+              threeDigitPrice={transformedGameData.threeDigitPrice}
+              onStateChange={handleChildStateChange}
+              targetDateProp={transformedGameData.targetDateProp}
+              onTimerComplete={() => triggerAPI(selectedOption)}
+              gameName={transformedGameData.gameName}
+              groupId={transformedGameData.groupId}
+              singleDigitGameId={transformedGameData.singleDigitGameId}
+              doubleDigitGameId={transformedGameData.doubleDigitGameId}
+              threeDigitGameId={transformedGameData.threeDigitGameId} />
+          </>
+        )
+      default:
+        return <Text style={{ color: 'red' }}>Invalid Option</Text>;
+    }
+  }
+
 
 
   return (
@@ -546,15 +584,19 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         nestedScrollEnabled
         contentContainerStyle={{ paddingBottom: Scale(100) }}>
         <GameHeader
-          HeaderText={'3 Digit Game'}
+          HeaderText={"Quick 3Digit Games"}
           leftonPress={goBack}
           leftImage={lefArrow}
           rightImage={lefArrow}
           onPressWithdraw={() => {
-            navigation.navigate('Withdraw');
+            navigation.navigate("Withdraw");
           }}
           onPressRecharge={() => {
-            navigation.navigate('WalletScreen');
+            navigation.navigate("WalletScreen");
+          }}
+          walletBalance={formatToDecimal(mainWalletBalance)}
+          onPressRefresh={() => {
+            dispatch(getWalletBalance());
           }}
         />
         <View style={styles.subContainer}>
@@ -716,6 +758,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
             totalAmount={sum}
             totalCount={sum1}
             isDisabled={sum1 === 0 || islast30sec}
+            handlePayNow={handlePayNow}
           />
         </View>
       </SafeAreaView>

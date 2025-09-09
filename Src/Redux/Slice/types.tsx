@@ -77,3 +77,8 @@ export interface CommonSliceState {
     allResultData: any;
     individualGameResults: any;
   }
+
+  export interface Quick3DState {
+    quick3dGamesList: any;
+    quick3dGamesLoader:boolean
+  }

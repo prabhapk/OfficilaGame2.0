@@ -13,17 +13,20 @@ export const serviceUrls = {
     forgotPasswordOtp: '/api/Auth/forgot-password-otp',
     resetPassword: '/api/Auth/reset-password',
   },
-  games:{
-    getAllGamesList:'/api/HomeGame/groups',
-    orderPlace:'/api/Bet/place',
-    walletBalance:'/api/Wallet/balance',
+  games: {
+    getAllGamesList: '/api/HomeGame/groups',
+    orderPlace: '/api/Bet/place',
+    walletBalance: '/api/Wallet/balance',
   },
-  results:{
-    getAllResults:'api/ResultHistory/all-result',
+  results: {
+    getAllResults: 'api/ResultHistory/all-result',
 
-    getIndividualGameResult:'/api/ResultHistory/game-result',
-    getIndividualGameData:'/api/Game/by-typeid',
+    getIndividualGameResult: '/api/ResultHistory/game-result',
+    getIndividualGameData: '/api/Game/by-typeid',
     getMyOrders: '/api/Bet/history',
+  },
+  quick3d: {
+    getQuick3DGamesData: '/api/Game/by-typeid/quickythree',
   }
 };
 

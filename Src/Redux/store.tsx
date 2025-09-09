@@ -1,11 +1,12 @@
 import { AnyAction, combineReducers, configureStore, createAction } from '@reduxjs/toolkit';
 import threeDigitSlice from './Slice/threeDigitSlice';
 import commonSlice from './Slice/commonSlice';
-import  LoaderSlice  from './Slice/loaderSlice';
+import LoaderSlice from './Slice/loaderSlice';
 import signInSlice from './Slice/signInSlice';
 import signUpSlice from './Slice/signUpSlice';
 import homeSlice from './Slice/HomeSlice';
 import resultSlice from './Slice/resultSlice';
+import Quick3DSlice from './Slice/Quick3DSlice';
 import storage from '@react-native-async-storage/async-storage';
 import {
   FLUSH,
@@ -23,15 +24,17 @@ import {
   useSelector as useReduxSelector,
 } from 'react-redux';
 
+
 export const resetState = createAction('RESET_STATE');
 const reducers = combineReducers({
   threeDigit: threeDigitSlice,
-  commonSlice:commonSlice,
-  LoaderSlice:LoaderSlice,
-  signInSlice:signInSlice,
-  signUpSlice:signUpSlice,
-  homeSlice:homeSlice,
-  resultSlice:resultSlice
+  commonSlice: commonSlice,
+  LoaderSlice: LoaderSlice,
+  signInSlice: signInSlice,
+  signUpSlice: signUpSlice,
+  homeSlice: homeSlice,
+  resultSlice: resultSlice,
+  quick3DSlice: Quick3DSlice,
 });
 const rootReducer = (state: any, action: AnyAction) => {
   if (action.type === resetState.type) {
@@ -59,7 +62,7 @@ const store = configureStore({
 
 const persistor = persistStore(store);
 
-export {persistor, store};
+export { persistor, store };
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
