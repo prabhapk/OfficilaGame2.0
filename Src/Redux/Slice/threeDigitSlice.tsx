@@ -1,6 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { threeDigitState } from './types'
+import axiosInstance from '../../Utils/axiosClient';
+import { serviceUrls } from '../../Utils/serviceUrls';
 
 
 
@@ -27,10 +29,33 @@ const initialvalues: threeDigitState = {
   min1TargetDate: "2025-07-22T15:46:27.123Z",
   min3TargetDate: '2025-07-22T15:49:27.123Z',
   min5TargetDate: '2025-07-22T15:52:27.123Z',
+  myOrdersData: [],
+  myOrdersLoader: false,
 }
+export const getMyOrders = createAsyncThunk<
+  any,
+  {
+
+  },
+  { rejectValue: string }
+>('games/getMyOrders', async (_, thunkAPI) => {
+  try {
+    const response = await axiosInstance.get(
+      serviceUrls.results.getMyOrders,
+    );
+    console.log('getMyOrdersResponse', response.data);
+    return response.data;
+  } catch (error: any) {
+    console.log('getMyOrdersApiError', error);
+    return thunkAPI.rejectWithValue(
+      error?.response?.data || error.message || error.toString(),
+    );
+  }
+});
 export const threeDigitSlice = createSlice({
   name: 'threeDigit',
   initialState:initialvalues,
+  
   reducers: {
     setSingleDigitA: (state, action: PayloadAction<any>) => {
       state.singleDigitA = action.payload;
@@ -110,6 +135,27 @@ export const threeDigitSlice = createSlice({
     setMin5TargetDate: (state, action: PayloadAction<any>) => {
       state.min5TargetDate = action.payload;
     },
+},
+extraReducers: builder => {
+  // Pending
+  builder.addCase(getMyOrders.pending, (state, action) => {
+    state.myOrdersLoader = true;
+
+  });
+
+  // Fulfilled
+  builder.addCase(getMyOrders.fulfilled, (state, action) => {
+    state.myOrdersLoader = false;
+    state.myOrdersData = action.payload;
+    console.log('getMyOrdersResponseState==>', state.myOrdersData);
+    
+  });
+
+  // Rejected
+  builder.addCase(getMyOrders.rejected, (state, action) => {
+    state.myOrdersLoader = false;
+
+  });
 },
 
 })

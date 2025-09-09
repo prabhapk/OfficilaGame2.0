@@ -7,6 +7,8 @@ import MyBets3DigitsCard from './MyBets3DigitsCard';
 import { hot } from '../../assets/assets';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { getVisiblePages } from '../Utils/Common';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Redux/store';
 interface ResultTableProps {
   tableData: any[];
   showHeader?: boolean;
@@ -19,6 +21,10 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
   const [onTableSelect, setOnTableSelect] = useState('ResultHistory');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const {
+    myOrdersData,
+    myOrdersLoader,
+  } = useSelector((state: RootState) => state.threeDigit);
 
   // Calculate the total number of pages
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
@@ -59,6 +65,47 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
       </View>
     </View>
   );
+
+
+    const myOrderRenterItem = ({ item, index }: { item: any; index: number }) => {
+      
+      const winningStatus = item.isWinning === true ? "Won" : "No Won";
+      const myBetsTableData = [
+        {
+          type: item.betType,
+          value: item.selectedNumber,  
+          payment: item.amount,      
+          result: winningStatus        
+        }
+      ];
+      return(
+      <View>
+
+<MyBets3DigitsCard
+      headers={["A", "B", "C"]} // Keep static for now (since API doesn't return this)
+      myBetsTableData={myBetsTableData}
+      id={`PK${10000000 + index}`} // Temporary ID placeholder
+      bettingTime={item.betTime}
+      paymentAmount={item.totalAmount}
+      drawTime="-" // Placeholder until API sends
+      topBalls={[
+        { text: "A", color: "#DE3C3F" },
+        { text: "B", color: "#EC8204" },
+        { text: "C", color: "#066FEA" }
+      ]}
+      bottomBalls={[
+        { text: "2", color: "#DE3C3F" }, // Show selected num
+        { text: "4", color: "#EC8204" },
+        { text: "6", color: "#066FEA" }
+      ]}
+      date={item.betTime.split("T")[0]} // take date part only
+      status={winningStatus}
+      imageSource={hot}
+    />
+
+      </View>
+      )};
+    
 
   return (
     <View>
@@ -248,7 +295,7 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
             </>
           ) : (
             <>
-              <MyBets3DigitsCard
+              {/* <MyBets3DigitsCard
                 headers={["A", "B", "C"]}
                 myBetsTableData={[
                   { type: "A", value: 2, payment: 33, result: "No Won" },
@@ -272,6 +319,12 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
                 date="01-08-2022"
                 status="NO WON"
                 imageSource={hot}
+              /> */}
+              <FlatList
+                data ={myOrdersData}
+                keyExtractor={(item, index) => index.toString()}
+                showsVerticalScrollIndicator={false}
+                renderItem={myOrderRenterItem}
               />
               
             </>

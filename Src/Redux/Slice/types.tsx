@@ -27,6 +27,8 @@ export interface CommonSliceState {
     min1TargetDate: any;
     min3TargetDate: any;
     min5TargetDate: any;
+    myOrdersData:any
+    myOrdersLoader:boolean
   }
   export interface signInSliceState {
     email: string;
@@ -43,6 +45,7 @@ export interface CommonSliceState {
     mainWalletBalance?: number;
     withdrawBalance?: number;
     walletBalanceLoader: boolean,
+
 
   }
   export interface signUpSliceState {

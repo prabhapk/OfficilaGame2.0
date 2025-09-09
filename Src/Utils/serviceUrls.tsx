@@ -1,4 +1,5 @@
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { getMyOrders } from "../Redux/Slice/threeDigitSlice";
 
 export const serviceUrls = {
   Auth: {
@@ -22,6 +23,7 @@ export const serviceUrls = {
 
     getIndividualGameResult:'/api/ResultHistory/game-result',
     getIndividualGameData:'/api/Game/by-typeid',
+    getMyOrders: '/api/Bet/history',
   }
 };
 

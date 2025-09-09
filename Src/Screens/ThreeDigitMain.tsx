@@ -52,6 +52,7 @@ import {
   setMin1TargetDate,
   setMin3TargetDate,
   setMin5TargetDate,
+  getMyOrders,
 } from "../Redux/Slice/threeDigitSlice";
 import { handleShowAlert } from "../Redux/Slice/commonSlice";
 import CountButtons from "../Components/CountButtons";
@@ -82,6 +83,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     min1TargetDate,
     min3TargetDate,
     min5TargetDate,
+    myOrdersData,
+    myOrdersLoader,
   } = useSelector((state: RootState) => state.threeDigit);
   const { individualGameData, individualGameDataLoader } = useSelector(
     (state: RootState) => state.homeSlice
@@ -125,7 +128,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     (state: RootState) => state.resultSlice
   );
 
-  console.log("individualGameResults==> asasas", individualGameData);
+  console.log("individualGameData==>", individualGameData);
 
   // helper: convert "HH:mm:ss" → total minutes
   function timeToMinutes(time: string) {
@@ -553,17 +556,18 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   };
 
   useEffect(() => {
-    // dispatch(
-    //   getIndividualGameResult({
-    //     groupId: groupId,
-    //   }),
-    // );
+    dispatch(
+      getIndividualGameResult({
+        groupId: groupId,
+      }),
+    );
     dispatch(
       getIndividualGameData({
         typeId: gameTypeId,
       })
     );
-  }, [gameTypeId, groupId]);
+    dispatch(getMyOrders());
+  }, [gameTypeId, groupId,]);
 
   const handlePayNow = () => {
     if (isLoggedIn) {
@@ -599,7 +603,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
         nestedScrollEnabled
         contentContainerStyle={{ paddingBottom: Scale(100) }}
       >
-        <CustomLoader visible={individualGameDataLoader} />
+        <CustomLoader visible={Boolean(individualGameDataLoader) && 
+          Boolean(myOrdersLoader)} />
         <GameHeader
           HeaderText={individualGameData[0]?.name}
           leftonPress={goBack}
