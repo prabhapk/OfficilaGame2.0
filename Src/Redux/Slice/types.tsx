@@ -1,6 +1,7 @@
 export interface CommonSliceState {
     howToPlayVisible: boolean;
     show30SecondsLeftAlert:boolean
+    paymentSuccessModalVisible:boolean
   }
 
   export interface threeDigitState {
@@ -26,6 +27,8 @@ export interface CommonSliceState {
     min1TargetDate: any;
     min3TargetDate: any;
     min5TargetDate: any;
+    myOrdersData:any
+    myOrdersLoader:boolean
   }
   export interface signInSliceState {
     email: string;
@@ -41,6 +44,8 @@ export interface CommonSliceState {
     isLoading?: boolean;
     mainWalletBalance?: number;
     withdrawBalance?: number;
+    walletBalanceLoader: boolean,
+
 
   }
   export interface signUpSliceState {

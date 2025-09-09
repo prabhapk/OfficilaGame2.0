@@ -4,6 +4,7 @@ import axios from 'axios';
 import { BaseURL, serviceUrls } from '../../Utils/serviceUrls';
 import axiosInstance from '../../Utils/axiosClient';
 import { RootState } from '../store';
+import { setPaymentSuccessModalVisible } from './commonSlice';
 
 const initialValues: homeSliceState = {
   howScreenCommonLoader: false,
@@ -74,6 +75,7 @@ export const payNow = createAsyncThunk<any, any, { rejectValue: string }>(
         apiData
       );
       console.log('payNowResponse', response.data);
+      thunkAPI.dispatch(setPaymentSuccessModalVisible(true));
       return response.data;
     } catch (error: any) {
       console.log('payNowResponseApiError', error);
@@ -128,7 +130,7 @@ export const homeSlice = createSlice({
 
     });
     builder.addCase(getIndividualGameData.rejected, (state, action) => {
-      state.individualGameDataLoader = true;
+      state.individualGameDataLoader = false;
 
     });
   },

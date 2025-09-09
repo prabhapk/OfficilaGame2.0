@@ -13,6 +13,8 @@ import { useDispatch } from 'react-redux';
 import { getAllGamesList } from '../Redux/Slice/HomeSlice';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { AppDispatch } from '../Redux/store';
+import { getWalletBalance } from '../Redux/Slice/signInSlice';
+import { useIsFocused } from '@react-navigation/native';
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
 const dispatch = useDispatch<AppDispatch>();
@@ -31,10 +33,17 @@ const dispatch = useDispatch<AppDispatch>();
   const { Scale, verticalScale } = useContainerScale();
     const styles = createStyles(Scale);
     
-
+    const isFocused = useIsFocused();
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
   useEffect(() => {
+    if (isFocused && !isInitialLoad) {
     dispatch(getAllGamesList());
-  }, []);
+    dispatch(getWalletBalance());
+
+  } 
+  else {
+      setIsInitialLoad(false);
+    } }, [dispatch, isFocused]);
 
   const openDrawerdd = () => {
     console.log('openDrawerdd', navigation.toggleDrawer);
