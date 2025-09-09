@@ -67,6 +67,7 @@ export interface IDigitProps {
   onStateChange: any;
   targetDateProp?: any;
   onTimerComplete?: any;
+  onThirtySecondsRemaining?: any;
   gameName: string;
   groupId: number,
   singleDigitGameId: number,
@@ -94,6 +95,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
   onStateChange,
   targetDateProp,
   onTimerComplete,
+  onThirtySecondsRemaining,
   gameName,
   groupId,
   singleDigitGameId,
@@ -282,6 +284,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               targetDate={targetDate}
               onThirtySecondsLeft={() => {
                 setShowAlert(true);
+                onThirtySecondsRemaining();
               }}
               onComplete={onTimerComplete}
             />

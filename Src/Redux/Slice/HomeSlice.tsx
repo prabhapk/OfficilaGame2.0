@@ -4,7 +4,8 @@ import axios from 'axios';
 import { BaseURL, serviceUrls } from '../../Utils/serviceUrls';
 import axiosInstance from '../../Utils/axiosClient';
 import { RootState } from '../store';
-import { setPaymentSuccessModalVisible } from './commonSlice';
+import { setInsufficientBalanceModalVisible, setPaymentSuccessModalVisible } from './commonSlice';
+import { Alert } from 'react-native';
 
 const initialValues: homeSliceState = {
   howScreenCommonLoader: false,
@@ -79,6 +80,11 @@ export const payNow = createAsyncThunk<any, any, { rejectValue: string }>(
       return response.data;
     } catch (error: any) {
       console.log('payNowResponseApiError', error);
+      const status = error?.response?.status;
+      const errorData = error?.response?.data;
+      if (status === 402 || errorData?.message?.toLowerCase().includes("insufficient")) {
+        thunkAPI.dispatch(setInsufficientBalanceModalVisible(true));
+      } 
       return thunkAPI.rejectWithValue(
         error?.response?.data || error.message || error.toString(),
       );

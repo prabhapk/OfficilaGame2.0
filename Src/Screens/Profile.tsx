@@ -58,7 +58,6 @@ const ProfileScreen = ({ navigation }: any) => {
       dispatch(setIsLoggedIn(false));
       await persistor.flush();
       persistor.purge();
-      // navigation.reset({ index: 0, routes: [{ name: 'DrawerNavigation' }] });
       navigation.replace('DrawerNavigation');
     } catch (error) {
       console.error('Error resetting state:', error);
