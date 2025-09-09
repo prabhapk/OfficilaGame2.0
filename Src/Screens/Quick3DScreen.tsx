@@ -41,15 +41,19 @@ import {
   setThreeDigitC,
   setThreeDigitCount,
 } from '../Redux/Slice/threeDigitSlice';
-import { handleShowAlert } from '../Redux/Slice/commonSlice';
+import { handleShowAlert, setInsufficientBalanceModalVisible, setPaymentSuccessModalVisible } from '../Redux/Slice/commonSlice';
 import Show30SecondsModal from '../Components/Show30SecondsModal';
 import DigitComponent from '../Components/DigitComponent';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '../Constants/Theme';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { fetchQuick3DGamesData } from '../Redux/Slice/Quick3DSlice';
-import { formatToDecimal } from '../Utils/Common';
+import { formatToDecimal, formatToTime } from '../Utils/Common';
 import { getWalletBalance } from '../Redux/Slice/signInSlice';
+import { payNow } from '../Redux/Slice/HomeSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+import PaymentSuccessModal from '../Components/Modal/PaymentSuccessModal';
+import InsufficientBalanceModal from '../Components/Modal/InsufficientBalanceModal';
 
 
 const Quick3DScreen = ({ navigation, route }: any) => {
@@ -77,6 +81,9 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const { quick3dGamesList } = useSelector((state: RootState) => state.quick3DSlice);
   const { isLoggedIn, mainWalletBalance } = useSelector(
     (state: RootState) => state.signInSlice
+  );
+  const {paymentSuccessModalVisible, InsufficientBalanceModalVisible} = useSelector(
+    (state: RootState) => state.commonSlice
   );
 
   const transformedResultData = individualGameResults.map((item: any) => ({
@@ -132,7 +139,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 
     return {
       lastGameWiiningId: triple?.lastResult?.winningNumber || "",
-      nextGameId: triple?.id || 0,
+      nextGameId:formatToTime( triple?.nextresulttime )|| 0,
       lastGameWinningA: a,
       lastGameWinningB: b,
       lastGameWinningC: c,
@@ -229,13 +236,15 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     count: number,
     selectedOption: string,
     price: number,
+    groupId: number,
+    gameId: number
   ) => {
     if (value === '') {
       Alert.alert('Error', 'Please enter a value');
       return;
     }
 
-    setNumbers(prevNumbers => [
+    setNumbers((prevNumbers) => [
       ...prevNumbers,
       {
         id: prevNumbers.length + 1,
@@ -244,6 +253,8 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         count,
         type: selectedOption,
         price,
+        groupId,
+        gameId,
       },
     ]);
 
@@ -307,6 +318,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   };
 
   const triggerAPI = (selectedOption: string) => {
+    setLast30sec(false);
     if (selectedOption == "1 Mins") {
       dispatch(
         fetchQuick3DGamesData({
@@ -413,9 +425,39 @@ const Quick3DScreen = ({ navigation, route }: any) => {
       })),
     ]);
   };
+  const resetState = () => {
+    console.log("resetState");
+    setNumbers([]);
+    setCartValues([]);
+    // setSelectedOption(null);
+    setSingleACount(3);
+    setSingleBCount(3);
+    setSingleCCount(3);
+    setDoubleABCount(3);
+    setDoubleACCount(3);
+    setDoubleBCCount(3);
+    setThreeDigitCount(3);
+    dispatch(setSingleDigitA(""));
+    dispatch(setSingleDigitB(""));
+    dispatch(setSingleDigitC(""));
+    dispatch(setDoubleDigitA1(""));
+    dispatch(setDoubleDigitA2(""));
+    dispatch(setDoubleDigitB1(""));
+    dispatch(setDoubleDigitB2(""));
+    dispatch(setDoubleDigitC1(""));
+    dispatch(setDoubleDigitC2(""));
+    dispatch(setThreeDigitA(""));
+    dispatch(setThreeDigitB(""));
+    dispatch(setThreeDigitC(""));
+  };
+  useEffect(() => {
+    resetState();
+  }, []);
 
   // Handle button press
-  const handleGenerate = () => {
+  const handleGenerate = (threeDigitPrice: any) => {
+    console.log("threeDigitPrice==>",threeDigitPrice);
+    
     if (threeDigitA !== '' && threeDigitB !== '' && threeDigitC !== '') {
       const values = [threeDigitA, threeDigitB, threeDigitC];
       handleAddPermutations(
@@ -423,16 +465,67 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         values,
         threeDigitCount,
         selectedOption,
-        transformedResultData.threeDigitPrice,
+        threeDigitPrice,
       )
       clearInputs('ABC');
     }
   }
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+  
+    if (paymentSuccessModalVisible) {
+      timer = setTimeout(() => {
+        dispatch(setPaymentSuccessModalVisible(false));
+      }, 3000); 
+    }
+  
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [paymentSuccessModalVisible, dispatch]);
 
-  const handlePayNow = () => {
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+  
+    if (InsufficientBalanceModalVisible) {
+      timer = setTimeout(() => {
+        dispatch(setInsufficientBalanceModalVisible(false));
+      }, 2000); 
+    }
+  
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [InsufficientBalanceModalVisible, dispatch]);
+
+  const handlePayNow = async () => {
     if (isLoggedIn) {
-
-    } else {
+      try {
+        const apiData = {
+          bets: numbers.map((item) => ({
+            gameId: item.gameId,
+            groupId: item.groupId,
+            betType: item.label,
+            selectedNumber: String(item.value),
+            betCount: item.count,
+            amount: item.price,
+          })),
+        };
+        console.log("apiData==>",apiData);
+        
+        const resultAction = await dispatch(payNow(apiData));
+        const data = unwrapResult(resultAction);
+        console.log("data==>",data);
+        if (data.success === true) {
+         resetState();
+        dispatch(getWalletBalance());
+        }
+      }
+       catch (error: any) {
+        console.log("handlePayNowError", error);
+      }
+    } 
+    else {
       navigation.navigate("SignInScreen");
     }
   };
@@ -496,12 +589,15 @@ const Quick3DScreen = ({ navigation, route }: any) => {
               doubleDigitPrice={transformedGameData.doubleDigitPrice}
               doubleDigitWinningPrice={transformedGameData.doubleDigitWinningPrice}
               tableData={transformedResultData}
-              handleGenerate={handleGenerate}
+              handleGenerate={()=> handleGenerate(
+                Number(transformedGameData.threeDigitPrice)
+              )}
               threeDigitWinningPrice={transformedGameData.threeDigitWinningPrice}
               threeDigitPrice={transformedGameData.threeDigitPrice}
               onStateChange={handleChildStateChange}
               targetDateProp={transformedGameData.targetDateProp}
               onTimerComplete={() => triggerAPI(selectedOption)}
+              onThirtySecondsRemaining={() => setLast30sec(true)}
               gameName={transformedGameData.gameName}
               groupId={transformedGameData.groupId}
               singleDigitGameId={transformedGameData.singleDigitGameId}
@@ -524,12 +620,15 @@ const Quick3DScreen = ({ navigation, route }: any) => {
               doubleDigitPrice={transformedGameData.doubleDigitPrice}
               doubleDigitWinningPrice={transformedGameData.doubleDigitWinningPrice}
               tableData={transformedResultData}
-              handleGenerate={handleGenerate}
+              handleGenerate={()=> handleGenerate(
+                Number(transformedGameData.threeDigitPrice)
+              )}
               threeDigitWinningPrice={transformedGameData.threeDigitWinningPrice}
               threeDigitPrice={transformedGameData.threeDigitPrice}
               onStateChange={handleChildStateChange}
               targetDateProp={transformedGameData.targetDateProp}
               onTimerComplete={() => triggerAPI(selectedOption)}
+              onThirtySecondsRemaining={() => setLast30sec(true)}
               gameName={transformedGameData.gameName}
               groupId={transformedGameData.groupId}
               singleDigitGameId={transformedGameData.singleDigitGameId}
@@ -553,12 +652,15 @@ const Quick3DScreen = ({ navigation, route }: any) => {
               doubleDigitPrice={transformedGameData.doubleDigitPrice}
               doubleDigitWinningPrice={transformedGameData.doubleDigitWinningPrice}
               tableData={transformedResultData}
-              handleGenerate={handleGenerate}
+              handleGenerate={()=> handleGenerate(
+                Number(transformedGameData.threeDigitPrice)
+              )}
               threeDigitWinningPrice={transformedGameData.threeDigitWinningPrice}
               threeDigitPrice={transformedGameData.threeDigitPrice}
               onStateChange={handleChildStateChange}
               targetDateProp={transformedGameData.targetDateProp}
               onTimerComplete={() => triggerAPI(selectedOption)}
+              onThirtySecondsRemaining={() => setLast30sec(true)}
               gameName={transformedGameData.gameName}
               groupId={transformedGameData.groupId}
               singleDigitGameId={transformedGameData.singleDigitGameId}
@@ -761,6 +863,21 @@ const Quick3DScreen = ({ navigation, route }: any) => {
             handlePayNow={handlePayNow}
           />
         </View>
+        <PaymentSuccessModal
+            headerImage
+            isVisible={paymentSuccessModalVisible}
+            toggleModal={() =>
+              dispatch(setPaymentSuccessModalVisible(false))
+            }
+            headerText="Paid successfully!"
+            bodyText="Your tickets have been successfully purchased. Please take note of the draw time and check the results
+            Three Digits promptly."
+          />
+          <InsufficientBalanceModal
+            isVisible={InsufficientBalanceModalVisible}
+            headerText="Insufficient Balance!"
+            bodyText="Please add funds to your wallet to continue" 
+            />
       </SafeAreaView>
     </View>
   );

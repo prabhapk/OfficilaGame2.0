@@ -244,7 +244,9 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           doubleDigitPrice={Number(individualGameData[1]?.ticketprize)}
           doubleDigitWinningPrice={Number(individualGameData[1]?.prizeamount)}
           tableData={transformedData}
-          handleGenerate={handleGenerate}
+          handleGenerate={()=> handleGenerate(
+            Number(individualGameData[2]?.ticketprize)
+          )}
           threeDigitWinningPrice={Number(individualGameData[2]?.prizeamount)}
           threeDigitPrice={Number(individualGameData[2]?.ticketprize)}
           onStateChange={handleChildStateChange}
@@ -535,7 +537,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   };
 
   // Handle button press
-  const handleGenerate = () => {
+  const handleGenerate = (threeDigitPrice: any) => {
     if (threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== "") {
       const values = [threeDigitA, threeDigitB, threeDigitC];
       handleAddPermutations(
