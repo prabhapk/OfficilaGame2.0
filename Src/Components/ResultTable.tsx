@@ -6,6 +6,7 @@ import { COLORS } from '../Constants/Theme';
 import MyBets3DigitsCard from './MyBets3DigitsCard';
 import { hot } from '../../assets/assets';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { formatDateTime } from '../Utils/Common';
 interface ResultTableProps {
   tableData: any[];
   showHeader?: boolean;
@@ -44,12 +45,13 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
         backgroundColor: index % 2 === 0 ? '#540000' : '#5C1818',
         borderBottomWidth: 1,
         borderColor: '#5C1818',
+        paddingHorizontal: Scale(10),
       }}>
-      <View style={{ flex: 1.5, paddingLeft: Scale(10) }}>
+      <View style={{ flex: 1.5, }}>
         <Text style={{ color: COLORS.white }}>{item.uid}</Text>
       </View>
-      <View style={{ flex: 1.3,alignItems: 'center' }}>
-        <Text style={{ color: COLORS.white }}>{item.gameTime}</Text>
+      <View style={{ flex: 1.2, alignItems: 'center' }}>
+        <Text style={{ color: COLORS.white }}>{formatDateTime(item.gameTime)}</Text>
       </View>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
         <TableCommonBall backgroundColor="#DE3C3F" innerText={item.balls[0]} borderColor={'#DE3C3F'} />
@@ -58,6 +60,18 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
       </View>
     </View>
   );
+
+  const getVisiblePages = (currentPage: number, totalPages: number, maxVisible: number = 5) => {
+    let start = Math.max(currentPage - 2, 1);
+    let end = start + maxVisible - 1;
+
+    if (end > totalPages) {
+      end = totalPages;
+      start = Math.max(end - maxVisible + 1, 1);
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  };
 
   return (
     <View>
@@ -101,8 +115,9 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
                   alignItems: 'center',
                   backgroundColor: '#812B2B',
                   paddingVertical: Scale(5),
+                  paddingHorizontal: Scale(10),
                 }}>
-                <View style={{ flex: 1.5, paddingLeft: Scale(10) }}>
+                <View style={{ flex: 1.5, }}>
                   <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Issue</Text>
                 </View>
                 <View style={{ flex: 1.3, alignItems: 'center' }}>
@@ -123,37 +138,59 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
               />
 
               {/* Pagination Controls */}
-              {!hidePages && <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: Scale(10),
-                  alignSelf: 'center',
-                  backgroundColor: '#812B2B',
-                  width: '100%',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  paddingVertical: Scale(10),
-                }}>
-                <Text
+              {!hidePages && (
+                <View
                   style={{
-                    borderRadius: Scale(10),
-                    padding: Scale(10),
-                    borderColor: '#812B2B',
-                    borderWidth: 1,
-                    height: Scale(40),
-                    textAlign: 'center',
-                    textAlignVertical: 'center',
-                    fontWeight: 'bold',
+                    flexDirection: 'row',
+                    marginTop: Scale(10),
+                    alignSelf: 'center',
+                    backgroundColor: '#812B2B',
+                    width: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingVertical: Scale(10),
+                    marginVertical: Scale(20),
                   }}>
-                  Total {tableData.length}
-                </Text>
 
-                {[...Array(totalPages)].map((_, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => changePage(index + 1)}
+                  <Text
                     style={{
-                      backgroundColor: currentPage === index + 1 ? 'gold' : '#812B2B',
+                      borderRadius: Scale(10),
+                      padding: Scale(10),
+                      borderColor: '#812B2B',
+                      borderWidth: 1,
+                      height: Scale(40),
+                      textAlign: 'center',
+                      textAlignVertical: 'center',
+                      fontWeight: 'bold',
+                    }}>
+                    Total {tableData.length}
+                  </Text>
+
+                  {/* Page Numbers */}
+                  {getVisiblePages(currentPage, totalPages).map((page) => (
+                    <TouchableOpacity
+                      key={page}
+                      onPress={() => changePage(page)}
+                      style={{
+                        backgroundColor: currentPage === page ? 'gold' : '#812B2B',
+                        borderRadius: Scale(10),
+                        padding: Scale(10),
+                        borderColor: '#812B2B',
+                        borderWidth: 1,
+                        marginHorizontal: Scale(5),
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <Text>{page}</Text>
+                    </TouchableOpacity>
+                  ))}
+
+                  {/* Left Arrow */}
+                  <TouchableOpacity
+                    onPress={() => changePage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    style={{
+                      backgroundColor: '#5F1616',
                       borderRadius: Scale(10),
                       padding: Scale(10),
                       borderColor: '#812B2B',
@@ -164,53 +201,37 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}>
-                    <Text>{index + 1}</Text>
+                    <FontAwesome5
+                      name={'chevron-left'}
+                      size={15}
+                      color={currentPage === 1 ? 'grey' : 'white'}
+                    />
                   </TouchableOpacity>
-                ))}
 
-                {/* Left Arrow */}
-                <TouchableOpacity
-                  onPress={() => changePage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  style={{
-                    backgroundColor: currentPage === 1 ? '#5F1616' : '#5F1616',
-                    borderRadius: Scale(10),
-                    padding: Scale(10),
-                    borderColor: '#812B2B',
-                    borderWidth: 1,
-                    height: Scale(40),
-                    width: Scale(40),
-                    marginHorizontal: Scale(5),
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <FontAwesome5 name={'chevron-left'} size={15} color={
+                  {/* Right Arrow */}
+                  <TouchableOpacity
+                    onPress={() => changePage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    style={{
+                      backgroundColor: '#5F1616',
+                      borderRadius: Scale(10),
+                      padding: Scale(10),
+                      borderColor: '#812B2B',
+                      borderWidth: 1,
+                      height: Scale(40),
+                      width: Scale(40),
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <FontAwesome5
+                      name={'chevron-right'}
+                      size={15}
+                      color={currentPage === totalPages ? 'grey' : 'white'}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
 
-                    currentPage === 1 ? 'grey' : 'white'
-
-                  } />
-                </TouchableOpacity>
-
-                {/* Right Arrow */}
-                <TouchableOpacity
-                  onPress={() => changePage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  style={{
-                    backgroundColor: currentPage === 1 ? '#5F1616' : '#5F1616',
-                    borderRadius: Scale(10),
-                    padding: Scale(10),
-                    borderColor: '#5F1616',
-                    borderWidth: 1,
-                    height: Scale(40),
-                    width: Scale(40),
-                    marginHorizontal: Scale(5),
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <FontAwesome5 name={'chevron-right'} size={15}
-                    color={currentPage === 1 ? 'white' : 'grey'} />
-                </TouchableOpacity>
-              </View>}
             </>
           ) : (
             <>
@@ -239,7 +260,7 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
                 status="NO WON"
                 imageSource={hot}
               />
-              
+
             </>
           )}
         </View>

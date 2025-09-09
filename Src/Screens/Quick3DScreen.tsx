@@ -62,9 +62,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '../Constants/Theme';
 import { getIndividualGameResult } from '../Redux/Slice/resultSlice';
 import { useContainerScale } from '../hooks/useContainerScale';
-import { verticalScale } from '../Components/Scale';
 const Quick3DScreen = ({ navigation, route }: any) => {
-  const { Scale, verticalScale } = useContainerScale();
+  const { Scale } = useContainerScale();
   const styles = createStyles(Scale);
   const {
     threeDigitA,
@@ -152,8 +151,12 @@ const Quick3DScreen = ({ navigation, route }: any) => {
               threeDigitPrice={threeDigitPrice}
               onStateChange={handleChildStateChange}
               targetDateProp={min1TargetDate}
-              onTimerComplete={handleTimerComplete}
-            />
+              onTimerComplete={handleTimerComplete} 
+              gameName={''} 
+              groupId={0} 
+              singleDigitGameId={0} 
+              doubleDigitGameId={0} 
+              threeDigitGameId={0}            />
           </>)
       case '3 Mins':
         return (
@@ -727,8 +730,8 @@ const createStyles = (Scale: any) =>
       marginBottom: Scale(0),
     },
     subContainer: {
+      flex: 1,
       marginHorizontal: 10,
-      height: verticalScale(100)
     },
     container: {
       flex: 1,

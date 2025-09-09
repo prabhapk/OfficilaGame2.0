@@ -57,7 +57,6 @@ import { handleShowAlert } from '../Redux/Slice/commonSlice';
 import CountButtons from '../Components/CountButtons';
 import Show30SecondsModal from '../Components/Show30SecondsModal';
 import AnimatedText from '../Components/AnimatedText';
-import { tableData } from '../Utils/Constants';
 import DigitComponent from '../Components/DigitComponent';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '../Constants/Theme';
@@ -177,18 +176,18 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   }
 
 
-const OPTIONS :any = useMemo(() => buildOptions(individualGameData), [individualGameData]);
+  const OPTIONS: any = useMemo(() => buildOptions(individualGameData), [individualGameData]);
 
-const [selectedOption, setSelectedOption] = useState<number | null>(
-  OPTIONS.length > 0 ? OPTIONS[0].id : null
-);
+  const [selectedOption, setSelectedOption] = useState<number | null>(
+    OPTIONS.length > 0 ? OPTIONS[0].id : null
+  );
 
-// If OPTIONS change (new API response), update selectedOption
-useEffect(() => {
-  if (OPTIONS.length > 0) {
-    setSelectedOption(OPTIONS[0].id);
-  }
-}, [OPTIONS]);
+  // If OPTIONS change (new API response), update selectedOption
+  useEffect(() => {
+    if (OPTIONS.length > 0) {
+      setSelectedOption(OPTIONS[0].id);
+    }
+  }, [OPTIONS]);
 
   console.log('individualGameResults==>', individualGameResults);
 
@@ -357,35 +356,35 @@ useEffect(() => {
       onChangeThreeDigitB(''), onChangeThreeDigitC('');
     }
   };
-const handleHeader = (value: any) => {
-  const isAdded = numbers.find((item: any) => item.type !== value.name);
+  const handleHeader = (value: any) => {
+    const isAdded = numbers.find((item: any) => item.type !== value.name);
 
-  if (isAdded) {
-    Alert.alert(
-      'Confirmation Reminder',
-      `You have placed an order for the Text\n${selectedOption} time.\nAre you sure you want to remove your previous selections?`,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Confirm',
-          onPress: () => {
-            setNumbers([]);
-            setSelectedOption(value.id); // ✅ always store id
+    if (isAdded) {
+      Alert.alert(
+        'Confirmation Reminder',
+        `You have placed an order for the Text\n${selectedOption} time.\nAre you sure you want to remove your previous selections?`,
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
           },
-        },
-      ],
-      { cancelable: false },
-    );
+          {
+            text: 'Confirm',
+            onPress: () => {
+              setNumbers([]);
+              setSelectedOption(value.id); // ✅ always store id
+            },
+          },
+        ],
+        { cancelable: false },
+      );
 
-    return;
-  }
+      return;
+    }
 
-  setSelectedOption(value.id); // ✅ always store id
-};
+    setSelectedOption(value.id); // ✅ always store id
+  };
 
   const getRandomNumber = () => Math.floor(Math.random() * 10);
   const removeNumber = (id: number) => {

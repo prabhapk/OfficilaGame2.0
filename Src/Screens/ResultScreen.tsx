@@ -33,8 +33,8 @@ const ResultScreen = ({ navigation }: any) => {
   const onClose = () => setShowFilter(false);
 
   const selectedTabName = resultHeaderList[selectedIndex].name;
-    const { Scale, verticalScale } = useContainerScale();
-    const styles = createStyles(Scale);
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
 
   const filteredData = useMemo(() => {
     const allCategories: any = resultTableData[0]; // since your array has 1 main object
