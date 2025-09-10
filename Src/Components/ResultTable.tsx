@@ -21,7 +21,7 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
   const [onTableSelect, setOnTableSelect] = useState('ResultHistory');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-    const {
+  const {
     myOrdersData,
     myOrdersLoader,
   } = useSelector((state: RootState) => state.threeDigit);
@@ -42,30 +42,34 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
     }
   };
 
-  const tableRenderItem = ({ item, index }: { item: any; index: number }) => (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: Scale(5),
-        backgroundColor: index % 2 === 0 ? '#540000' : '#5C1818',
-        borderBottomWidth: 1,
-        borderColor: '#5C1818',
-        paddingHorizontal: Scale(10),
-      }}>
-      <View style={{ flex: 1.5, }}>
-        <Text style={{ color: COLORS.white }}>{item.uid}</Text>
+  const tableRenderItem = ({ item, index }: { item: any; index: number }) => {
+    const winningBalls = item.winningNumber.split("")
+
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingVertical: Scale(5),
+          backgroundColor: index % 2 === 0 ? '#540000' : '#5C1818',
+          borderBottomWidth: 1,
+          borderColor: '#5C1818',
+          paddingHorizontal: Scale(10),
+        }}>
+        <View style={{ flex: 1.5, }}>
+          <Text style={{ color: COLORS.white }}>{item.uid}</Text>
+        </View>
+        <View style={{ flex: 1.2, alignItems: 'center' }}>
+          <Text style={{ color: COLORS.white }}>{formatDateTime(item.gameTime)}</Text>
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+          <TableCommonBall backgroundColor="#DE3C3F" innerText={winningBalls[0]} borderColor={'#DE3C3F'} />
+          <TableCommonBall backgroundColor="#EC8204" innerText={winningBalls[1]} borderColor={'#EC8204'} />
+          <TableCommonBall backgroundColor="#066FEA" innerText={winningBalls[2]} borderColor={'#066FEA'} />
+        </View>
       </View>
-      <View style={{ flex: 1.2, alignItems: 'center' }}>
-        <Text style={{ color: COLORS.white }}>{formatDateTime(item.gameTime)}</Text>
-      </View>
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-        <TableCommonBall backgroundColor="#DE3C3F" innerText={item.balls[0]} borderColor={'#DE3C3F'} />
-        <TableCommonBall backgroundColor="#EC8204" innerText={item.balls[1]} borderColor={'#EC8204'} />
-        <TableCommonBall backgroundColor="#066FEA" innerText={item.balls[2]} borderColor={'#066FEA'} />
-      </View>
-    </View>
-  );
+    );
+  }
 
   const getVisiblePages = (currentPage: number, totalPages: number, maxVisible: number = 5) => {
     let start = Math.max(currentPage - 2, 1);
@@ -81,45 +85,46 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
 
 
 
-    const myOrderRenterItem = ({ item, index }: { item: any; index: number }) => {
-      
-      const winningStatus = item.isWinning === true ? "Won" : "No Won";
-      const myBetsTableData = [
-        {
-          type: item.betType,
-          value: item.selectedNumber,  
-          payment: item.amount,      
-          result: winningStatus        
-        }
-      ];
-      return(
+  const myOrderRenterItem = ({ item, index }: { item: any; index: number }) => {
+
+    const winningStatus = item.isWinning === true ? "Won" : "No Won";
+    const myBetsTableData = [
+      {
+        type: item.betType,
+        value: item.selectedNumber,
+        payment: item.amount,
+        result: winningStatus
+      }
+    ];
+    return (
       <View>
 
-<MyBets3DigitsCard
-      headers={["A", "B", "C"]} // Keep static for now (since API doesn't return this)
-      myBetsTableData={myBetsTableData}
-      id={`PK${10000000 + index}`} // Temporary ID placeholder
-      bettingTime={item.betTime}
-      paymentAmount={item.totalAmount}
-      drawTime="-" // Placeholder until API sends
-      topBalls={[
-        { text: "A", color: "#DE3C3F" },
-        { text: "B", color: "#EC8204" },
-        { text: "C", color: "#066FEA" }
-      ]}
-      bottomBalls={[
-        { text: "2", color: "#DE3C3F" }, // Show selected num
-        { text: "4", color: "#EC8204" },
-        { text: "6", color: "#066FEA" }
-      ]}
-      date={item.betTime.split("T")[0]} // take date part only
-      status={winningStatus}
-      imageSource={hot}
-    />
+        <MyBets3DigitsCard
+          headers={["A", "B", "C"]} // Keep static for now (since API doesn't return this)
+          myBetsTableData={myBetsTableData}
+          id={`PK${10000000 + index}`} // Temporary ID placeholder
+          bettingTime={item.betTime}
+          paymentAmount={item.totalAmount}
+          drawTime="-" // Placeholder until API sends
+          topBalls={[
+            { text: "A", color: "#DE3C3F" },
+            { text: "B", color: "#EC8204" },
+            { text: "C", color: "#066FEA" }
+          ]}
+          bottomBalls={[
+            { text: "2", color: "#DE3C3F" }, // Show selected num
+            { text: "4", color: "#EC8204" },
+            { text: "6", color: "#066FEA" }
+          ]}
+          date={item.betTime.split("T")[0]} // take date part only
+          status={winningStatus}
+          imageSource={hot}
+        />
 
       </View>
-      )};
-    
+    )
+  };
+
 
 
   return (
@@ -310,8 +315,8 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
                 status="NO WON"
                 imageSource={hot}
               /> */}
-               <FlatList
-                data ={myOrdersData}
+              <FlatList
+                data={myOrdersData}
                 keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={false}
                 renderItem={myOrderRenterItem}

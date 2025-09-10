@@ -13,8 +13,6 @@ import {
 import React, { useState, useMemo, use, useEffect } from 'react';
 import {
   resultFilterList,
-  resultHeaderList,
-  resultTableData,
 } from '../Constants/CommonFlatlist';
 import { COLORS } from '../Constants/Theme';
 import ResultTable from '../Components/ResultTable';
@@ -32,20 +30,28 @@ const ResultScreen = ({ navigation }: any) => {
   const dispatch = useDispatch();
   const { allResultData } = useSelector((state: RootState) => state.resultSlice);
   console.log("allResultData==>", allResultData);
-  
+
   const [selectedHeaderId, setSelectedHeaderId] = useState(1);
   const [selectedFilerId, setSelectedFilerId] = useState(1);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showFilter, setShowFilter] = useState(false);
   const onClose = () => setShowFilter(false);
 
+  const resultHeaderList = [
+    { id: 1, name: "All" },
+    ...Object.keys(allResultData).map((key, index) => ({
+      id: index + 2,
+      name: key,
+    }))
+  ];
+
   const selectedTabName = resultHeaderList[selectedIndex].name;
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
 
-  
+
   const filteredData = useMemo(() => {
-    const allCategories: any = allResultData ; // since your array has 1 main object
+    const allCategories: any = allResultData; // since your array has 1 main object
     if (selectedTabName === 'All') {
       // Show all categories
       return Object.keys(allCategories).map(key => ({
@@ -61,7 +67,7 @@ const ResultScreen = ({ navigation }: any) => {
         return [
           {
             category: categoryKey,
-            data: allCategories[categoryKey]?.slice(0, 5),
+            data: allCategories[categoryKey]?.slice(0, 15),
           },
         ];
       }
@@ -69,7 +75,7 @@ const ResultScreen = ({ navigation }: any) => {
     }
   }, [selectedTabName]);
   console.log("filteredData==>", filteredData);
-  
+
   useEffect(() => {
     dispatch(getAllResults());
   }, []);
@@ -87,18 +93,6 @@ const ResultScreen = ({ navigation }: any) => {
           <Text style={styles.resultText}>Result</Text>
         </View>
         <View>
-          {/* <FlatList
-                        data={resultHeaderList}
-                        keyExtractor={item => item.id.toString()}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={{
-                            marginHorizontal: Scale(5),
-                            backgroundColor: "#481616",
-                            paddingVertical: Scale(10)
-                        }}
-                        renderItem={renderHeader}
-                    /> */}
           <CustomTabs
             tabs={resultHeaderList}
             index={selectedIndex}
