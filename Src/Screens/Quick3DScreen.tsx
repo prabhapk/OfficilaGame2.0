@@ -130,16 +130,11 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     const key = Object.keys(response)[0]; // "23:59:59"
     const games = response[key];
 
-    const single = games?.find((g: any) => g.sectiontype == "Single");
-    const double = games?.find((g: any) => g.sectiontype == "Double");
-    const triple = games?.find((g: any) => g.sectiontype == "Triple");
-    console.log('triple==>',triple)
-    console.log('Double==>',double)
-    console.log('single==>',single)
-    console.log('games==>',games)
+    const single = games?.find((g: any) => g.sectiontype == "Single") || games[0];
+    const double = games?.find((g: any) => g.sectiontype == "Double") || games[1];
+    const triple = games?.find((g: any) => g.sectiontype == "Triple") || games[2];
     
-    
-    const lastWinningNumber = triple?.lastResult?.winningNumber || "";
+    const lastWinningNumber = single?.lastResult?.winningNumber || "";
     const [a = "", b = "", c = ""] = lastWinningNumber.split("");
 
     return {
@@ -432,7 +427,6 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     ]);
   };
   const resetState = () => {
-    console.log("resetState");
     setNumbers([]);
     setCartValues([]);
     // setSelectedOption(null);
@@ -462,8 +456,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 
   // Handle button press
   const handleGenerate = (threeDigitPrice: any) => {
-    console.log("threeDigitPrice==>",threeDigitPrice);
-    
+
     if (threeDigitA !== '' && threeDigitB !== '' && threeDigitC !== '') {
       const values = [threeDigitA, threeDigitB, threeDigitC];
       handleAddPermutations(
@@ -517,11 +510,9 @@ const Quick3DScreen = ({ navigation, route }: any) => {
             amount: item.price,
           })),
         };
-        console.log("apiData==>",apiData);
-        
+
         const resultAction = await dispatch(payNow(apiData));
         const data = unwrapResult(resultAction);
-        console.log("data==>",data);
         if (data.success === true) {
          resetState();
         dispatch(getWalletBalance());
@@ -578,8 +569,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 
   const renderContent = () => {
     const transformedGameData = transformApiResponse(quick3dGamesList);
-    console.log('transformedGameData==>',transformedGameData)
-    
+
     switch (selectedOption) {
       case '1 Mins':
         return (
