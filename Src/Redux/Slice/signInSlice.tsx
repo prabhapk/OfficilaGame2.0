@@ -22,6 +22,7 @@ const initialValues: signInSliceState = {
   withdrawBalance: 1,
   walletBalanceLoader: false,
   resetPasswordLoader: false,
+  userId:0
 }
 
 
@@ -286,6 +287,7 @@ export const signInSlice = createSlice({
       ;
       console.log("state.mobileNumber", state.mobileNumber);
       state.isLoading = false;
+      state.userId = action.payload.user.id;
       
     });
 

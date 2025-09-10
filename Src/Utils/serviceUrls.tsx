@@ -23,7 +23,7 @@ export const serviceUrls = {
 
     getIndividualGameResult: '/api/ResultHistory/game-result',
     getIndividualGameData: '/api/Game/by-typeid',
-    getMyOrders: '/api/Bet/history',
+    getMyOrders: '/api/BetHistory/group',
   },
   quick3d: {
     getQuick3DGamesData: '/api/Game/by-typeid/quickythree',

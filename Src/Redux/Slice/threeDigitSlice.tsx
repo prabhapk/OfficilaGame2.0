@@ -35,13 +35,24 @@ const initialvalues: threeDigitState = {
 export const getMyOrders = createAsyncThunk<
   any,
   {
-
+userId:number;
+groupId:number;
   },
   { rejectValue: string }
->('games/getMyOrders', async (_, thunkAPI) => {
+>('games/getMyOrders', async ({userId,groupId}, thunkAPI) => {
   try {
+    console.log('userIdSlice==>',userId);
+    console.log('groupIdSlice==>',groupId);
+    console.log('Check===>', serviceUrls.results.getMyOrders + '/' + userId + '/' + groupId,);
+    
     const response = await axiosInstance.get(
-      serviceUrls.results.getMyOrders,
+      serviceUrls.results.getMyOrders + '/' + userId + '/' + groupId,
+      // {
+      //   params: {
+      //     userId,
+      //     groupId
+      //   },
+      // },
     );
     console.log('getMyOrdersResponse', response.data);
     return response.data;

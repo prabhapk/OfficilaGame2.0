@@ -40,6 +40,7 @@ import {
   setThreeDigitB,
   setThreeDigitC,
   setThreeDigitCount,
+  getMyOrders,
 } from '../Redux/Slice/threeDigitSlice';
 import { handleShowAlert, setInsufficientBalanceModalVisible, setPaymentSuccessModalVisible } from '../Redux/Slice/commonSlice';
 import Show30SecondsModal from '../Components/Show30SecondsModal';
@@ -60,6 +61,8 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const { Scale } = useContainerScale();
   const styles = createStyles(Scale);
   const gameData = route.params.gameData;
+  console.log('gameData==>',gameData);
+  
   const dispatch = useDispatch();
   const refRBSheet: any = useRef();
 
@@ -70,7 +73,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const [numbers, setNumbers] = useState([]);
   const [cartValues, setCartValues] = useState([]);
 
-  const {
+  const { 
     threeDigitA,
     threeDigitB,
     threeDigitC,
@@ -79,7 +82,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 
   const { allResultData, individualGameResults } = useSelector((state: RootState) => state.resultSlice);
   const { quick3dGamesList } = useSelector((state: RootState) => state.quick3DSlice);
-  const { isLoggedIn, mainWalletBalance } = useSelector(
+  const { isLoggedIn, mainWalletBalance, userId} = useSelector(
     (state: RootState) => state.signInSlice
   );
   const {paymentSuccessModalVisible, InsufficientBalanceModalVisible} = useSelector(
@@ -95,6 +98,15 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const handleChildStateChange = (updatedValue: any) => {
     setCartValues(updatedValue);
   };
+  useEffect(() => {
+
+    dispatch(getMyOrders(
+      {
+        userId:userId,
+        groupId:gameData.id
+      }
+    ));
+  }, [userId, gameData.id]);
 
 
   useEffect(() => {

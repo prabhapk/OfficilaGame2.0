@@ -92,7 +92,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const { individualGameData, individualGameDataLoader } = useSelector(
     (state: RootState) => state.homeSlice
   );
-  const { isLoggedIn, mainWalletBalance } = useSelector(
+  const { isLoggedIn, mainWalletBalance, userId } = useSelector(
     (state: RootState) => state.signInSlice
   );
   const {paymentSuccessModalVisible, InsufficientBalanceModalVisible} = useSelector(
@@ -268,6 +268,8 @@ function buildOptions(individualGameData: any[]) {
       </>
     );
   };
+  console.log('userId==>',userId);
+  console.log('groupId==>',groupId);
 
   const handleTimerComplete = () => {
    
@@ -276,7 +278,11 @@ function buildOptions(individualGameData: any[]) {
         typeId: gameTypeId,
       })
     );
-    dispatch(getMyOrders());
+    dispatch(getMyOrders({
+      userId:userId,
+      groupId:groupId
+    }));
+
     setLast30sec(false);
   };
   const filterNumericInput = (value: string) => {
@@ -615,7 +621,12 @@ function buildOptions(individualGameData: any[]) {
         typeId: gameTypeId,
       })
     );
-    dispatch(getMyOrders());
+    dispatch(getMyOrders(
+      {
+        userId:userId,
+        groupId:groupId
+      }
+    ));
   }, [gameTypeId, groupId,]);
 
   useEffect(() => {

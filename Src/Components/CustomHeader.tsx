@@ -48,7 +48,7 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
   {isLoggedIn ? (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <Text style={{ fontSize: Scale(20), fontWeight: 'bold' , color: 'white'}}>{formatToDecimal(mainWalletBalance)}</Text>
+      <Text style={{ fontSize: Scale(20), fontWeight: 'bold' , color: 'white'}}>₹ {formatToDecimal(mainWalletBalance)}</Text>
       <Image
         source={amountIcon}
         resizeMode="contain"
