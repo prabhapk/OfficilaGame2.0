@@ -196,7 +196,7 @@ const ProfileScreen = ({ navigation }: any) => {
   
           <View style={styles.inputRow}>
             <TouchableOpacity
-            onPress={() => {!isLoggedIn ? navigation.navigate('ForgotPassword') : navigation.navigate('SignInScreen')}}
+            onPress={() => {isLoggedIn ? navigation.navigate('ForgotPassword') : navigation.navigate('SignInScreen')}}
             style={styles.inputButton}>
               <Text style={styles.inputLabel}>Password</Text>
               <Entypo name="chevron-right" size={Scale(20)} color="white" />

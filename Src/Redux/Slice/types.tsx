@@ -48,8 +48,7 @@ export interface CommonSliceState {
     mainWalletBalance?: number;
     withdrawBalance?: number;
     walletBalanceLoader: boolean,
-
-
+    resetPasswordLoader: boolean,
   }
   export interface signUpSliceState {
     mobileNumber?: string;

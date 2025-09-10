@@ -21,6 +21,7 @@ const initialValues: signInSliceState = {
   mainWalletBalance: 0,
   withdrawBalance: 1,
   walletBalanceLoader: false,
+  resetPasswordLoader: false,
 }
 
 
@@ -269,6 +270,10 @@ export const signInSlice = createSlice({
       state.walletBalanceLoader = true;
       
     });
+    builder.addCase(resetPassword.pending, (state, action) => {
+      state.resetPasswordLoader = true;
+      
+    });
 
     // Fulfilled
     builder.addCase(SignInPassword.fulfilled, (state, action) => {
@@ -292,6 +297,10 @@ export const signInSlice = createSlice({
       console.log("state.withdrawBalance", state.withdrawBalance);
       
     });
+    builder.addCase(resetPassword.fulfilled, (state, action) => {
+      state.resetPasswordLoader = false;
+      
+    });
     // Rejected
 
     builder.addCase(SignInPassword.rejected, (state, action) => {
@@ -300,6 +309,10 @@ export const signInSlice = createSlice({
     });
     builder.addCase(getWalletBalance.rejected, (state, action) => {
       state.walletBalanceLoader = false;
+      
+    });
+    builder.addCase(resetPassword.rejected, (state, action) => {
+      state.resetPasswordLoader = false;
       
     });
   },

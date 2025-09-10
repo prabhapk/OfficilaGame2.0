@@ -31,12 +31,13 @@ import AlertErrorModal from '../Components/Modal/AlertErrorModal';
 import AlertSuccessModal from '../Components/Modal/AlertSuccessModal';
 import Toast from 'react-native-toast-message';
 import { useContainerScale } from '../hooks/useContainerScale';
+import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
 
 const ForgotPassword = ({navigation}: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
   const dispatch = useDispatch();
-  const {mobileNumber, otp, newPassword} = useSelector(
+  const {mobileNumber, otp, newPassword, resetPasswordLoader} = useSelector(
     (state: RootState) => state.signInSlice,
   );
   const [countdown, setCountdown] = useState(0);
@@ -224,7 +225,12 @@ const ForgotPassword = ({navigation}: any) => {
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
               style={styles.signInButton}>
-              <Text style={styles.signInButtonText}>Confirm</Text>
+              {/* <Text style={styles.signInButtonText}>Confirm</Text> */}
+              {resetPasswordLoader ? (
+      <LoadingSpinnerButton color="#fff" durationMs={1000} />
+    ) : (
+      <Text style={styles.signInButtonText}>LOGIN</Text>
+    )}
             </LinearGradient>
           </TouchableOpacity>
         </View>

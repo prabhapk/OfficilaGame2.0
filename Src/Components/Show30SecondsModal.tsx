@@ -1,83 +1,70 @@
 import React, { useState } from 'react';
-import { Alert, Modal, StyleSheet, Text, Pressable, View } from 'react-native';
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import Scale from './Scale';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import Modal from 'react-native-modal';
+import { close } from '../../../assets/assets';
+import { betAlertImage } from '../../assets/assets';
+import { useContainerScale } from '../hooks/useContainerScale';
 
-const Show30SecondsModal = () => {
-  const [modalVisible, setModalVisible] = useState(false);
 
+const show30SecondsModal = () => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
+    const [modalVisible, setModalVisible] = useState(false);
+  
   return (
-
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={true}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={{}}>Unable to purchase in last 30 Sec</Text>
-
-            </View>
-          </View>
-        </Modal>
-
-      </SafeAreaView>
-    </SafeAreaProvider>
-
+    <Modal
+      isVisible={true}
+      animationIn="flipInX" animationOut="flipOutX" 
+      backdropOpacity={0.5}
+      backdropTransitionInTiming={0.5}
+      backdropTransitionOutTiming={0.5}
+    >
+      <View style={styles.modalContainer}>
+  <View style ={{alignItems: 'center'}}> 
+    <Image source={betAlertImage}
+     style={{width: Scale(50), height: Scale(50)}} />
+     </View>
+        {/* Body */}
+        <View style={styles.bodyWrapper}>
+          <Text style={styles.bodyText}>Betting Closed!</Text>
+        </View>
+      </View>
+    </Modal>
   );
 };
 
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
+const createStyles = (Scale: any) => StyleSheet.create({
+  modalContainer: {
+    backgroundColor: '#360400',
+    borderRadius: Scale(18),
+    padding: Scale(20),
+    marginBottom: Scale(16),
+    position: 'relative',
+    width: '80%',
+    marginLeft: '10%',
+  },
+
+  headerWrapper: {
     alignItems: 'center',
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    marginBottom: Scale(20),
   },
-  modalView: {
-
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
+  headerText: {
+    color: 'orange',
+    fontWeight: 'bold',
+    fontSize: Scale(16),
+    textAlign: 'center',
+  },
+  bodyWrapper: {
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-
-    width: '90%',
-    height: 150,
-    justifyContent: 'center',
-
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
+  bodyText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: Scale(16),
     textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
+    marginTop: Scale(10),
   },
 });
-export default Show30SecondsModal;
+
+export default show30SecondsModal;
+

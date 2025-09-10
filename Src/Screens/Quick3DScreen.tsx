@@ -130,10 +130,15 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     const key = Object.keys(response)[0]; // "23:59:59"
     const games = response[key];
 
-    const single = games?.find((g: any) => g.sectiontype === "Single");
-    const double = games?.find((g: any) => g.sectiontype === "Double");
-    const triple = games?.find((g: any) => g.sectiontype === "Triple");
-
+    const single = games?.find((g: any) => g.sectiontype == "Single");
+    const double = games?.find((g: any) => g.sectiontype == "Double");
+    const triple = games?.find((g: any) => g.sectiontype == "Triple");
+    console.log('triple==>',triple)
+    console.log('Double==>',double)
+    console.log('single==>',single)
+    console.log('games==>',games)
+    
+    
     const lastWinningNumber = triple?.lastResult?.winningNumber || "";
     const [a = "", b = "", c = ""] = lastWinningNumber.split("");
 
@@ -573,6 +578,8 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 
   const renderContent = () => {
     const transformedGameData = transformApiResponse(quick3dGamesList);
+    console.log('transformedGameData==>',transformedGameData)
+    
     switch (selectedOption) {
       case '1 Mins':
         return (
