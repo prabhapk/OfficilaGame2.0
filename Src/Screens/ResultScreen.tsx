@@ -10,7 +10,7 @@ import {
   Modal,
   Image,
 } from 'react-native';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, use, useEffect } from 'react';
 import {
   resultFilterList,
   resultHeaderList,
@@ -25,7 +25,14 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { checked, hot, lottery1, unchecked } from '../../assets/assets';
 import CustomTabs from '../Components/CustomTabsHeader';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllResults } from '../Redux/Slice/resultSlice';
+import { RootState } from '../Redux/store';
 const ResultScreen = ({ navigation }: any) => {
+  const dispatch = useDispatch();
+  const { allResultData } = useSelector((state: RootState) => state.resultSlice);
+  console.log("allResultData==>", allResultData);
+  
   const [selectedHeaderId, setSelectedHeaderId] = useState(1);
   const [selectedFilerId, setSelectedFilerId] = useState(1);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -36,8 +43,9 @@ const ResultScreen = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
 
+  
   const filteredData = useMemo(() => {
-    const allCategories: any = resultTableData[0]; // since your array has 1 main object
+    const allCategories: any = allResultData ; // since your array has 1 main object
     if (selectedTabName === 'All') {
       // Show all categories
       return Object.keys(allCategories).map(key => ({
@@ -60,6 +68,11 @@ const ResultScreen = ({ navigation }: any) => {
       return [];
     }
   }, [selectedTabName]);
+  console.log("filteredData==>", filteredData);
+  
+  useEffect(() => {
+    dispatch(getAllResults());
+  }, []);
 
   return (
     <ScrollView

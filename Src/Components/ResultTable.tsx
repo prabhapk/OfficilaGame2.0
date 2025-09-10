@@ -194,7 +194,7 @@ const ResultTable: React.FC<ResultTableProps> = ({ tableData, showHeader, custom
                     marginTop: Scale(10),
                     alignSelf: 'center',
                     backgroundColor: '#812B2B',
-                    width: '100%',
+                    width: '110%',
                     alignItems: 'center',
                     justifyContent: 'center',
                     paddingVertical: Scale(10),
