@@ -11,8 +11,16 @@ import CustomInput from '../Components/CustomInput';
 import NewAppHeader from '../Components/NewAppHeader';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../Redux/store';
+import { AddBankAccount } from '../Redux/Slice/withdrawSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const AddBankCardScreen = ({ navigation }: any) => {
+  const { isLoggedIn, userId } = useSelector(
+    (state: RootState) => state.signInSlice
+  );
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     accountName: '',
     ifsc: '',
@@ -38,6 +46,34 @@ const AddBankCardScreen = ({ navigation }: any) => {
     form.otp.trim();
     const { Scale, verticalScale } = useContainerScale();
     const styles = createStyles(Scale);
+
+    const handleAddBankAccount = async () => {
+      if (isLoggedIn) {
+        try {
+          const apiData = {
+            id: 0,
+            userId: 0,
+            accountNumber: "string",
+            bankName: "string",
+            ifsc: "string",
+            accountHolderName: "string",
+            gatewayName: "string"
+          };
+  
+          const resultAction = await dispatch(AddBankAccount(apiData));
+          const data = unwrapResult(resultAction);
+          console.log("data==>",data);
+          // if (data.success === true) {
+          //  resetState();
+          // dispatch(getWalletBalance());
+          // }
+        } catch (error: any) {
+          console.log("handlePayNowError", error);
+        }
+      } else {
+        navigation.navigate("SignInScreen");
+      }
+    };
 
   return (
     <KeyboardAvoidingView style={styles.container}>

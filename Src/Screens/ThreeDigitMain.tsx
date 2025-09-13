@@ -69,6 +69,7 @@ import { COLORS } from "../Constants/Theme";
 import { getIndividualGameResult } from "../Redux/Slice/resultSlice";
 import { getIndividualGameData, payNow } from "../Redux/Slice/HomeSlice";
 import {
+  convertToISO,
   formatToDecimal,
   formatToTime,
   generateOptions,
@@ -198,6 +199,10 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(
     OPTIONS.length > 0 ? OPTIONS[0].id : null
   );
+  const [selectedTime, setSelectedTime] = useState<any | null>(
+    OPTIONS.length > 0 ? OPTIONS[0].name : null
+  );
+  
 
   // If OPTIONS change (new API response), update selectedOption
   useEffect(() => {
@@ -351,7 +356,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       selectedOption,
       price,
       groupId,
-      gameId
+      gameId,
+      selectedTime
     );
 
     if (value === "") {
@@ -359,6 +365,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       return;
     }
 
+
+    
     setNumbers((prevNumbers) => [
       ...prevNumbers,
       {
@@ -417,7 +425,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
             text: "Confirm",
             onPress: () => {
               setNumbers([]);
-              setSelectedOption(value.id); // ✅ always store id
+              setSelectedOption(value.id);
+              setSelectedTime(value.name);
             },
           },
         ],
@@ -427,7 +436,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       return;
     }
 
-    setSelectedOption(value.id); // ✅ always store id
+    setSelectedOption(value.id);
+    setSelectedTime(value.name);
   };
 
   const getRandomNumber = () => Math.floor(Math.random() * 10);
@@ -678,16 +688,19 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   }, [InsufficientBalanceModalVisible, dispatch]);
 
   const handlePayNow = async () => {
+    console.log('numbers==>',numbers);
     if (isLoggedIn) {
       try {
         const apiData = {
           bets: numbers.map((item) => ({
+           
             gameId: item.gameId,
             groupId: item.groupId,
             betType: item.label,
             selectedNumber: String(item.value),
             betCount: item.count,
             amount: item.price,
+            gameTime: item.bettingTime,
           })),
         };
 
@@ -697,6 +710,12 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
         if (data.success === true) {
          resetState();
         dispatch(getWalletBalance());
+        dispatch(
+          getMyOrders({
+            userId: userId,
+            groupId: groupId,
+          })
+        );
         }
       } catch (error: any) {
         console.log("handlePayNowError", error);

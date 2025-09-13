@@ -41,24 +41,22 @@ import {
   setThreeDigitC,
   setThreeDigitCount,
   getMyOrders,
-} from "../Redux/Slice/threeDigitSlice";
-import {
-  handleShowAlert,
-  setInsufficientBalanceModalVisible,
-  setPaymentSuccessModalVisible,
-} from "../Redux/Slice/commonSlice";
-import Show30SecondsModal from "../Components/Show30SecondsModal";
-import DigitComponent from "../Components/DigitComponent";
-import { LinearGradient } from "expo-linear-gradient";
-import { COLORS } from "../Constants/Theme";
-import { useContainerScale } from "../hooks/useContainerScale";
-import { fetchQuick3DGamesData } from "../Redux/Slice/Quick3DSlice";
-import { formatToDecimal, formatToTime } from "../Utils/Common";
-import { getWalletBalance } from "../Redux/Slice/signInSlice";
-import { payNow } from "../Redux/Slice/HomeSlice";
-import { unwrapResult } from "@reduxjs/toolkit";
-import PaymentSuccessModal from "../Components/Modal/PaymentSuccessModal";
-import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceModal";
+} from '../Redux/Slice/threeDigitSlice';
+import { handleShowAlert, setInsufficientBalanceModalVisible, setPaymentSuccessModalVisible } from '../Redux/Slice/commonSlice';
+import Show30SecondsModal from '../Components/Show30SecondsModal';
+import DigitComponent from '../Components/DigitComponent';
+import { LinearGradient } from 'expo-linear-gradient';
+import { COLORS } from '../Constants/Theme';
+import { useContainerScale } from '../hooks/useContainerScale';
+import { fetchQuick3DGamesData } from '../Redux/Slice/Quick3DSlice';
+import { formatToDecimal, formatToTime } from '../Utils/Common';
+import { getWalletBalance } from '../Redux/Slice/signInSlice';
+import { payNow } from '../Redux/Slice/HomeSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+import PaymentSuccessModal from '../Components/Modal/PaymentSuccessModal';
+import InsufficientBalanceModal from '../Components/Modal/InsufficientBalanceModal';
+import { getIndividualGameResult } from '../Redux/Slice/resultSlice';
+
 
 const Quick3DScreen = ({ navigation, route }: any) => {
   const { Scale } = useContainerScale();
@@ -81,7 +79,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const { allResultData, individualGameResults } = useSelector(
     (state: RootState) => state.resultSlice
   );
-  const { quick3dGamesList } = useSelector(
+  const { quick3dGamesList,quick3dGamesGroupId } = useSelector(
     (state: RootState) => state.quick3DSlice
   );
   const { isLoggedIn, mainWalletBalance, userId } = useSelector(
@@ -98,15 +96,6 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const handleChildStateChange = (updatedValue: any) => {
     setCartValues(updatedValue);
   };
-
-  useEffect(() => {
-    dispatch(
-      getMyOrders({
-        userId: userId,
-        groupId: gameData.id,
-      })
-    );
-  }, [userId, gameData.id]);
 
   useEffect(() => {
     if (gameData.name === "1minGame") {
@@ -131,7 +120,24 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         })
       );
     }
-  }, [gameData]);
+  }, [gameData])
+
+  useEffect(() => {
+
+    dispatch(getMyOrders(
+      {
+        userId:userId,
+        groupId:quick3dGamesGroupId
+      }
+    ));
+    dispatch(
+      getIndividualGameResult({
+        groupId: quick3dGamesGroupId
+      }),
+    );
+  }, [userId, quick3dGamesGroupId]);
+
+
 
   const transformApiResponse = (response: any) => {
     const key = Object.keys(response)[0]; // "23:59:59"
@@ -140,7 +146,6 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     const single = games?.find((g: any) => g.sectiontype == "Single");
     const double = games?.find((g: any) => g.sectiontype == "Double");
     const triple = games?.find((g: any) => g.sectiontype == "Triple");
-
     const lastWinningNumber = single?.lastResult?.winningNumber || "";
     const [a = "", b = "", c = ""] = lastWinningNumber.split("");
 
@@ -498,6 +503,12 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         if (data.success === true) {
           resetState();
           dispatch(getWalletBalance());
+          dispatch(
+            getMyOrders({
+              userId: userId,
+              groupId: groupId,
+            })
+          );
         }
       } catch (error: any) {
         console.log("handlePayNowError", error);

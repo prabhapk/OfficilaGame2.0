@@ -84,4 +84,9 @@ export interface CommonSliceState {
   export interface Quick3DState {
     quick3dGamesList: any;
     quick3dGamesLoader:boolean
+    quick3dGameTypeId:number
+    quick3dGamesGroupId:number
+  }
+  export interface withdrawSliceStates {
+  
   }

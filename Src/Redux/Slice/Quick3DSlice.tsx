@@ -10,6 +10,8 @@ const initialValues: Quick3DState = {
 
   quick3dGamesList: [],
   quick3dGamesLoader: false,
+  quick3dGameTypeId:0,
+  quick3dGamesGroupId:0
 }
 
 
@@ -61,6 +63,19 @@ export const Quick3DSlice = createSlice({
       .addCase(fetchQuick3DGamesData.fulfilled, (state, action) => {
         state.quick3dGamesLoader = false;
         state.quick3dGamesList = action.payload;
+        console.log("quick3dGamesListState====>", action.payload);
+      
+        // Extract the first key dynamically
+        const firstKey = Object.keys(action.payload)[0];
+        const firstGame = action.payload[firstKey]?.[0];
+      
+        if (firstGame) {
+          state.quick3dGamesGroupId = firstGame.groupId;
+        } else {
+          state.quick3dGamesGroupId = null;
+        }
+      
+        console.log("quick3dGamesGroupId====>", state.quick3dGamesGroupId);
       })
       .addCase(fetchQuick3DGamesData.rejected, (state, action) => {
         state.quick3dGamesLoader = false;

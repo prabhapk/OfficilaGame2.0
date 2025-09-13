@@ -40,10 +40,12 @@ export const getIndividualGameResult = createAsyncThunk<
 >('result/getIndividualGameResult', async ({ groupId }, thunkAPI) => {
   try {
     console.log('groupId==>', groupId);
+    const page = 1;
+    const pageSie = 10;
    
     
     const response = await axiosInstance.get(
-        `${serviceUrls.results.getIndividualGameResult}/${groupId}`,
+        `${serviceUrls.results.getIndividualGameResult}/${groupId}?page=${page}&pageSize=${pageSie}`,
     //   {
     //     params: {
     //       groupId,

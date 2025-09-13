@@ -114,3 +114,33 @@ export const formatDateTime = (dateString: string) => {
 
   return  formattedDate + '\n' + formattedTime;
 };
+
+export const convertToISO =(dateStr: string, timeStr: string): string =>{
+  // Parse hours and minutes from time string
+  const timeRegex = /(\d{1,2}):(\d{2})\s*(am|pm)/i;
+  const match = timeStr.match(timeRegex);
+
+  if (!match) {
+    throw new Error("Invalid time format. Use something like '10:30 am'");
+  }
+
+  let hours = parseInt(match[1], 10);
+  const minutes = parseInt(match[2], 10);
+  const meridian = match[3].toLowerCase();
+
+  if (meridian === "pm" && hours < 12) {
+    hours += 12;
+  }
+  if (meridian === "am" && hours === 12) {
+    hours = 0;
+  }
+
+  // Split the date (YYYY-MM-DD)
+  const [year, month, day] = dateStr.split("-").map(Number);
+
+  // Construct a Date in local timezone
+  const localDate = new Date(year, month - 1, day, hours, minutes);
+
+  // Return ISO string (UTC)
+  return localDate.toISOString();
+}

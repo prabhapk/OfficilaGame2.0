@@ -13,6 +13,10 @@ import Scale from '../Components/Scale';
 import { walletMini, refresh, lefArrow, checkBox } from '../../assets/assets';
 import NewAppHeader from '../Components/NewAppHeader';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { formatToDecimal } from '../Utils/Common';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../Redux/store';
+import { getWalletBalance } from '../Redux/Slice/signInSlice';
 const WalletScreenUI = ({navigation}: any) => {
   const [walletAmount, setWalletAmount] = useState(0);
   const [selectedAmount, setSelectedAmount] = useState('');
@@ -20,6 +24,8 @@ const WalletScreenUI = ({navigation}: any) => {
   const [selectedRechargeOption, setSelectedRechargeOption] = useState<'option1' | 'option2' | null>(null);
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
+  const dispatch = useDispatch();
+  const {mainWalletBalance } = useSelector((state: RootState) => state.signInSlice);
   return (
     <View style={{flex: 1, backgroundColor: '#360400'}}>
       <NewAppHeader
@@ -40,8 +46,10 @@ const WalletScreenUI = ({navigation}: any) => {
             <Text style={styles.walletTitle}>Total Wallet</Text>
           </View>
             <View style={styles.amountRow}>
-          <Text style={styles.amountText}>₹ 1,00,000</Text>
-          <Image source={refresh} style={styles.iconMedium} />
+          <Text style={styles.amountText}>₹ {formatToDecimal(mainWalletBalance)}</Text>
+          <TouchableOpacity onPress={() => dispatch(getWalletBalance())}>
+  <Image source={refresh} style={styles.iconMedium} />
+</TouchableOpacity>
         </View>
         </View>
         <TouchableOpacity

@@ -27,7 +27,10 @@ export const serviceUrls = {
   },
   quick3d: {
     getQuick3DGamesData: '/api/Game/by-typeid/quickythree',
-  }
+  },
+  withdraw: {
+    AddBankAccount:'/api/user/User/bank-accounts',
+  },
 };
 
 export const BaseURL = process.env.API_BASE_URL;

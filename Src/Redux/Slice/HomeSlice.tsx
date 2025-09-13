@@ -70,6 +70,7 @@ export const getIndividualGameData = createAsyncThunk<
 export const payNow = createAsyncThunk<any, any, { rejectValue: string }>(
   'games/payNow',
   async (apiData, thunkAPI) => {
+    console.log('apiData===>', apiData);
     try {
       const response = await axiosInstance.post(
         serviceUrls.games.orderPlace,

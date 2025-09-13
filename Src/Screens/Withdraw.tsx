@@ -19,6 +19,9 @@ import Modal from 'react-native-modal';
 import CommonTextInput from '../Components/CommonTextInput';
 import NewAppHeader from '../Components/NewAppHeader';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Redux/store';
+import { formatToDecimal } from '../Utils/Common';
 
 const Withdraw = ({navigation}: any) => {
   const [walletAmount, setWalletAmount] = useState(0);
@@ -30,6 +33,7 @@ const Withdraw = ({navigation}: any) => {
   const [BankAccountModalVisible, setBankAccountModalVisible] = useState(false);
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
+  const {withdrawBalance } = useSelector((state: RootState) => state.signInSlice);
   return (
     <View style={{flex: 1, backgroundColor: '#360400'}}>
       <NewAppHeader
@@ -50,7 +54,7 @@ const Withdraw = ({navigation}: any) => {
             <Text style={styles.walletTitle}>Total Wallet</Text>
           </View>
             <View style={styles.amountRow}>
-          <Text style={styles.amountText}>₹ 1,00,000</Text>
+          <Text style={styles.amountText}>₹{formatToDecimal(withdrawBalance)}</Text>
           <TouchableOpacity onPress={()=>{
             setBankAccountModalVisible(true)
           }

@@ -29,6 +29,8 @@ const ResultTable: React.FC<ResultTableProps> = ({
   const { myOrdersData, myOrdersLoader } = useSelector(
     (state: RootState) => state.threeDigit
   );
+  console.log("myOrdersData====>",myOrdersData);
+  
 
   // Calculate the total number of pages
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
@@ -123,7 +125,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
         <MyBets3DigitsCard
           headers={["A", "B", "C"]} // Keep static for now (since API doesn't return this)
           myBetsTableData={myBetsTableData}
-          id={`PK${10000000 + index}`} // Temporary ID placeholder
+          id={item.betUniqueId}
           bettingTime={item.betTime}
           paymentAmount={item.totalAmount}
           drawTime="-" // Placeholder until API sends

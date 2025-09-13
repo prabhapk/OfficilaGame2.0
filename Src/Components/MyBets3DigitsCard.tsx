@@ -5,6 +5,8 @@ import CommonBall from "./CommonBall"; // adjust path
 import TableCommonBall from "./TableCommonBall"; // adjust path
 import { COLORS } from "../Constants/Theme";
 import { useContainerScale } from '../hooks/useContainerScale';
+import { ImageBackground } from "expo-image";
+import { winLabel } from "../../assets/assets";
 
 type BetData = {
     type: string;
@@ -187,6 +189,31 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
                 <Text style={styles.footerText}>
                     Sorry, your guess is wrong, Try next time
                 </Text>
+                <View style={{ marginTop: Scale(5), marginBottom: Scale(10) }}>
+  <ImageBackground
+    source={winLabel}
+    style={{
+      width: '100%',
+      height: 60,
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}
+    contentFit='fill'
+  >
+    <Text
+      style={{
+        color: 'white',
+        fontSize: Scale(14),
+        fontWeight: 'bold',
+        textAlign: 'center',
+        paddingHorizontal: Scale(30),
+      }}
+    >
+      Congratulations! You won the game lottery and claim your winning amount ₹100
+    </Text>
+  </ImageBackground>
+</View>
+
             </View>
         </View>
     );
