@@ -9,6 +9,7 @@ import { RootState } from './Redux/store';
 import Toast from 'react-native-toast-message'
 import MobileContainer from './Components/MobileContainer';
 import { LogBox } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 const App = () => {
   const dispatch = useDispatch();
 
@@ -56,6 +57,7 @@ const App = () => {
     getIpAddress();
   }, [dispatch]);
   return (
+    <SafeAreaProvider>
     <MobileContainer>
       <MainNavigation />
       {isLoading && (
@@ -63,6 +65,7 @@ const App = () => {
       )}
       <Toast />
     </MobileContainer>
+    </SafeAreaProvider>
   );
 };
 

@@ -15,9 +15,12 @@ import {
 } from "react-native";
 import React, { use, useEffect, useMemo, useRef, useState } from "react";
 import { cancel, lefArrow, quick3min, sameClock } from "../../assets/assets";
-import CountdownTimer from "../Components/CountdownTimer";
 import { useDispatch, useSelector } from "react-redux";
-import { setInsufficientBalanceModalVisible, setPaymentSuccessModalVisible, showHowToPlay } from "../Redux/Slice/commonSlice";
+import {
+  setInsufficientBalanceModalVisible,
+  setPaymentSuccessModalVisible,
+  showHowToPlay,
+} from "../Redux/Slice/commonSlice";
 import HowToPlayModal from "../Components/HowToPlayModal";
 import CommonBall from "../Components/CommonBall";
 import Scale from "../Components/Scale";
@@ -95,9 +98,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const { isLoggedIn, mainWalletBalance, userId } = useSelector(
     (state: RootState) => state.signInSlice
   );
-  const {paymentSuccessModalVisible, InsufficientBalanceModalVisible} = useSelector(
-    (state: RootState) => state.commonSlice
-  );
+  const { paymentSuccessModalVisible, InsufficientBalanceModalVisible } =
+    useSelector((state: RootState) => state.commonSlice);
   console.log("individualGameData==>", individualGameData);
   const dispatch = useDispatch();
 
@@ -111,17 +113,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const [islast30sec, setLast30sec] = useState(false);
   const [numbers, setNumbers] = useState([]);
   const [cartValues, setCartValues] = useState([]);
-  const singleDigitPrice = 10.0;
-  const doubleDigitPrice = 11.0;
-  const threeDigitPrice = 21.0;
 
-  const singleDigitWinningPrice = 110.0;
-  const doubleDigitWinningPrice = 220.0;
-  const threeDigitWinningPrice = 330.0;
-
-  const [targetDateProp, setTargetDateProp] = useState(
-    new Date(new Date().getTime() + 1 * 60 * 1000).toISOString()
-  );
 
   const handleChildStateChange = (updatedValue: any) => {
     console.log("Received from DigitComponent:", updatedValue);
@@ -131,7 +123,6 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     (state: RootState) => state.resultSlice
   );
 
-  console.log("individualGameData==>", individualGameData);
 
   // helper: convert "HH:mm:ss" → total minutes
   function timeToMinutes(time: string) {
@@ -150,56 +141,54 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       .padStart(2, "0")} ${period}`;
   }
 
-function buildOptions(individualGameData: any[]) {
-  if (!individualGameData?.length) return [];
+  function buildOptions(individualGameData: any[]) {
+    if (!individualGameData?.length) return [];
 
-  const first = individualGameData[0];
+    const first = individualGameData[0];
 
-  // ✅ CASE 1: no interval
-  if (first.intervaltime === "00:00:00") {
-    return Object.values(
-      individualGameData.reduce((acc, item) => {
-        if (!acc[item.groupId]) {
-          acc[item.groupId] = {
-            id: item.groupId,
-            groupedId: item.groupedId,
-            name: minutesTo12Hr(timeToMinutes(item.endtime)),
-            isSelected: Object.keys(acc).length === 0,
-          };
-        }
-        return acc;
-      }, {} as Record<number, { id: number; name: string; isSelected: boolean }>)
-    );
+    // ✅ CASE 1: no interval
+    if (first.intervaltime === "00:00:00") {
+      return Object.values(
+        individualGameData.reduce((acc, item) => {
+          if (!acc[item.groupId]) {
+            acc[item.groupId] = {
+              id: item.groupId,
+              groupedId: item.groupedId,
+              name: minutesTo12Hr(timeToMinutes(item.endtime)),
+              isSelected: Object.keys(acc).length === 0,
+            };
+          }
+          return acc;
+        }, {} as Record<number, { id: number; name: string; isSelected: boolean }>)
+      );
+    }
+
+    // ✅ CASE 2: interval available
+    const end = timeToMinutes(first.endtime);
+    const step = timeToMinutes(first.intervaltime);
+
+    // ⏰ Use nextresulttime instead of starttime
+    const nextResult = new Date(first.nextresulttime);
+    const nowMinutes = nextResult.getHours() * 60 + nextResult.getMinutes(); // convert to minutes
+
+    const slots: {
+      id: number;
+      groupedId: number;
+      name: string;
+      isSelected: boolean;
+    }[] = [];
+
+    for (let t = nowMinutes, i = 0; t <= end; t += step, i++) {
+      slots.push({
+        id: i + 1,
+        groupedId: first.groupId,
+        name: minutesTo12Hr(t),
+        isSelected: i === 0, // first slot = upcoming game
+      });
+    }
+
+    return slots;
   }
-
-  // ✅ CASE 2: interval available
-  const end = timeToMinutes(first.endtime);
-  const step = timeToMinutes(first.intervaltime);
-
-  // ⏰ Use nextresulttime instead of starttime
-  const nextResult = new Date(first.nextresulttime);
-  const nowMinutes =
-    nextResult.getHours() * 60 + nextResult.getMinutes(); // convert to minutes
-
-  const slots: {
-    id: number;
-    groupedId: number;
-    name: string;
-    isSelected: boolean;
-  }[] = [];
-
-  for (let t = nowMinutes, i = 0; t <= end; t += step, i++) {
-    slots.push({
-      id: i + 1,
-      groupedId: first.groupId,
-      name: minutesTo12Hr(t),
-      isSelected: i === 0, // first slot = upcoming game
-    });
-  }
-
-  return slots;
-}
-
 
   const OPTIONS: any = useMemo(
     () => buildOptions(individualGameData),
@@ -250,9 +239,7 @@ function buildOptions(individualGameData: any[]) {
           doubleDigitPrice={Number(individualGameData[1]?.ticketprize)}
           doubleDigitWinningPrice={Number(individualGameData[1]?.prizeamount)}
           tableData={transformedData}
-          handleGenerate={()=> handleGenerate(
-            Number(individualGameData[2]?.ticketprize)
-          )}
+          handleGenerate={handleGenerate}
           threeDigitWinningPrice={Number(individualGameData[2]?.prizeamount)}
           threeDigitPrice={Number(individualGameData[2]?.ticketprize)}
           onStateChange={handleChildStateChange}
@@ -268,20 +255,21 @@ function buildOptions(individualGameData: any[]) {
       </>
     );
   };
-  console.log('userId==>',userId);
-  console.log('groupId==>',groupId);
+  console.log("userId==>", userId);
+  console.log("groupId==>", groupId);
 
   const handleTimerComplete = () => {
-   
-     dispatch(
+    dispatch(
       getIndividualGameData({
         typeId: gameTypeId,
       })
     );
-    dispatch(getMyOrders({
-      userId:userId,
-      groupId:groupId
-    }));
+    dispatch(
+      getMyOrders({
+        userId: userId,
+        groupId: groupId,
+      })
+    );
 
     setLast30sec(false);
   };
@@ -352,7 +340,8 @@ function buildOptions(individualGameData: any[]) {
     selectedOption: string,
     price: number,
     groupId: number,
-    gameId: number
+    gameId: number,
+    targetDateProp: any
   ) => {
     console.log(
       "testttt",
@@ -381,6 +370,7 @@ function buildOptions(individualGameData: any[]) {
         price,
         groupId,
         gameId,
+        bettingTime: targetDateProp,
       },
     ]);
     console.log("Label==>", label);
@@ -511,19 +501,23 @@ function buildOptions(individualGameData: any[]) {
   );
   const sum1 = numbers.reduce((acc: any, item: any) => acc + item.count, 0);
   console.log("sum==>", sum);
-  console.log("sum1==>", sum1);
+  console.log("sum==> 1", sum1);
 
   const handleAddPermutations = (
     label: string,
     values: string[],
     count: number,
     selectedOption: string,
-    price: number
+    price: number,
+    groupId: number,
+    gameId: number,
+    bettingTime: any
   ) => {
     if (values.length === 0) {
       Alert.alert("Error", "Please enter a value");
       return;
     }
+    console.log("testttt", groupId, gameId);
 
     // Generate permutations
     const results: Set<string> = new Set();
@@ -552,6 +546,9 @@ function buildOptions(individualGameData: any[]) {
         count,
         type: selectedOption,
         price,
+        groupId,
+        gameId,
+        bettingTime,
       })),
     ]);
 
@@ -559,7 +556,12 @@ function buildOptions(individualGameData: any[]) {
   };
 
   // Handle button press
-  const handleGenerate = (threeDigitPrice: any) => {
+  const handleGenerate = (
+    threeDigitPrice: number,
+    groupId: number,
+    threeDigitGameId: number,
+    targetDateProp: string
+  ) => {
     if (threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== "") {
       const values = [threeDigitA, threeDigitB, threeDigitC];
       handleAddPermutations(
@@ -567,11 +569,29 @@ function buildOptions(individualGameData: any[]) {
         values,
         threeDigitCount,
         selectedOption,
-        threeDigitPrice
+        threeDigitPrice,
+        groupId,
+        threeDigitGameId,
+        targetDateProp
       );
       clearInputs("ABC");
     }
   };
+  //   const handleGenerate = (
+  //   threeDigitPrice: number,
+  //   groupId: number,
+  //   threeDigitGameId: number,
+  //   targetDateProp: string
+  // ) => {
+  //   console.log("📌 From child BOX button:", {
+  //     threeDigitPrice,
+  //     groupId,
+  //     threeDigitGameId,
+  //     targetDateProp,
+  //   });
+
+  //   // 👉 Here you can call API, set state, etc.
+  // };
 
   const renderHeader = ({ item }: any) => {
     console.log("item==>asasa", item);
@@ -614,30 +634,30 @@ function buildOptions(individualGameData: any[]) {
     dispatch(
       getIndividualGameResult({
         groupId: groupId,
-      }),
+      })
     );
     dispatch(
       getIndividualGameData({
         typeId: gameTypeId,
       })
     );
-    dispatch(getMyOrders(
-      {
-        userId:userId,
-        groupId:groupId
-      }
-    ));
-  }, [gameTypeId, groupId,]);
+    dispatch(
+      getMyOrders({
+        userId: userId,
+        groupId: groupId,
+      })
+    );
+  }, [gameTypeId, groupId]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
-  
+
     if (paymentSuccessModalVisible) {
       timer = setTimeout(() => {
         dispatch(setPaymentSuccessModalVisible(false));
-      }, 3000); 
+      }, 3000);
     }
-  
+
     return () => {
       if (timer) clearTimeout(timer);
     };
@@ -645,18 +665,17 @@ function buildOptions(individualGameData: any[]) {
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
-  
+
     if (InsufficientBalanceModalVisible) {
       timer = setTimeout(() => {
         dispatch(setInsufficientBalanceModalVisible(false));
-      }, 2000); 
+      }, 2000);
     }
-  
+
     return () => {
       if (timer) clearTimeout(timer);
     };
   }, [InsufficientBalanceModalVisible, dispatch]);
-
 
   const handlePayNow = async () => {
     if (isLoggedIn) {
@@ -687,58 +706,62 @@ function buildOptions(individualGameData: any[]) {
     }
   };
 
-
+  console.log("islast30sec==>", islast30sec); 
+  
   return (
     <View style={styles.mainContainer}>
       {/* {islast30sec && <Show30SecondsModal />} */}
-      <CustomLoader visible={Boolean(individualGameDataLoader) &&
-          Boolean(myOrdersLoader)} />
+      <CustomLoader
+        visible={Boolean(individualGameDataLoader) && Boolean(myOrdersLoader)}
+      />
       <ScrollView
         scrollEnabled
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
-         nestedScrollEnabled={true}
+        nestedScrollEnabled={true}
         contentContainerStyle={{ paddingBottom: Scale(100) }}
       >
         <TouchableWithoutFeedback>
           <>
-          
-        <CustomLoader visible={Boolean(individualGameDataLoader) && 
-          Boolean(myOrdersLoader)} />
-        <GameHeader
-          HeaderText={individualGameData[0]?.name}
-          leftonPress={goBack}
-          leftImage={lefArrow}
-          rightImage={lefArrow}
-          onPressWithdraw={() => {
-            navigation.navigate("Withdraw");
-          }}
-          onPressRecharge={() => {
-            navigation.navigate("WalletScreen");
-          }}
-          walletBalance={formatToDecimal(mainWalletBalance)}
-          onPressRefresh={() => {
-            dispatch(getWalletBalance());
-          }}
-        />
-        <View style={styles.subContainer}>
-          <FlatList
-            data={OPTIONS}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.startView}
-            renderItem={renderHeader}
-            nestedScrollEnabled={true}
-          />
+            <CustomLoader
+              visible={
+                Boolean(individualGameDataLoader) && Boolean(myOrdersLoader)
+              }
+            />
+            <GameHeader
+              HeaderText={individualGameData[0]?.name}
+              leftonPress={goBack}
+              leftImage={lefArrow}
+              rightImage={lefArrow}
+              onPressWithdraw={() => {
+                navigation.navigate("Withdraw");
+              }}
+              onPressRecharge={() => {
+                navigation.navigate("WalletScreen");
+              }}
+              walletBalance={formatToDecimal(mainWalletBalance)}
+              onPressRefresh={() => {
+                dispatch(getWalletBalance());
+              }}
+            />
+            <View style={styles.subContainer}>
+              <FlatList
+                data={OPTIONS}
+                keyExtractor={(item) => item.id.toString()}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.startView}
+                renderItem={renderHeader}
+                nestedScrollEnabled={true}
+              />
 
-          {/* Conditionally Render UI Based on Selection */}
-          <View style={styles.renderDataView}>{renderContent()}</View>
-          <View>
-            <HowToPlayModal />
-          </View>
-        </View>
-        </>
+              {/* Conditionally Render UI Based on Selection */}
+              <View style={styles.renderDataView}>{renderContent()}</View>
+              <View>
+                <HowToPlayModal />
+              </View>
+            </View>
+          </>
         </TouchableWithoutFeedback>
       </ScrollView>
       <RBSheet
@@ -900,9 +923,7 @@ function buildOptions(individualGameData: any[]) {
           <PaymentSuccessModal
             headerImage
             isVisible={paymentSuccessModalVisible}
-            toggleModal={() =>
-              dispatch(setPaymentSuccessModalVisible(false))
-            }
+            toggleModal={() => dispatch(setPaymentSuccessModalVisible(false))}
             headerText="Paid successfully!"
             bodyText="Your tickets have been successfully purchased. Please take note of the draw time and check the results
             Three Digits promptly."
@@ -910,8 +931,8 @@ function buildOptions(individualGameData: any[]) {
           <InsufficientBalanceModal
             isVisible={InsufficientBalanceModalVisible}
             headerText="Insufficient Balance!"
-            bodyText="Please add funds to your wallet to continue" 
-            />
+            bodyText="Please add funds to your wallet to continue"
+          />
         </View>
       </SafeAreaView>
     </View>
