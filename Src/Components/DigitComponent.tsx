@@ -291,7 +291,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               targetDate={targetDate}
               onThirtySecondsLeft={() => {
                 setShowAlert(true);
-                // onThirtySecondsRemaining();
+                onThirtySecondsRemaining?.();
               }}
               onComplete={onTimerComplete}
             />

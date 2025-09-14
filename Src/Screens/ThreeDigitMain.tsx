@@ -114,7 +114,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const [islast30sec, setLast30sec] = useState(false);
   const [numbers, setNumbers] = useState([]);
   const [cartValues, setCartValues] = useState([]);
-
+  const [last30SecStates, setLast30SecStates] = useState<{ [key: string]: boolean }>({});
 
   const handleChildStateChange = (updatedValue: any) => {
     console.log("Received from DigitComponent:", updatedValue);
@@ -249,13 +249,25 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           threeDigitPrice={Number(individualGameData[2]?.ticketprize)}
           onStateChange={handleChildStateChange}
           targetDateProp={individualGameData[0]?.nextresulttime}
-          onTimerComplete={handleTimerComplete}
+          // onTimerComplete={handleTimerComplete}
           gameName={individualGameData[0]?.name}
           singleDigitGameId={individualGameData[0]?.id}
           doubleDigitGameId={individualGameData[1]?.id}
           threeDigitGameId={individualGameData[2]?.id}
           groupId={groupId}
-          onThirtySecondsRemaining={() => setLast30sec(true)}
+          onThirtySecondsRemaining={() => {
+    setLast30SecStates(prev => ({
+      ...prev,
+      [groupId]: true,  // mark this group as <30s
+    }));
+  }}
+  onTimerComplete={() => {
+    setLast30SecStates(prev => ({
+      ...prev,
+      [groupId]: false, // reset when timer completes
+    }));
+    handleTimerComplete(); // your other reset logic
+  }}
         />
       </>
     );
@@ -725,7 +737,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     }
   };
 
-  console.log("islast30sec==>", islast30sec); 
+  console.log("islast30sec==>", islast30sec, ); 
   
   return (
     <View style={styles.mainContainer}>
@@ -936,7 +948,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
             openSheet={() => refRBSheet.current.open()}
             totalAmount={sum}
             totalCount={sum1}
-            isDisabled={sum1 === 0 || islast30sec}
+             isDisabled={sum1 === 0 || last30SecStates[groupId]}
             handlePayNow={handlePayNow}
           />
           <PaymentSuccessModal

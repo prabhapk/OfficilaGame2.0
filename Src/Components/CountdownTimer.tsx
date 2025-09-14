@@ -37,34 +37,31 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   const [alertTriggered, setAlertTriggered] = useState(false);
 
-  useEffect(() => {
-    if (!isFocused) return;
+useEffect(() => {
+  if (!isFocused) return;
 
-    const timer = setInterval(() => {
-      const newTimeLeft = calculateTimeLeft();
-      setTimeLeft(newTimeLeft);
-      // console.log("newTimeLeftqwqwq",newTimeLeft);
-      const now = new Date().toISOString(); // returns ISO 8601 with milliseconds and 'Z'
-      // console.log(now,newTimeLeft);
-      // console.log(now,"newTimeLeft");
+  const timer = setInterval(() => {
+    const newTimeLeft = calculateTimeLeft();
+    setTimeLeft(newTimeLeft);
 
-      if (!alertTriggered && newTimeLeft.minutes === 0 && newTimeLeft.seconds === 30) {
-        setAlertTriggered(true);
-        onThirtySecondsLeft?.();
-      }
+    if (!alertTriggered && newTimeLeft.minutes === 0 && newTimeLeft.seconds === 30) {
+      setAlertTriggered(true);
+      onThirtySecondsLeft?.();
+    }
 
-      if (
-        newTimeLeft.hours === 0 &&
-        newTimeLeft.minutes === 0 &&
-        newTimeLeft.seconds === 0
-      ) {
-        clearInterval(timer);
-        onComplete?.();
-      }
-    }, 1000);
+    if (
+      newTimeLeft.hours === 0 &&
+      newTimeLeft.minutes === 0 &&
+      newTimeLeft.seconds === 0
+    ) {
+      clearInterval(timer);
+      onComplete?.();
+    }
+  }, 1000);
 
-    return () => clearInterval(timer);
-  }, [targetDate, isFocused]);
+  return () => clearInterval(timer);
+}, [targetDate, isFocused, alertTriggered]); // 👈 added alertTriggered
+
 
   useEffect(() => {
     setAlertTriggered(false);

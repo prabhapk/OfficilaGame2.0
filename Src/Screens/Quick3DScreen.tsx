@@ -41,22 +41,25 @@ import {
   setThreeDigitC,
   setThreeDigitCount,
   getMyOrders,
-} from '../Redux/Slice/threeDigitSlice';
-import { handleShowAlert, setInsufficientBalanceModalVisible, setPaymentSuccessModalVisible } from '../Redux/Slice/commonSlice';
-import Show30SecondsModal from '../Components/Show30SecondsModal';
-import DigitComponent from '../Components/DigitComponent';
-import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS } from '../Constants/Theme';
-import { useContainerScale } from '../hooks/useContainerScale';
-import { fetchQuick3DGamesData } from '../Redux/Slice/Quick3DSlice';
-import { formatToDecimal, formatToTime } from '../Utils/Common';
-import { getWalletBalance } from '../Redux/Slice/signInSlice';
-import { payNow } from '../Redux/Slice/HomeSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
-import PaymentSuccessModal from '../Components/Modal/PaymentSuccessModal';
-import InsufficientBalanceModal from '../Components/Modal/InsufficientBalanceModal';
-import { getIndividualGameResult } from '../Redux/Slice/resultSlice';
-
+} from "../Redux/Slice/threeDigitSlice";
+import {
+  handleShowAlert,
+  setInsufficientBalanceModalVisible,
+  setPaymentSuccessModalVisible,
+} from "../Redux/Slice/commonSlice";
+import Show30SecondsModal from "../Components/Show30SecondsModal";
+import DigitComponent from "../Components/DigitComponent";
+import { LinearGradient } from "expo-linear-gradient";
+import { COLORS } from "../Constants/Theme";
+import { useContainerScale } from "../hooks/useContainerScale";
+import { fetchQuick3DGamesData } from "../Redux/Slice/Quick3DSlice";
+import { formatToDecimal, formatToTime } from "../Utils/Common";
+import { getWalletBalance } from "../Redux/Slice/signInSlice";
+import { payNow } from "../Redux/Slice/HomeSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import PaymentSuccessModal from "../Components/Modal/PaymentSuccessModal";
+import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceModal";
+import { getIndividualGameResult } from "../Redux/Slice/resultSlice";
 
 const Quick3DScreen = ({ navigation, route }: any) => {
   const { Scale } = useContainerScale();
@@ -72,6 +75,9 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const [islast30sec, setLast30sec] = useState(false);
   const [numbers, setNumbers] = useState([]);
   const [cartValues, setCartValues] = useState([]);
+  const [last30SecStates, setLast30SecStates] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   const { threeDigitA, threeDigitB, threeDigitC, threeDigitCount } =
     useSelector((state: RootState) => state.threeDigit);
@@ -79,7 +85,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const { allResultData, individualGameResults } = useSelector(
     (state: RootState) => state.resultSlice
   );
-  const { quick3dGamesList,quick3dGamesGroupId } = useSelector(
+  const { quick3dGamesList, quick3dGamesGroupId } = useSelector(
     (state: RootState) => state.quick3DSlice
   );
   const { isLoggedIn, mainWalletBalance, userId } = useSelector(
@@ -120,24 +126,21 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         })
       );
     }
-  }, [gameData])
+  }, [gameData]);
 
   useEffect(() => {
-
-    dispatch(getMyOrders(
-      {
-        userId:userId,
-        groupId:quick3dGamesGroupId
-      }
-    ));
+    dispatch(
+      getMyOrders({
+        userId: userId,
+        groupId: quick3dGamesGroupId,
+      })
+    );
     dispatch(
       getIndividualGameResult({
-        groupId: quick3dGamesGroupId
-      }),
+        groupId: quick3dGamesGroupId,
+      })
     );
   }, [userId, quick3dGamesGroupId]);
-
-
 
   const transformApiResponse = (response: any) => {
     const key = Object.keys(response)[0]; // "23:59:59"
@@ -565,7 +568,11 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 
   const renderContent = () => {
     const transformedGameData = transformApiResponse(quick3dGamesList);
-
+    console.log(
+      "islast30sec==>",
+      islast30sec,
+      transformedGameData.targetDateProp
+    );
     return (
       <>
         <DigitComponent
@@ -586,8 +593,20 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           threeDigitPrice={transformedGameData.threeDigitPrice}
           onStateChange={handleChildStateChange}
           targetDateProp={transformedGameData.targetDateProp}
-          onTimerComplete={() => triggerAPI(selectedOption)}
-          onThirtySecondsRemaining={() => setLast30sec(true)}
+          // onTimerComplete={() => triggerAPI(selectedOption)}
+          onThirtySecondsRemaining={() => {
+            setLast30SecStates((prev) => ({
+              ...prev,
+              [transformedGameData.groupId]: true, // mark this group as <30s
+            }));
+          }}
+          onTimerComplete={() => {
+            setLast30SecStates((prev) => ({
+              ...prev,
+              [transformedGameData.groupId]: false, // reset when timer completes
+            }));
+            triggerAPI(selectedOption); // your other reset logic
+          }}
           gameName={transformedGameData.gameName}
           groupId={transformedGameData.groupId}
           singleDigitGameId={transformedGameData.singleDigitGameId}
@@ -793,7 +812,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
             openSheet={() => refRBSheet.current.open()}
             totalAmount={sum}
             totalCount={sum1}
-            isDisabled={sum1 === 0 || islast30sec}
+            isDisabled={sum1 === 0 || last30SecStates[quick3dGamesGroupId]}
             handlePayNow={handlePayNow}
           />
         </View>
