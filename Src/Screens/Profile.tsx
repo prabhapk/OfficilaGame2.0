@@ -30,9 +30,11 @@ import { setIsLoggedIn } from '../Redux/Slice/signInSlice';
 import { useSelector } from 'react-redux';
 import { formatToDecimal } from '../Utils/Common';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { useFreshChat } from '../context/FreshChatContext';
 
 const ProfileScreen = ({ navigation }: any) => {
   const { isLoggedIn,mainWalletBalance, withdrawBalance } = useSelector((state: RootState) => state.signInSlice);
+  const { openChat, isReady } = useFreshChat();
   const dispatch = useDispatch();
   const [showLogoutButton, setShowLogoutButton] = useState(true);
   
@@ -66,6 +68,23 @@ const ProfileScreen = ({ navigation }: any) => {
 
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
+
+    const handleTabPress = (item) => {
+        openChat();
+    // if (item.label === 'Customer Service') {
+    //   if (isLoggedIn) {
+    //     openChat(); // This will open the FreshChat
+    //   } else {
+    //     navigation.navigate('SignInScreen');
+    //   }
+    // } else {
+    //   if (isLoggedIn) {
+    //     navigation.navigate(item.route, { isProfile: true });
+    //   } else {
+    //     navigation.navigate('SignInScreen');
+    //   }
+    // }
+  };
 
   return (
     <View style={styles.safeArea}>
@@ -171,7 +190,7 @@ const ProfileScreen = ({ navigation }: any) => {
         <View style={styles.bottomTabs}>
           {tabItems.map(item => (
             <TouchableOpacity 
-            onPress={() => {isLoggedIn ? navigation.navigate(item.route,{isProfile:true}) : navigation.navigate('SignInScreen')}}
+           onPress={() => handleTabPress(item)}
             key={item.label} style={styles.tabCenter}>
               <View>
                 <Image source={item.image} style={styles.tabIcon} />
