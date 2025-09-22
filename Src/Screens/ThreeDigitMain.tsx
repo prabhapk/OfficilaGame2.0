@@ -72,6 +72,7 @@ import {
   convertToISO,
   formatToDecimal,
   formatToTime,
+  formatToTimeIST,
   generateOptions,
 } from "../Utils/Common";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -233,7 +234,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       <>
         <DigitComponent
           lastGameWiiningId={"12455"}
-          nextGameId={formatToTime(individualGameData[0]?.nextresulttime)}
+          nextGameId={formatToTimeIST(individualGameData[0]?.nextresulttime)}
           latGameWinningA={WinningBalls[0] || "1"}
           lastGameWinningB={WinningBalls[1] || "2"}
           lastGameWinningC={WinningBalls[2] || "3"}

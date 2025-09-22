@@ -9,6 +9,7 @@ import { useContainerScale } from "../hooks/useContainerScale";
 import { formatDateTime } from "../Utils/Common";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
+import MyOrders from "./MyOrders";
 interface ResultTableProps {
   tableData: any[];
   showHeader?: boolean;
@@ -122,7 +123,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
     ];
     return (
       <View>
-        <MyBets3DigitsCard
+        <MyOrders
           headers={["A", "B", "C"]} // Keep static for now (since API doesn't return this)
           myBetsTableData={myBetsTableData}
           id={item.betUniqueId}

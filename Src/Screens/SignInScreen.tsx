@@ -182,6 +182,7 @@ const SignInScreen = ({ navigation }: any) => {
               secureTextEntry={false}
               leftText={true}
               leftIcon={<Ionicons name="call-outline" size={Scale(18)} color="#999" />}
+              maxChar={10}
             />
 
             {selectedTab === 'password' ? (

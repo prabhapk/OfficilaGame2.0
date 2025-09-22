@@ -24,6 +24,7 @@ import { RootState } from '../Redux/store';
 import { useNavigation } from '@react-navigation/native';
 import { useContainerScale } from '../hooks/useContainerScale';
 import NewAppHeader from '../Components/NewAppHeader';
+import * as Clipboard from 'expo-clipboard';
 const InviteScreen = ({route}: any) => {
   const [dateRange, setDateRange] = useState({
     start: new Date(),
@@ -49,9 +50,11 @@ const InviteScreen = ({route}: any) => {
   const { isLoggedIn, userDetails } = useSelector(
     (state: RootState) => state.signInSlice,
   );
+
   const handleInvite = async () => {
     if (isLoggedIn) {
-      Alert.alert('Code copied to clipboard');
+      await Clipboard.setStringAsync(userDetails.referralCode || '');
+      // Alert.alert('Copied!', 'Code copied to clipboard');
     } else {
       navigation.navigate('SignInScreen');
     }

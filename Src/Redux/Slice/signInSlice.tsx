@@ -259,6 +259,9 @@ export const signInSlice = createSlice({
     setIsLoggedIn: (state, action: PayloadAction<boolean>) => {
       state.isLoggedIn = action.payload;
     },
+    setMainWalletBalance: (state, action: PayloadAction<number>) => {
+      state.mainWalletBalance = action.payload;
+    },
   },
   extraReducers: builder => {
 
@@ -327,7 +330,8 @@ export const {
   setNewPassword,
   setToken,
   setRefreshToken,
-  setIsLoggedIn
+  setIsLoggedIn,
+  setMainWalletBalance
 } = signInSlice.actions
 
 export default signInSlice.reducer

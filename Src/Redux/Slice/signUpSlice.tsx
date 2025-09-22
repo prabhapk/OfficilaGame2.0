@@ -6,7 +6,7 @@ import { serviceUrls, BaseURL } from '../../Utils/serviceUrls';
 import { RootState } from '../store';
 import { Alert } from 'react-native';
 import axiosInstance from '../../Utils/axiosClient';
-import { setIsLoggedIn } from "./signInSlice"; 
+import { setIsLoggedIn, setMainWalletBalance } from "./signInSlice"; 
 const initialValues: signUpSliceState = {
   mobileNumber: '',
   otp: '',
@@ -126,6 +126,8 @@ export const RegisterUSer = createAsyncThunk<
 
       if (response.status === 200) {
         thunkAPI.dispatch(setIsLoggedIn(true));
+        console.log('check', response.data.user.walletBalance.rechargeBalance);
+        thunkAPI.dispatch(setMainWalletBalance(response.data.user.walletBalance.rechargeBalance))
         navigation.navigate('DrawerNavigation');
       }
       console.log('VerifyOtpResponse', response.data);

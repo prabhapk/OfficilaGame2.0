@@ -25,6 +25,7 @@
     "@rneui/themed": "^0.0.0-edge.2",
     "axios": "^1.11.0",
     "expo": "~53.0.20",
+    "expo-clipboard": "^8.0.7",
     "expo-image": "3.0.2",
     "expo-image-picker": "~15.0.7",
     "expo-linear-gradient": "~14.1.5",

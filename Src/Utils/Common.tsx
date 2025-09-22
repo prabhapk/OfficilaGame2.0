@@ -7,24 +7,60 @@ export const goBack = ({navigation}: any) => {
     if (isNaN(num)) return "0.00"; // fallback for invalid values
     return num.toFixed(decimals);
   };
+  // export const formatToTime = (dateString: string): string => {
+  //   if (!dateString) return '';
+  
+  //   const date = new Date(dateString);
+  
+  //   // Convert to local time
+  //   const options: Intl.DateTimeFormatOptions = {
+  //     hour: 'numeric',
+  //     minute: '2-digit',
+  //     hour12: true,
+  //   };
+  
+  //   // Example: "11:30 PM"
+  //   const formatted = date.toLocaleTimeString([], options);
+  
+  //   // Replace ":" with "." => "11.30 PM"
+  //   return formatted.replace(':', '.').toLowerCase();
+  // };
+
   export const formatToTime = (dateString: string): string => {
     if (!dateString) return '';
   
     const date = new Date(dateString);
   
-    // Convert to local time
+    const options: Intl.DateTimeFormatOptions = {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'Asia/Kolkata', // Force India timezone
+    };
+
+    const formatted = date.toLocaleTimeString('en-IN', options);
+  
+
+    return formatted.replace(':', '.').toLowerCase();
+  };
+  export const formatToTimeIST = (dateString: string): string => {
+    if (!dateString) return '';
+  
+    // Parse without shifting (drop the Z)
+    const localDate = new Date(dateString.replace('Z', ''));
+  
     const options: Intl.DateTimeFormatOptions = {
       hour: 'numeric',
       minute: '2-digit',
       hour12: true,
     };
   
-    // Example: "11:30 PM"
-    const formatted = date.toLocaleTimeString([], options);
-  
-    // Replace ":" with "." => "11.30 PM"
-    return formatted.replace(':', '.').toLowerCase();
+    return localDate
+      .toLocaleTimeString('en-IN', options)
+      .replace(':', '.')
+      .toLowerCase();
   };
+  
 
   export const formatTime24to12 =(time: string)=> {
   const [h, m] = time.split(":").map(Number);

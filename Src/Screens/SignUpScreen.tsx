@@ -71,8 +71,10 @@ const SignUpScreen = ({ navigation }: any) => {
   const handleGetOtp = async () => {
     if (mobileNumberValid) {
       const resultAction = await dispatch(GetRegistrationOtp({ mobileNumber }));
+      const data = unwrapResult(resultAction);
+      console.log('getOtpResponse==>', data);
       setCountdown(60);
-      unwrapResult(resultAction);
+      
       Toast.show({
         type: 'success',
         text1: 'OTP sent successfully',
