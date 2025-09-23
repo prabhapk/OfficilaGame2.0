@@ -31,6 +31,29 @@ allprojects {
     mavenCentral()
     maven { url 'https://www.jitpack.io' }
   }
+  // Align Google Play services to avoid duplicate classes across transitive deps
+  configurations.all {
+    resolutionStrategy {
+      force 'com.google.android.gms:play-services-gcm:17.0.0'
+    }
+  }
+}
+
+// Ensure react-native-freshchat-sdk has required AndroidX dependency
+subprojects { subproject ->
+  if (subproject.name == 'react-native-freshchat-sdk') {
+    subproject.afterEvaluate {
+      dependencies {
+        implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+        // Replace old support-v4 with AndroidX to avoid duplicate classes
+        configurations.all {
+          exclude group: 'com.android.support', module: 'support-v4'
+        }
+        implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+        implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+      }
+    }
+  }
 }
 
 apply plugin: "expo-root-project"

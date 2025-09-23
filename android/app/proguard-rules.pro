@@ -12,3 +12,12 @@
 -keep class com.facebook.react.turbomodule.** { *; }
 
 # Add any project specific keep options here:
+## Freshchat SDK keep rules
+-keep class com.freshchat.** { *; }
+-keep class com.freshworks.** { *; }
+-keep class com.freshchat.consumer.sdk.** { *; }
+-keep class com.freshchat.consumer.sdk.react.** { *; }
+-keep class com.google.firebase.** { *; }
+-dontwarn com.freshchat.**
+-dontwarn com.freshworks.**
+-dontwarn com.google.firebase.**
