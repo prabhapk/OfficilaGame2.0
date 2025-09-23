@@ -4,9 +4,11 @@ import CustomHeaderRegister from '../Components/CustomHeaderRegister'
 import { backGround1, leftArrowHeader } from '../../assets/assets'
 import CommonTextInput from '../Components/CommonTextInput'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import Scale from '../Components/Scale'
+import { useContainerScale } from '../hooks/useContainerScale';
 
 const PasswordChange = ({navigation}: any) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
     const [otp, setOtp] = React.useState('');
@@ -75,7 +77,8 @@ const PasswordChange = ({navigation}: any) => {
     </View>
   )
 }
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
     signInButton: {
         marginTop: Scale(20),
         marginHorizontal: Scale(20),

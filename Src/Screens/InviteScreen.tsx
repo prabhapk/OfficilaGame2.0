@@ -16,7 +16,6 @@ import {
   inviteRecharge,
   invitetop,
 } from '../../assets/assets';
-import Scale from '../Components/Scale';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSelector } from 'react-redux';

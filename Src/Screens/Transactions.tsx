@@ -2,7 +2,6 @@ import {View, Text, Image, StyleSheet, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import HeaderButtonList from '../Components/HeaderButtonList';
 import {AllData, BetsData, HeaderButton, RechargeData, transactionData} from '../types';
-import Scale from '../Components/Scale';
 import BetsCard from '../Components/BetsCard';
 import RechargeCard from '../Components/RechargeCard';
 import { leftArrowHeader } from '../../assets/assets';

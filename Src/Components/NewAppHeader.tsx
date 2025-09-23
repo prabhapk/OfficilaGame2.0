@@ -1,5 +1,4 @@
 import {StyleSheet, Text, View, TouchableOpacity, Image, GestureResponderEvent} from 'react-native';
-import Scale from './Scale';
 import React from 'react';
 import { lefArrow } from '../../assets/assets';
 import { useContainerScale } from '../hooks/useContainerScale';

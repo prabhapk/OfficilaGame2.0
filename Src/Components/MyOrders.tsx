@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import Scale from "./Scale"; // adjust path
 import CommonBall from "./CommonBall"; // adjust path
 import TableCommonBall from "./TableCommonBall"; // adjust path
 import { COLORS } from "../Constants/Theme";

@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, TouchableOpacity, Image, GestureResponderEvent} from 'react-native';
-import Scale from './Scale';
+import { useContainerScale } from '../hooks/useContainerScale';
 import React from 'react';
 
 interface customHeaderProps {
@@ -17,6 +17,8 @@ const CustomHeaderRegister: React.FC<customHeaderProps> = ({
   rightIcon,
   centerText,
 }) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -50,7 +52,8 @@ const CustomHeaderRegister: React.FC<customHeaderProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',

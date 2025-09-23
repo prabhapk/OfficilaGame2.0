@@ -9,7 +9,7 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import Scale from './Scale';
+import { useContainerScale } from '../hooks/useContainerScale';
 import { hideHowToPlay } from '../Redux/Slice/commonSlice';
 import { cancel } from '../../assets/assets';
 
@@ -21,6 +21,8 @@ const HowToPlayModal = () => {
   const closeModal = () => {
     dispatch(hideHowToPlay());
   };
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
 
   return (
     <Modal
@@ -121,7 +123,8 @@ const HowToPlayModal = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   centeredView: {
     flex: 1,
     // justifyContent: 'center',

@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import LottieView from 'lottie-react-native';
-import Scale from './Scale';
+import { useContainerScale } from '../hooks/useContainerScale';
 import { rupeeCoinLoaderGif } from '../../assets/assets';
 import { Image } from 'expo-image';
 
@@ -14,6 +14,8 @@ interface Props {
 }
 
 const CustomLoader = ({visible}: Props): JSX.Element => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <Spinner
       visible={visible}
@@ -32,7 +34,8 @@ const CustomLoader = ({visible}: Props): JSX.Element => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject, // fill full screen
     justifyContent: "center",

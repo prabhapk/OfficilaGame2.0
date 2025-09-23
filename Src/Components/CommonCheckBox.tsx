@@ -1,7 +1,7 @@
 import {View, GestureResponderEvent, StyleSheet} from 'react-native';
 import React from 'react';
-import Scale from './Scale';
 import {CheckBox} from '@rneui/themed';
+import { useContainerScale } from '../hooks/useContainerScale';
 interface Props {
   checkvalue: boolean | undefined;
   onPress: (event: GestureResponderEvent) => void;
@@ -21,6 +21,8 @@ const CommonCheckBox: React.FC<Props> = ({
   uncheckedIconStyle,
   checkedColor,
 }) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <View style={{height: 38}}>
       <CheckBox
@@ -39,7 +41,8 @@ const CommonCheckBox: React.FC<Props> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   textStyle: {
     fontWeight: '400',
     fontSize: Scale(14),

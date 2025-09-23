@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, TouchableOpacity, GestureResponderEvent, StyleSheet, ViewStyle } from 'react-native'
 import React from 'react'
-import Scale from './Scale'
 import { COLORS } from '../Constants/Theme';
 import { useContainerScale } from '../hooks/useContainerScale';
 

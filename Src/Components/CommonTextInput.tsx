@@ -10,7 +10,6 @@ import {
   } from 'react-native';
   import React, {useState} from 'react';
   import Ionicons from 'react-native-vector-icons/Ionicons';
-  import Scale from './Scale';
   import { useContainerScale } from '../hooks/useContainerScale';
   interface Props {
     isDisabled: boolean;

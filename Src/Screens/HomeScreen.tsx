@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { bannerLuna1, bannerLuna2 } from '../../assets/assets';
 import CustomHeader from '../Components/CustomHeader';
 import CommonBanner from '../Components/CommonBanner';
-import Scale from '../Components/Scale';
 import { HomeScreenFlatlist } from '../Constants/CommonFlatlist';
 import HomeScreenGameHeaders from '../Components/HomeScreenGameHeaders';
 import CasinoScreen from './CasinoScreen';

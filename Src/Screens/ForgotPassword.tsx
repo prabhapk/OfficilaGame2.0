@@ -9,7 +9,6 @@ import {
   SafeAreaView,
   ImageBackground,
 } from 'react-native';
-import Scale from '../Components/Scale';
 import CommonTextInput from '../Components/CommonTextInput';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';

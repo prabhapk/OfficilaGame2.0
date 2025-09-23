@@ -1,10 +1,21 @@
 // components/MobileContainer.tsx
 import React from "react";
-import { Platform, SafeAreaView, StatusBar, StyleSheet, useWindowDimensions, View } from "react-native";
+import {
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 
 export const MobileContainerContext = React.createContext<number>(414); // default iPhone width
 
-export default function MobileContainer({ children }: { children: React.ReactNode }) {
+export default function MobileContainer({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { width } = useWindowDimensions();
   const containerWidth = Platform.OS === "web" ? Math.min(width, 450) : width;
 
@@ -27,15 +38,7 @@ export default function MobileContainer({ children }: { children: React.ReactNod
           </View>
         </View>
       ) : (
-        <SafeAreaView
-        style={styles.nativeContainer}>
-       
-        <StatusBar
-          barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
-          backgroundColor="#250f0fff"
-        />       
-        {children}
-      </SafeAreaView>
+        <View style={styles.nativeContainer}>{children}</View>
       )}
     </MobileContainerContext.Provider>
   );

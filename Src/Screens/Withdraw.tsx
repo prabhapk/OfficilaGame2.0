@@ -10,7 +10,6 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Scale from '../Components/Scale';
 import { walletMini, refresh, lefArrow, checkBox } from '../../assets/assets';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';

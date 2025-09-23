@@ -9,7 +9,6 @@ import {
   TextInput,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Scale from '../Components/Scale';
 import { walletMini, refresh, lefArrow, checkBox } from '../../assets/assets';
 import NewAppHeader from '../Components/NewAppHeader';
 import { useContainerScale } from '../hooks/useContainerScale';

@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
-import Scale from './Scale';
 import { betIconCard } from '../../assets/assets';
 import { useContainerScale } from '../hooks/useContainerScale';
 interface Props {

@@ -10,7 +10,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Scale from './Scale';
 import { customerService, CustomerServiceIcon, customerServiceTopIcon, headerWallet, refreshIcon, walletIcon } from '../../assets/assets';
 import { LinearGradient } from 'expo-linear-gradient';
 import Theme, { COLORS, Fonts } from '../Constants/Theme';

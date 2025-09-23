@@ -9,7 +9,6 @@ import {
   FlatList,
 } from 'react-native';
 
-import Scale from '../Components/Scale';
 import { COLORS } from '../Constants/Theme';
 import {
   bigSpin,

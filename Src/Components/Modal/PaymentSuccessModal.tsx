@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import { greenTick } from '../../../assets/assets';
-import Scale from '../Scale';
+import { useContainerScale } from '../../hooks/useContainerScale';
 
 type PaymentSuccessModalProps = {
   isVisible: boolean;
@@ -19,6 +19,7 @@ const PaymentSuccessModal: React.FC<PaymentSuccessModalProps> = ({
   bodyText,
   headerImage
 }) => {
+  const { Scale, verticalScale } = useContainerScale();
   return (
     <Modal 
     isVisible={isVisible}

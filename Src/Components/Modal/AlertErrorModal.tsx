@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { close } from '../../../assets/assets';
-import Scale from '../Scale';
+import { useContainerScale } from '../../hooks/useContainerScale';
 
 type AlertErrorModalProps = {
   isVisible: boolean;
@@ -17,6 +17,8 @@ const AlertErrorModal: React.FC<AlertErrorModalProps> = ({
   headerText,
   bodyText
 }) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
     <Modal
       isVisible={isVisible}
@@ -45,7 +47,7 @@ const AlertErrorModal: React.FC<AlertErrorModalProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) => StyleSheet.create({
   modalContainer: {
     backgroundColor: '#360400',
     borderRadius: Scale(10),

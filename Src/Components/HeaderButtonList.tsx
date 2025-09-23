@@ -4,7 +4,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 
 import { HeaderButton } from '../types'
-import Scale from "./Scale"
 import { useContainerScale } from '../hooks/useContainerScale';
 interface Props {
   buttonList: HeaderButton[]

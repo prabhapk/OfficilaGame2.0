@@ -23,7 +23,6 @@ import {
 } from "../Redux/Slice/commonSlice";
 import HowToPlayModal from "../Components/HowToPlayModal";
 import CommonBall from "../Components/CommonBall";
-import Scale from "../Components/Scale";
 import SingleIntegerTextInput from "../Components/SingleIntegerTextInput";
 import GameFooter from "../Components/GameFooter";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -61,7 +60,6 @@ import {
 import { handleShowAlert } from "../Redux/Slice/commonSlice";
 import CountButtons from "../Components/CountButtons";
 import Show30SecondsModal from "../Components/Show30SecondsModal";
-import AnimatedText from "../Components/AnimatedText";
 import { tableData } from "../Utils/Constants";
 import DigitComponent from "../Components/DigitComponent";
 import { LinearGradient } from "expo-linear-gradient";
@@ -81,8 +79,12 @@ import { getWalletBalance } from "../Redux/Slice/signInSlice";
 import PaymentSuccessModal from "../Components/Modal/PaymentSuccessModal";
 import AlertSuccessModal from "../Components/Modal/AlertSuccessModal";
 import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceModal";
+import { useContainerScale } from '../hooks/useContainerScale';
 
 const ThreeDigitMain = ({ navigation, route }: any) => {
+  const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
+
   const {
     threeDigitA,
     threeDigitB,
@@ -970,7 +972,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     </View>
   );
 };
-const styles = StyleSheet.create({
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
   mainContainer: {
     backgroundColor: "#3e0d0d",
     flex: 1,

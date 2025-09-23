@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import React, { useRef } from 'react';
 import { FooterWallet } from '../../assets/assets';
-import Scale from './Scale';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';

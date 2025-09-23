@@ -15,7 +15,6 @@ import {
   digit,
   lotteryHeader,
 } from '../../../assets/assets';
-import Scale from '../../Components/Scale';
 import { lotteryGamesList, ThreeDigits, ThreeDigitsLottery } from '../../Constants/CommonFlatlist';
 import CommonDigits from '../../Components/CommonDigits';
 import { useNavigation } from '@react-navigation/native';

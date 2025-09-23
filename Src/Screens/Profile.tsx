@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Scale from '../Components/Scale';
 import {
   profileCommissionImage,
   profileCustomerServiceImage,

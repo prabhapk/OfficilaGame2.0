@@ -17,7 +17,6 @@ import {
 import { COLORS } from '../Constants/Theme';
 import ResultTable from '../Components/ResultTable';
 import { tableData } from '../Utils/Constants';
-import Scale from '../Components/Scale';
 import Icon from 'react-native-vector-icons/Feather'; // for filter icon
 import Entypo from 'react-native-vector-icons/Entypo';
 import { checked, hot, lottery1, unchecked } from '../../assets/assets';

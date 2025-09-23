@@ -4,7 +4,6 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-import Scale from './Scale';
 import { useContainerScale } from '../hooks/useContainerScale';
 
 interface Props {
