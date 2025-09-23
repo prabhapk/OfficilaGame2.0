@@ -79,7 +79,7 @@ import { getWalletBalance } from "../Redux/Slice/signInSlice";
 import PaymentSuccessModal from "../Components/Modal/PaymentSuccessModal";
 import AlertSuccessModal from "../Components/Modal/AlertSuccessModal";
 import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceModal";
-import { useContainerScale } from '../hooks/useContainerScale';
+import { useContainerScale } from "../hooks/useContainerScale";
 
 const ThreeDigitMain = ({ navigation, route }: any) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -117,7 +117,9 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const [islast30sec, setLast30sec] = useState(false);
   const [numbers, setNumbers] = useState([]);
   const [cartValues, setCartValues] = useState([]);
-  const [last30SecStates, setLast30SecStates] = useState<{ [key: string]: boolean }>({});
+  const [last30SecStates, setLast30SecStates] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   const handleChildStateChange = (updatedValue: any) => {
     console.log("Received from DigitComponent:", updatedValue);
@@ -126,7 +128,6 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const { allResultData, individualGameResults } = useSelector(
     (state: RootState) => state.resultSlice
   );
-
 
   // helper: convert "HH:mm:ss" → total minutes
   function timeToMinutes(time: string) {
@@ -205,7 +206,6 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const [selectedTime, setSelectedTime] = useState<any | null>(
     OPTIONS.length > 0 ? OPTIONS[0].name : null
   );
-  
 
   // If OPTIONS change (new API response), update selectedOption
   useEffect(() => {
@@ -259,18 +259,18 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           threeDigitGameId={individualGameData[2]?.id}
           groupId={groupId}
           onThirtySecondsRemaining={() => {
-    setLast30SecStates(prev => ({
-      ...prev,
-      [groupId]: true,  // mark this group as <30s
-    }));
-  }}
-  onTimerComplete={() => {
-    setLast30SecStates(prev => ({
-      ...prev,
-      [groupId]: false, // reset when timer completes
-    }));
-    handleTimerComplete(); // your other reset logic
-  }}
+            setLast30SecStates((prev) => ({
+              ...prev,
+              [groupId]: true, // mark this group as <30s
+            }));
+          }}
+          onTimerComplete={() => {
+            setLast30SecStates((prev) => ({
+              ...prev,
+              [groupId]: false, // reset when timer completes
+            }));
+            handleTimerComplete(); // your other reset logic
+          }}
         />
       </>
     );
@@ -380,8 +380,6 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       return;
     }
 
-
-    
     setNumbers((prevNumbers) => [
       ...prevNumbers,
       {
@@ -703,12 +701,11 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   }, [InsufficientBalanceModalVisible, dispatch]);
 
   const handlePayNow = async () => {
-    console.log('numbers==>',numbers);
+    console.log("numbers==>", numbers);
     if (isLoggedIn) {
       try {
         const apiData = {
           bets: numbers.map((item) => ({
-           
             gameId: item.gameId,
             groupId: item.groupId,
             betType: item.label,
@@ -721,16 +718,16 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
 
         const resultAction = await dispatch(payNow(apiData));
         const data = unwrapResult(resultAction);
-        console.log("data==>",data);
+        console.log("data==>", data);
         if (data.success === true) {
-         resetState();
-        dispatch(getWalletBalance());
-        dispatch(
-          getMyOrders({
-            userId: userId,
-            groupId: groupId,
-          })
-        );
+          resetState();
+          dispatch(getWalletBalance());
+          dispatch(
+            getMyOrders({
+              userId: userId,
+              groupId: groupId,
+            })
+          );
         }
       } catch (error: any) {
         console.log("handlePayNowError", error);
@@ -740,8 +737,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     }
   };
 
-  console.log("islast30sec==>", islast30sec, ); 
-  
+  console.log("islast30sec==>", islast30sec);
+
   return (
     <View style={styles.mainContainer}>
       {/* {islast30sec && <Show30SecondsModal />} */}
@@ -778,17 +775,17 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
                 dispatch(getWalletBalance());
               }}
             />
+            <FlatList
+              data={OPTIONS}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.startView}
+              renderItem={renderHeader}
+              nestedScrollEnabled={true}
+              scrollEnabled={true}
+            />
             <View style={styles.subContainer}>
-              <FlatList
-                data={OPTIONS}
-                keyExtractor={(item) => item.id.toString()}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.startView}
-                renderItem={renderHeader}
-                nestedScrollEnabled={true}
-              />
-
               {/* Conditionally Render UI Based on Selection */}
               <View style={styles.renderDataView}>{renderContent()}</View>
               <View>
@@ -951,7 +948,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
             openSheet={() => refRBSheet.current.open()}
             totalAmount={sum}
             totalCount={sum1}
-             isDisabled={sum1 === 0 || last30SecStates[groupId]}
+            isDisabled={sum1 === 0 || last30SecStates[groupId]}
             handlePayNow={handlePayNow}
           />
           <PaymentSuccessModal
@@ -974,117 +971,115 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
 };
 const createStyles = (Scale: any) =>
   StyleSheet.create({
-  mainContainer: {
-    backgroundColor: "#3e0d0d",
-    flex: 1,
-    marginBottom: Scale(0),
-  },
-  subContainer: {
-    flex: 1,
-    marginHorizontal: 10,
-  },
-  container: {
-    flex: 1,
-  },
-  card: {
-    marginTop: Scale(20),
-    backgroundColor: "#5A1C1C",
-    width: "100%",
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
-  },
-  cancelImage: {
-    height: Scale(24),
-    width: Scale(24),
-    marginTop: Scale(10),
-  },
-  startView: {
-    // flexDirection: 'row',
-    // borderRadius: 10,
-    // width: '100%',
-    // justifyContent: 'center',
-    flex: 1,
-  },
-  renderDataView: {
-    padding: 10,
-    backgroundColor: "#3e0d0d",
-    flex: 1,
-    borderRadius: 10,
-  },
-  gameDetailView: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
-    marginTop: 10,
-    backgroundColor: "#DBCEFB",
-    overflow: "hidden",
-  },
-  showCountContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#EEF0F6",
-    borderRadius: 30,
-    paddingHorizontal: 5,
-    height: 40,
-    marginLeft: 30,
-  },
-  button: {
-    backgroundColor: "#F5F7FB",
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    // marginHorizontal: 20,
-  },
-  symbol: {
-    fontSize: 15,
-    color: "black",
-  },
-  input: {
-    width: 50, // Set an explicit width to ensure visibility
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#000", // Ensure text is visible
-    textAlign: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-  },
-  valueText: {
-    marginTop: 20,
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  boxButton: {
-    backgroundColor: "#007AFF",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-  },
-  DigitTitleText: {
-    color: "#000",
-    fontWeight: "bold",
-    fontSize: Scale(16),
-  },
-  DigitTitleText1: {
-    color: "#000",
-    fontWeight: "bold",
-    fontSize: Scale(14),
-    top: 1,
-  },
-  headerBtn: {
-    alignItems: "center",
-    borderRadius: 10,
-    padding: 10,
-    justifyContent: "center",
-    marginHorizontal: 5,
-  },
-  headerImg: { width: 30, height: 30 },
-});
+    mainContainer: {
+      backgroundColor: "#3e0d0d",
+      flex: 1,
+      marginBottom: Scale(0),
+    },
+    subContainer: {
+      marginTop: Scale(10),
+      marginHorizontal: 10,
+    },
+    container: {
+      flex: 1,
+    },
+    card: {
+      marginTop: Scale(20),
+      backgroundColor: "#5A1C1C",
+      width: "100%",
+      borderRadius: 10,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      elevation: 3,
+    },
+    cancelImage: {
+      height: Scale(24),
+      width: Scale(24),
+      marginTop: Scale(10),
+    },
+    startView: {
+      flex: 1,
+      marginHorizontal: 10,
+    },
+    renderDataView: {
+      padding: 10,
+      backgroundColor: "#3e0d0d",
+      flex: 1,
+      borderRadius: 10,
+    },
+    gameDetailView: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      paddingHorizontal: 10,
+      marginTop: 10,
+      backgroundColor: "#DBCEFB",
+      overflow: "hidden",
+    },
+    showCountContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: "#EEF0F6",
+      borderRadius: 30,
+      paddingHorizontal: 5,
+      height: 40,
+      marginLeft: 30,
+    },
+    button: {
+      backgroundColor: "#F5F7FB",
+      width: 30,
+      height: 30,
+      borderRadius: 15,
+      justifyContent: "center",
+      alignItems: "center",
+      // marginHorizontal: 20,
+    },
+    symbol: {
+      fontSize: 15,
+      color: "black",
+    },
+    input: {
+      width: 50, // Set an explicit width to ensure visibility
+      fontSize: 18,
+      fontWeight: "bold",
+      color: "#000", // Ensure text is visible
+      textAlign: "center",
+    },
+    buttonText: {
+      color: "#fff",
+      fontSize: 16,
+    },
+    valueText: {
+      marginTop: 20,
+      fontSize: 18,
+      fontWeight: "bold",
+    },
+    boxButton: {
+      backgroundColor: "#007AFF",
+      paddingVertical: 12,
+      paddingHorizontal: 20,
+      borderRadius: 10,
+    },
+    DigitTitleText: {
+      color: "#000",
+      fontWeight: "bold",
+      fontSize: Scale(16),
+    },
+    DigitTitleText1: {
+      color: "#000",
+      fontWeight: "bold",
+      fontSize: Scale(14),
+      top: 1,
+    },
+    headerBtn: {
+      alignItems: "center",
+      borderRadius: 10,
+      padding: 10,
+      justifyContent: "center",
+      marginHorizontal: 5,
+      height: Scale(100),
+    },
+    headerImg: { width: 30, height: 30 },
+  });
 export default ThreeDigitMain;

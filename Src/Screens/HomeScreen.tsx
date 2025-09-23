@@ -1,22 +1,22 @@
-import React, { use, useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { bannerLuna1, bannerLuna2 } from '../../assets/assets';
-import CustomHeader from '../Components/CustomHeader';
-import CommonBanner from '../Components/CommonBanner';
-import { HomeScreenFlatlist } from '../Constants/CommonFlatlist';
-import HomeScreenGameHeaders from '../Components/HomeScreenGameHeaders';
-import CasinoScreen from './CasinoScreen';
-import LotteryScreen from './Lottery/LotteryScreen';
-import CustomLoader from '../Components/CustomLoader';
-import { useDispatch } from 'react-redux';
-import { getAllGamesList } from '../Redux/Slice/HomeSlice';
-import { useContainerScale } from '../hooks/useContainerScale';
-import { AppDispatch } from '../Redux/store';
-import { getWalletBalance } from '../Redux/Slice/signInSlice';
-import { useIsFocused } from '@react-navigation/native';
+import React, { use, useEffect, useRef, useState } from "react";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { bannerLuna1, bannerLuna2 } from "../../assets/assets";
+import CustomHeader from "../Components/CustomHeader";
+import CommonBanner from "../Components/CommonBanner";
+import { HomeScreenFlatlist } from "../Constants/CommonFlatlist";
+import HomeScreenGameHeaders from "../Components/HomeScreenGameHeaders";
+import CasinoScreen from "./CasinoScreen";
+import LotteryScreen from "./Lottery/LotteryScreen";
+import CustomLoader from "../Components/CustomLoader";
+import { useDispatch } from "react-redux";
+import { getAllGamesList } from "../Redux/Slice/HomeSlice";
+import { useContainerScale } from "../hooks/useContainerScale";
+import { AppDispatch } from "../Redux/store";
+import { getWalletBalance } from "../Redux/Slice/signInSlice";
+import { useIsFocused } from "@react-navigation/native";
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
-const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const [gameList, setGameList] = useState(HomeScreenFlatlist);
   const [selectedGameId, setSelectedGameId] = useState(1);
 
@@ -30,15 +30,15 @@ const dispatch = useDispatch<AppDispatch>();
   ];
 
   const { Scale, verticalScale } = useContainerScale();
-    const styles = createStyles(Scale);
-    
-    const isFocused = useIsFocused();
+  const styles = createStyles(Scale);
+
+  const isFocused = useIsFocused();
   useEffect(() => {
     // always fetch on mount
     dispatch(getAllGamesList());
     dispatch(getWalletBalance());
   }, [dispatch]);
-  
+
   useEffect(() => {
     if (isFocused) {
       dispatch(getAllGamesList());
@@ -47,12 +47,12 @@ const dispatch = useDispatch<AppDispatch>();
   }, [dispatch, isFocused]);
 
   const openDrawerdd = () => {
-    console.log('openDrawerdd', navigation.toggleDrawer);
+    console.log("openDrawerdd", navigation.toggleDrawer);
     navigation.toggleDrawer();
   };
 
   const handleSelectGameHeader = (id: number) => {
-    const updatedList = gameList.map(item => ({
+    const updatedList = gameList.map((item) => ({
       ...item,
       isSelected: item.id === id,
     }));
@@ -64,7 +64,7 @@ const dispatch = useDispatch<AppDispatch>();
     switch (selectedGameId) {
       case 1:
         return (
-           <>
+          <>
             <LotteryScreen />
           </>
         );
@@ -98,15 +98,15 @@ const dispatch = useDispatch<AppDispatch>();
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#250f0fff' }}>
-       <CustomLoader visible={loader} />
+    <View style={{ flex: 1, backgroundColor: "#250f0fff" }}>
+      <CustomLoader visible={loader} />
       <CustomHeader
         onMenuPress={openDrawerdd}
         onLoginPress={() => {
-          navigation.navigate('SignInScreen');
+          navigation.navigate("SignInScreen");
         }}
         registerPress={() => {
-          navigation.navigate('SignUpScreen');
+          navigation.navigate("SignUpScreen");
         }}
       />
       <ScrollView
@@ -129,8 +129,9 @@ const dispatch = useDispatch<AppDispatch>();
   );
 };
 
-const createStyles = (Scale: any) => StyleSheet.create({
-  container: { flex: 1 },
-});
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
+    container: { flex: 1 },
+  });
 
 export default HomeScreen;
