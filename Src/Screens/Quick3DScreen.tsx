@@ -642,8 +642,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
             dispatch(getWalletBalance());
           }}
         />
-        <View style={styles.subContainer}>
-          <FlatList
+         <FlatList
             data={OPTIONS}
             keyExtractor={(item) => item.id.toString()}
             horizontal
@@ -651,6 +650,9 @@ const Quick3DScreen = ({ navigation, route }: any) => {
             contentContainerStyle={styles.startView}
             renderItem={renderHeader}
           />
+
+        <View style={styles.subContainer}>
+         
 
           {/* Conditionally Render UI Based on Selection */}
           <View style={styles.renderDataView}>{renderContent()}</View>
@@ -841,7 +843,7 @@ const createStyles = (Scale: any) =>
       marginBottom: Scale(0),
     },
     subContainer: {
-      flex: 1,
+      marginTop: Scale(10),
       marginHorizontal: 10,
     },
     container: {
@@ -939,12 +941,13 @@ const createStyles = (Scale: any) =>
       fontSize: Scale(14),
       top: 1,
     },
-    headerBtn: {
+     headerBtn: {
       alignItems: "center",
-      borderRadius: Scale(10),
-      padding: Scale(10),
+      borderRadius: 10,
+      padding: 10,
       justifyContent: "center",
-      marginHorizontal: Scale(5),
+      marginHorizontal: 5,
+      height: Scale(100),
     },
     headerImg: { width: Scale(30), height: Scale(30) },
   });
