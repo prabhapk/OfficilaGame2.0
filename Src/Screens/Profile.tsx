@@ -99,7 +99,7 @@ const ProfileScreen = ({ navigation }: any) => {
     // Show loading state
     console.log("Opening Freshchat...");
     setIsChatLoading(true);
-    
+
     try {
       // Pass real user details here
       await setFreshchatUser({
@@ -110,15 +110,14 @@ const ProfileScreen = ({ navigation }: any) => {
         externalId: "user-123",
         properties: { tier: "gold" },
       });
-      
+
       // Open chat (will auto-open on web, no second click needed)
       openFreshchat();
-      
+
       // Hide loading after a delay to allow chat to open
       setTimeout(() => {
         setIsChatLoading(false);
       }, 2000);
-      
     } catch (error) {
       console.error("Error opening chat:", error);
       setIsChatLoading(false);
@@ -132,7 +131,7 @@ const ProfileScreen = ({ navigation }: any) => {
         onPressChat();
       } else {
         console.log("elseeee ", route);
-        navigation.navigate(route);
+        navigation.navigate(route, { isProfile: true });
       }
     } else {
       navigation.navigate("SignInScreen");
@@ -298,7 +297,14 @@ const ProfileScreen = ({ navigation }: any) => {
                   </View>
                 )}
               </View>
-              <Text style={[styles.tabItem, isChatLoading && item.label === "Customer Service" && styles.loadingText]}>
+              <Text
+                style={[
+                  styles.tabItem,
+                  isChatLoading &&
+                    item.label === "Customer Service" &&
+                    styles.loadingText,
+                ]}
+              >
                 {item.label}
               </Text>
             </TouchableOpacity>
@@ -682,7 +688,7 @@ const createStyles = (Scale: any) =>
       fontWeight: "bold",
       fontSize: Scale(14),
     },
-    
+
     /* ===== Loading States ===== */
     loadingOverlay: {
       position: "absolute",

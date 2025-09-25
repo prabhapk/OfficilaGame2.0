@@ -6,8 +6,9 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { customerService, CustomerServiceIcon, customerServiceTopIcon, headerWallet, refreshIcon, walletIcon } from '../../assets/assets';
@@ -16,6 +17,7 @@ import Theme, { COLORS, Fonts } from '../Constants/Theme';
 import { Image } from 'expo-image';
 import CommonAddButton from './CommonAddButton';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { initFreshchat, setFreshchatUser, openFreshchat } from '../Utils/freshchat';
 interface Props {
   HeaderText: string;
   leftonPress: (event: GestureResponderEvent) => void;
@@ -40,6 +42,41 @@ const GameHeader: React.FC<Props> = ({
 
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
+  const [isChatLoading, setIsChatLoading] = useState(false);
+
+  useEffect(() => {
+    initFreshchat();
+  }, []);
+
+  const onPressChat = useCallback(async () => {
+    // Show loading state
+    console.log("Opening Freshchat...");
+    setIsChatLoading(true);
+    
+    try {
+      // Pass real user details here
+      await setFreshchatUser({
+        name: "Demo User",
+        email: "demo@example.com",
+        phoneCountryCode: "+91",
+        phone: "9876543210",
+        externalId: "user-123",
+        properties: { tier: "gold" },
+      });
+      
+      // Open chat (will auto-open on web, no second click needed)
+      openFreshchat();
+      
+      // Hide loading after a delay to allow chat to open
+      setTimeout(() => {
+        setIsChatLoading(false);
+      }, 2000);
+      
+    } catch (error) {
+      console.error("Error opening chat:", error);
+      setIsChatLoading(false);
+    }
+  }, []);
 
   return (
     <View style={styles.mainContainer}>
@@ -63,7 +100,7 @@ const GameHeader: React.FC<Props> = ({
             <TouchableOpacity style={styles.leftImageStyle} onPress={leftonPress}>
               <Image
                 source={leftImage}
-                resizeMode="contain"
+                contentFit='contain' 
                 tintColor={'white'}
                 style={styles.leftImageSize}
               />
@@ -73,15 +110,21 @@ const GameHeader: React.FC<Props> = ({
               <Text style={styles.headerTextStyle}>{HeaderText}</Text>
             </View>
             <TouchableOpacity
-              onPress={() => Alert.alert('Will show the wallet screen soon')}
-              style={{ flexDirection: 'row', alignItems: 'center' }}>
+              onPress={onPressChat}
+              style={{ flexDirection: 'row', alignItems: 'center' }}
+              disabled={isChatLoading}>
 
-              <View>
+              <View style={{ position: 'relative' }}>
                 <Image
                   source={CustomerServiceIcon}
-                  resizeMode="contain"
+                  contentFit='contain' 
                   style={{ width: 30, height: 30, marginLeft: Scale(10) }}
                 />
+                {isChatLoading && (
+                  <View style={styles.loadingOverlay}>
+                    <ActivityIndicator size="small" color="#fff" />
+                  </View>
+                )}
               </View>
             </TouchableOpacity>
           </View>
@@ -208,6 +251,18 @@ const createStyles = (Scale: any) =>
   button: {
     height: Scale(170),
     alignItems: 'center',
+  },
+  loadingOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    borderRadius: Scale(15),
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: Scale(10),
   },
 });
 
