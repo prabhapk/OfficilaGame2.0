@@ -6,15 +6,17 @@ import { COLORS } from "../Constants/Theme";
 import MyBets3DigitsCard from "./MyBets3DigitsCard";
 import { hot, noDataImage } from "../../assets/assets";
 import { useContainerScale } from "../hooks/useContainerScale";
-import { formatDateTime } from "../Utils/Common";
-import { useSelector } from "react-redux";
+import { formatDateTime, groupByOrder } from "../Utils/Common";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
 import MyOrders from "./MyOrders";
+import { setTableCurrentPage } from "../Redux/Slice/commonSlice";
 interface ResultTableProps {
   tableData: any[];
   showHeader?: boolean;
   customStyle?: any;
   hidePages?: boolean;
+  totalPage?: any;
 }
 
 const ResultTable: React.FC<ResultTableProps> = ({
@@ -22,30 +24,42 @@ const ResultTable: React.FC<ResultTableProps> = ({
   showHeader,
   customStyle,
   hidePages = false,
+  totalPage = 1,
 }) => {
+  const dispatch = useDispatch();
   const { Scale, verticalScale } = useContainerScale();
   const [onTableSelect, setOnTableSelect] = useState("ResultHistory");
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const { myOrdersData, myOrdersLoader } = useSelector(
     (state: RootState) => state.threeDigit
   );
+  const { tableCurrentPage } = useSelector(
+    (state: RootState) => state.commonSlice
+  );
+
+  
   console.log("myOrdersData====>",myOrdersData);
+
+  const rawData = myOrdersData;
+
+  // Group bets into orders
+  const groupedOrders = groupByOrder(rawData);
   
 
   // Calculate the total number of pages
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
+  const totalPages = Math.ceil(tableData?.length / itemsPerPage);
 
   // Get data for the current page
-  const currentData = tableData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  const currentData = tableData?.slice(
+    (tableCurrentPage - 1) * itemsPerPage,
+    tableCurrentPage * itemsPerPage
   );
 
   // Handle Page Change
   const changePage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
+    if (page >= 1 && page <= totalPage) {
+     dispatch(setTableCurrentPage(page));
     }
   };
 
@@ -111,42 +125,105 @@ const ResultTable: React.FC<ResultTableProps> = ({
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
 
-  const myOrderRenterItem = ({ item, index }: { item: any; index: number }) => {
-    const winningStatus = item.isWinning === true ? "Won" : "No Won";
+  const myOrderRenterItem = ({ item }: { item: any; index: number }) => {
+    const winningStatus = item.isWinning ? "Won" : "No Won";
+  
+    // Build row per bet
     const myBetsTableData = [
       {
-        type: item.betType,
-        value: item.selectedNumber,
-        payment: item.amount,
-        result: winningStatus,
+        type: item.betType,          // "A", "B", "AB", etc.
+        value: item.selectedNumber,  // e.g. 5, 15
+        payment: item.amount,        // bet amount
+        result: winningStatus,       // "Won" or "No Won"
       },
     ];
+  
+    // Winning number split into balls
+    const winningNumber = item.winningNumber;
+    const bottomBalls =
+      winningNumber && winningNumber.length > 0
+        ? winningNumber.split("").map((digit, idx) => {
+            let color =
+              idx === 0 ? "#DE3C3F" :
+              idx === 1 ? "#EC8204" :
+              "#066FEA";
+            return { text: digit, color };
+          })
+        : [
+            { text: "-", color: "#DE3C3F" },
+            { text: "-", color: "#EC8204" },
+            { text: "-", color: "#066FEA" },
+          ];
+  
     return (
-      <View>
-        <MyOrders
-          headers={["A", "B", "C"]} // Keep static for now (since API doesn't return this)
-          myBetsTableData={myBetsTableData}
-          id={item.betUniqueId}
-          bettingTime={item.betTime}
-          paymentAmount={item.totalAmount}
-          drawTime="-" // Placeholder until API sends
-          topBalls={[
-            { text: "A", color: "#DE3C3F" },
-            { text: "B", color: "#EC8204" },
-            { text: "C", color: "#066FEA" },
-          ]}
-          bottomBalls={[
-            { text: "2", color: "#DE3C3F" }, // Show selected num
-            { text: "4", color: "#EC8204" },
-            { text: "6", color: "#066FEA" },
-          ]}
-          date={item.betTime.split("T")[0]} // take date part only
-          status={winningStatus}
-          imageSource={hot}
-        />
-      </View>
+      // <MyOrders
+      //   headers={["A", "B", "C"]}
+      //   myBetsTableData={myBetsTableData}
+      //   id={item.betUniqueId}
+      //   bettingTime={item.betTime}
+      //   paymentAmount={item.totalAmount}
+      //   drawTime={
+      //     item.nextDrawTime !== "0001-01-01T00:00:00"
+      //       ? item.nextDrawTime
+      //       : "-"
+      //   }
+      //   topBalls={[
+      //     { text: "A", color: "#DE3C3F" },
+      //     { text: "B", color: "#EC8204" },
+      //     { text: "C", color: "#066FEA" },
+      //   ]}
+      //   bottomBalls={bottomBalls}
+      //   date={item.betTime.split("T")[0]}
+      //   status={winningStatus}
+      //   imageSource={hot}
+      //   winOrLossId={item.betUniqueId}
+      //   gameName={item.gameName || "AvisGaming"}
+      //   totalWinningAmount={item.totalAmount}
+      // />
+      <MyOrders
+      headers={["A", "B", "C"]}
+      myBetsTableData={item.bets}
+      id={item.betUniqueId}
+      bettingTime={item.betTime}
+      paymentAmount={item.totalAmount} // now sum of all bets in this order
+      drawTime={
+        item.nextDrawTime !== "0001-01-01T00:00:00"
+          ? item.nextDrawTime
+          : "-"
+      }
+      topBalls={[
+        { text: "A", color: "#DE3C3F" },
+        { text: "B", color: "#EC8204" },
+        { text: "C", color: "#066FEA" },
+      ]}
+      bottomBalls={
+        item.winningNumber
+          ? item.winningNumber.split("").map((digit, idx) => {
+              let color =
+                idx === 0
+                  ? "#DE3C3F"
+                  : idx === 1
+                  ? "#EC8204"
+                  : "#066FEA";
+              return { text: digit, color };
+            })
+          : [
+              { text: "-", color: "#DE3C3F" },
+              { text: "-", color: "#EC8204" },
+              { text: "-", color: "#066FEA" },
+            ]
+      }
+      date={item.betTime.split("T")[0]}
+      status={item.isWinning ? "Won" : "No Won"}
+      imageSource={hot}
+      winOrLossId={item.betUniqueId}
+      gameName={item.gameName || "AvisGaming"}
+      totalWinningAmount={item.totalAmount}
+    />
     );
   };
+  
+  
 
   return (
     <View>
@@ -233,7 +310,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
               </View>
 
               <FlatList
-                data={currentData}
+                data={tableData}
                 keyExtractor={(item) => item.id.toString()}
                 showsVerticalScrollIndicator={false}
                 renderItem={tableRenderItem}
@@ -266,17 +343,17 @@ const ResultTable: React.FC<ResultTableProps> = ({
                       fontWeight: "bold",
                     }}
                   >
-                    Total {tableData.length}
+                    Total {totalPage}
                   </Text>
 
                   {/* Page Numbers */}
-                  {getVisiblePages(currentPage, totalPages).map((page) => (
+                  {getVisiblePages(tableCurrentPage, totalPage).map((page) => (
                     <TouchableOpacity
                       key={page}
                       onPress={() => changePage(page)}
                       style={{
                         backgroundColor:
-                          currentPage === page ? "gold" : "#812B2B",
+                        tableCurrentPage === page ? "gold" : "#812B2B",
                         borderRadius: Scale(10),
                         padding: Scale(10),
                         borderColor: "#812B2B",
@@ -292,8 +369,8 @@ const ResultTable: React.FC<ResultTableProps> = ({
 
                   {/* Left Arrow */}
                   <TouchableOpacity
-                    onPress={() => changePage(currentPage - 1)}
-                    disabled={currentPage === 1}
+                    onPress={() => changePage(tableCurrentPage - 1)}
+                    disabled={tableCurrentPage === 1}
                     style={{
                       backgroundColor: "#5F1616",
                       borderRadius: Scale(10),
@@ -310,14 +387,14 @@ const ResultTable: React.FC<ResultTableProps> = ({
                     <FontAwesome5
                       name={"chevron-left"}
                       size={15}
-                      color={currentPage === 1 ? "grey" : "white"}
+                      color={tableCurrentPage === 1 ? "grey" : "white"}
                     />
                   </TouchableOpacity>
 
                   {/* Right Arrow */}
                   <TouchableOpacity
-                    onPress={() => changePage(currentPage + 1)}
-                    disabled={currentPage === totalPages}
+                    onPress={() => changePage(tableCurrentPage + 1)}
+                    disabled={tableCurrentPage === totalPage}
                     style={{
                       backgroundColor: "#5F1616",
                       borderRadius: Scale(10),
@@ -333,7 +410,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
                     <FontAwesome5
                       name={"chevron-right"}
                       size={15}
-                      color={currentPage === totalPages ? "grey" : "white"}
+                      color={tableCurrentPage === totalPage ? "grey" : "white"}
                     />
                   </TouchableOpacity>
                 </View>
@@ -368,7 +445,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
                 imageSource={hot}
               /> */}
               <FlatList
-                data={myOrdersData}
+                data={groupedOrders}
                 keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={false}
                 renderItem={myOrderRenterItem}

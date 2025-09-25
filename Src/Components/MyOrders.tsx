@@ -27,6 +27,9 @@ type MyBetsCardProps = {
   date: string;
   status: string;
   imageSource: any; // require(...) or { uri: string }
+  winOrLossId: string;
+  gameName: string;
+  totalWinningAmount: number;
 };
 
 const MyOrders: React.FC<MyBetsCardProps> = ({
@@ -41,6 +44,9 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
   date,
   status,
   imageSource,
+  winOrLossId,
+  gameName,
+  totalWinningAmount
 }) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -81,251 +87,241 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
       <View style={styles.dashedDivider} />
       {/* Details */}
       <View style={styles.detailsContainer}>
+        {/* Win Ui  */}
         <View>
-          <ImageBackground
-            source={myOrdersWinLabel}
-            style={{
-              marginVertical: Scale(10),
-              height: Scale(35),
-              marginHorizontal: Scale(10),
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                alignSelf: "center",
-              }}
-            >
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: Scale(16),
-                  fontWeight: "bold",
-                  color: "white",
-                  marginLeft: Scale(110),
-                  marginVertical: Scale(5),
-                }}
-              >
-                ID PK269331509072321
-              </Text>
-              <Image
-                source={copyImage}
-                style={{
-                  width: Scale(20),
-                  height: Scale(20),
-                  marginLeft: Scale(10),
-                  marginTop: Scale(5),
-                }}
-              />
-            </View>
-          </ImageBackground>
-        </View>
-        <View>
-          <LinearGradient
-            colors={["#844d4d", "#825q4d"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={{
-              borderBottomLeftRadius: 10,
-              paddingHorizontal: 10,
-              height: 30,
-              bottom: 10,
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "row",
-              marginHorizontal: 15,
-              marginTop: 10,
-              borderTopRightRadius: 10,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                alignSelf: "center",
-              }}
-            >
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: Scale(16),
-                  fontWeight: "bold",
-                  color: "white",
-                  marginLeft: Scale(10),
-                  marginVertical: Scale(5),
-                }}
-              >
-                NO WON
-              </Text>
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: Scale(16),
-                  fontWeight: "bold",
-                  color: "white",
-                  marginLeft: Scale(20),
-                  marginVertical: Scale(5),
-                }}
-              >
-                ID PK269331509072321
-              </Text>
-              <Image
-                source={copyImage}
-                style={{
-                  width: Scale(20),
-                  height: Scale(20),
-                  marginLeft: Scale(10),
-                  marginTop: Scale(5),
-                }}
-              />
-            </View>
-          </LinearGradient>
-        </View>
-        <View style={styles.detailsSubHeader}>
-          <View>
-            <Text style={styles.detailText}>Dear Lottery</Text>
-            {/* <Text style={[styles.detailText1,{flexWrap:"wrap"}]}>Draw time:{bettingTime}</Text> */}
-            <Text style={[styles.detailText1, { flexWrap: "wrap" }]}>
-              Draw time: 09-09 01:00 PM
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.paymentAmount}>Payment</Text>
-            <Text style={styles.paymentAmount1}>₹ {paymentAmount}</Text>
-          </View>
-        </View>
+        {status === "Won" ? (
+    <ImageBackground
+      source={myOrdersWinLabel}
+      style={{
+        marginVertical: Scale(10),
+        height: Scale(35),
+        marginHorizontal: Scale(10),
+      }}
+    >
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", alignSelf: "center" }}>
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: Scale(16),
+            fontWeight: "bold",
+            color: "white",
+            marginLeft: Scale(110),
+            marginVertical: Scale(5),
+          }}
+        >
+          {winOrLossId}
+        </Text>
+        <Image
+          source={copyImage}
+          style={{
+            width: Scale(20),
+            height: Scale(20),
+            marginLeft: Scale(10),
+            marginTop: Scale(5),
+          }}
+        />
+      </View>
+    </ImageBackground>
+  ) : (
+    <LinearGradient
+      colors={["#844d4d", "#82504d"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      style={{
+        borderBottomLeftRadius: 10,
+        paddingHorizontal: 10,
+        height: 30,
+        bottom: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        marginHorizontal: 15,
+        marginTop: 10,
+        borderTopRightRadius: 10,
+      }}
+    >
+      <Text
+        style={{
+          textAlign: "center",
+          fontSize: Scale(16),
+          fontWeight: "bold",
+          color: "white",
+          marginLeft: Scale(10),
+          marginVertical: Scale(5),
+        }}
+      >
+        NO WON
+      </Text>
+      <Text
+        style={{
+          textAlign: "center",
+          fontSize: Scale(16),
+          fontWeight: "bold",
+          color: "white",
+          marginLeft: Scale(20),
+          marginVertical: Scale(5),
+        }}
+      >
+        {winOrLossId}
+      </Text>
+      <Image
+        source={copyImage}
+        style={{
+          width: Scale(20),
+          height: Scale(20),
+          marginLeft: Scale(10),
+          marginTop: Scale(5),
+        }}
+      />
+    </LinearGradient>
+  )}
 
-        <View style={{ marginTop: Scale(10), marginBottom: Scale(5) }}>
-          <ImageBackground
-            source={winLabel}
-            style={{
-              width: "100%",
-              height: 60,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            contentFit="fill"
-          >
-            <Text
-              style={{
-                color: "white",
-                fontSize: Scale(14),
-                fontWeight: "bold",
-                textAlign: "center",
-                paddingHorizontal: Scale(30),
-              }}
-            >
-              Congratulations! You won the game lottery and claim your winning
-              amount ₹100
-            </Text>
-          </ImageBackground>
-          <Text style={styles.footerText}>
-            Sorry, your guess is wrong, Try next time
-          </Text>
-        </View>
+  {/* Game Name + Time + Payment */}
+  <View style={styles.detailsSubHeader}>
+    <View>
+      <Text style={styles.detailText}>{gameName || "AvisGaming"}</Text>
+      <Text style={[styles.detailText1, { flexWrap: "wrap" }]}>
+        Draw time: {drawTime || "-"}
+      </Text>
+    </View>
+    <View>
+      <Text style={styles.paymentAmount}>Payment</Text>
+      <Text style={styles.paymentAmount1}>₹ {paymentAmount}</Text>
+    </View>
+  </View>
+
+  {/* Footer (Win / Loss Message) */}
+  <View style={{ marginTop: Scale(10), marginBottom: Scale(5) }}>
+    {status === "Won" ? (
+      <ImageBackground
+        source={winLabel}
+        style={{
+          width: "100%",
+          height: 60,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        contentFit="fill"
+      >
+        <Text
+          style={{
+            color: "white",
+            fontSize: Scale(14),
+            fontWeight: "bold",
+            textAlign: "center",
+            paddingHorizontal: Scale(30),
+          }}
+        >
+          Congratulations! You won the game lottery and claim your winning
+          amount ₹{totalWinningAmount}
+        </Text>
+      </ImageBackground>
+    ) : (
+      <Text style={styles.footerText}>
+        Sorry, your guess is wrong, Try next time
+      </Text>
+    )}
+  </View>
+  </View>
         <View style={styles.newDivider} />
         <View style={styles.dateStatusRow}>
           <Text style={styles.myBetsTitle}>MY BETS</Text>
           <Text style={styles.dateText}>07-09-2025 02:00 AM</Text>
         </View>
 
-        {/* <Text style={styles.myBetsTitle}>MY BETS</Text> */}
+     {/* Table */}
+<View style={{ backgroundColor: "#812B2B" }}>
+  {/* Table Header */}
+  <View style={styles.tableHeader}>
+    <View style={{ flexDirection: "row" }}>
+      {headers.map((head) => {
+        let color =
+          head === "A"
+            ? "#DE3C3F"
+            : head === "B"
+            ? "#EC8204"
+            : "#066FEA";
+        return (
+          <TableCommonBall
+            key={head}
+            backgroundColor={color}
+            innerText={head}
+            borderColor={color}
+          />
+        );
+      })}
+    </View>
+    <Text style={styles.tableHeaderText}>Payment</Text>
+    <Text style={[styles.tableHeaderText, { marginRight: 10 }]}>
+      Result
+    </Text>
+  </View>
 
-        {/* Table */}
-        <View style={{ backgroundColor: "#812B2B" }}>
-          {/* Table Header */}
-          <View style={styles.tableHeader}>
-            <View style={{ flexDirection: "row" }}>
-              {headers.map((head) => {
-                let color =
-                  head === "A"
-                    ? "#DE3C3F"
-                    : head === "B"
-                    ? "#EC8204"
-                    : "#066FEA";
-                return (
-                  <TableCommonBall
-                    key={head}
-                    backgroundColor={color}
-                    innerText={head}
-                    borderColor={color}
-                  />
-                );
-              })}
-            </View>
-            <Text style={styles.tableHeaderText}>Payment</Text>
-            <Text style={[styles.tableHeaderText, { marginRight: 10 }]}>
-              Result
-            </Text>
-          </View>
+  {/* Table Rows */}
+  {myBetsTableData.map((bet, rowIndex) => {
+    const isEvenRow = rowIndex % 2 === 0;
+    const rowBgColor = isEvenRow ? "#550011" : "#812B2B";
 
-          {/* Table Rows */}
-          {headers.map((rowHead, rowIndex) => {
-            const isEvenRow = rowIndex % 2 === 0;
-            const rowBgColor = isEvenRow ? "#550011" : "#812B2B";
+    // Helper: check if betType contains header (A/B/C)
+    const isSelectedFor = (header: string) =>
+      bet.type.includes(header);
 
-            return (
-              <View
-                key={rowHead}
-                style={[styles.tableRow, { backgroundColor: rowBgColor }]}
-              >
-                {/* Row Balls */}
-                <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
-                  {headers.map((colHead) => {
-                    let color =
-                      colHead === "A"
-                        ? "#DE3C3F"
-                        : colHead === "B"
-                        ? "#EC8204"
-                        : "#066FEA";
-                    const value =
-                      myBetsTableData.find((item) => item.type === rowHead)
-                        ?.value || "-";
+    return (
+      <View
+        key={`${bet.type}-${rowIndex}`}
+        style={[styles.tableRow, { backgroundColor: rowBgColor }]}
+      >
+        {/* Row Balls */}
+        <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
+        {headers.map((colHead, colIndex) => {
+  let color =
+    colHead === "A"
+      ? "#DE3C3F"
+      : colHead === "B"
+      ? "#EC8204"
+      : "#066FEA";
 
-                    if (colHead === rowHead) {
-                      return (
-                        <TableCommonBall
-                          key={colHead}
-                          backgroundColor={color}
-                          innerText={String(value)}
-                          borderColor={color}
-                        />
-                      );
-                    } else {
-                      return (
-                        <TableCommonBall
-                          key={colHead}
-                          backgroundColor={"#BFBFBF"}
-                          innerText={"-"}
-                          borderColor={"#BFBFBF"}
-                        />
-                      );
-                    }
-                  })}
-                </View>
+  // Split selectedNumber into digits
+  const digits = String(bet.value).split("");
 
-                {/* Payment */}
-                <Text style={{ color: COLORS.white }}>
-                  {myBetsTableData.find((item) => item.type === rowHead)
-                    ? `₹${
-                        myBetsTableData.find((item) => item.type === rowHead)
-                          ?.payment
-                      }`
-                    : "-"}
-                </Text>
+  // Decide which digit goes where
+  let showDigit = "-";
+  if (bet.type.length === digits.length) {
+    const pos = bet.type.indexOf(colHead); // index of A/B/C in betType
+    if (pos !== -1) {
+      showDigit = digits[pos] || "-";
+    }
+  } else if (bet.type.includes(colHead)) {
+    // fallback: single digit bet for multi-type (e.g. type=A, value=5)
+    showDigit = digits[0] || "-";
+  }
 
-                {/* Result */}
-                <Text style={{ color: COLORS.white, marginRight: 30 }}>
-                  {myBetsTableData.find((item) => item.type === rowHead)
-                    ?.result || "-"}
-                </Text>
-              </View>
-            );
-          })}
+  return (
+    <TableCommonBall
+      key={colHead}
+      backgroundColor={showDigit !== "-" ? color : "#BFBFBF"}
+      innerText={showDigit}
+      borderColor={showDigit !== "-" ? color : "#BFBFBF"}
+    />
+  );
+})}
+
         </View>
+
+        {/* Payment */}
+        <Text style={{ color: COLORS.white }}>
+          ₹{bet.payment}
+        </Text>
+
+        {/* Result */}
+        <Text style={{ color: COLORS.white, marginRight: 30 }}>
+          {bet.result}
+        </Text>
+      </View>
+    );
+  })}
+</View>
+
       </View>
     </View>
   );
@@ -374,6 +370,7 @@ const createStyles = (Scale: any) =>
       color: "white",
       fontWeight: "bold",
       marginVertical: Scale(5),
+      width: Scale(200),
     },
     detailsSubHeader: {
       flexDirection: "row",

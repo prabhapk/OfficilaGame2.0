@@ -5,6 +5,8 @@ export interface CommonSliceState {
     show30SecondsLeftAlert:boolean
     paymentSuccessModalVisible:boolean
     InsufficientBalanceModalVisible:boolean
+    tableCurrentPage:number
+    gameRulesData: any;
   }
 
   export interface threeDigitState {

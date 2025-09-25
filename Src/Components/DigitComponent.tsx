@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import CommonBall from "./CommonBall";
 import SingleIntegerTextInput from "./SingleIntegerTextInput";
@@ -31,7 +31,7 @@ import {
   setThreeDigitC,
   setThreeDigitCount,
 } from "../Redux/Slice/threeDigitSlice";
-import { handleShowAlert, showHowToPlay } from "../Redux/Slice/commonSlice";
+import { gameRules, handleShowAlert, showHowToPlay } from "../Redux/Slice/commonSlice";
 import Show30SecondsModal from "./Show30SecondsModal";
 import { COLORS } from "../Constants/Theme";
 import { LinearGradient } from "expo-linear-gradient";
@@ -79,6 +79,7 @@ export interface IDigitProps {
   singleDigitGameId: number;
   doubleDigitGameId: number;
   threeDigitGameId: number;
+  totalPage: number;
 }
 
 const DigitComponent: React.FC<IDigitProps> = ({
@@ -107,6 +108,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
   singleDigitGameId,
   doubleDigitGameId,
   threeDigitGameId,
+  totalPage,
 }) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -236,6 +238,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
       setTargetDate(targetDateProp);
     }
   }, [targetDateProp]);
+
+
 
   return (
     <>
@@ -898,7 +902,10 @@ const DigitComponent: React.FC<IDigitProps> = ({
           </View>
         </View>
 
-        <ResultTable tableData={tableData} showHeader={true} />
+        <ResultTable
+         tableData={tableData} 
+         totalPage ={totalPage}
+         showHeader={true} />
       </View>
       {showAlert && <Show30SecondsModal />}
     </>

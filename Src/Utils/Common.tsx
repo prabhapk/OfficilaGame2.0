@@ -180,3 +180,30 @@ export const convertToISO =(dateStr: string, timeStr: string): string =>{
   // Return ISO string (UTC)
   return localDate.toISOString();
 }
+
+
+export const groupByOrder = (data: any[]) => {
+  const grouped: Record<string, any> = {};
+
+  data.forEach((item) => {
+    if (!grouped[item.betUniqueId]) {
+      grouped[item.betUniqueId] = {
+        ...item,       // copy common props (betTime, drawTime, etc.)
+        bets: [],      // collect bets here
+        totalAmount: 0 // recalc total
+      };
+    }
+
+    grouped[item.betUniqueId].bets.push({
+      type: item.betType,
+      value: item.selectedNumber,
+      payment: item.amount,
+      result: item.isWinning ? "Won" : "No Won",
+    });
+
+    // Update total for this order
+    grouped[item.betUniqueId].totalAmount += item.amount;
+  });
+
+  return Object.values(grouped);
+};

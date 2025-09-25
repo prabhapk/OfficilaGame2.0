@@ -107,7 +107,7 @@ const ProfileScreen = ({ navigation }: any) => {
 
   const handleActionButtonPress = (route: string) => {
     if (isLoggedIn) {
-      if (route === "Customer Service") {
+      if (route === "CustomerService") {
         onPressChat();
       } else {
         navigation.navigate(route);

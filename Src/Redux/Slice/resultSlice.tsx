@@ -34,18 +34,25 @@ export const getAllResults = createAsyncThunk<
 export const getIndividualGameResult = createAsyncThunk<
   any,
   {
-    groupId: number;
+    // groupId: number;
+    GametypeId: number;
+    page: number;
+    pageSize: number;
   },
   { rejectValue: string }
->('result/getIndividualGameResult', async ({ groupId }, thunkAPI) => {
+>('result/getIndividualGameResult', async ({ GametypeId,
+  page,
+  pageSize
+ }, thunkAPI) => {
   try {
-    console.log('groupId==>', groupId);
-    const page = 1;
-    const pageSie = 10;
+    console.log('GametypeId==>', GametypeId);
+    // const page = 1;
+    // const pageSie = 10;
    
+    console.log('check==>', `${serviceUrls.results.getIndividualGameResult}?GametypeId=${GametypeId}&page=${page}&pageSize=${pageSize}`);
     
     const response = await axiosInstance.get(
-        `${serviceUrls.results.getIndividualGameResult}/${groupId}?page=${page}&pageSize=${pageSie}`,
+        `${serviceUrls.results.getIndividualGameResult}?GametypeId=${GametypeId}&page=${page}&pageSize=${pageSize}`,
     //   {
     //     params: {
     //       groupId,

@@ -17,6 +17,9 @@ const HowToPlayModal = () => {
   const modalVisible = useSelector(
     (state: any) => state.commonSlice.howToPlayVisible,
   );
+const {gameRulesData} = useSelector((state: any) => state.commonSlice);
+  console.log("gameRulesDataHowToPlay===>", gameRulesData);
+  
   const dispatch = useDispatch();
   const closeModal = () => {
     dispatch(hideHowToPlay());
@@ -49,7 +52,7 @@ const HowToPlayModal = () => {
           scrollEnabled
           showsVerticalScrollIndicator = {false}
           keyboardShouldPersistTaps="always">
-          <Text style={styles.textCenter}>Quick3D 3min</Text>
+          {/* <Text style={styles.textCenter}>Quick3D 3min</Text>
           <Text style={styles.textCenter}>Quick3D 3min is an exhilarating lottery game.The lottery game mode that opens every 3 minutes has increased fun and excitement,and more frequent bonus opportunities \n&Dear Lottery first prize result last three digit.</Text>
           <Text style={styles.textCenter}>Time:24-hour drawing,once every 3 minutes</Text>
           <Text style={styles.textCenter}>An example of a first prize ticket is 834</Text>
@@ -114,7 +117,10 @@ const HowToPlayModal = () => {
          <View style ={styles.flexRow}>
           <Text style={styles.textCenterBold}>(iii)Match C :</Text>
           <Text style={styles.textCenterBoldRed}>50</Text>
-          </View>
+          </View> */}
+          <Text>
+            {gameRulesData}
+          </Text>
           </ScrollView>
 
         </View>

@@ -17,8 +17,10 @@ import React, { use, useEffect, useMemo, useRef, useState } from "react";
 import { cancel, lefArrow, quick3min, sameClock } from "../../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  gameRules,
   setInsufficientBalanceModalVisible,
   setPaymentSuccessModalVisible,
+  setTableCurrentPage,
   showHowToPlay,
 } from "../Redux/Slice/commonSlice";
 import HowToPlayModal from "../Components/HowToPlayModal";
@@ -102,7 +104,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const { isLoggedIn, mainWalletBalance, userId } = useSelector(
     (state: RootState) => state.signInSlice
   );
-  const { paymentSuccessModalVisible, InsufficientBalanceModalVisible } =
+  const { paymentSuccessModalVisible, InsufficientBalanceModalVisible, tableCurrentPage } =
     useSelector((state: RootState) => state.commonSlice);
   console.log("individualGameData==>", individualGameData);
   const dispatch = useDispatch();
@@ -216,12 +218,15 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
 
   console.log("individualGameResults==>", individualGameResults);
 
-  const transformedData = individualGameResults.map((item: any) => ({
+  const transformedData = individualGameResults?.results?.map((item: any) => ({
     ...item,
     balls: item.winningNumber.split(""),
   }));
   console.log("transformedData==>", transformedData);
 
+  const totalPages = individualGameResults.totalPages
+  console.log("totalPages==>", totalPages);
+  
   const groupId = route.params.gameData?.groupId;
   const gameTypeId = route.params.gameData?.gameTypeId;
   console.log("groupId==>", groupId, gameTypeId);
@@ -258,6 +263,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           doubleDigitGameId={individualGameData[1]?.id}
           threeDigitGameId={individualGameData[2]?.id}
           groupId={groupId}
+          totalPage ={totalPages}
           onThirtySecondsRemaining={() => {
             setLast30SecStates((prev) => ({
               ...prev,
@@ -504,6 +510,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   };
   useEffect(() => {
     resetState();
+    dispatch(setTableCurrentPage(1))
   }, []);
 
   useEffect(() => {
@@ -653,10 +660,15 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     );
   };
 
+  console.log('tableCurrentPage==>', tableCurrentPage );
+  
   useEffect(() => {
     dispatch(
       getIndividualGameResult({
-        groupId: groupId,
+        // groupId: groupId,
+        GametypeId: groupId,
+        page: tableCurrentPage,
+        pageSize: 10,
       })
     );
     dispatch(
@@ -670,7 +682,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
         groupId: groupId,
       })
     );
-  }, [gameTypeId, groupId]);
+  }, [gameTypeId, groupId, tableCurrentPage]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -738,6 +750,10 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   };
 
   console.log("islast30sec==>", islast30sec);
+
+  useEffect(() => {
+    dispatch(gameRules({gameTypeId: groupId} ));
+  }, [groupId]);
 
   return (
     <View style={styles.mainContainer}>

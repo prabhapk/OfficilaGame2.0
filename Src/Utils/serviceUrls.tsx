@@ -21,7 +21,7 @@ export const serviceUrls = {
   results: {
     getAllResults: 'api/ResultHistory/all-result',
 
-    getIndividualGameResult: '/api/ResultHistory/game-result',
+    getIndividualGameResult: '/api/ResultHistory/game-result/gametype',
     getIndividualGameData: '/api/Game/by-typeid',
     getMyOrders: '/api/BetHistory/group',
   },
@@ -31,6 +31,9 @@ export const serviceUrls = {
   withdraw: {
     AddBankAccount:'/api/user/User/bank-accounts',
   },
+  rules: {
+    getRules: '/api/user/User/game-rules',
+  }
 };
 
 export const BaseURL = process.env.API_BASE_URL;

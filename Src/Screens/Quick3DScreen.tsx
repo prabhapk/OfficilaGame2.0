@@ -43,9 +43,11 @@ import {
   getMyOrders,
 } from "../Redux/Slice/threeDigitSlice";
 import {
+  gameRules,
   handleShowAlert,
   setInsufficientBalanceModalVisible,
   setPaymentSuccessModalVisible,
+  setTableCurrentPage,
 } from "../Redux/Slice/commonSlice";
 import Show30SecondsModal from "../Components/Show30SecondsModal";
 import DigitComponent from "../Components/DigitComponent";
@@ -91,13 +93,14 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const { isLoggedIn, mainWalletBalance, userId } = useSelector(
     (state: RootState) => state.signInSlice
   );
-  const { paymentSuccessModalVisible, InsufficientBalanceModalVisible } =
+  const { paymentSuccessModalVisible, InsufficientBalanceModalVisible, tableCurrentPage } =
     useSelector((state: RootState) => state.commonSlice);
 
-  const transformedResultData = individualGameResults.map((item: any) => ({
+  const transformedResultData = individualGameResults.results.map((item: any) => ({
     ...item,
     balls: item.winningNumber.split(""),
   }));
+  const totalPages = individualGameResults.totalPages
 
   const handleChildStateChange = (updatedValue: any) => {
     setCartValues(updatedValue);
@@ -111,6 +114,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           quickythree: "Q3D-1M",
         })
       );
+      dispatch(setTableCurrentPage(1))
     } else if (gameData.name === "3minGame") {
       setSelectedOption("3 Mins");
       dispatch(
@@ -118,6 +122,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           quickythree: "Q3D-3M",
         })
       );
+      dispatch(setTableCurrentPage(1))
     } else if (gameData.name === "5minGame") {
       setSelectedOption("5 Mins");
       dispatch(
@@ -125,6 +130,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           quickythree: "Q3D-5M",
         })
       );
+      dispatch(setTableCurrentPage(1))
     }
   }, [gameData]);
 
@@ -137,10 +143,16 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     );
     dispatch(
       getIndividualGameResult({
-        groupId: quick3dGamesGroupId,
+        // groupId: quick3dGamesGroupId,
+        GametypeId: quick3dGamesGroupId,
+        page: tableCurrentPage,
+        pageSize: 10,
       })
     );
-  }, [userId, quick3dGamesGroupId]);
+  }, [userId, quick3dGamesGroupId, tableCurrentPage ]);
+  useEffect(() => {
+    dispatch(gameRules({gameTypeId: quick3dGamesGroupId} ));
+  }, [dispatch, quick3dGamesGroupId]);
 
   const transformApiResponse = (response: any) => {
     const key = Object.keys(response)[0]; // "23:59:59"
@@ -593,6 +605,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           threeDigitPrice={transformedGameData.threeDigitPrice}
           onStateChange={handleChildStateChange}
           targetDateProp={transformedGameData.targetDateProp}
+          totalPage ={totalPages}
           // onTimerComplete={() => triggerAPI(selectedOption)}
           onThirtySecondsRemaining={() => {
             setLast30SecStates((prev) => ({

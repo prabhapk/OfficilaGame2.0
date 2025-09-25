@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image, StatusBar } from 'react-native';
-import { applogo, splashScreen } from '../../assets/assets';
+import { applogo, newSplashScreen, splashScreen } from '../../assets/assets';
 
 const SplashScreen = ({ navigation }: { navigation: any }) => {
   useEffect(() => {
@@ -14,7 +14,8 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="black" barStyle="dark-content" />
-      <Image source={splashScreen} style={styles.logoImg}/>
+      {/* <Image source={splashScreen} style={styles.logoImg}/> */}
+      <Image source={newSplashScreen} style={styles.logoImg}/>
     </View>
   );
 };
