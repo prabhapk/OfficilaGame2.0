@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import React, { useEffect, useState, useCallback } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
@@ -18,6 +19,7 @@ import { Image } from 'expo-image';
 import CommonAddButton from './CommonAddButton';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { initFreshchat, setFreshchatUser, openFreshchat } from '../Utils/freshchat';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 interface Props {
   HeaderText: string;
   leftonPress: (event: GestureResponderEvent) => void;
@@ -41,7 +43,8 @@ const GameHeader: React.FC<Props> = ({
 }) => {
 
   const { Scale, verticalScale } = useContainerScale();
-  const styles = createStyles(Scale);
+  const insets = useSafeAreaInsets();
+  const styles = createStyles(Scale, insets);
   const [isChatLoading, setIsChatLoading] = useState(false);
 
   useEffect(() => {
@@ -205,10 +208,11 @@ const GameHeader: React.FC<Props> = ({
 };
 
 
-const createStyles = (Scale: any) =>
+const createStyles = (Scale: any, insets: any) =>
   StyleSheet.create({
   mainContainer: {
     height: Scale(270),
+    paddingTop: Platform.OS === 'android' ? insets.top : 0,
   },
   leftImageStyle: {
     // backgroundColor: 'white',

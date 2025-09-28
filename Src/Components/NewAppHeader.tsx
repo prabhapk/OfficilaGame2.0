@@ -1,11 +1,12 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image, GestureResponderEvent} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image, GestureResponderEvent, Platform, ImageSourcePropType} from 'react-native';
 import React from 'react';
 import { lefArrow } from '../../assets/assets';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 interface customHeaderProps {
   leftIconPress: (event: GestureResponderEvent) => void;
   rightIconPress?:(event: GestureResponderEvent) => void;
-  rightIcon?: Image;
+  rightIcon?: ImageSourcePropType;
   centerText?: string;
 }
 
@@ -16,7 +17,8 @@ const NewAppHeader: React.FC<customHeaderProps> = ({
   centerText,
 }) => {
   const { Scale, verticalScale } = useContainerScale();
-  const styles = createStyles(Scale);
+  const insets = useSafeAreaInsets();
+  const styles = createStyles(Scale, insets);
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -52,7 +54,7 @@ const NewAppHeader: React.FC<customHeaderProps> = ({
   );
 };
 
-const createStyles = (Scale: any) =>
+const createStyles = (Scale: any, insets: any) =>
   StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -60,7 +62,7 @@ const createStyles = (Scale: any) =>
     padding: 10,
     alignItems: 'center',
     backgroundColor: 'transparent',
-    marginTop: Scale(10),
+   
   },
   menuContainer: {
     flexDirection: 'row',

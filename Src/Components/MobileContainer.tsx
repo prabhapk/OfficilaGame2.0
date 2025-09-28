@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const MobileContainerContext = React.createContext<number>(414); // default iPhone width
 
@@ -17,6 +18,7 @@ export default function MobileContainer({
   children: React.ReactNode;
 }) {
   const { width } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const containerWidth = Platform.OS === "web" ? Math.min(width, 450) : width;
 
   return (
@@ -38,7 +40,9 @@ export default function MobileContainer({
           </View>
         </View>
       ) : (
-        <View style={styles.nativeContainer}>{children}</View>
+        <SafeAreaView style={[styles.nativeContainer, { paddingTop: Platform.OS === 'android' ? insets.top : 0, paddingBottom: Platform.OS === 'android' ? insets.bottom : 0 }]}>
+          {children}
+        </SafeAreaView>
       )}
     </MobileContainerContext.Provider>
   );
