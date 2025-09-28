@@ -12,7 +12,7 @@ import {
   Platform,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { cancel, lefArrow, sameClock } from "../../assets/assets";
+import { cancel, CustomerServiceIcon, lefArrow, sameClock } from "../../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
 import HowToPlayModal from "../Components/HowToPlayModal";
 import GameFooter from "../Components/GameFooter";
@@ -62,6 +62,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import PaymentSuccessModal from "../Components/Modal/PaymentSuccessModal";
 import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceModal";
 import { getIndividualGameResult } from "../Redux/Slice/resultSlice";
+import NewAppHeader from "../Components/NewAppHeader";
 
 const Quick3DScreen = ({ navigation, route }: any) => {
   const { Scale } = useContainerScale();
@@ -93,14 +94,22 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const { isLoggedIn, mainWalletBalance, userId } = useSelector(
     (state: RootState) => state.signInSlice
   );
-  const { paymentSuccessModalVisible, InsufficientBalanceModalVisible, tableCurrentPage } =
-    useSelector((state: RootState) => state.commonSlice);
 
-  const transformedResultData = individualGameResults.results.map((item: any) => ({
-    ...item,
-    balls: item.winningNumber.split(""),
-  }));
-  const totalPages = individualGameResults.totalPages
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
+
+
+  const {
+    paymentSuccessModalVisible,
+    InsufficientBalanceModalVisible,
+    tableCurrentPage,
+  } = useSelector((state: RootState) => state.commonSlice);
+
+  const transformedResultData =
+    individualGameResults?.results?.map((item: any) => ({
+      ...item,
+      balls: item.winningNumber.split(""),
+    })) || [];
+  const totalPages = individualGameResults?.totalPages || 0;
 
   const handleChildStateChange = (updatedValue: any) => {
     setCartValues(updatedValue);
@@ -114,7 +123,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           quickythree: "Q3D-1M",
         })
       );
-      dispatch(setTableCurrentPage(1))
+      dispatch(setTableCurrentPage(1));
     } else if (gameData.name === "3minGame") {
       setSelectedOption("3 Mins");
       dispatch(
@@ -122,7 +131,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           quickythree: "Q3D-3M",
         })
       );
-      dispatch(setTableCurrentPage(1))
+      dispatch(setTableCurrentPage(1));
     } else if (gameData.name === "5minGame") {
       setSelectedOption("5 Mins");
       dispatch(
@@ -130,7 +139,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           quickythree: "Q3D-5M",
         })
       );
-      dispatch(setTableCurrentPage(1))
+      dispatch(setTableCurrentPage(1));
     }
   }, [gameData]);
 
@@ -149,12 +158,45 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         pageSize: 10,
       })
     );
-  }, [userId, quick3dGamesGroupId, tableCurrentPage ]);
+  }, [userId, quick3dGamesGroupId, tableCurrentPage]);
   useEffect(() => {
-    dispatch(gameRules({gameTypeId: quick3dGamesGroupId} ));
+    dispatch(gameRules({ gameTypeId: quick3dGamesGroupId }));
   }, [dispatch, quick3dGamesGroupId]);
 
+    // Handle scroll to show/hide sticky header
+    const handleScroll = (event: any) => {
+      const scrollY = event.nativeEvent.contentOffset.y;
+      const threshold = 200; // Show sticky header after scrolling 200px (halfway point)
+      
+      if (scrollY > threshold && !showStickyHeader) {
+        setShowStickyHeader(true);
+      } else if (scrollY <= threshold && showStickyHeader) {
+        setShowStickyHeader(false);
+      }
+    };
+
   const transformApiResponse = (response: any) => {
+    if (!response || Object.keys(response).length === 0) {
+      return {
+        lastGameWiiningId: "",
+        nextGameId: 0,
+        lastGameWinningA: "",
+        lastGameWinningB: "",
+        lastGameWinningC: "",
+        singleDigitPrice: 0,
+        doubleDigitPrice: 0,
+        threeDigitPrice: 0,
+        singleDigitWinningPrice: 0,
+        doubleDigitWinningPrice: 0,
+        threeDigitWinningPrice: 0,
+        groupId: 0,
+        singleDigitGameId: 0,
+        doubleDigitGameId: 0,
+        threeDigitGameId: 0,
+        gameName: "",
+        targetDateProp: "",
+      };
+    }
     const key = Object.keys(response)[0]; // "23:59:59"
     const games = response[key];
 
@@ -249,7 +291,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   };
 
   const goBack = () => {
-    navigation.navigate("DrawerNavigation");
+    navigation.goBack();
   };
 
   const handleAdd = (
@@ -579,7 +621,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   };
 
   const renderContent = () => {
-    const transformedGameData = transformApiResponse(quick3dGamesList);
+    const transformedGameData = transformApiResponse(quick3dGamesList || {});
     console.log(
       "islast30sec==>",
       islast30sec,
@@ -605,7 +647,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           threeDigitPrice={transformedGameData.threeDigitPrice}
           onStateChange={handleChildStateChange}
           targetDateProp={transformedGameData.targetDateProp}
-          totalPage ={totalPages}
+          totalPage={totalPages}
           // onTimerComplete={() => triggerAPI(selectedOption)}
           onThirtySecondsRemaining={() => {
             setLast30SecStates((prev) => ({
@@ -632,12 +674,26 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 
   return (
     <View style={styles.mainContainer}>
-      <ScrollView
-        scrollEnabled
+       {showStickyHeader && (
+       <NewAppHeader 
+       leftIconPress={goBack}
+       rightIconPress={() => {}}
+       centerText={"Quick 3Digit Games"}
+       rightIcon={CustomerServiceIcon}
+       />
+       
+      )}
+       <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ 
+          flexGrow: 1, 
+          paddingBottom: Scale(100),
+          paddingTop: showStickyHeader ? Scale(80) : 0 // Only add padding when sticky header is visible
+        }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
-        nestedScrollEnabled
-        contentContainerStyle={{ paddingBottom: Scale(100) }}
+        scrollEventThrottle={16}
+        onScroll={handleScroll}
       >
         <GameHeader
           HeaderText={"Quick 3Digit Games"}
@@ -655,18 +711,16 @@ const Quick3DScreen = ({ navigation, route }: any) => {
             dispatch(getWalletBalance());
           }}
         />
-         <FlatList
-            data={OPTIONS}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.startView}
-            renderItem={renderHeader}
-          />
+        <FlatList
+          data={OPTIONS}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.startView}
+          renderItem={renderHeader}
+        />
 
         <View style={styles.subContainer}>
-         
-
           {/* Conditionally Render UI Based on Selection */}
           <View style={styles.renderDataView}>{renderContent()}</View>
           <View>
@@ -954,7 +1008,7 @@ const createStyles = (Scale: any) =>
       fontSize: Scale(14),
       top: 1,
     },
-     headerBtn: {
+    headerBtn: {
       alignItems: "center",
       borderRadius: 10,
       padding: 10,

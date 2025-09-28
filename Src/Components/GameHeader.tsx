@@ -212,7 +212,6 @@ const createStyles = (Scale: any, insets: any) =>
   StyleSheet.create({
   mainContainer: {
     height: Scale(270),
-    paddingTop: Platform.OS === 'android' ? insets.top : 0,
   },
   leftImageStyle: {
     // backgroundColor: 'white',
