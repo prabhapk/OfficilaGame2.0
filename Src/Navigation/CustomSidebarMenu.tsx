@@ -228,7 +228,10 @@ const CustomSidebarMenu = ({ navigation }: any) => {
       )}
 
       <View style={styles.referalView}>
-        <TouchableOpacity style={styles.refButton}>
+        <TouchableOpacity 
+          style={styles.refButton}
+          onPress={() => navigation.navigate('RebateScreen')}
+        >
           <Image
             source={rebateMenu}
             style={styles.refImage}
@@ -269,7 +272,10 @@ const CustomSidebarMenu = ({ navigation }: any) => {
         renderItem={renderMenuItem}
       />
 
-      <TouchableOpacity style={{ alignItems: 'center' }}>
+      <TouchableOpacity 
+        style={{ alignItems: 'center' }}
+        onPress={() => navigation.navigate('AgencyScreen')}
+      >
         <Image
           source={superAgent}
           style={{ width: '93%', height: Scale(110) }}

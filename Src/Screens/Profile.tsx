@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -40,12 +42,15 @@ const ProfileScreen = ({ navigation }: any) => {
   const { isLoggedIn, mainWalletBalance, withdrawBalance } = useSelector(
     (state: RootState) => state.signInSlice
   );
+  console.log("withdrawBalanceScreenProfile==>", mainWalletBalance);
+  
   const dispatch = useDispatch();
   const [showLogoutButton, setShowLogoutButton] = useState(true);
 
   const [showModal, setShowModal] = useState(false);
   const [isRechargeModalVisible, setRechargeModalVisible] = useState(false);
   const [isWithdrawModalVisible, setWithdrawModalVisible] = useState(false);
+  const [isChatLoading, setIsChatLoading] = useState(false);
 
   const tabItems = [
     { label: "Lotteries", image: profileLotteriesImage, route: "MyBetsScreen" },
@@ -93,24 +98,42 @@ const ProfileScreen = ({ navigation }: any) => {
   }, []);
 
   const onPressChat = useCallback(async () => {
-    // Pass real user details here
-    await setFreshchatUser({
-      name: "Demo User",
-      email: "demo@example.com",
-      phoneCountryCode: "+91",
-      phone: "9876543210",
-      externalId: "user-123",
-      properties: { tier: "gold" },
-    });
-    openFreshchat();
+    // Show loading state
+    console.log("Opening Freshchat...");
+    setIsChatLoading(true);
+
+    try {
+      // Pass real user details here
+      await setFreshchatUser({
+        name: "Demo User",
+        email: "demo@example.com",
+        phoneCountryCode: "+91",
+        phone: "9876543210",
+        externalId: "user-123",
+        properties: { tier: "gold" },
+      });
+
+      // Open chat (will auto-open on web, no second click needed)
+      openFreshchat();
+
+      // Hide loading after a delay to allow chat to open
+      setTimeout(() => {
+        setIsChatLoading(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error opening chat:", error);
+      setIsChatLoading(false);
+    }
   }, []);
 
   const handleActionButtonPress = (route: string) => {
     if (isLoggedIn) {
       if (route === "CustomerService") {
+        console.log("CustomerService", route);
         onPressChat();
       } else {
-        navigation.navigate(route);
+        console.log("elseeee ", route);
+        navigation.navigate(route, { isProfile: true });
       }
     } else {
       navigation.navigate("SignInScreen");
@@ -257,13 +280,10 @@ const ProfileScreen = ({ navigation }: any) => {
         <View style={styles.bottomTabs}>
           {tabItems.map((item) => (
             <TouchableOpacity
-              onPress={() => {
-                isLoggedIn
-                  ? navigation.navigate(item.route, { isProfile: true })
-                  : navigation.navigate("SignInScreen");
-              }}
+              onPress={() => handleActionButtonPress(item.route)}
               key={item.label}
               style={styles.tabCenter}
+              disabled={item.label === "Customer Service" && isChatLoading}
             >
               <View>
                 <Image source={item.image} style={styles.tabIcon} />
@@ -273,8 +293,22 @@ const ProfileScreen = ({ navigation }: any) => {
                     style={styles.tabBadge}
                   />
                 )}
+                {item.label === "Customer Service" && isChatLoading && (
+                  <View style={styles.loadingOverlay}>
+                    <ActivityIndicator size="small" color="#fff" />
+                  </View>
+                )}
               </View>
-              <Text style={styles.tabItem}>{item.label}</Text>
+              <Text
+                style={[
+                  styles.tabItem,
+                  isChatLoading &&
+                    item.label === "Customer Service" &&
+                    styles.loadingText,
+                ]}
+              >
+                {item.label}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -655,5 +689,21 @@ const createStyles = (Scale: any) =>
       color: "red",
       fontWeight: "bold",
       fontSize: Scale(14),
+    },
+
+    /* ===== Loading States ===== */
+    loadingOverlay: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      borderRadius: Scale(30),
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    loadingText: {
+      opacity: 0.6,
     },
   });

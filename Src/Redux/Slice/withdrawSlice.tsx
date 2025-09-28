@@ -8,7 +8,8 @@ import { Alert } from 'react-native';
 import axiosInstance from '../../Utils/axiosClient';
 import { setIsLoggedIn } from "./signInSlice"; 
 const initialValues: withdrawSliceStates = {
-
+  withdrawLoader:false,
+  bankAccountsData: null,
 };
 
 export const AddBankAccount =createAsyncThunk<any, any, { rejectValue: string }>(
@@ -32,6 +33,80 @@ export const AddBankAccount =createAsyncThunk<any, any, { rejectValue: string }>
   },
 );
 
+export const getBankAccounts = createAsyncThunk<
+  any,
+  {
+userId:number;
+  },
+  { rejectValue: string }
+>('withDraw/getBankAccounts', async ({userId}, thunkAPI) => {
+  try {
+    console.log('userIdSlice==>',userId);
+    console.log('CheckServiceRequest===>', serviceUrls.withdraw.getBankDetails + '/' + userId);
+    
+    const response = await axiosInstance.get(
+      serviceUrls.withdraw.getBankDetails + '/' + userId,
+    );
+    console.log('getBankAccountsResponse', response.data);
+    return response.data;
+  } catch (error: any) {
+    console.log('getBankAccountsApiError', error);
+    return thunkAPI.rejectWithValue(
+      error?.response?.data || error.message || error.toString(),
+    );
+  }
+});
+
+export const withDrawAmount = createAsyncThunk<
+  any,
+  { 
+    userId: number; 
+    withdrawalAmount: number; 
+    bankName: string;
+    accountNo: string;
+    ifsc: string;
+    holderName: string;
+    upi: string;
+    },
+  { rejectValue: string }
+>(
+  'withDraw/withDrawAmount',
+  async ({
+    userId, 
+    withdrawalAmount,
+    bankName,
+    accountNo,
+    ifsc,
+    holderName,
+    upi,
+  }, thunkAPI) => {
+    const data = {
+      userId, 
+      withdrawalAmount,
+      bankName,
+      accountNo,
+      ifsc,
+      holderName,
+      upi,
+    }
+    console.log("withDrawAmountPassingData", data)
+    try {
+
+      const response = await axiosInstance.post(serviceUrls.withdraw.withDrawAmount,
+        data,
+      );
+      console.log('withDrawAmountResponse', response);
+      console.log('withDrawAmountResponseData', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.log('withDrawAmountResponseApiError', error);
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || error.message || error.toString()
+      );
+    }
+  }
+);
+
 
 
 export const withdrawSlice = createSlice({
@@ -45,19 +120,20 @@ export const withdrawSlice = createSlice({
   },
   extraReducers: builder => {
     // Pending 
-    // builder.addCase(VerifyRegisterationOtp.pending, (state, action) => {
-    //   state.nextButtonLoader = true;
-    // });
+    builder.addCase(getBankAccounts.pending, (state, action) => {
+      state.withdrawLoader = true;
+    });
 
     // Fulfilled
-    // builder.addCase(VerifyRegisterationOtp.fulfilled, (state, action) => {
-    //   state.nextButtonLoader = false;
-    // });
+    builder.addCase(getBankAccounts.fulfilled, (state, action) => {
+      state.bankAccountsData = action.payload;
+      state.withdrawLoader = false;
+    });
 
     // Rejected
-    // builder.addCase(VerifyRegisterationOtp.rejected, (state, action) => {
-    //   state.nextButtonLoader = false;
-    // });
+    builder.addCase(getBankAccounts.rejected, (state, action) => {
+      state.withdrawLoader = false;
+    });
   },
 });
 

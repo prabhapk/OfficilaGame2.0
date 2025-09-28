@@ -45,6 +45,8 @@ const ResultTable: React.FC<ResultTableProps> = ({
 
   // Group bets into orders
   const groupedOrders = groupByOrder(rawData);
+  console.log("groupedOrders===>",groupedOrders);
+  
   
 
   // Calculate the total number of pages
@@ -131,10 +133,10 @@ const ResultTable: React.FC<ResultTableProps> = ({
     // Build row per bet
     const myBetsTableData = [
       {
-        type: item.betType,          // "A", "B", "AB", etc.
-        value: item.selectedNumber,  // e.g. 5, 15
-        payment: item.amount,        // bet amount
-        result: winningStatus,       // "Won" or "No Won"
+        type: item.betType,        
+        value: item.selectedNumber, 
+        payment: item.amount, 
+        result: winningStatus,
       },
     ];
   
@@ -156,36 +158,12 @@ const ResultTable: React.FC<ResultTableProps> = ({
           ];
   
     return (
-      // <MyOrders
-      //   headers={["A", "B", "C"]}
-      //   myBetsTableData={myBetsTableData}
-      //   id={item.betUniqueId}
-      //   bettingTime={item.betTime}
-      //   paymentAmount={item.totalAmount}
-      //   drawTime={
-      //     item.nextDrawTime !== "0001-01-01T00:00:00"
-      //       ? item.nextDrawTime
-      //       : "-"
-      //   }
-      //   topBalls={[
-      //     { text: "A", color: "#DE3C3F" },
-      //     { text: "B", color: "#EC8204" },
-      //     { text: "C", color: "#066FEA" },
-      //   ]}
-      //   bottomBalls={bottomBalls}
-      //   date={item.betTime.split("T")[0]}
-      //   status={winningStatus}
-      //   imageSource={hot}
-      //   winOrLossId={item.betUniqueId}
-      //   gameName={item.gameName || "AvisGaming"}
-      //   totalWinningAmount={item.totalAmount}
-      // />
       <MyOrders
       headers={["A", "B", "C"]}
       myBetsTableData={item.bets}
       id={item.betUniqueId}
       bettingTime={item.betTime}
-      paymentAmount={item.totalAmount} // now sum of all bets in this order
+      paymentAmount={item.totalAmount}
       drawTime={
         item.nextDrawTime !== "0001-01-01T00:00:00"
           ? item.nextDrawTime

@@ -1,5 +1,13 @@
-import { NativeModules } from "react-native";
-import { FRESHCHAT_APP_ID, FRESHCHAT_APP_KEY, FRESHCHAT_DOMAIN } from "../Config/freshchat";
+import { NativeModules, Platform } from "react-native";
+import {
+  FRESHCHAT_APP_ID,
+  FRESHCHAT_APP_KEY,
+  FRESHCHAT_DOMAIN,
+  FRESHCHAT_WEB_EMBED_URL,
+  FRESHCHAT_WEB_HOST,
+  FRESHCHAT_WEB_TOKEN,
+  FRESHCHAT_WEB_DOMAIN,
+} from "../Config/freshchat";
 
 type FreshchatUser = {
   firstName?: string;
@@ -23,6 +31,40 @@ function getSdk() {
 }
 
 export function initFreshchat(appId: string = FRESHCHAT_APP_ID, appKey: string = FRESHCHAT_APP_KEY, domain: string = FRESHCHAT_DOMAIN) {
+  if (Platform.OS === 'web') {
+    console.log("Initializing Freshchat for web...");
+    if (typeof document !== 'undefined' && FRESHCHAT_WEB_EMBED_URL) {
+      const existing = document.querySelector('script[data-freshchat="1"]');
+      if (!existing) {
+        console.log("Loading Freshworks script...");
+        const s = document.createElement('script');
+        s.async = true;
+        s.dataset.freshchat = '1';
+        s.src = FRESHCHAT_WEB_EMBED_URL.startsWith('//')
+          ? `https:${FRESHCHAT_WEB_EMBED_URL}`
+          : FRESHCHAT_WEB_EMBED_URL;
+        s.onload = () => {
+          console.log("Freshworks script loaded");
+          // @ts-ignore
+          if (window.FreshworksWidget) {
+            console.log("FreshworksWidget available after script load");
+            // @ts-ignore
+            window.FreshworksWidget('hide', 'launcher');
+          } else {
+            console.log("FreshworksWidget still not available after script load");
+          }
+        };
+        s.onerror = (error) => {
+          console.error("Error loading Freshworks script:", error);
+        };
+        document.head.appendChild(s);
+      } else {
+        console.log("Freshworks script already loaded");
+      }
+    }
+    return;
+  }
+
   const sdk = getSdk();
   if (!sdk) return;
   const { Freshchat, FreshchatConfig } = sdk;
@@ -66,6 +108,117 @@ export async function setFreshchatUser(user: FreshchatUser) {
 }
 
 export function openFreshchat() {
+  if (Platform.OS === 'web') {
+    console.log("openFreshchat called on web");
+    
+    const tryOpenFW = () => {
+      // Check multiple ways for the widget
+      // @ts-ignore
+      const hasWidget = typeof window !== 'undefined' && window.FreshworksWidget;
+      // @ts-ignore
+      const hasFcWidget = typeof window !== 'undefined' && window.fcWidget;
+      
+      // Also check for DOM elements
+      const widgetElement = document.querySelector('[data-fc-widget]') || 
+                           document.querySelector('.fc-widget') ||
+                           document.querySelector('#fc-widget') ||
+                           document.querySelector('[class*="freshchat"]') ||
+                           document.querySelector('[id*="freshchat"]');
+      
+      console.log("Widget checks:", {
+        hasWidget,
+        hasFcWidget,
+        widgetElement: !!widgetElement,
+        windowKeys: typeof window !== 'undefined' ? Object.keys(window).filter(k => k.toLowerCase().includes('fresh')) : []
+      });
+      
+      if (hasWidget) {
+        console.log("FreshworksWidget found, attempting to open...");
+        try {
+          // @ts-ignore
+          window.FreshworksWidget('open');
+          console.log("FreshworksWidget open called");
+          
+          // @ts-ignore
+          window.FreshworksWidget('hide', 'launcher');
+          console.log("FreshworksWidget launcher hidden");
+          
+        } catch (error) {
+          console.error("Error with FreshworksWidget:", error);
+        }
+        return true;
+      }
+      
+      if (hasFcWidget) {
+        console.log("fcWidget found, attempting to open...");
+        try {
+          // @ts-ignore
+          window.fcWidget.open();
+          console.log("fcWidget open called");
+        } catch (error) {
+          console.error("Error with fcWidget:", error);
+        }
+        return true;
+      }
+      
+      if (widgetElement) {
+        console.log("Widget DOM element found, trying to click it...");
+        try {
+          // Try to find and click the widget button
+          const widgetButton = widgetElement.querySelector('button') || 
+                              widgetElement.querySelector('[role="button"]') ||
+                              widgetElement;
+          if (widgetButton) {
+            widgetButton.click();
+            console.log("Widget button clicked");
+            return true;
+          }
+        } catch (error) {
+          console.error("Error clicking widget:", error);
+        }
+      }
+      
+      console.log("No widget found");
+      return false;
+    };
+
+    // Check if widget is available with a longer wait
+    const waitForWidget = () => {
+      console.log("Waiting for FreshworksWidget to be available...");
+      let attempts = 0;
+      const maxAttempts = 500; // 5 seconds total
+      
+      const checkWidget = () => {
+        attempts++;
+        console.log(`Attempt ${attempts}/${maxAttempts} to find FreshworksWidget`);
+        
+        // @ts-ignore
+        if (typeof window !== 'undefined' && window.FreshworksWidget) {
+          console.log("FreshworksWidget found after waiting!");
+          tryOpenFW();
+          return;
+        }
+        
+        if (attempts < maxAttempts) {
+          setTimeout(checkWidget, 100);
+        } else {
+          console.log("FreshworksWidget not found after maximum attempts");
+        }
+      };
+      
+      checkWidget();
+    };
+    
+    // Web behavior: open Freshworks widget if available
+    if (tryOpenFW()) {
+      return;
+    }
+    
+    // If widget not found, wait for it to become available
+    waitForWidget();
+    return;
+  }
+
   const sdk = getSdk();
   if (!sdk) return;
   const { Freshchat } = sdk;

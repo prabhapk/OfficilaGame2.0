@@ -8,8 +8,11 @@ import { setDeviceInfo, setIpAddress } from './Redux/Slice/signUpSlice';
 import { RootState } from './Redux/store';
 import Toast from 'react-native-toast-message'
 import MobileContainer from './Components/MobileContainer';
-import { LogBox } from 'react-native';
+import { LogBox, StatusBar, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { COLORS } from './Constants/Theme';
+import { PaperProvider, MD3LightTheme as DefaultTheme } from 'react-native-paper';
+
 const App = () => {
   const dispatch = useDispatch();
 
@@ -39,6 +42,15 @@ const App = () => {
   //   fetchDeviceInfo();
   // }, [dispatch]);
 
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#FF4140',   // your brand color
+      secondary: '#FFAD45', // accent color
+    },
+  };
+
 
 
   useEffect(() => {
@@ -58,14 +70,19 @@ const App = () => {
   }, [dispatch]);
   return (
     <SafeAreaProvider>
-    <MobileContainer>
-      <MainNavigation />
-      {isLoading && (
-        <CustomLoader modalVisible={isLoading} />
-      )}
-      <Toast />
-    </MobileContainer>
-    </SafeAreaProvider>
+      <StatusBar
+        backgroundColor={COLORS.primary}
+        barStyle="light-content"
+        translucent={Platform.OS === 'android'}
+      />
+    <PaperProvider theme={theme}>
+      <MobileContainer>
+        <MainNavigation />
+        {isLoading && <CustomLoader modalVisible={isLoading} />}
+        <Toast />
+      </MobileContainer>
+    </PaperProvider>
+  </SafeAreaProvider>
   );
 };
 

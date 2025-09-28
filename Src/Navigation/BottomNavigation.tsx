@@ -4,10 +4,13 @@ import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 import React from "react";
 import { tabScreens } from "../Constants/CommonFlatlist";
 import { COLORS } from "../Constants/Theme";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomNavigation() {
+  const insets = useSafeAreaInsets();
+  
   return (
     <Tab.Navigator
       screenOptions={{
@@ -15,7 +18,8 @@ export default function BottomNavigation() {
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
           backgroundColor: COLORS.primary,
-          height: Platform.OS === "web" ? scale(40) : scale(60),
+          height: Platform.OS === "web" ? scale(40) : scale(60) + insets.bottom,
+          paddingBottom: Platform.OS === "android" ? insets.bottom : 0,
         },
         tabBarItemStyle: {
           paddingVertical: verticalScale(2),

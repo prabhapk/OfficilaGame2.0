@@ -30,6 +30,8 @@ export const serviceUrls = {
   },
   withdraw: {
     AddBankAccount:'/api/user/User/bank-accounts',
+    getBankDetails:'/api/user/User/bank-accounts',
+    withDrawAmount: '/api/Withdrawal/submit'
   },
   rules: {
     getRules: '/api/user/User/game-rules',

@@ -207,3 +207,18 @@ export const groupByOrder = (data: any[]) => {
 
   return Object.values(grouped);
 };
+
+export type OrderStatus = "pending" | "win" | "loss";
+
+export const getOrderStatus = (winningNumber: string | null, isWinning: boolean): OrderStatus => {
+  if (!winningNumber && isWinning === false) {
+    return "pending";
+  }
+  if (winningNumber && isWinning) {
+    return "win";
+  }
+  if (winningNumber && !isWinning) {
+    return "loss";
+  }
+  return "pending"; // fallback
+};

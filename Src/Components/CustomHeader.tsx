@@ -26,7 +26,7 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
 
   return (
     <View style={styles.container}>
-      <View style ={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style ={{flexDirection: 'row', alignItems: 'center',}}>
       <TouchableOpacity
         style={styles.menuContainer}
         onPress={() => onMenuPress()}
@@ -87,8 +87,8 @@ const createStyles = (Scale: any) => StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
     alignItems: 'center',
+    paddingHorizontal:10
   },
   menuContainer: {
     flexDirection: 'row',

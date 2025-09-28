@@ -337,7 +337,7 @@ const createStyles = (Scale: any) =>
     paddingVertical: Scale(6),
     paddingHorizontal: Scale(16),
     marginBottom: Scale(8),
-    width: Scale(80),
+    width: Scale(85),
     marginTop: Scale(10),
   },
   chipText: {

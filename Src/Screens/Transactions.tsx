@@ -1,4 +1,4 @@
-import {View, Text, Image, StyleSheet, FlatList} from 'react-native';
+import {View, Text, Image, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import HeaderButtonList from '../Components/HeaderButtonList';
 import {AllData, BetsData, HeaderButton, RechargeData, transactionData} from '../types';
@@ -7,6 +7,9 @@ import RechargeCard from '../Components/RechargeCard';
 import { leftArrowHeader } from '../../assets/assets';
 import NewAppHeader from '../Components/NewAppHeader';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { DatePickerModal } from 'react-native-paper-dates';
+import { format } from 'date-fns';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Transactions = ({navigation}: any) => {
   const [allData, setAllData] = useState<AllData[]>([]);
@@ -217,7 +220,27 @@ const Transactions = ({navigation}: any) => {
       ssr: 'ONLINE',
     },
 ]
+const [range, setRange] = React.useState({ startDate: undefined, endDate: undefined });
 
+  const [open, setOpen] = React.useState(false);
+
+  const onDismiss = React.useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const onConfirm = React.useCallback(
+    ({ startDate, endDate }) => {
+      setOpen(false);
+      setRange({ startDate, endDate });
+    },
+    [setOpen, setRange]
+  );
+  const displayText =
+  range.startDate && range.endDate
+    ? `${format(range.startDate, 'yyyy-MM-dd')} → ${format(range.endDate, 'yyyy-MM-dd')}`
+    : range.startDate
+    ? format(range.startDate, 'yyyy-MM-dd')
+    : 'Pick range';
 
   useEffect(() => {
     setAllData(allDatasVAlues);
@@ -295,6 +318,29 @@ const Transactions = ({navigation}: any) => {
       onButtonPressed={handleButtonPress}
       selectedButtonObject = {selectedButton}
     />
+    <View style={{}}>
+    <TouchableOpacity
+        style={styles.dateButton}
+        onPress={() => setOpen(true)}
+        activeOpacity={0.7}
+      >
+        <Icon name="calendar" size={22} color="#fff" style={styles.icon} />
+        <Text style={styles.dateText}>{displayText}</Text>
+        <Icon name="chevron-down" size={20} color="#fff" />
+      </TouchableOpacity>
+        <DatePickerModal
+          disableStatusBarPadding
+          locale="en"
+          mode="range"
+          visible={open}
+          onDismiss={onDismiss}
+          startDate={range.startDate}
+          endDate={range.endDate}
+          onConfirm={onConfirm}
+          startYear={2025}
+          endYear={2028}
+        />
+      </View>
 
 <FlatList
   data={getSelectedData() || []}
@@ -307,5 +353,27 @@ const Transactions = ({navigation}: any) => {
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    margin: 10,
+  },
+  dateButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FF4140',
+    padding: 12,
+    borderRadius: 10,
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
+    marginVertical: 10,
+  },
+  dateText: {
+    color: '#fff',
+    fontWeight: '600',
+  },
+  icon: {
+    marginRight: 8,
+  },
+});
 
 export default Transactions;

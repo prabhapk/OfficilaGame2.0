@@ -90,5 +90,6 @@ export interface CommonSliceState {
     quick3dGamesGroupId:number
   }
   export interface withdrawSliceStates {
-  
+    withdrawLoader:boolean
+    bankAccountsData:any
   }
