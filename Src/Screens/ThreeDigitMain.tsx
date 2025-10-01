@@ -12,9 +12,10 @@ import {
   Platform,
   Dimensions,
   TouchableWithoutFeedback,
+  GestureResponderEvent,
 } from "react-native";
 import React, { use, useEffect, useMemo, useRef, useState } from "react";
-import { cancel, lefArrow, quick3min, sameClock } from "../../assets/assets";
+import { cancel, CustomerServiceIcon, customerServiceTopIcon, lefArrow, quick3min, sameClock } from "../../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
 import {
   gameRules,
@@ -82,6 +83,7 @@ import PaymentSuccessModal from "../Components/Modal/PaymentSuccessModal";
 import AlertSuccessModal from "../Components/Modal/AlertSuccessModal";
 import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceModal";
 import { useContainerScale } from "../hooks/useContainerScale";
+import NewAppHeader from "../Components/NewAppHeader";
 
 const ThreeDigitMain = ({ navigation, route }: any) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -208,6 +210,19 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const [selectedTime, setSelectedTime] = useState<any | null>(
     OPTIONS.length > 0 ? OPTIONS[0].name : null
   );
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
+
+  // Handle scroll to show/hide sticky header
+  const handleScroll = (event: any) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    const threshold = 200; // Show sticky header after scrolling 200px (halfway point)
+    
+    if (scrollY > threshold && !showStickyHeader) {
+      setShowStickyHeader(true);
+    } else if (scrollY <= threshold && showStickyHeader) {
+      setShowStickyHeader(false);
+    }
+  };
 
   // If OPTIONS change (new API response), update selectedOption
   useEffect(() => {
@@ -237,11 +252,13 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   // const WinningBalls = "123"
 
   const renderContent = () => {
+    const matchedGame = individualGameData.find((game) => game.groupId === selectedOption);
+    const nextResultTime = matchedGame ? matchedGame.nextresulttime : "N/A";
     return (
       <>
         <DigitComponent
           lastGameWiiningId={"12455"}
-          nextGameId={formatToTimeIST(individualGameData[0]?.nextresulttime)}
+          nextGameId={formatToTimeIST(nextResultTime)}
           latGameWinningA={WinningBalls[0] || "1"}
           lastGameWinningB={WinningBalls[1] || "2"}
           lastGameWinningC={WinningBalls[2] || "3"}
@@ -256,7 +273,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           threeDigitWinningPrice={Number(individualGameData[2]?.prizeamount)}
           threeDigitPrice={Number(individualGameData[2]?.ticketprize)}
           onStateChange={handleChildStateChange}
-          targetDateProp={individualGameData[0]?.nextresulttime}
+          targetDateProp={nextResultTime}
           // onTimerComplete={handleTimerComplete}
           gameName={individualGameData[0]?.name}
           singleDigitGameId={individualGameData[0]?.id}
@@ -356,7 +373,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const refRBSheet: any = useRef();
   // const navigation = useNavigation();
   const goBack = () => {
-    navigation.navigate("DrawerNavigation");
+    navigation.goBack();
   };
 
   const handleAdd = (
@@ -761,55 +778,69 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       <CustomLoader
         visible={Boolean(individualGameDataLoader) && Boolean(myOrdersLoader)}
       />
+      
+      {/* Sticky Header - Only shows when scrolled halfway */}
+      {showStickyHeader && (
+       <NewAppHeader 
+       leftIconPress={goBack}
+       rightIconPress={() => navigation.navigate('SignUpScreen')}
+       centerText={individualGameData[0]?.name}
+       rightIcon={CustomerServiceIcon}
+       />
+       
+      )}
+      
       <ScrollView
-        scrollEnabled
+        style={{ flex: 1 }}
+        contentContainerStyle={{ 
+          flexGrow: 1, 
+          paddingBottom: Scale(100),
+          paddingTop: showStickyHeader ? Scale(80) : 0 // Only add padding when sticky header is visible
+        }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
-        nestedScrollEnabled={true}
-        contentContainerStyle={{ paddingBottom: Scale(100) }}
+        scrollEventThrottle={16}
+        onScroll={handleScroll}
       >
-        <TouchableWithoutFeedback>
-          <>
-            <CustomLoader
-              visible={
-                Boolean(individualGameDataLoader) && Boolean(myOrdersLoader)
-              }
-            />
-            <GameHeader
-              HeaderText={individualGameData[0]?.name}
-              leftonPress={goBack}
-              leftImage={lefArrow}
-              rightImage={lefArrow}
-              onPressWithdraw={() => {
-                navigation.navigate("Withdraw");
-              }}
-              onPressRecharge={() => {
-                navigation.navigate("WalletScreen");
-              }}
-              walletBalance={formatToDecimal(mainWalletBalance)}
-              onPressRefresh={() => {
-                dispatch(getWalletBalance());
-              }}
-            />
-            <FlatList
-              data={OPTIONS}
-              keyExtractor={(item) => item.id.toString()}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.startView}
-              renderItem={renderHeader}
-              nestedScrollEnabled={true}
-              scrollEnabled={true}
-            />
-            <View style={styles.subContainer}>
-              {/* Conditionally Render UI Based on Selection */}
-              <View style={styles.renderDataView}>{renderContent()}</View>
-              <View>
-                <HowToPlayModal />
-              </View>
-            </View>
-          </>
-        </TouchableWithoutFeedback>
+        <CustomLoader
+          visible={
+            Boolean(individualGameDataLoader) && Boolean(myOrdersLoader)
+          }
+        />
+        <GameHeader
+          HeaderText={individualGameData[0]?.name}
+          leftonPress={goBack}
+          leftImage={lefArrow}
+          rightImage={lefArrow}
+          onPressWithdraw={() => {
+            navigation.navigate("Withdraw");
+          }}
+          onPressRecharge={() => {
+            navigation.navigate("WalletScreen");
+          }}
+          walletBalance={formatToDecimal(mainWalletBalance)}
+          onPressRefresh={() => {
+            dispatch(getWalletBalance());
+          }}
+        />
+        <FlatList
+          data={OPTIONS}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.startView}
+          renderItem={renderHeader}
+          nestedScrollEnabled={true}
+          scrollEnabled={true}
+        />
+        
+        <View style={styles.subContainer}>
+          {/* Conditionally Render UI Based on Selection */}
+          <View style={styles.renderDataView}>{renderContent()}</View>
+          <View>
+            <HowToPlayModal />
+          </View>
+        </View>
       </ScrollView>
       <RBSheet
         ref={refRBSheet}
@@ -1016,13 +1047,12 @@ const createStyles = (Scale: any) =>
       marginTop: Scale(10),
     },
     startView: {
-      flex: 1,
-      marginHorizontal: 10,
+      paddingHorizontal: 10,
+      alignItems: 'center',
     },
     renderDataView: {
       padding: 10,
       backgroundColor: "#3e0d0d",
-      flex: 1,
       borderRadius: 10,
     },
     gameDetailView: {
@@ -1097,5 +1127,45 @@ const createStyles = (Scale: any) =>
       height: Scale(100),
     },
     headerImg: { width: 30, height: 30 },
+    
+    // Sticky Header Styles
+    stickyHeader: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 1000,
+      backgroundColor: '#FF4242',
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: Scale(15),
+      paddingTop: Scale(50), // Account for status bar
+      paddingBottom: Scale(10),
+      elevation: 5,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      transform: [{ translateY: 0 }],
+    },
+    stickyBackButton: {
+      padding: Scale(5),
+      marginRight: Scale(10),
+    },
+    stickyBackIcon: {
+      width: Scale(20),
+      height: Scale(20),
+      tintColor: 'white',
+    },
+    stickyHeaderTitle: {
+      flex: 1,
+      color: 'white',
+      fontSize: Scale(16),
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    stickyHeaderSpacer: {
+      width: Scale(30), // Same width as back button to center the title
+    },
   });
 export default ThreeDigitMain;
