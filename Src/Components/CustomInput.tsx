@@ -14,6 +14,7 @@ interface CustomInputProps extends TextInputProps {
   required?: boolean;
   error?: string;
   showSendButton?: boolean;
+  onPressSend?: () => void;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -21,6 +22,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   required,
   error,
   showSendButton = false,
+  onPressSend,
   ...props
 }) => {
   return (
@@ -35,7 +37,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
         {...props}
       />
       {showSendButton && (
-        <TouchableOpacity onPress={()=>{Alert.alert('Send')}}
+        <TouchableOpacity onPress={onPressSend}
           style={{ position: 'absolute', right: 10, top: 10, padding: 8 }}
         >
           <Text

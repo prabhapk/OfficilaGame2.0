@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -13,13 +13,19 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
-import { AddBankAccount } from '../Redux/Slice/withdrawSlice';
+import { AddBankAccount, UpdateBankAccount, getBankAccounts, getMobileOtpAddAccount } from '../Redux/Slice/withdrawSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
+import Toast from 'react-native-toast-message';
+import { ro } from 'react-native-paper-dates';
 
-const AddBankCardScreen = ({ navigation }: any) => {
-  const { isLoggedIn, userId } = useSelector(
+const AddBankCardScreen = ({ navigation, route }: any) => {
+  const AccountId= route?.params?.bankAccountId;
+  console.log("AccountId===>", AccountId);
+  
+  const { isLoggedIn, userId, mobileNumber } = useSelector(
     (state: RootState) => state.signInSlice
   );
+  const bankAccountsData = useSelector((state: RootState) => state.withdrawSlice.bankAccountsData);
   const dispatch = useDispatch();
   const [form, setForm] = useState({
     accountName: '',
@@ -31,6 +37,24 @@ const AddBankCardScreen = ({ navigation }: any) => {
     email: '',
     otp: '',
   });
+
+  useEffect(() => {
+    if (AccountId && bankAccountsData?.length) {
+      const selected = bankAccountsData.find((b: any) => b.id === AccountId);
+      if (selected) {
+        setForm({
+          accountName: selected.accountHolderName || '',
+          ifsc: selected.ifsc || '',
+          accountNumber: selected.accountNumber || '',
+          accountNumberAgain: selected.accountNumber || '',
+          upi: selected.upi || '',
+          upiAgain: selected.upi || '',
+          email: selected.email || '',
+          otp: '',
+        });
+      }
+    }
+  }, [AccountId, bankAccountsData]);
 
   const handleChange = (key: string, value: string) => {
     setForm({ ...form, [key]: value });
@@ -52,29 +76,144 @@ const AddBankCardScreen = ({ navigation }: any) => {
         try {
           const apiData = {
             id: 0,
-            userId: 0,
-            accountNumber: "string",
-            bankName: "string",
-            ifsc: "string",
-            accountHolderName: "string",
-            gatewayName: "string"
+            userId: userId,
+            accountNumber: form.accountNumber,
+            ifsc: form.ifsc,
+            accountHolderName: form.accountName,
+            gatewayName: '',
+            mobile: mobileNumber,
+            upi: form.upi,
+            otp: form.otp,
           };
-  
+    
           const resultAction = await dispatch(AddBankAccount(apiData));
           const data = unwrapResult(resultAction);
-          console.log("data==>",data);
-          // if (data.success === true) {
-          //  resetState();
-          // dispatch(getWalletBalance());
-          // }
+          console.log("data==>", data);
+    
+          // ✅ Since response is the created bank account object
+          if (data?.id) {
+            Toast.show({
+              type: 'success',
+              text1: 'Account added successfully',
+              position: 'top',
+            });
+            setForm({
+              accountName: '',
+              ifsc: '',
+              accountNumber: '',
+              accountNumberAgain: '',
+              upi: '',
+              upiAgain: '',
+              email: '',
+              otp: '',
+            });
+    
+            dispatch(getBankAccounts({ userId: userId }));
+            // navigation.navigate("Withdraw");
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: 'Something went wrong',
+              position: 'top',
+            });
+          }
         } catch (error: any) {
           console.log("handlePayNowError", error);
+          Toast.show({
+            type: 'error',
+            text1: error?.message || 'Failed to add account',
+            position: 'top',
+          });
         }
       } else {
         navigation.navigate("SignInScreen");
       }
     };
-
+    const handleUpdateBankAccount = async () => {
+      if (isLoggedIn) {
+        try {
+          const apiData = {
+            id: AccountId,
+            userId: userId,
+            accountNumber: form.accountNumber,
+            ifsc: form.ifsc,
+            accountHolderName: form.accountName,
+            mobile: mobileNumber,
+            upi: form.upi,
+            otp: form.otp,
+          };
+    
+          const resultAction = await dispatch(UpdateBankAccount(apiData));
+          const data = unwrapResult(resultAction);
+          console.log("data==>", data);
+          if (data?.id) {
+            Toast.show({
+              type: 'success',
+              text1: 'Account Updated successfully',
+              position: 'top',
+            });
+            setForm({
+              accountName: '',
+              ifsc: '',
+              accountNumber: '',
+              accountNumberAgain: '',
+              upi: '',
+              upiAgain: '',
+              email: '',
+              otp: '',
+            });
+    
+            dispatch(getBankAccounts({ userId: userId }));
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: 'Something went wrong',
+              position: 'top',
+            });
+          }
+        } catch (error: any) {
+          console.log("handlePayNowError", error);
+          Toast.show({
+            type: 'error',
+            text1: error?.message || 'Failed to add account',
+            position: 'top',
+          });
+        }
+      } else {
+        navigation.navigate("SignInScreen");
+      }
+    };
+    
+    const handleGetOtp = async () => {
+      try {
+        const resultAction = await dispatch(getMobileOtpAddAccount({ mobileNumber }));
+        const data = unwrapResult(resultAction);
+        console.log('getOtpResponse==>', data);
+    
+        // ✅ check by message or other available keys
+        if (data?.message?.toLowerCase().includes("otp sent")) {
+          Toast.show({
+            type: 'success',
+            text1: data.message || 'OTP sent successfully',
+            position: 'top',
+          });
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: data?.message || 'Please enter a valid mobile number',
+            position: 'top',
+          });
+        }
+      } catch (error: any) {
+        console.log('handleGetOtpError==>', error);
+        Toast.show({
+          type: 'error',
+          text1: error?.message || 'Failed to send OTP',
+          position: 'top',
+        });
+      }
+    };
+    
   return (
     <KeyboardAvoidingView style={styles.container}>
       <NewAppHeader leftIconPress={() => {
@@ -133,13 +272,14 @@ const AddBankCardScreen = ({ navigation }: any) => {
           placeholder="Email"
         />
         <CustomInput
-          label={`Phone number:  ${7373214025}`}
+          label={`Phone number:  ${mobileNumber}`}
           required
           keyboardType="numeric"
           value={form.otp}
           onChangeText={val => handleChange('otp', val)}
           placeholder="Please enter OTP"
           showSendButton
+          onPressSend={handleGetOtp}
         />
       </ScrollView>
       <View style={{ marginBottom: 15 }}>
@@ -147,7 +287,11 @@ const AddBankCardScreen = ({ navigation }: any) => {
           style={[styles.buttonWrapper, { opacity: isFormValid ? 1 : 0.5 }]}
           disabled={!isFormValid}
           onPress={() => {
-            console.log('asasasasas', form);
+            if (AccountId) {
+              handleUpdateBankAccount(); 
+            } else {
+              handleAddBankAccount();
+            }
           }}
         >
           <LinearGradient
@@ -160,6 +304,7 @@ const AddBankCardScreen = ({ navigation }: any) => {
           </LinearGradient>
         </TouchableOpacity>
       </View>
+      <Toast/>
     </KeyboardAvoidingView>
   );
 };

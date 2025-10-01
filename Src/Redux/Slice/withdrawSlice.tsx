@@ -9,7 +9,7 @@ import axiosInstance from '../../Utils/axiosClient';
 import { setIsLoggedIn } from "./signInSlice"; 
 const initialValues: withdrawSliceStates = {
   withdrawLoader:false,
-  bankAccountsData: null,
+  bankAccountsData: [],
 };
 
 export const AddBankAccount =createAsyncThunk<any, any, { rejectValue: string }>(
@@ -32,7 +32,56 @@ export const AddBankAccount =createAsyncThunk<any, any, { rejectValue: string }>
     }
   },
 );
+export const UpdateBankAccount =createAsyncThunk<any, any, { rejectValue: string }>(
+  'withDraw/UpdateBankAccount',
+  async (apiData, thunkAPI) => {
+    console.log('apiData===>', apiData);
+    try {
+      const response = await axiosInstance.put(
+        `${serviceUrls.withdraw.UpdateBankAccount}/${apiData.id}`,
+        apiData,
+      );
 
+      console.log('UpdateBankAccountResponse', response);
+      // thunkAPI.dispatch(setBankAccountsData(response.data));
+      return response.data;
+    } catch (error: any) {
+      console.log('UpdateBankAccountApiError', error);
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || error.message || error.toString(),
+      );
+    }
+  },
+);
+export const getMobileOtpAddAccount = createAsyncThunk<
+any,
+{
+  mobileNumber:number;
+},
+{ rejectValue: string }
+>(
+  'authAccount/getOtp',
+  async ({mobileNumber}, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+    const data = {
+      mobileNumber: Number(mobileNumber),
+    };
+    try {
+      const response = await axiosInstance.post(
+        serviceUrls.Auth.getBankOtp,
+        data,
+      );
+
+      console.log('getOtpResponse', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.log('getOtpResponseApiError', error);
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || error.message || error.toString(),
+      );
+    }
+  },
+);
 export const getBankAccounts = createAsyncThunk<
   any,
   {
@@ -51,6 +100,29 @@ userId:number;
     return response.data;
   } catch (error: any) {
     console.log('getBankAccountsApiError', error);
+    return thunkAPI.rejectWithValue(
+      error?.response?.data || error.message || error.toString(),
+    );
+  }
+});
+export const deleteBankAccount = createAsyncThunk<
+  any,
+  {
+  id:number;
+  },
+  { rejectValue: string }
+>('withDraw/deleteBankAccount', async ({id}, thunkAPI) => {
+  try {
+    console.log('userIdSlice==>',id);
+    console.log('CheckServiceRequest===>', serviceUrls.withdraw.deleteBankAccount + '/' + id);
+    
+    const response = await axiosInstance.delete(
+      serviceUrls.withdraw.getBankDetails + '/' + id,
+    );
+    console.log('DeleteBankAccountsResponse', response.data);
+    return response.data;
+  } catch (error: any) {
+    console.log('DeleteBankAccountApiError', error);
     return thunkAPI.rejectWithValue(
       error?.response?.data || error.message || error.toString(),
     );
@@ -107,20 +179,55 @@ export const withDrawAmount = createAsyncThunk<
   }
 );
 
+export const withdrawBalanceConversion = createAsyncThunk<
+any,
+{
+  amount:number;
+  transferType:string;
+},
+{ rejectValue: string }
+>(
+  'withDraw/withdrawBalanceConversion',
+  async ({amount, transferType}, thunkAPI) => {
+    console.log('data===>', amount, transferType);
+    const data = {
+      amount: amount,
+      transferType: transferType,
+    }
+    try {
+      const response = await axiosInstance.post(
+        serviceUrls.withdraw.transfer,
+        data,
+      );
+
+      console.log('withdrawBalanceConversion', response);
+      return response.data;
+    } catch (error: any) {
+      console.log('withdrawBalanceConversionApiError', error);
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || error.message || error.toString(),
+      );
+    }
+  },
+);
+
 
 
 export const withdrawSlice = createSlice({
   name: 'withdrawSlice',
   initialState: initialValues,
   reducers: {
-    // setMobileNumber: (state, action: PayloadAction<string>) => {
-    //   state.mobileNumber = action.payload;
-    // },
+    setBankAccountsData: (state, action: PayloadAction<any>) => {
+      state.bankAccountsData = action.payload;
+    },
    
   },
   extraReducers: builder => {
     // Pending 
     builder.addCase(getBankAccounts.pending, (state, action) => {
+      state.withdrawLoader = true;
+    });
+    builder.addCase(UpdateBankAccount.pending, (state, action) => {
       state.withdrawLoader = true;
     });
 
@@ -129,16 +236,23 @@ export const withdrawSlice = createSlice({
       state.bankAccountsData = action.payload;
       state.withdrawLoader = false;
     });
+    // builder.addCase(UpdateBankAccount.fulfilled, (state, action) => {
+    //   state.bankAccountsData = action.payload;
+    //   state.withdrawLoader = false;
+    // });
 
     // Rejected
     builder.addCase(getBankAccounts.rejected, (state, action) => {
+      state.withdrawLoader = false;
+    });
+    builder.addCase(UpdateBankAccount.rejected, (state, action) => {
       state.withdrawLoader = false;
     });
   },
 });
 
 export const {
-//   setMobileNumber,
+  setBankAccountsData
 } = withdrawSlice.actions;
 
 export default withdrawSlice.reducer;
