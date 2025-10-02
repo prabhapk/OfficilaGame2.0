@@ -32,7 +32,6 @@ export default function MobileContainer({
               {
                 width: containerWidth,
                 boxShadow: "0 0 12px rgba(0,0,0,0.1)",
-                borderRadius: 12,
                 overflow: "hidden",
               } as any,
             ]}

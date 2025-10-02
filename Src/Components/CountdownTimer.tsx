@@ -25,7 +25,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
     const difference = targetDateTime - now;
 
     if (difference > 0) {
-      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+      const hours = Math.floor(difference / (1000 * 60 * 60)); // Remove % 24 to allow hours > 24
       const minutes = Math.floor((difference / (1000 * 60)) % 60);
       const seconds = Math.floor((difference / 1000) % 60);
       return { hours, minutes, seconds };
@@ -74,8 +74,7 @@ useEffect(() => {
   return (
     <View style={styles.container}>
       <View style={styles.timerBlock}>
-        <Text style={styles.timerText}>{hourString[0]}</Text>
-        <Text style={styles.timerText}>{hourString[1]}</Text>
+        <Text style={styles.timerText}>{hourString}</Text>
       </View>
       <Text style={styles.separator}>:</Text>
       <View style={styles.timerBlock}>

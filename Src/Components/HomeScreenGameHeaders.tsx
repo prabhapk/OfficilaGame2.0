@@ -26,7 +26,7 @@ const HomeScreenGameHeaders: React.FC<HeaderProps> = ({
         justifyContent: 'center',
         flex: 1,
         marginHorizontal: Scale(10),
-        marginVertical: Scale(10),
+        marginVertical: Scale(5),
       }}
       data={headerList}
       horizontal

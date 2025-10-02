@@ -70,9 +70,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
         );
       case 2:
         return (
-          <View style={{ marginTop: Scale(10) }}>
             <CasinoScreen showHeader={false} />
-          </View>
         );
       case 3:
         return (
@@ -123,7 +121,9 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           onPress={() => {}}
           onSelect={handleSelectGameHeader}
         />
+        <View style={{paddingBottom:100}}>
         {renderGameContent()}
+        </View>
       </ScrollView>
     </View>
   );

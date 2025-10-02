@@ -251,9 +251,85 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   console.log("WinningBalls==>", WinningBalls, individualGameData);
   // const WinningBalls = "123"
 
-  const renderContent = () => {
-    const matchedGame = individualGameData.find((game) => game.groupId === selectedOption);
-    const nextResultTime = matchedGame ? matchedGame.nextresulttime : "N/A";
+const renderContent = () => {
+  // Add safety check for individualGameData
+  if (!individualGameData || individualGameData.length === 0) {
+    return null;
+  }
+  
+  const first = individualGameData[0];
+  
+  // Add safety check for first item
+  if (!first) {
+    return null;
+  }
+  
+  let matchedGame;
+  
+  // Handle different cases based on interval time
+  if (first?.intervaltime === "00:00:00") {
+    // Case 1: No interval - selectedOption corresponds to groupId
+    matchedGame = individualGameData?.find(
+      (game) => game.groupId === selectedOption
+    );
+  } else {
+    // Case 2: With interval - selectedOption is sequential (1, 2, 3...)
+    // All slots use the same groupId (first.groupId)
+    matchedGame = individualGameData?.find(
+      (game) => game.groupId === first.groupId
+    );
+  }
+  
+  console.log("matchedGame==>", selectedOption, individualGameData, selectedTime, "matchedGame:", matchedGame);
+
+  let nextResultTime = "N/A";
+
+  if (first?.intervaltime === "00:00:00") {
+    nextResultTime = matchedGame?.nextresulttime || "N/A";
+  } else {
+    // Get the selected header index (0-based)
+    const selectedHeaderIndex = OPTIONS.findIndex(option => option.id === selectedOption);
+    
+    // If selectedHeader is 0th index, no need to add interval time
+    // Otherwise, multiply interval by the selected header index
+    const intervalMultiplier = selectedHeaderIndex === 0 ? 0 : selectedHeaderIndex;
+    
+    if (intervalMultiplier === 0) {
+      nextResultTime = first?.nextresulttime || "N/A";
+    } else {
+      // Add safety checks for required properties
+      if (!first?.nextresulttime || !first?.intervaltime) {
+        nextResultTime = "N/A";
+      } else {
+        // Parse the existing date string (e.g., "2025-10-02T15:00:00")
+        const [datePart, timePart] = first.nextresulttime.split('T');
+        const [year, month, day] = datePart.split('-').map(Number);
+        const [hours, minutes, seconds] = timePart.split(':').map(Number);
+        
+        // Parse interval time (e.g., "00:30:00")
+        const [intervalHours, intervalMinutes, intervalSeconds] = first.intervaltime
+          .split(":")
+          .map(Number);
+        
+        // Calculate total minutes to add
+        const totalMinutesToAdd = intervalMultiplier * (intervalHours * 60 + intervalMinutes);
+        
+        // Add minutes to the existing time
+        const totalMinutes = hours * 60 + minutes + totalMinutesToAdd;
+        
+        // Convert back to hours and minutes
+        const newHours = Math.floor(totalMinutes / 60) % 24;
+        const newMinutes = totalMinutes % 60;
+        
+        // Format back to the same string format
+        nextResultTime = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}T${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+    }
+    
+    console.log("nextResultTime==>123", nextResultTime, first.nextresulttime, first.intervaltime, "selectedHeaderIndex:", selectedHeaderIndex, "intervalMultiplier:", intervalMultiplier);
+  }
+  
+  console.log("nextResultTime==>", nextResultTime);
     return (
       <>
         <DigitComponent

@@ -32,7 +32,7 @@ const LotteryScreen = () => {
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Image
           source={lotteryHeader}
-          style={{ width: 150, height: 50 }}
+          style={{ width: 150, height: 30, }}
           contentFit='contain'
         />
 
@@ -52,7 +52,7 @@ const LotteryScreen = () => {
               >
                 <Image
                   source={item.image}
-                  style={{ width: Scale(100), height: Scale(100) }}
+                  style={{ width: Scale(70), height: Scale(80) }}
                   contentFit='contain'
                 />
               </TouchableOpacity>

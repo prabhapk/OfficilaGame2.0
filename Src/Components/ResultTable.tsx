@@ -81,7 +81,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
         }}
       >
         <View style={{ flex: 1.5 }}>
-          <Text style={{ color: COLORS.white }}>{item.uid}</Text>
+          <Text style={{ color: COLORS.white }}>{item.uid}{" "}{item?.gamename.startsWith("QUICK3D") && item.gamename}</Text>
         </View>
         <View style={{ flex: 1.2, alignItems: "center" }}>
           <Text style={{ color: COLORS.white }}>
