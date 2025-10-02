@@ -152,9 +152,9 @@ const ResultTable: React.FC<ResultTableProps> = ({
             return { text: digit, color };
           })
         : [
-            { text: "-", color: "#DE3C3F" },
-            { text: "-", color: "#EC8204" },
-            { text: "-", color: "#066FEA" },
+            { text: "?", color: "#DE3C3F" },
+            { text: "?", color: "#EC8204" },
+            { text: "?", color: "#066FEA" },
           ];
   
     return (
@@ -167,7 +167,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
       drawTime={
         item.nextDrawTime !== "0001-01-01T00:00:00"
           ? item.nextDrawTime
-          : "-"
+          : "?"
       }
       topBalls={[
         { text: "A", color: "#DE3C3F" },
@@ -186,9 +186,9 @@ const ResultTable: React.FC<ResultTableProps> = ({
               return { text: digit, color };
             })
           : [
-              { text: "-", color: "#DE3C3F" },
-              { text: "-", color: "#EC8204" },
-              { text: "-", color: "#066FEA" },
+              { text: "?", color: "#DE3C3F" },
+              { text: "?", color: "#EC8204" },
+              { text: "?", color: "#066FEA" },
             ]
       }
       date={item.betTime.split("T")[0]}
@@ -202,7 +202,6 @@ const ResultTable: React.FC<ResultTableProps> = ({
   };
   
   
-
   return (
     <View>
       <View style={{ marginTop: Scale(10), ...customStyle }}>

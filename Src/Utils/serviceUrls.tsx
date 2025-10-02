@@ -12,6 +12,7 @@ export const serviceUrls = {
     signInOtp: '/api/Auth/login-with-otp',
     forgotPasswordOtp: '/api/Auth/forgot-password-otp',
     resetPassword: '/api/Auth/reset-password',
+    getBankOtp: '/api/Auth/send-bank-otp',
   },
   games: {
     getAllGamesList: '/api/HomeGame/groups',
@@ -31,7 +32,11 @@ export const serviceUrls = {
   withdraw: {
     AddBankAccount:'/api/user/User/bank-accounts',
     getBankDetails:'/api/user/User/bank-accounts',
-    withDrawAmount: '/api/Withdrawal/submit'
+    withDrawAmount: '/api/Withdrawal/submit',
+    deleteBankAccount:'/api/user/User/bank-accounts',
+    transfer: '/api/Wallet/transfer-to-recharge',
+    UpdateBankAccount:'/api/user/User/bank-accounts',
+    
   },
   rules: {
     getRules: '/api/user/User/game-rules',
