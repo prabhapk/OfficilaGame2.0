@@ -207,7 +207,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     const [a = "", b = "", c = ""] = lastWinningNumber.split("");
 
     return {
-      lastGameWiiningId: triple?.lastResult?.winningNumber || "",
+      lastGameWiiningId: "Last Game Winning Digits",
       nextGameId: formatToTime(triple?.nextresulttime) || 0,
       lastGameWinningA: a,
       lastGameWinningB: b,
@@ -708,7 +708,11 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           }}
           walletBalance={formatToDecimal(mainWalletBalance)}
           onPressRefresh={() => {
-            dispatch(getWalletBalance());
+            if (isLoggedIn) {
+              dispatch(getWalletBalance());
+            } else {
+              navigation.navigate('SignInScreen');
+            }
           }}
         />
         <FlatList

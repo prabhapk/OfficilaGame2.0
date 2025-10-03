@@ -618,6 +618,7 @@ const createStyles = (Scale: any) =>
     /* ===== Logout ===== */
     logoutWrapper: {
       marginTop: Scale(40),
+      marginBottom: Scale(20),
     },
     logoutButton: {
       borderWidth: 2,

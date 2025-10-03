@@ -128,7 +128,7 @@ const SignInScreen = ({ navigation }: any) => {
         {/* <Image source={loginImageBackground} style={styles.topImage} /> */}
         <ImageBackground source={loginImageBackground} style={styles.topImage}>
           <TouchableOpacity
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.navigate("DrawerNavigation")}
           >
             <Image source={lefArrow} style={styles.leftArrow} resizeMode="contain" />
           </TouchableOpacity>

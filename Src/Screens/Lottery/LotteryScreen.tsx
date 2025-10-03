@@ -2,58 +2,49 @@ import {
   View,
   Text,
   FlatList,
-  Touchable,
   TouchableOpacity,
   ScrollView,
-} from 'react-native';
-import React from 'react';
-import { Image } from 'expo-image';
-import {
-  chipIcon,
-  color,
-  dice,
-  digit,
-  lotteryHeader,
-} from '../../../assets/assets';
-import { lotteryGamesList, ThreeDigits, ThreeDigitsLottery } from '../../Constants/CommonFlatlist';
-import CommonDigits from '../../Components/CommonDigits';
-import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-import { useContainerScale } from '../../hooks/useContainerScale';
+} from "react-native";
+import React from "react";
+import { Image } from "expo-image";
+import { chipIcon, lotteryHeader } from "../../../assets/assets";
+import { ThreeDigitsLottery } from "../../Constants/CommonFlatlist";
+import CommonDigits from "../../Components/CommonDigits";
+import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+import { useContainerScale } from "../../hooks/useContainerScale";
 
 const LotteryScreen = () => {
   const navigation = useNavigation();
   const { allGamesList } = useSelector((state: any) => state.homeSlice);
-  console.log("allGamesList", allGamesList);
   const { Scale, verticalScale } = useContainerScale();
   return (
-
     <ScrollView>
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ alignItems: "center", justifyContent: "center" }}>
         <Image
           source={lotteryHeader}
-          style={{ width: 150, height: 30, }}
-          contentFit='contain'
+          style={{ width: 150, height: 30 }}
+          contentFit="contain"
         />
 
         <FlatList
           data={ThreeDigitsLottery}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{
-            flexDirection: 'row',
-            justifyContent: 'center',
+            flexDirection: "row",
+            justifyContent: "center",
           }}
           renderItem={({ item }) => {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('Quick3DScreen', { gameData: item });
+                  navigation.navigate("Quick3DScreen", { gameData: item });
                 }}
               >
                 <Image
                   source={item.image}
                   style={{ width: Scale(70), height: Scale(80) }}
-                  contentFit='contain'
+                  contentFit="contain"
                 />
               </TouchableOpacity>
             );
@@ -65,28 +56,28 @@ const LotteryScreen = () => {
           flex: 1,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          borderTopColor: 'yellow',
+          borderTopColor: "yellow",
           borderWidth: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
+          alignItems: "center",
+          justifyContent: "center",
           marginTop: Scale(20),
         }}
       >
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
             marginTop: Scale(10),
           }}
         >
           <Image
             source={chipIcon}
             style={{ width: Scale(25), height: Scale(25) }}
-            contentFit='contain'
+            contentFit="contain"
           />
           <Text
-            style={{ fontSize: Scale(16), fontWeight: 'bold', color: 'white' }}
+            style={{ fontSize: Scale(16), fontWeight: "bold", color: "white" }}
           >
             3 Digit Games
           </Text>
@@ -104,12 +95,7 @@ const LotteryScreen = () => {
               <CommonDigits
                 data={item}
                 onPress3Digits={() => {
-                  // if (item.gameTye === 'Custom') {
-                  //   navigation.navigate('ThreeDigitMain', { gameData: item });
-                  // } else if (item.gameTye === 'RealGame') {
-                  //   // navigation.navigate('ThreeDigitMain',{gameDat:item});
-                  // }
-                  navigation.navigate('ThreeDigitMain', { gameData: item });
+                  navigation.navigate("ThreeDigitMain", { gameData: item });
                 }}
               />
             );

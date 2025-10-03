@@ -128,7 +128,7 @@ const InviteScreen = ({route}: any) => {
 
   const isProfile = route?.params?.isProfile;
   return (
-    <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#250f0fff' }} showsVerticalScrollIndicator={false}>
       {isProfile && <NewAppHeader
         leftIconPress={() => navigation.goBack()}
         centerText={'Invite'}

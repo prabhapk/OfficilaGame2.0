@@ -4,6 +4,7 @@ import { store } from '../Redux/store';
 import { getNavigation } from '../Utils/getNavigation';
 import noTokenUrls from './noTokenUrls';
 import Toast from 'react-native-toast-message';
+import { setSessionExpiredVisible } from '../Redux/Slice/commonSlice';
 
 const axiosInstance = axios.create({
   // baseURL: process.env.API_BASE_URL,
@@ -25,10 +26,19 @@ axiosInstance.interceptors.request.use(
 
     if (!shouldExcludeToken) {
       const token = store.getState().signInSlice.token;
+      console.log('🔑 AUTH DEBUG: URL:', config.url);
+      console.log('🔑 AUTH DEBUG: Should exclude token:', shouldExcludeToken);
+      console.log('🔑 AUTH DEBUG: Token from store:', token);
+      console.log('🔑 AUTH DEBUG: Token length:', token?.length);
+      
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
-        console.log('TOKEN:', token);
+        console.log('✅ TOKEN ADDED:', token.substring(0, 20) + '...');
+      } else {
+        console.warn('❌ NO TOKEN FOUND for authenticated API:', config.url);
       }
+    } else {
+      console.log('🚫 TOKEN EXCLUDED for URL:', config.url);
     }
 
     config.headers['Content-Type'] = 'application/json; charset=UTF-8';
@@ -39,11 +49,16 @@ axiosInstance.interceptors.request.use(
     config.signal = perRequestController.signal;
     (config as any).abortController = perRequestController;
 
-    console.log('Final Headers:', config.headers);
-    console.log('REQUEST SENT TO:', config.baseURL + config.url);
-    console.log('HTTP METHOD:', config.method);
-    console.log('BODY:', config.data);
-    console.log('PARAMS:', config.params);
+    console.log('🌐 API REQUEST:', {
+      method: config.method?.toUpperCase(),
+      url: config.url,
+      fullUrl: config.baseURL + config.url,
+      hasToken: !!config.headers.Authorization,
+      tokenPreview: config.headers.Authorization ? 
+        config.headers.Authorization.substring(0, 20) + '...' : 'NO TOKEN',
+      body: config.data,
+      params: config.params
+    });
 
     return config;
   },
@@ -52,9 +67,28 @@ axiosInstance.interceptors.request.use(
 
 // ⛳ RESPONSE INTERCEPTOR
 axiosInstance.interceptors.response.use(
-  response => response,
+  response => {
+    console.log('✅ API SUCCESS:', {
+      method: response.config.method?.toUpperCase(),
+      url: response.config.url,
+      status: response.status,
+      dataPreview: JSON.stringify(response.data).substring(0, 100) + '...'
+    });
+    return response;
+  },
   error => {
     const originalRequest = error.config;
+
+    console.log('❌ API ERROR:', {
+      method: originalRequest?.method?.toUpperCase(),
+      url: originalRequest?.url,
+      fullUrl: originalRequest?.baseURL + originalRequest?.url,
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      errorMessage: error?.message,
+      errorData: error?.response?.data,
+      hasToken: !!originalRequest?.headers?.Authorization
+    });
 
     if (axios.isCancel(error)) {
       console.warn('Request was canceled:', error.message);
@@ -62,9 +96,19 @@ axiosInstance.interceptors.response.use(
     }
 
     if (error?.response?.status === 401 && !originalRequest._retry) {
-      console.warn('Token expired or unauthorized. Redirecting to Signin...');
+      console.error('🚨 401 UNAUTHORIZED TRIGGERED BY:', {
+        method: originalRequest?.method?.toUpperCase(),
+        url: originalRequest?.url,
+        fullUrl: originalRequest?.baseURL + originalRequest?.url,
+        timestamp: new Date().toISOString(),
+        errorData: error?.response?.data
+      });
+      console.warn('Token expired or unauthorized. Showing session expired modal...');
       originalRequest._retry = true;
-      getNavigation()?.dispatch(resetAction);
+      
+      // Dispatch action to show session expired modal
+      store.dispatch(setSessionExpiredVisible(true));
+      
       return Promise.reject(error);
     }
     if (error?.response?.status === 400) {

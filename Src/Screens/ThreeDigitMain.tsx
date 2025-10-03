@@ -333,7 +333,7 @@ const renderContent = () => {
     return (
       <>
         <DigitComponent
-          lastGameWiiningId={"12455"}
+          lastGameWiiningId={"Last Game Winning Digits"}
           nextGameId={formatToTimeIST(nextResultTime)}
           latGameWinningA={WinningBalls[0] || "1"}
           lastGameWinningB={WinningBalls[1] || "2"}
@@ -896,7 +896,11 @@ const renderContent = () => {
           }}
           walletBalance={formatToDecimal(mainWalletBalance)}
           onPressRefresh={() => {
-            dispatch(getWalletBalance());
+            if (isLoggedIn) {
+              dispatch(getWalletBalance());
+            } else {
+              navigation.navigate('SignInScreen');
+            }
           }}
         />
         <FlatList

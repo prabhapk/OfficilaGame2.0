@@ -9,8 +9,10 @@ const initialValues: CommonSliceState = {
   show30SecondsLeftAlert: false,
   paymentSuccessModalVisible: false,
   InsufficientBalanceModalVisible: false,
+  sessionExpiredVisible: false,
   tableCurrentPage: 1,
   gameRulesData: null,
+  shouldNavigateToLogin: false,
 }
 export const gameRules = createAsyncThunk<
   any,
@@ -55,6 +57,13 @@ export const CommonSlice = createSlice({
     setInsufficientBalanceModalVisible:(state,action:PayloadAction<boolean>)=>{
       state.InsufficientBalanceModalVisible = action.payload
     },
+    setSessionExpiredVisible:(state,action:PayloadAction<boolean>)=>{
+      console.log('setSessionExpiredVisibleasasasas', action.payload)
+      state.sessionExpiredVisible = action.payload
+    },
+    setShouldNavigateToLogin:(state,action:PayloadAction<boolean>)=>{
+      state.shouldNavigateToLogin = action.payload
+    },
     setTableCurrentPage:(state,action:PayloadAction<number>)=>{
       state.tableCurrentPage = action.payload
     }
@@ -81,7 +90,7 @@ export const CommonSlice = createSlice({
 })
 
 export const { showHowToPlay, hideHowToPlay, handleShowAlert, setPaymentSuccessModalVisible, 
-  setInsufficientBalanceModalVisible, setTableCurrentPage
+  setInsufficientBalanceModalVisible, setSessionExpiredVisible, setShouldNavigateToLogin, setTableCurrentPage
  } = CommonSlice.actions
 
 export default CommonSlice.reducer

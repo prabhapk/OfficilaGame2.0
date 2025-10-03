@@ -82,7 +82,11 @@ export const SignInPassword = createAsyncThunk<
 
       thunkAPI.dispatch(setIsLoggedIn(true));
       navigation.navigate('DrawerNavigation')
-      console.log("responseSignIn", response);
+      console.log("🔑 FULL LOGIN RESPONSE:", response);
+      console.log("🔑 RESPONSE DATA:", response.data);
+      console.log("🔑 RESPONSE DATA TYPE:", typeof response.data);
+      console.log("🔑 TOKEN FROM DATA:", response.data?.token);
+      console.log("🔑 REFRESH TOKEN FROM DATA:", response.data?.refreshToken);
       
       return response.data;
     } catch (error: any) {
@@ -214,19 +218,28 @@ export const resetPassword = createAsyncThunk<
 
 export const getWalletBalance = createAsyncThunk<
   any,
+  void,
   { rejectValue: string }
 >(
   'games/getWalletBalance',
   async (_, thunkAPI) => {
     try {
-
-      const response = await axiosInstance.get(serviceUrls.games.walletBalance,
-
-      );
-      console.log('getWalletBalance', response.data);
+      const state = thunkAPI.getState() as RootState;
+      // Early rejection if token hasn't hydrated yet due to race vs Redux persist
+      if (!state.signInSlice.token) {
+        console.warn('⚠️ getWalletBalance rejected early: missing token');
+        return thunkAPI.rejectWithValue('Token not available yet');
+      }
+      console.log('🔑 WALLET BALANCE: Current token:', state.signInSlice.token);
+      console.log('🔑 WALLET BALANCE: IsLoggedIn:', state.signInSlice.isLoggedIn);
+      console.log('🔑 WALLET BALANCE: API URL:', serviceUrls.games.walletBalance);
+      const response = await axiosInstance.get(serviceUrls.games.walletBalance);
+      console.log('✅ getWalletBalance SUCCESS:', response.data);
       return response.data;
     } catch (error: any) {
-      console.log('walletBalanceApiError', error);
+      console.log('❌ walletBalanceApiError', error);
+      console.log('❌ walletBalanceApiError Status:', error?.response?.status);
+      console.log('❌ walletBalanceApiError Message:', error?.response?.data);
       return thunkAPI.rejectWithValue(
         error?.response?.data || error.message || error.toString()
       );
@@ -262,6 +275,27 @@ export const signInSlice = createSlice({
     setMainWalletBalance: (state, action: PayloadAction<number>) => {
       state.mainWalletBalance = action.payload;
     },
+    logoutUser: (state) => {
+      // Clear all token-related fields
+      state.token = undefined;
+      state.refreshAccessToken = undefined;
+      state.userDetails = undefined;
+      state.mobileNumber = undefined;
+      state.email = undefined;
+      state.password = undefined;
+      state.otp = undefined;
+      state.newPassword = undefined;
+      state.isLoggedIn = false;
+      state.mainWalletBalance = 0;
+      state.withdrawBalance = 0;
+      state.userId = 0;
+      state.error = '';
+      state.isLoading = false;
+      state.walletBalanceLoader = false;
+      state.resetPasswordLoader = false;
+      
+      console.log('SignInSlice: User logged out - all tokens and data cleared');
+    },
   },
   extraReducers: builder => {
 
@@ -281,16 +315,30 @@ export const signInSlice = createSlice({
 
     // Fulfilled
     builder.addCase(SignInPassword.fulfilled, (state, action) => {
+      console.log("🔑 FULFILLED DEBUG: Raw action.payload:", action.payload);
+      console.log("🔑 FULFILLED DEBUG: action.payload.token:", action.payload.token);
+      console.log("🔑 FULFILLED DEBUG: action.payload.refreshToken:", action.payload.refreshToken);
+      console.log("🔑 FULFILLED DEBUG: action.payload.user:", action.payload.user);
+      
       state.token = action.payload.token;
       state.refreshAccessToken = action.payload.refreshToken;
       state.userDetails = action.payload.user;
       state.mobileNumber = action.payload.user.mobileNumber;
-      state.mainWalletBalance = action.payload.user?.walletBalance?.rechargeBalance
-      state.withdrawBalance = action.payload.user?.walletBalance?.withdrawBalance
-      ;
-      console.log("state.mobileNumber", state.mobileNumber);
+      state.mainWalletBalance = action.payload.user?.walletBalance?.rechargeBalance;
+      state.withdrawBalance = action.payload.user?.walletBalance?.withdrawBalance;
+      
+      // Ensure login state is properly set
+      state.isLoggedIn = true;
       state.isLoading = false;
       state.userId = action.payload.user.id;
+      
+      console.log("🔑 LOGIN SUCCESS: Page reload test start");
+      console.log("🔑 LOGIN SUCCESS: Token stored:", state.token);
+      console.log("🔑 LOGIN SUCCESS: Token length:", state.token?.length);
+      console.log("🔑 LOGIN SUCCESS: IsLoggedIn:", state.isLoggedIn);
+      console.log("🔑 LOGIN SUCCESS: RefreshToken:", state.refreshAccessToken);
+      console.log("🔑 LOGIN SUCCESS: Page reload test end");
+      console.log("state.mobileNumber", state.mobileNumber);
       
     });
 
@@ -331,7 +379,8 @@ export const {
   setToken,
   setRefreshToken,
   setIsLoggedIn,
-  setMainWalletBalance
+  setMainWalletBalance,
+  logoutUser
 } = signInSlice.actions
 
 export default signInSlice.reducer

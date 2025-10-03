@@ -5,6 +5,8 @@ export interface CommonSliceState {
     show30SecondsLeftAlert:boolean
     paymentSuccessModalVisible:boolean
     InsufficientBalanceModalVisible:boolean
+    sessionExpiredVisible:boolean
+    shouldNavigateToLogin:boolean
     tableCurrentPage:number
     gameRulesData: any;
   }
