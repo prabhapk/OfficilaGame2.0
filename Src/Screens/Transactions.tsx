@@ -305,6 +305,8 @@ const [range, setRange] = React.useState({ startDate: undefined, endDate: undefi
         return vipData;
     }
   };
+
+  
   return (
     <View style={{flex: 1, backgroundColor: '#3E0E0D'}}>
       <NewAppHeader
