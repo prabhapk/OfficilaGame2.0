@@ -11,9 +11,11 @@ import { LinearGradient } from "expo-linear-gradient";
 type BetData = {
   type: string;
   value: string | number;
-  payment: string | number;
+  payment: number; // per-bet unit or already-calculated amount
   result: string;
-};
+  totalAmount?: number; // optional total for that bet
+  betCount?: number; // optional times for this bet
+  };
 
 type MyBetsCardProps = {
   headers: string[];
@@ -50,6 +52,21 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
 }) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
+  const getRowAmount = (bet: BetData) => {
+    // 1) If the bet itself has totalAmount (from API), prefer it
+    if (bet.totalAmount !== undefined && !isNaN(Number(bet.totalAmount))) {
+    return Number(bet.totalAmount);
+    }
+    // 2) Else compute from payment * betCount (fallback betCount -> 1)
+    const count = bet.betCount !== undefined ? Number(bet.betCount) : 1;
+    return Number(bet.payment || 0) * count;
+    };
+    
+    // Overall order total: prefer paymentAmount prop (from parent). If missing, sum rows
+    const orderTotal =
+    typeof paymentAmount === "number"
+    ? Number(paymentAmount)
+    : myBetsTableData.reduce((s, b) => s + getRowAmount(b), 0);
   return (
     <View style={styles.cardContainer}>
       <Text
@@ -247,7 +264,14 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
     </View>
     <View>
       <Text style={styles.paymentAmount}>Payment</Text>
-      <Text style={styles.paymentAmount1}>₹ {paymentAmount}</Text>
+      {/* <Text style={styles.paymentAmount1}>₹ {paymentAmount}</Text> */}
+      <Text style={styles.paymentAmount1}>
+  ₹ {myBetsTableData.reduce((sum, bet) => {
+        const rowTotal = (bet?.betCount ?? 1) * (bet?.payment ?? 0);
+        return sum + rowTotal;
+      }, 0).toFixed(2)}
+</Text>
+
     </View>
   </View>
 
@@ -294,7 +318,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
         <View style={styles.newDivider} />
         <View style={styles.dateStatusRow}>
           <Text style={styles.myBetsTitle}>MY BETS</Text>
-          <Text style={styles.dateText}>07-09-2025 02:00 AM</Text>
+          <Text style={styles.dateText}>{bettingTime}</Text>
         </View>
 
      {/* Table */}
@@ -327,68 +351,59 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
 
   {/* Table Rows */}
   {myBetsTableData.map((bet, rowIndex) => {
-    const isEvenRow = rowIndex % 2 === 0;
-    const rowBgColor = isEvenRow ? "#550011" : "#812B2B";
+  const isEvenRow = rowIndex % 2 === 0;
+  const rowBgColor = isEvenRow ? "#550011" : "#812B2B";
+  console.log('myBetsTableData==>', myBetsTableData);
 
-    // Helper: check if betType contains header (A/B/C)
-    const isSelectedFor = (header: string) =>
-      bet.type.includes(header);
-
-    return (
-      <View
-        key={`${bet.type}-${rowIndex}`}
-        style={[styles.tableRow, { backgroundColor: rowBgColor }]}
-      >
-        {/* Row Balls */}
-        <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
-        {headers.map((colHead, colIndex) => {
-  let color =
-    colHead === "A"
-      ? "#DE3C3F"
-      : colHead === "B"
-      ? "#EC8204"
-      : "#066FEA";
-
-  // Split selectedNumber into digits
-  const digits = String(bet.value).split("");
-
-  // Decide which digit goes where
-  let showDigit = "-";
-  if (bet.type.length === digits.length) {
-    const pos = bet.type.indexOf(colHead); // index of A/B/C in betType
-    if (pos !== -1) {
-      showDigit = digits[pos] || "-";
-    }
-  } else if (bet.type.includes(colHead)) {
-    // fallback: single digit bet for multi-type (e.g. type=A, value=5)
-    showDigit = digits[0] || "-";
-  }
+  const totalPaymentAmount = bet?.betCount * bet?.payment;
 
   return (
-    <TableCommonBall
-      key={colHead}
-      backgroundColor={showDigit !== "-" ? color : "#BFBFBF"}
-      innerText={showDigit}
-      borderColor={showDigit !== "-" ? color : "#BFBFBF"}
-    />
+    <View
+      key={`${bet.type}-${rowIndex}`}
+      style={[styles.tableRow, { backgroundColor: rowBgColor }]}
+    >
+      {/* Row Balls */}
+      <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
+        {headers.map((colHead) => {
+          let color =
+            colHead === "A" ? "#DE3C3F" :
+            colHead === "B" ? "#EC8204" :
+            "#066FEA";
+
+          const digits = String(bet.value).split("");
+          let showDigit = "-";
+
+          if (bet.type.length === digits.length) {
+            const pos = bet.type.indexOf(colHead);
+            if (pos !== -1) showDigit = digits[pos] || "-";
+          } else if (bet.type.includes(colHead)) {
+            showDigit = digits[0] || "-";
+          }
+
+          return (
+            <TableCommonBall
+              key={colHead}
+              backgroundColor={showDigit !== "-" ? color : "#BFBFBF"}
+              innerText={showDigit}
+              borderColor={showDigit !== "-" ? color : "#BFBFBF"}
+            />
+          );
+        })}
+      </View>
+
+      {/* ✅ Payment from API */}
+      <Text style={{ color: COLORS.white }}>
+        ₹{totalPaymentAmount.toFixed(2)}
+      </Text>
+
+      {/* Result */}
+      <Text style={{ color: COLORS.white, marginRight: 20 }}>
+        {status}
+      </Text>
+    </View>
   );
 })}
 
-        </View>
-
-        {/* Payment */}
-        <Text style={{ color: COLORS.white }}>
-          ₹{bet.payment}
-        </Text>
-
-        {/* Result */}
-        <Text style={{ color: COLORS.white, marginRight: 20 }}>
-          {/* {bet.result} */}
-          {status}
-        </Text>
-      </View>
-    );
-  })}
 </View>
 
       </View>

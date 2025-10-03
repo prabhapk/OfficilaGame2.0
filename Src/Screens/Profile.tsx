@@ -43,6 +43,8 @@ const ProfileScreen = ({ navigation }: any) => {
     (state: RootState) => state.signInSlice
   );
   console.log("withdrawBalanceScreenProfile==>", mainWalletBalance);
+
+  const totalBalance = mainWalletBalance + withdrawBalance;
   
   const dispatch = useDispatch();
   const [showLogoutButton, setShowLogoutButton] = useState(true);
@@ -179,7 +181,7 @@ const ProfileScreen = ({ navigation }: any) => {
         >
           <Text style={styles.walletTitle}>Total Wallet</Text>
           <Text style={styles.walletAmount}>
-            ₹ {formatToDecimal(mainWalletBalance)}
+            ₹ {formatToDecimal(totalBalance)}
           </Text>
 
           <View style={styles.walletRow}>

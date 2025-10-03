@@ -208,50 +208,33 @@ const ResultTable: React.FC<ResultTableProps> = ({
   } else if (!item.isWinning && item.winningNumber !== null) {
     status = "No Won";
   } else {
-    status = "To Be Drawn"; // ✅ derived for UI
+    status = "To Be Drawn";
   }
 
     return (
       <MyOrders
-        headers={["A", "B", "C"]}
-        myBetsTableData={item.bets}
-        id={item.betUniqueId}
-        bettingTime={item.betTime}
-        paymentAmount={item.totalAmount}
-        drawTime={
-          item.nextDrawTime !== "0001-01-01T00:00:00"
-            ? item.nextDrawTime
-            : "-"
-        }
-        topBalls={[
-          { text: "A", color: "#DE3C3F" },
-          { text: "B", color: "#EC8204" },
-          { text: "C", color: "#066FEA" },
-        ]}
-        bottomBalls={
-          item.winningNumber
-            ? item.winningNumber.split("").map((digit, idx) => {
-                let color =
-                  idx === 0
-                    ? "#DE3C3F"
-                    : idx === 1
-                    ? "#EC8204"
-                    : "#066FEA";
-                return { text: digit, color };
-              })
-            : [
-                { text: "?", color: "#DE3C3F" },
-                { text: "?", color: "#EC8204" },
-                { text: "?", color: "#066FEA" },
-              ]
-        }
-        date={item.betTime.split("T")[0]}
-        status={status}   // ✅ now has 3 states
-        imageSource={hot}
-        winOrLossId={item.betUniqueId}
-        gameName={item.gameName || "AvisGaming"}
-        totalWinningAmount={item.totalAmount}
+      headers={["A", "B", "C"]}
+      myBetsTableData={item.bets.map((b) => ({
+      ...b,
+      // attach parent's betCount so MyOrders can multiply if bet doesn't carry its own count
+      betCount: b.betCount ?? item.betCount,
+      // only attach parent totalAmount if there's a single bet in this order AND the bet doesn't already have totalAmount
+      totalAmount: b.totalAmount ?? (item.bets.length === 1 ? item.totalAmount : undefined),
+      }))}
+      id={item.betUniqueId}
+      bettingTime={item.betTime.split("T")[0]}
+      paymentAmount={item.totalAmount} // order total (used by MyOrders to show order total)
+      drawTime={ item.nextDrawTime !== "0001-01-01T00:00:00" ? item.nextDrawTime : "-" }
+      topBalls={[{ text: "A", color: "#DE3C3F" }, { text: "B", color: "#EC8204" }, { text: "C", color: "#066FEA" }]}
+      bottomBalls={ item.winningNumber ? item.winningNumber.split("").map((d, idx) => ({ text: d, color: idx===0? "#DE3C3F": idx===1? "#EC8204": "#066FEA" })) : [{ text: "?", color: "#DE3C3F" }, { text: "?", color: "#EC8204" }, { text: "?", color: "#066FEA" }] }
+      date={item.betTime.split("T")[0]}
+      status={ item.isWinning ? "Won" : (item.winningNumber !== null ? "No Won" : "To Be Drawn") }
+      imageSource={hot}
+      winOrLossId={item.betUniqueId}
+      gameName={item.gameName || "AvisGaming"}
+      totalWinningAmount={item.totalAmount}
       />
+
     );
   };
   

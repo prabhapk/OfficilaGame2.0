@@ -44,10 +44,12 @@ const CustomSidebarMenu = ({ navigation }: any) => {
   };
     const { Scale, verticalScale } = useContainerScale();
     const styles = createStyles(Scale);
-  const { isLoggedIn, userDetails } = useSelector(
+  const { isLoggedIn, userDetails, mainWalletBalance, withdrawBalance } = useSelector(
     (state: RootState) => state.signInSlice,
   );
   console.log('userDetails', userDetails);
+
+  const totalBalance = mainWalletBalance + withdrawBalance;
 
   const renderMenuItem = ({ item }: any) => {
     return (
@@ -201,7 +203,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
                   fontWeight: 'bold',
                 }}
               >
-                ₹ {formatToDecimal(userDetails.walletBalance?.rechargeBalance)}
+                ₹ {formatToDecimal(totalBalance)}
               </Text>
             </View>
 
