@@ -42,7 +42,13 @@ export const serviceUrls = {
     getRules: '/api/user/User/game-rules',
   },
   transaction: {
-    transfer: '/api/Transaction/transfers'
+    transfer: '/api/Transaction/transfers',
+    wallet: '/api/Transaction/wallet',
+    withdrawals: '/api/Transaction/withdrawals',
+    bets: '/api/Transaction/bets',
+    win: '/api/Transaction/wins',
+    vip: '/api/Transaction/vip',
+    allTransactions: '/api/Transaction/all-transactions',
   }
 };
 

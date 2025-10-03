@@ -53,16 +53,13 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
   const getRowAmount = (bet: BetData) => {
-    // 1) If the bet itself has totalAmount (from API), prefer it
     if (bet.totalAmount !== undefined && !isNaN(Number(bet.totalAmount))) {
     return Number(bet.totalAmount);
     }
-    // 2) Else compute from payment * betCount (fallback betCount -> 1)
     const count = bet.betCount !== undefined ? Number(bet.betCount) : 1;
     return Number(bet.payment || 0) * count;
     };
     
-    // Overall order total: prefer paymentAmount prop (from parent). If missing, sum rows
     const orderTotal =
     typeof paymentAmount === "number"
     ? Number(paymentAmount)

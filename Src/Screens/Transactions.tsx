@@ -10,16 +10,23 @@ import { useContainerScale } from '../hooks/useContainerScale';
 import { DatePickerModal } from 'react-native-paper-dates';
 import { format } from 'date-fns';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllTransactionsData, getTransferData, getWinsData, getBetsData, getWalletData, getWithdrawalsData, getVipsData } from '../Redux/Slice/TransactionSlice';
+import { RootState } from '../Redux/store';
 
 const Transactions = ({navigation}: any) => {
+  const dispatch = useDispatch();
+  const {userId} = useSelector(
+    (state: RootState) => state.signInSlice
+  );
   const [allData, setAllData] = useState<AllData[]>([]);
   const [winData, setWinData] = useState<BetsData[]>([]);
   const [rechargeData, setRechargeData] = useState<RechargeData[]>([]);
-  const [betsData, setBetsData] = useState<BetsData[]>([]);
+  // const [betsData, setBetsData] = useState<BetsData[]>([]);
   const [withDrawData, setWithDrawData] = useState<RechargeData[]>([]);
   const [commissionData, setCommissionData] = useState<RechargeData[]>([]);
   const [rebateData, setRebateData] = useState<RechargeData[]>([]);
-  const [transferData, setTransferData] = useState<RechargeData[]>([]);
+  // const [transferData, setTransferData] = useState<RechargeData[]>([]);
   const [vipData, setVipData] = useState<RechargeData[]>([]);
   const { Scale, verticalScale } = useContainerScale();
   const buttons = [
@@ -37,9 +44,51 @@ const Transactions = ({navigation}: any) => {
     buttons[0],
   );
 
+  // const handleButtonPress = (button: HeaderButton) => {
+  //   setSelectedButton(button);
+  // };
   const handleButtonPress = (button: HeaderButton) => {
     setSelectedButton(button);
+  
+    const dateParams = {
+      FromDate: range.startDate
+        ? format(range.startDate, "yyyy-MM-dd")
+        : "2025-01-01",   // default fallback
+      ToDate: range.endDate
+        ? format(range.endDate, "yyyy-MM-dd")
+        : format(new Date(), "yyyy-MM-dd"),
+      UserId: userId,
+      Page: 1,
+      PageSize: 20,
+    };
+  
+    switch (button.id) {
+      case 1:
+        dispatch(getAllTransactionsData(dateParams));
+        break;
+      case 2:
+        dispatch(getWinsData(dateParams));
+        break;
+      case 3:
+        dispatch(getWalletData(dateParams));
+        break;
+      case 4:
+        dispatch(getBetsData(dateParams));
+        break;
+      case 5:
+        dispatch(getWithdrawalsData(dateParams));
+        break;
+      case 8:
+        dispatch(getTransferData(dateParams));
+        break;
+      case 9:
+        dispatch(getVipsData(dateParams));
+        break;
+      default:
+        break;
+    }
   };
+  
   const allDatasVAlues = [
     {
       betAmount: 200,
@@ -222,6 +271,17 @@ const Transactions = ({navigation}: any) => {
 ]
 const [range, setRange] = React.useState({ startDate: undefined, endDate: undefined });
 
+const {
+  allTransactionsData,
+  transferData,
+  walletData,
+  withdrawalsData,
+  betsData,
+  winsData,
+  vipsData,
+  transactionLoader,
+} = useSelector((state: RootState) => state.TransactionSlice);
+
   const [open, setOpen] = React.useState(false);
 
   const onDismiss = React.useCallback(() => {
@@ -235,6 +295,7 @@ const [range, setRange] = React.useState({ startDate: undefined, endDate: undefi
     },
     [setOpen, setRange]
   );
+
   const displayText =
   range.startDate && range.endDate
     ? `${format(range.startDate, 'yyyy-MM-dd')} → ${format(range.endDate, 'yyyy-MM-dd')}`
@@ -242,24 +303,41 @@ const [range, setRange] = React.useState({ startDate: undefined, endDate: undefi
     ? format(range.startDate, 'yyyy-MM-dd')
     : 'Pick range';
 
+    useEffect(() => {
+      dispatch(getAllTransactionsData({
+        // FromDate: range.startDate,
+        // ToDate: range.endDate,
+        FromDate: '',
+        ToDate: '',
+        UserId: userId,
+        Page: 1,
+        PageSize: 10,
+      }))
+    }, [
+      dispatch,
+      range.startDate,
+      range.endDate,
+      userId,
+    ]);
+
   useEffect(() => {
     setAllData(allDatasVAlues);
     setWinData(winsDatas);
     setRechargeData(rechargeDatas);
-    setBetsData(betsDatas);
+    // setBetsData(betsDatas);
     setWithDrawData(withDrawDatas);
     setCommissionData(commissionDatas);
     setRebateData(rebateDatas);
-    setTransferData(transferDatas);
+    // setTransferData(transferDatas);
     setVipData(vipDatas);
   }, []);
   const renderItem = ({item}: {item: any}) => {
     console.log('Render item:', item);
   
-    if (item.betAmount !== undefined) {
+    if (item.amount !== undefined) {
       return (
         <BetsCard
-          betAmount={item.betAmount}
+          betAmount={item.amount}
           beforeBalance={item.beforeBalance}
           afterBalance={item.afterBalance}
           orderTime={item.orderTime}
@@ -283,28 +361,57 @@ const [range, setRange] = React.useState({ startDate: undefined, endDate: undefi
     }
   };
   
+  // const getSelectedData = () => {
+  //   switch (selectedButton?.id) {
+  //     case 1:
+  //       return allData;
+  //     case 2:
+  //       return winData;
+  //     case 3:
+  //       return rechargeData;
+  //     case 4:
+  //       return betsData;
+  //     case 5:
+  //       return withDrawData;
+  //     case 6:
+  //       return commissionData;
+  //     case 7:
+  //       return rebateData;
+  //     case 8:
+  //       return transferData;
+  //     default:
+  //       return vipData;
+  //   }
+  // };
+
   const getSelectedData = () => {
     switch (selectedButton?.id) {
       case 1:
-        return allData;
+        return allTransactionsData;
       case 2:
-        return winData;
+        return winsData;
       case 3:
-        return rechargeData;
+        return walletData;
       case 4:
         return betsData;
       case 5:
-        return withDrawData;
-      case 6:
-        return commissionData;
-      case 7:
-        return rebateData;
+        return withdrawalsData;
       case 8:
         return transferData;
+      case 9:
+        return vipsData;
       default:
-        return vipData;
+        return [];
     }
   };
+  useEffect(() => {
+    handleButtonPress(buttons[0]);
+  }, []);
+
+ 
+
+
+
 
   
   return (
@@ -331,7 +438,6 @@ const [range, setRange] = React.useState({ startDate: undefined, endDate: undefi
         <Icon name="chevron-down" size={20} color="#fff" />
       </TouchableOpacity>
         <DatePickerModal
-          disableStatusBarPadding
           locale="en"
           mode="range"
           visible={open}
@@ -344,12 +450,17 @@ const [range, setRange] = React.useState({ startDate: undefined, endDate: undefi
         />
       </View>
 
-<FlatList
+      <FlatList
   data={getSelectedData() || []}
   renderItem={renderItem}
   keyExtractor={(item, index) => index.toString()}
-  ListEmptyComponent={() => <Text style={{color: 'white', textAlign: 'center'}}>No data available</Text>}
-  showsVerticalScrollIndicator={false}
+  ListEmptyComponent={() =>
+    transactionLoader ? (
+      <Text style={{color: 'white', textAlign: 'center'}}>Loading...</Text>
+    ) : (
+      <Text style={{color: 'white', textAlign: 'center'}}>No data available</Text>
+    )
+  }
 />
   </View>
   );

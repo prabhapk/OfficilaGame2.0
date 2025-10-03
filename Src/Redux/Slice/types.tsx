@@ -93,3 +93,13 @@ export interface CommonSliceState {
     withdrawLoader:boolean
     bankAccountsData:any
   }
+  export interface transactionSliceStates {
+    transactionLoader:boolean
+    transferData:any
+    walletData:any
+    withdrawalsData:any
+    betsData:any
+    winsData:any
+    vipsData:any
+    allTransactionsData:any
+  }

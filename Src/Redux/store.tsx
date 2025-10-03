@@ -8,6 +8,7 @@ import homeSlice from './Slice/HomeSlice';
 import resultSlice from './Slice/resultSlice';
 import Quick3DSlice from './Slice/Quick3DSlice';
 import withdrawSlice from './Slice/withdrawSlice';
+import TransactionSlice from './Slice/TransactionSlice';
 import storage from '@react-native-async-storage/async-storage';
 import {
   FLUSH,
@@ -36,7 +37,8 @@ const reducers = combineReducers({
   homeSlice: homeSlice,
   resultSlice: resultSlice,
   quick3DSlice: Quick3DSlice,
-  withdrawSlice: withdrawSlice
+  withdrawSlice: withdrawSlice,
+  TransactionSlice: TransactionSlice
 });
 const rootReducer = (state: any, action: AnyAction) => {
   if (action.type === resetState.type) {
