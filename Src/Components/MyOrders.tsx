@@ -46,7 +46,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
   imageSource,
   winOrLossId,
   gameName,
-  totalWinningAmount
+  totalWinningAmount,
 }) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -89,7 +89,8 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
       <View style={styles.detailsContainer}>
         {/* Win Ui  */}
         <View>
-        {status === "Won" ? (
+  {/* === Status Label Section === */}
+  {status === "Won" && (
     <ImageBackground
       source={myOrdersWinLabel}
       style={{
@@ -98,7 +99,14 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
         marginHorizontal: Scale(10),
       }}
     >
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", alignSelf: "center" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          alignSelf: "center",
+        }}
+      >
         <Text
           style={{
             textAlign: "center",
@@ -122,13 +130,16 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
         />
       </View>
     </ImageBackground>
-  ) : (
+  )}
+
+  {status === "No Won" && (
     <LinearGradient
       colors={["#844d4d", "#82504d"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
       style={{
         borderBottomLeftRadius: 10,
+        borderTopRightRadius: 10,
         paddingHorizontal: 10,
         height: 30,
         bottom: 10,
@@ -137,12 +148,10 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
         flexDirection: "row",
         marginHorizontal: 15,
         marginTop: 10,
-        borderTopRightRadius: 10,
       }}
     >
       <Text
         style={{
-          textAlign: "center",
           fontSize: Scale(16),
           fontWeight: "bold",
           color: "white",
@@ -154,7 +163,6 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
       </Text>
       <Text
         style={{
-          textAlign: "center",
           fontSize: Scale(16),
           fontWeight: "bold",
           color: "white",
@@ -176,7 +184,60 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
     </LinearGradient>
   )}
 
-  {/* Game Name + Time + Payment */}
+  {/* {status === "No Won" && winningNumber === null && ( */}
+  {status === "To Be Drawn" &&  (
+    <LinearGradient
+      colors={["#844d4d", "#82504d"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      style={{
+        borderBottomLeftRadius: 10,
+        borderTopRightRadius: 10,
+        paddingHorizontal: 10,
+        height: 30,
+        bottom: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        marginHorizontal: 15,
+        marginTop: 10,
+      }}
+    >
+      <Text
+        style={{
+          fontSize: Scale(16),
+          fontWeight: "bold",
+          color: "white",
+          marginLeft: Scale(10),
+          marginVertical: Scale(5),
+        }}
+      >
+        TO BE DRAWN
+      </Text>
+      <Text
+        style={{
+          fontSize: Scale(16),
+          fontWeight: "bold",
+          color: "white",
+          marginLeft: Scale(20),
+          marginVertical: Scale(5),
+        }}
+      >
+        {winOrLossId}
+      </Text>
+      <Image
+        source={copyImage}
+        style={{
+          width: Scale(20),
+          height: Scale(20),
+          marginLeft: Scale(10),
+          marginTop: Scale(5),
+        }}
+      />
+    </LinearGradient>
+  )}
+
+  {/* === Game Name + Time + Payment === */}
   <View style={styles.detailsSubHeader}>
     <View>
       <Text style={styles.detailText}>{gameName || "AvisGaming"}</Text>
@@ -190,9 +251,9 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
     </View>
   </View>
 
-  {/* Footer (Win / Loss Message) */}
+  {/* === Footer (Win / Loss Message) === */}
   <View style={{ marginTop: Scale(10), marginBottom: Scale(5) }}>
-    {status === "Won" ? (
+    {status === "Won" && (
       <ImageBackground
         source={winLabel}
         style={{
@@ -216,13 +277,20 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
           amount ₹{totalWinningAmount}
         </Text>
       </ImageBackground>
-    ) : (
+    )
+  }
+    {status === "No Won" && (
       <Text style={styles.footerText}>
         Sorry, your guess is wrong, Try next time
       </Text>
     )}
+    {status === "To Be Drawn" && (
+      <>
+      </>
+    )}
   </View>
-  </View>
+</View>
+
         <View style={styles.newDivider} />
         <View style={styles.dateStatusRow}>
           <Text style={styles.myBetsTitle}>MY BETS</Text>
@@ -314,8 +382,9 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
         </Text>
 
         {/* Result */}
-        <Text style={{ color: COLORS.white, marginRight: 30 }}>
-          {bet.result}
+        <Text style={{ color: COLORS.white, marginRight: 20 }}>
+          {/* {bet.result} */}
+          {status}
         </Text>
       </View>
     );

@@ -40,6 +40,9 @@ export const serviceUrls = {
   },
   rules: {
     getRules: '/api/user/User/game-rules',
+  },
+  transaction: {
+    transfer: '/api/Transaction/transfers'
   }
 };
 
