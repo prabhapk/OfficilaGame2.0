@@ -25,6 +25,7 @@ import AddBankAccount from "../Screens/AddBankAccount";
 import RebateScreen from "../Screens/RebateScreen";
 import AgencyScreen from "../Screens/AgencyScreen";
 import InvitationRulesScreen from "../Screens/InvitationRulesScreen";
+import HomeScreen from "../Screens/HomeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -82,6 +83,7 @@ function MainNavigation() {
         <Stack.Screen name="DrawerNavigation" component={DrawerNavigation} />
         <Stack.Screen name="WalletScreen" component={WalletScreen} />
         <Stack.Screen name="Withdraw" component={Withdraw} />
+        <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen
           name="VipLevelDetailsScreen"
           component={VipLevelDetailsScreen}

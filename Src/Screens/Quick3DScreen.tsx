@@ -12,7 +12,12 @@ import {
   Platform,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { cancel, CustomerServiceIcon, lefArrow, sameClock } from "../../assets/assets";
+import {
+  cancel,
+  CustomerServiceIcon,
+  lefArrow,
+  sameClock,
+} from "../../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
 import HowToPlayModal from "../Components/HowToPlayModal";
 import GameFooter from "../Components/GameFooter";
@@ -44,12 +49,10 @@ import {
 } from "../Redux/Slice/threeDigitSlice";
 import {
   gameRules,
-  handleShowAlert,
   setInsufficientBalanceModalVisible,
   setPaymentSuccessModalVisible,
   setTableCurrentPage,
 } from "../Redux/Slice/commonSlice";
-import Show30SecondsModal from "../Components/Show30SecondsModal";
 import DigitComponent from "../Components/DigitComponent";
 import { LinearGradient } from "expo-linear-gradient";
 import { COLORS } from "../Constants/Theme";
@@ -74,7 +77,6 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const refRBSheet: any = useRef();
 
   const [selectedOption, setSelectedOption] = useState("1 Mins");
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [islast30sec, setLast30sec] = useState(false);
   const [numbers, setNumbers] = useState([]);
   const [cartValues, setCartValues] = useState([]);
@@ -91,12 +93,11 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const { quick3dGamesList, quick3dGamesGroupId } = useSelector(
     (state: RootState) => state.quick3DSlice
   );
-  const { isLoggedIn, mainWalletBalance, userId } = useSelector(
-    (state: RootState) => state.signInSlice
-  );
+  const { isLoggedIn, mainWalletBalance, userId, withdrawBalance } =
+    useSelector((state: RootState) => state.signInSlice);
 
   const [showStickyHeader, setShowStickyHeader] = useState(false);
-
+  const totalBalance = mainWalletBalance + withdrawBalance;
 
   const {
     paymentSuccessModalVisible,
@@ -163,17 +164,17 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     dispatch(gameRules({ gameTypeId: quick3dGamesGroupId }));
   }, [dispatch, quick3dGamesGroupId]);
 
-    // Handle scroll to show/hide sticky header
-    const handleScroll = (event: any) => {
-      const scrollY = event.nativeEvent.contentOffset.y;
-      const threshold = 200; // Show sticky header after scrolling 200px (halfway point)
-      
-      if (scrollY > threshold && !showStickyHeader) {
-        setShowStickyHeader(true);
-      } else if (scrollY <= threshold && showStickyHeader) {
-        setShowStickyHeader(false);
-      }
-    };
+  // Handle scroll to show/hide sticky header
+  const handleScroll = (event: any) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    const threshold = 200; // Show sticky header after scrolling 200px (halfway point)
+
+    if (scrollY > threshold && !showStickyHeader) {
+      setShowStickyHeader(true);
+    } else if (scrollY <= threshold && showStickyHeader) {
+      setShowStickyHeader(false);
+    }
+  };
 
   const transformApiResponse = (response: any) => {
     if (!response || Object.keys(response).length === 0) {
@@ -382,6 +383,12 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   };
 
   const triggerAPI = (selectedOption: string) => {
+    dispatch(
+      getMyOrders({
+        userId: userId,
+        groupId: groupId,
+      })
+    );
     if (selectedOption == "1 Mins") {
       dispatch(
         fetchQuick3DGamesData({
@@ -674,21 +681,20 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 
   return (
     <View style={styles.mainContainer}>
-       {showStickyHeader && (
-       <NewAppHeader 
-       leftIconPress={goBack}
-       rightIconPress={() => {}}
-       centerText={"Quick 3Digit Games"}
-       rightIcon={CustomerServiceIcon}
-       />
-       
+      {showStickyHeader && (
+        <NewAppHeader
+          leftIconPress={goBack}
+          rightIconPress={() => {}}
+          centerText={"Quick 3Digit Games"}
+          rightIcon={CustomerServiceIcon}
+        />
       )}
-       <ScrollView
+      <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ 
-          flexGrow: 1, 
+        contentContainerStyle={{
+          flexGrow: 1,
           paddingBottom: Scale(100),
-          paddingTop: showStickyHeader ? Scale(80) : 0 // Only add padding when sticky header is visible
+          paddingTop: showStickyHeader ? Scale(80) : 0, // Only add padding when sticky header is visible
         }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
@@ -706,12 +712,12 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           onPressRecharge={() => {
             navigation.navigate("WalletScreen");
           }}
-          walletBalance={formatToDecimal(mainWalletBalance)}
+          walletBalance={formatToDecimal(totalBalance)}
           onPressRefresh={() => {
             if (isLoggedIn) {
               dispatch(getWalletBalance());
             } else {
-              navigation.navigate('SignInScreen');
+              navigation.navigate("SignInScreen");
             }
           }}
         />

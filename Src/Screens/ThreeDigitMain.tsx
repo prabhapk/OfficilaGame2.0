@@ -15,7 +15,14 @@ import {
   GestureResponderEvent,
 } from "react-native";
 import React, { use, useEffect, useMemo, useRef, useState } from "react";
-import { cancel, CustomerServiceIcon, customerServiceTopIcon, lefArrow, quick3min, sameClock } from "../../assets/assets";
+import {
+  cancel,
+  CustomerServiceIcon,
+  customerServiceTopIcon,
+  lefArrow,
+  quick3min,
+  sameClock,
+} from "../../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
 import {
   gameRules,
@@ -103,12 +110,14 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const { individualGameData, individualGameDataLoader } = useSelector(
     (state: RootState) => state.homeSlice
   );
-  const { isLoggedIn, mainWalletBalance, userId } = useSelector(
-    (state: RootState) => state.signInSlice
-  );
-  const { paymentSuccessModalVisible, InsufficientBalanceModalVisible, tableCurrentPage } =
-    useSelector((state: RootState) => state.commonSlice);
-  console.log("individualGameData==>", individualGameData);
+  const { isLoggedIn, mainWalletBalance, userId, withdrawBalance } =
+    useSelector((state: RootState) => state.signInSlice);
+  const {
+    paymentSuccessModalVisible,
+    InsufficientBalanceModalVisible,
+    tableCurrentPage,
+  } = useSelector((state: RootState) => state.commonSlice);
+  const totalBalance = mainWalletBalance + withdrawBalance;
   const dispatch = useDispatch();
 
   const now = new Date();
@@ -216,7 +225,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const handleScroll = (event: any) => {
     const scrollY = event.nativeEvent.contentOffset.y;
     const threshold = 200; // Show sticky header after scrolling 200px (halfway point)
-    
+
     if (scrollY > threshold && !showStickyHeader) {
       setShowStickyHeader(true);
     } else if (scrollY <= threshold && showStickyHeader) {
@@ -239,9 +248,9 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   }));
   console.log("transformedData==>", transformedData);
 
-  const totalPages = individualGameResults.totalPages
+  const totalPages = individualGameResults.totalPages;
   console.log("totalPages==>", totalPages);
-  
+
   const groupId = route.params.gameData?.groupId;
   const gameTypeId = route.params.gameData?.gameTypeId;
   console.log("groupId==>", groupId, gameTypeId);
@@ -251,85 +260,110 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   console.log("WinningBalls==>", WinningBalls, individualGameData);
   // const WinningBalls = "123"
 
-const renderContent = () => {
-  // Add safety check for individualGameData
-  if (!individualGameData || individualGameData.length === 0) {
-    return null;
-  }
-  
-  const first = individualGameData[0];
-  
-  // Add safety check for first item
-  if (!first) {
-    return null;
-  }
-  
-  let matchedGame;
-  
-  // Handle different cases based on interval time
-  if (first?.intervaltime === "00:00:00") {
-    // Case 1: No interval - selectedOption corresponds to groupId
-    matchedGame = individualGameData?.find(
-      (game) => game.groupId === selectedOption
-    );
-  } else {
-    // Case 2: With interval - selectedOption is sequential (1, 2, 3...)
-    // All slots use the same groupId (first.groupId)
-    matchedGame = individualGameData?.find(
-      (game) => game.groupId === first.groupId
-    );
-  }
-  
-  console.log("matchedGame==>", selectedOption, individualGameData, selectedTime, "matchedGame:", matchedGame);
-
-  let nextResultTime = "N/A";
-
-  if (first?.intervaltime === "00:00:00") {
-    nextResultTime = matchedGame?.nextresulttime || "N/A";
-  } else {
-    // Get the selected header index (0-based)
-    const selectedHeaderIndex = OPTIONS.findIndex(option => option.id === selectedOption);
-    
-    // If selectedHeader is 0th index, no need to add interval time
-    // Otherwise, multiply interval by the selected header index
-    const intervalMultiplier = selectedHeaderIndex === 0 ? 0 : selectedHeaderIndex;
-    
-    if (intervalMultiplier === 0) {
-      nextResultTime = first?.nextresulttime || "N/A";
-    } else {
-      // Add safety checks for required properties
-      if (!first?.nextresulttime || !first?.intervaltime) {
-        nextResultTime = "N/A";
-      } else {
-        // Parse the existing date string (e.g., "2025-10-02T15:00:00")
-        const [datePart, timePart] = first.nextresulttime.split('T');
-        const [year, month, day] = datePart.split('-').map(Number);
-        const [hours, minutes, seconds] = timePart.split(':').map(Number);
-        
-        // Parse interval time (e.g., "00:30:00")
-        const [intervalHours, intervalMinutes, intervalSeconds] = first.intervaltime
-          .split(":")
-          .map(Number);
-        
-        // Calculate total minutes to add
-        const totalMinutesToAdd = intervalMultiplier * (intervalHours * 60 + intervalMinutes);
-        
-        // Add minutes to the existing time
-        const totalMinutes = hours * 60 + minutes + totalMinutesToAdd;
-        
-        // Convert back to hours and minutes
-        const newHours = Math.floor(totalMinutes / 60) % 24;
-        const newMinutes = totalMinutes % 60;
-        
-        // Format back to the same string format
-        nextResultTime = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}T${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-      }
+  const renderContent = () => {
+    // Add safety check for individualGameData
+    if (!individualGameData || individualGameData.length === 0) {
+      return null;
     }
-    
-    console.log("nextResultTime==>123", nextResultTime, first.nextresulttime, first.intervaltime, "selectedHeaderIndex:", selectedHeaderIndex, "intervalMultiplier:", intervalMultiplier);
-  }
-  
-  console.log("nextResultTime==>", nextResultTime);
+
+    const first = individualGameData[0];
+
+    // Add safety check for first item
+    if (!first) {
+      return null;
+    }
+
+    let matchedGame;
+
+    // Handle different cases based on interval time
+    if (first?.intervaltime === "00:00:00") {
+      // Case 1: No interval - selectedOption corresponds to groupId
+      matchedGame = individualGameData?.find(
+        (game) => game.groupId === selectedOption
+      );
+    } else {
+      // Case 2: With interval - selectedOption is sequential (1, 2, 3...)
+      // All slots use the same groupId (first.groupId)
+      matchedGame = individualGameData?.find(
+        (game) => game.groupId === first.groupId
+      );
+    }
+
+    console.log(
+      "matchedGame==>",
+      selectedOption,
+      individualGameData,
+      selectedTime,
+      "matchedGame:",
+      matchedGame
+    );
+
+    let nextResultTime = "N/A";
+
+    if (first?.intervaltime === "00:00:00") {
+      nextResultTime = matchedGame?.nextresulttime || "N/A";
+    } else {
+      // Get the selected header index (0-based)
+      const selectedHeaderIndex = OPTIONS.findIndex(
+        (option) => option.id === selectedOption
+      );
+
+      // If selectedHeader is 0th index, no need to add interval time
+      // Otherwise, multiply interval by the selected header index
+      const intervalMultiplier =
+        selectedHeaderIndex === 0 ? 0 : selectedHeaderIndex;
+
+      if (intervalMultiplier === 0) {
+        nextResultTime = first?.nextresulttime || "N/A";
+      } else {
+        // Add safety checks for required properties
+        if (!first?.nextresulttime || !first?.intervaltime) {
+          nextResultTime = "N/A";
+        } else {
+          // Parse the existing date string (e.g., "2025-10-02T15:00:00")
+          const [datePart, timePart] = first.nextresulttime.split("T");
+          const [year, month, day] = datePart.split("-").map(Number);
+          const [hours, minutes, seconds] = timePart.split(":").map(Number);
+
+          // Parse interval time (e.g., "00:30:00")
+          const [intervalHours, intervalMinutes, intervalSeconds] =
+            first.intervaltime.split(":").map(Number);
+
+          // Calculate total minutes to add
+          const totalMinutesToAdd =
+            intervalMultiplier * (intervalHours * 60 + intervalMinutes);
+
+          // Add minutes to the existing time
+          const totalMinutes = hours * 60 + minutes + totalMinutesToAdd;
+
+          // Convert back to hours and minutes
+          const newHours = Math.floor(totalMinutes / 60) % 24;
+          const newMinutes = totalMinutes % 60;
+
+          // Format back to the same string format
+          nextResultTime = `${year}-${month.toString().padStart(2, "0")}-${day
+            .toString()
+            .padStart(2, "0")}T${newHours
+            .toString()
+            .padStart(2, "0")}:${newMinutes
+            .toString()
+            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+        }
+      }
+
+      console.log(
+        "nextResultTime==>123",
+        nextResultTime,
+        first.nextresulttime,
+        first.intervaltime,
+        "selectedHeaderIndex:",
+        selectedHeaderIndex,
+        "intervalMultiplier:",
+        intervalMultiplier
+      );
+    }
+
+    console.log("nextResultTime==>", nextResultTime);
     return (
       <>
         <DigitComponent
@@ -356,7 +390,7 @@ const renderContent = () => {
           doubleDigitGameId={individualGameData[1]?.id}
           threeDigitGameId={individualGameData[2]?.id}
           groupId={groupId}
-          totalPage ={totalPages}
+          totalPage={totalPages}
           onThirtySecondsRemaining={() => {
             setLast30SecStates((prev) => ({
               ...prev,
@@ -603,7 +637,7 @@ const renderContent = () => {
   };
   useEffect(() => {
     resetState();
-    dispatch(setTableCurrentPage(1))
+    dispatch(setTableCurrentPage(1));
   }, []);
 
   useEffect(() => {
@@ -753,8 +787,8 @@ const renderContent = () => {
     );
   };
 
-  console.log('tableCurrentPage==>', tableCurrentPage );
-  
+  console.log("tableCurrentPage==>", tableCurrentPage);
+
   useEffect(() => {
     dispatch(
       getIndividualGameResult({
@@ -845,7 +879,7 @@ const renderContent = () => {
   console.log("islast30sec==>", islast30sec);
 
   useEffect(() => {
-    dispatch(gameRules({gameTypeId: groupId} ));
+    dispatch(gameRules({ gameTypeId: groupId }));
   }, [groupId]);
 
   return (
@@ -854,24 +888,23 @@ const renderContent = () => {
       <CustomLoader
         visible={Boolean(individualGameDataLoader) && Boolean(myOrdersLoader)}
       />
-      
+
       {/* Sticky Header - Only shows when scrolled halfway */}
       {showStickyHeader && (
-       <NewAppHeader 
-       leftIconPress={goBack}
-       rightIconPress={() => navigation.navigate('SignUpScreen')}
-       centerText={individualGameData[0]?.name}
-       rightIcon={CustomerServiceIcon}
-       />
-       
+        <NewAppHeader
+          leftIconPress={goBack}
+          rightIconPress={() => navigation.navigate("SignUpScreen")}
+          centerText={individualGameData[0]?.name}
+          rightIcon={CustomerServiceIcon}
+        />
       )}
-      
+
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ 
-          flexGrow: 1, 
+        contentContainerStyle={{
+          flexGrow: 1,
           paddingBottom: Scale(100),
-          paddingTop: showStickyHeader ? Scale(80) : 0 // Only add padding when sticky header is visible
+          paddingTop: showStickyHeader ? Scale(80) : 0, // Only add padding when sticky header is visible
         }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
@@ -879,9 +912,7 @@ const renderContent = () => {
         onScroll={handleScroll}
       >
         <CustomLoader
-          visible={
-            Boolean(individualGameDataLoader) && Boolean(myOrdersLoader)
-          }
+          visible={Boolean(individualGameDataLoader) && Boolean(myOrdersLoader)}
         />
         <GameHeader
           HeaderText={individualGameData[0]?.name}
@@ -894,12 +925,12 @@ const renderContent = () => {
           onPressRecharge={() => {
             navigation.navigate("WalletScreen");
           }}
-          walletBalance={formatToDecimal(mainWalletBalance)}
+          walletBalance={formatToDecimal(totalBalance)}
           onPressRefresh={() => {
             if (isLoggedIn) {
               dispatch(getWalletBalance());
             } else {
-              navigation.navigate('SignInScreen');
+              navigation.navigate("SignInScreen");
             }
           }}
         />
@@ -913,7 +944,7 @@ const renderContent = () => {
           nestedScrollEnabled={true}
           scrollEnabled={true}
         />
-        
+
         <View style={styles.subContainer}>
           {/* Conditionally Render UI Based on Selection */}
           <View style={styles.renderDataView}>{renderContent()}</View>
@@ -1128,7 +1159,7 @@ const createStyles = (Scale: any) =>
     },
     startView: {
       paddingHorizontal: 10,
-      alignItems: 'center',
+      alignItems: "center",
     },
     renderDataView: {
       padding: 10,
@@ -1207,22 +1238,22 @@ const createStyles = (Scale: any) =>
       height: Scale(100),
     },
     headerImg: { width: 30, height: 30 },
-    
+
     // Sticky Header Styles
     stickyHeader: {
-      position: 'absolute',
+      position: "absolute",
       top: 0,
       left: 0,
       right: 0,
       zIndex: 1000,
-      backgroundColor: '#FF4242',
-      flexDirection: 'row',
-      alignItems: 'center',
+      backgroundColor: "#FF4242",
+      flexDirection: "row",
+      alignItems: "center",
       paddingHorizontal: Scale(15),
       paddingTop: Scale(50), // Account for status bar
       paddingBottom: Scale(10),
       elevation: 5,
-      shadowColor: '#000',
+      shadowColor: "#000",
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
@@ -1235,14 +1266,14 @@ const createStyles = (Scale: any) =>
     stickyBackIcon: {
       width: Scale(20),
       height: Scale(20),
-      tintColor: 'white',
+      tintColor: "white",
     },
     stickyHeaderTitle: {
       flex: 1,
-      color: 'white',
+      color: "white",
       fontSize: Scale(16),
-      fontWeight: 'bold',
-      textAlign: 'center',
+      fontWeight: "bold",
+      textAlign: "center",
     },
     stickyHeaderSpacer: {
       width: Scale(30), // Same width as back button to center the title

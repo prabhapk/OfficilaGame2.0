@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import MainNavigation from "./Navigation/mainNavigation";
 import CustomLoader from "./Components/Modal/CustomLoader";
 import SessionExpiredModal from "./Components/SessionExpiredModal";
+import ErrorBoundary from "./Components/ErrorBoundary";
 import { useDispatch, useSelector } from "react-redux";
 // import DeviceInfo from 'react-native-device-info';
 import axios from "axios";
@@ -40,8 +41,7 @@ const App = () => {
   useEffect(() => {
     const clearPersistedState = async () => {
       try {
-        const AsyncStorage =
-          require("@react-native-async-storage/async-storage").default;
+        const AsyncStorage = require("@react-native-async-storage/async-storage").default;
         await AsyncStorage.removeItem("persist:root");
       } catch (error) {
         console.log("🚨 Error clearing AsyncStorage:", error);
@@ -118,21 +118,23 @@ const App = () => {
     }
   }, [shouldNavigateToLogin, dispatch]);
   return (
-    <SafeAreaProvider>
-      <StatusBar
-        backgroundColor={COLORS.primary}
-        barStyle="light-content"
-        translucent={Platform.OS === "android"}
-      />
-      <PaperProvider theme={theme}>
-        <MobileContainer>
-          <MainNavigation />
-          {isLoading && <CustomLoader modalVisible={isLoading} />}
-          <SessionExpiredModal />
-          <Toast />
-        </MobileContainer>
-      </PaperProvider>
-    </SafeAreaProvider>
+    <ErrorBoundary>
+      <SafeAreaProvider>
+        <StatusBar
+          backgroundColor={COLORS.primary}
+          barStyle="light-content"
+          translucent={Platform.OS === "android"}
+        />
+        <PaperProvider theme={theme}>
+          <MobileContainer>
+            <MainNavigation />
+            {isLoading && <CustomLoader modalVisible={isLoading} />}
+            <SessionExpiredModal />
+            <Toast />
+          </MobileContainer>
+        </PaperProvider>
+      </SafeAreaProvider>
+    </ErrorBoundary>
   );
 };
 

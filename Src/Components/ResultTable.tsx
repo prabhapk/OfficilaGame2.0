@@ -38,16 +38,13 @@ const ResultTable: React.FC<ResultTableProps> = ({
     (state: RootState) => state.commonSlice
   );
 
-  
-  console.log("myOrdersData====>",myOrdersData);
+  console.log("myOrdersData====>", myOrdersData);
 
   const rawData = myOrdersData;
 
   // Group bets into orders
   const groupedOrders = groupByOrder(rawData);
-  console.log("groupedOrders===>",groupedOrders);
-  
-  
+  console.log("groupedOrders===>", groupedOrders);
 
   // Calculate the total number of pages
   const totalPages = Math.ceil(tableData?.length / itemsPerPage);
@@ -61,7 +58,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
   // Handle Page Change
   const changePage = (page: number) => {
     if (page >= 1 && page <= totalPage) {
-     dispatch(setTableCurrentPage(page));
+      dispatch(setTableCurrentPage(page));
     }
   };
 
@@ -81,7 +78,9 @@ const ResultTable: React.FC<ResultTableProps> = ({
         }}
       >
         <View style={{ flex: 1.5 }}>
-          <Text style={{ color: COLORS.white }}>{item.uid}{" "}{item?.gamename.startsWith("QUICK3D") && item.gamename}</Text>
+          <Text style={{ color: COLORS.white }}>
+            {item.uid} {item?.gamename.startsWith("QUICK3D") && item.gamename}
+          </Text>
         </View>
         <View style={{ flex: 1.2, alignItems: "center" }}>
           <Text style={{ color: COLORS.white }}>
@@ -129,17 +128,17 @@ const ResultTable: React.FC<ResultTableProps> = ({
 
   // const myOrderRenterItem = ({ item }: { item: any; index: number }) => {
   //   const winningStatus = item.isWinning ? "Won" : "No Won";
-  
+
   //   // Build row per bet
   //   const myBetsTableData = [
   //     {
-  //       type: item.betType,        
-  //       value: item.selectedNumber, 
-  //       payment: item.amount, 
+  //       type: item.betType,
+  //       value: item.selectedNumber,
+  //       payment: item.amount,
   //       result: winningStatus,
   //     },
   //   ];
-  
+
   //   // Winning number split into balls
   //   const winningNumber = item.winningNumber;
   //   const bottomBalls =
@@ -156,7 +155,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
   //           { text: "?", color: "#EC8204" },
   //           { text: "?", color: "#066FEA" },
   //         ];
-  
+
   //   return (
   //     <MyOrders
   //     headers={["A", "B", "C"]}
@@ -203,43 +202,66 @@ const ResultTable: React.FC<ResultTableProps> = ({
   const myOrderRenterItem = ({ item }: { item: any; index: number }) => {
     let status: string;
 
-  if (item.isWinning) {
-    status = "Won";
-  } else if (!item.isWinning && item.winningNumber !== null) {
-    status = "No Won";
-  } else {
-    status = "To Be Drawn";
-  }
+    if (item.isWinning) {
+      status = "Won";
+    } else if (!item.isWinning && item.winningNumber !== null) {
+      status = "No Won";
+    } else {
+      status = "To Be Drawn";
+    }
 
     return (
       <MyOrders
-      headers={["A", "B", "C"]}
-      myBetsTableData={item.bets.map((b) => ({
-      ...b,
-      // attach parent's betCount so MyOrders can multiply if bet doesn't carry its own count
-      betCount: b.betCount ?? item.betCount,
-      // only attach parent totalAmount if there's a single bet in this order AND the bet doesn't already have totalAmount
-      totalAmount: b.totalAmount ?? (item.bets.length === 1 ? item.totalAmount : undefined),
-      }))}
-      id={item.betUniqueId}
-      bettingTime={item.betTime.split("T")[0]}
-      paymentAmount={item.totalAmount} // order total (used by MyOrders to show order total)
-      drawTime={ item.nextDrawTime !== "0001-01-01T00:00:00" ? item.nextDrawTime : "-" }
-      topBalls={[{ text: "A", color: "#DE3C3F" }, { text: "B", color: "#EC8204" }, { text: "C", color: "#066FEA" }]}
-      bottomBalls={ item.winningNumber ? item.winningNumber.split("").map((d, idx) => ({ text: d, color: idx===0? "#DE3C3F": idx===1? "#EC8204": "#066FEA" })) : [{ text: "?", color: "#DE3C3F" }, { text: "?", color: "#EC8204" }, { text: "?", color: "#066FEA" }] }
-      date={item.betTime.split("T")[0]}
-      status={ item.isWinning ? "Won" : (item.winningNumber !== null ? "No Won" : "To Be Drawn") }
-      imageSource={hot}
-      winOrLossId={item.betUniqueId}
-      gameName={item.gameName || "AvisGaming"}
-      totalWinningAmount={item.totalAmount}
+        headers={["A", "B", "C"]}
+        myBetsTableData={item.bets.map((b) => ({
+          ...b,
+          // attach parent's betCount so MyOrders can multiply if bet doesn't carry its own count
+          betCount: b.betCount ?? item.betCount,
+          // only attach parent totalAmount if there's a single bet in this order AND the bet doesn't already have totalAmount
+          totalAmount:
+            b.totalAmount ??
+            (item.bets.length === 1 ? item.totalAmount : undefined),
+        }))}
+        id={item.betUniqueId}
+        bettingTime={item.betTime.split("T")[0]}
+        paymentAmount={item.totalAmount} // order total (used by MyOrders to show order total)
+        drawTime={
+          item.nextDrawTime !== "0001-01-01T00:00:00" ? item.nextDrawTime : "-"
+        }
+        topBalls={[
+          { text: "A", color: "#DE3C3F" },
+          { text: "B", color: "#EC8204" },
+          { text: "C", color: "#066FEA" },
+        ]}
+        bottomBalls={
+          item.winningNumber
+            ? item.winningNumber.split("").map((d, idx) => ({
+                text: d,
+                color:
+                  idx === 0 ? "#DE3C3F" : idx === 1 ? "#EC8204" : "#066FEA",
+              }))
+            : [
+                { text: "?", color: "#DE3C3F" },
+                { text: "?", color: "#EC8204" },
+                { text: "?", color: "#066FEA" },
+              ]
+        }
+        date={item.betTime.split("T")[0]}
+        status={
+          item.isWinning
+            ? "Won"
+            : item.winningNumber !== null
+            ? "No Won"
+            : "To Be Drawn"
+        }
+        imageSource={hot}
+        winOrLossId={item.betUniqueId}
+        gameName={item.gameName || "AvisGaming"}
+        totalWinningAmount={item.totalAmount}
       />
-
     );
   };
-  
-  
-  
+
   return (
     <View>
       <View style={{ marginTop: Scale(10), ...customStyle }}>
@@ -368,7 +390,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
                       onPress={() => changePage(page)}
                       style={{
                         backgroundColor:
-                        tableCurrentPage === page ? "gold" : "#812B2B",
+                          tableCurrentPage === page ? "gold" : "#812B2B",
                         borderRadius: Scale(10),
                         padding: Scale(10),
                         borderColor: "#812B2B",
