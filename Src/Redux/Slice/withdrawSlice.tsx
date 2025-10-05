@@ -36,13 +36,14 @@ export const UpdateBankAccount =createAsyncThunk<any, any, { rejectValue: string
   'withDraw/UpdateBankAccount',
   async (apiData, thunkAPI) => {
     console.log('apiData===>', apiData);
+    console.log('serviceUrls.withdraw.UpdateBankAccount', `${serviceUrls.withdraw.UpdateBankAccount}/${apiData.id}`);
     try {
       const response = await axiosInstance.put(
         `${serviceUrls.withdraw.UpdateBankAccount}/${apiData.id}`,
         apiData,
       );
 
-      console.log('UpdateBankAccountResponse', response);
+      console.log('UpdateBankAccountResponse', response.data);
       // thunkAPI.dispatch(setBankAccountsData(response.data));
       return response.data;
     } catch (error: any) {

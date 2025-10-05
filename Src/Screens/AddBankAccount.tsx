@@ -129,60 +129,121 @@ const AddBankCardScreen = ({ navigation, route }: any) => {
         navigation.navigate("SignInScreen");
       }
     };
+    // const handleUpdateBankAccount = async () => {
+    //   if (isLoggedIn) {
+    //     try {
+    //       const apiData = {
+    //         id: AccountId,
+    //         userId: userId,
+    //         accountNumber: form.accountNumber,
+    //         ifsc: form.ifsc,
+    //         accountHolderName: form.accountName,
+    //         mobile: mobileNumber,
+    //         upi: form.upi,
+    //         otp: form.otp,
+    //       };
+    
+    //       const resultAction = await dispatch(UpdateBankAccount(apiData));
+    //       // const data = unwrapResult(resultAction);
+    //       const data = resultAction.payload;
+    //       console.log("dataEditAccount==>", data);
+    //       if (data?.id) {
+    //         Toast.show({
+    //           type: 'success',
+    //           text1: 'Account Updated successfully',
+    //           position: 'top',
+    //         });
+    //         setForm({
+    //           accountName: '',
+    //           ifsc: '',
+    //           accountNumber: '',
+    //           accountNumberAgain: '',
+    //           upi: '',
+    //           upiAgain: '',
+    //           email: '',
+    //           otp: '',
+    //         });
+    
+    //         dispatch(getBankAccounts({ userId: userId }));
+    //       } else {
+    //         Toast.show({
+    //           type: 'error',
+    //           text1: 'Something went wrong',
+    //           position: 'top',
+    //         });
+    //       }
+    //     } catch (error: any) {
+    //       console.log("handlePayNowError", error);
+    //       Toast.show({
+    //         type: 'error',
+    //         text1: error?.message || 'Failed to Edit account',
+    //         position: 'top',
+    //       });
+    //     }
+    //   } else {
+    //     navigation.navigate("SignInScreen");
+    //   }
+    // };
     const handleUpdateBankAccount = async () => {
-      if (isLoggedIn) {
-        try {
-          const apiData = {
-            id: AccountId,
-            userId: userId,
-            accountNumber: form.accountNumber,
-            ifsc: form.ifsc,
-            accountHolderName: form.accountName,
-            mobile: mobileNumber,
-            upi: form.upi,
-            otp: form.otp,
-          };
+      if (!isLoggedIn) {
+        navigation.navigate("SignInScreen");
+        return;
+      }
     
-          const resultAction = await dispatch(UpdateBankAccount(apiData));
-          const data = unwrapResult(resultAction);
-          console.log("data==>", data);
-          if (data?.id) {
-            Toast.show({
-              type: 'success',
-              text1: 'Account Updated successfully',
-              position: 'top',
-            });
-            setForm({
-              accountName: '',
-              ifsc: '',
-              accountNumber: '',
-              accountNumberAgain: '',
-              upi: '',
-              upiAgain: '',
-              email: '',
-              otp: '',
-            });
+      try {
+        const apiData = {
+          id: AccountId,
+          userId: userId,
+          accountNumber: form.accountNumber,
+          ifsc: form.ifsc,
+          accountHolderName: form.accountName,
+          mobile: mobileNumber,
+          upi: form.upi,
+          otp: form.otp,
+        };
     
-            dispatch(getBankAccounts({ userId: userId }));
-          } else {
-            Toast.show({
-              type: 'error',
-              text1: 'Something went wrong',
-              position: 'top',
-            });
-          }
-        } catch (error: any) {
-          console.log("handlePayNowError", error);
+        const resultAction = await dispatch(UpdateBankAccount(apiData));
+    
+        if (UpdateBankAccount.fulfilled.match(resultAction)) {
+          const data = resultAction.payload;
+          console.log("dataEditAccount==>", data);
+    
+          Toast.show({
+            type: 'success',
+            text1: 'Account Updated successfully',
+            position: 'top',
+          });
+    
+          setForm({
+            accountName: '',
+            ifsc: '',
+            accountNumber: '',
+            accountNumberAgain: '',
+            upi: '',
+            upiAgain: '',
+            email: '',
+            otp: '',
+          });
+    
+          dispatch(getBankAccounts({ userId }));
+        } else {
           Toast.show({
             type: 'error',
-            text1: error?.message || 'Failed to add account',
+            text1: resultAction.payload || 'Something went wrong',
             position: 'top',
           });
         }
-      } else {
-        navigation.navigate("SignInScreen");
+      } catch (error: any) {
+        console.log("handleUpdateBankAccountError", error);
+        Toast.show({
+          type: 'error',
+          text1: error?.message || 'Failed to Edit account',
+          position: 'top',
+        });
       }
     };
+    
+    
     
     const handleGetOtp = async () => {
       try {

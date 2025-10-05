@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import CommonBall from "./CommonBall"; // adjust path
 import TableCommonBall from "./TableCommonBall"; // adjust path
 import { COLORS } from "../Constants/Theme";
@@ -7,6 +7,7 @@ import { useContainerScale } from "../hooks/useContainerScale";
 import { ImageBackground } from "expo-image";
 import { copyImage, myOrdersWinLabel, winLabel } from "../../assets/assets";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Clipboard from 'expo-clipboard';
 
 type BetData = {
   type: string;
@@ -133,6 +134,12 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
         >
           {winOrLossId}
         </Text>
+        <TouchableOpacity
+        onPress={() => {
+          Clipboard.setStringAsync(winOrLossId);
+          Alert.alert('Copied!', 'ID copied to clipboard');
+        }}
+      >
         <Image
           source={copyImage}
           style={{
@@ -142,6 +149,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
             marginTop: Scale(5),
           }}
         />
+      </TouchableOpacity>
       </View>
     </ImageBackground>
   )}
@@ -186,15 +194,22 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
       >
         {winOrLossId}
       </Text>
-      <Image
-        source={copyImage}
-        style={{
-          width: Scale(20),
-          height: Scale(20),
-          marginLeft: Scale(10),
-          marginTop: Scale(5),
+      <TouchableOpacity
+        onPress={() => {
+          Clipboard.setStringAsync(winOrLossId);
+          Alert.alert('Copied!', 'ID copied to clipboard');
         }}
-      />
+      >
+        <Image
+          source={copyImage}
+          style={{
+            width: Scale(20),
+            height: Scale(20),
+            marginLeft: Scale(10),
+            marginTop: Scale(5),
+          }}
+        />
+      </TouchableOpacity>
     </LinearGradient>
   )}
 
@@ -239,15 +254,22 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
       >
         {winOrLossId}
       </Text>
-      <Image
-        source={copyImage}
-        style={{
-          width: Scale(20),
-          height: Scale(20),
-          marginLeft: Scale(10),
-          marginTop: Scale(5),
+      <TouchableOpacity
+        onPress={() => {
+          Clipboard.setStringAsync(winOrLossId);
+          Alert.alert('Copied!', 'ID copied to clipboard');
         }}
-      />
+      >
+        <Image
+          source={copyImage}
+          style={{
+            width: Scale(20),
+            height: Scale(20),
+            marginLeft: Scale(10),
+            marginTop: Scale(5),
+          }}
+        />
+      </TouchableOpacity>
     </LinearGradient>
   )}
 

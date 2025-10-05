@@ -9,6 +9,7 @@ import {
     TouchableWithoutFeedback,
     Modal,
     Image,
+    Alert,
 } from 'react-native';
 import React, { useState } from 'react';
 import {
@@ -30,6 +31,8 @@ import TableCommonBall from '../Components/TableCommonBall';
 import MyBets3DigitsCard from '../Components/MyBets3DigitsCard';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useContainerScale } from '../hooks/useContainerScale';
+import * as Clipboard from 'expo-clipboard';
+import { DatePickerModal } from 'react-native-paper-dates';
 const MyBetsScreen = ({ navigation }: any) => {
     const { Scale, verticalScale } = useContainerScale();
     const styles = createStyles(Scale);
@@ -65,6 +68,32 @@ const MyBetsScreen = ({ navigation }: any) => {
             </View>
         );
     };
+    const [copiedId, setCopiedId] = useState(null);
+    const gameID ='PK5321'
+
+    const handleCopyLink = async () => {
+        try {
+          await Clipboard.setStringAsync(gameID);
+          Alert.alert('Copied!', 'ID copied to clipboard');
+        } catch (error) {
+          console.log('Error copying id:', error);
+        }
+      };
+
+      const [open, setOpen] = React.useState(false);
+      const [range, setRange] = React.useState({ startDate: undefined, endDate: undefined });
+
+      const onDismiss = React.useCallback(() => {
+        setOpen(false);
+      }, [setOpen]);
+    
+      const onConfirm = React.useCallback(
+        ({ startDate, endDate }) => {
+          setOpen(false);
+          setRange({ startDate, endDate });
+        },
+        [setOpen, setRange]
+      );
 
     return (
         <ScrollView
@@ -96,12 +125,25 @@ const MyBetsScreen = ({ navigation }: any) => {
                     <Text style={styles.resultText}>My Bets</Text>
                     <TouchableOpacity
                         style={styles.filterButton}
-                        onPress={() => setShowFilter(!showFilter)}
+                        // onPress={() => setShowFilter(!showFilter)}
+                        onPress={() => setOpen(true)}
                     >
                         <Icon name="filter" size={16} color="white" />
                         <Text style={styles.filterText}> {"Filter"}</Text>
                         <Entypo name="chevron-down" size={14} color="white" />
                     </TouchableOpacity>
+
+                    <DatePickerModal
+          locale="en"
+          mode="range"
+          visible={open}
+          onDismiss={onDismiss}
+          startDate={range.startDate}
+          endDate={range.endDate}
+          onConfirm={onConfirm}
+          startYear={2025}
+          endYear={2028}
+        />
                 </View>
                 <View style={{ flex: 1 }}>
                     <CustomTabs
@@ -139,7 +181,7 @@ const MyBetsScreen = ({ navigation }: any) => {
                         { type: "B", value: 3, payment: 33, result: "No Won" },
                         { type: "C", value: 4, payment: 33, result: "No Won" }
                     ]}
-                    id="PK56283947"
+                    id={gameID}
                     bettingTime="01-08-2022 12:00 PM"
                     paymentAmount={33}
                     drawTime="01-08-2022 12:00 PM"
@@ -156,6 +198,7 @@ const MyBetsScreen = ({ navigation }: any) => {
                     date="01-08-2022"
                     status="NO WON"
                     imageSource={hot}
+                    handleCopyLink={handleCopyLink}
                 />
             </View>
 

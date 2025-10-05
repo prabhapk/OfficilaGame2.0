@@ -382,13 +382,15 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     triggerAPI(value.name);
   };
 
-  const triggerAPI = (selectedOption: string) => {
-    dispatch(
-      getMyOrders({
-        userId: userId,
-        groupId: groupId,
-      })
-    );
+  const triggerAPI = (selectedOption: string) => {    
+    // dispatch(
+    //   getMyOrders({
+    //     userId: userId,
+    //     groupId: 2,
+    //   })
+    // );
+    console.log('checkSelectedOption==', selectedOption);
+    
     if (selectedOption == "1 Mins") {
       dispatch(
         fetchQuick3DGamesData({
