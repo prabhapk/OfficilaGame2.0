@@ -12,9 +12,10 @@ interface CustomTabsProps {
   index: number;
   onIndexChange: (idx: number) => void;
   style?: any;
+  onSelectGroupId?: (groupId: string) => void;
 }
 
-const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, index, onIndexChange, style }) => {
+const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, index, onIndexChange, style, onSelectGroupId }) => {
   const scrollRef = useRef<ScrollView>(null);
   const [tabLayouts, setTabLayouts] = useState<{ x: number; width: number }[]>([]);
   const { Scale, verticalScale } = useContainerScale();
@@ -36,7 +37,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, index, onIndexChange, sty
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ alignItems: 'center' }}
       >
-        {tabs.map((tab, idx) => (
+        {tabs.map((tab:any, idx) => (
           <TouchableOpacity
             key={tab.id}
             style={{
@@ -47,7 +48,10 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, index, onIndexChange, sty
               borderBottomWidth: 3,
               borderBottomColor: idx === index ? '#fff' : 'transparent',
             }}
-            onPress={() => onIndexChange(idx)}
+            onPress={() => {
+              onIndexChange(idx);
+              onSelectGroupId?.(tab?.groupId);
+            }}
             onLayout={(e) => {
               const { x, width } = e.nativeEvent.layout;
               setTabLayouts((prev) => {
