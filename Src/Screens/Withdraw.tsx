@@ -33,6 +33,7 @@ import Toast from "react-native-toast-message";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { set } from "date-fns";
 import { getWalletBalance } from "../Redux/Slice/signInSlice";
+import { COLORS } from "../Constants/Theme";
 
 const Withdraw = ({ navigation }: any) => {
   const dispatch = useDispatch();
@@ -227,13 +228,13 @@ const Withdraw = ({ navigation }: any) => {
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          borderColor: isSelected ? "#FFD700" : "#FF4242",
+          borderColor: isSelected ? "#fff" : "grey",
           borderWidth: 2,
           borderRadius: 10,
           padding: Scale(15),
           marginVertical: Scale(10),
           width: "95%",
-          backgroundColor: isSelected ? "rgba(255,215,0,0.1)" : "transparent",
+          backgroundColor: "transparent",
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -279,14 +280,14 @@ const Withdraw = ({ navigation }: any) => {
             <Entypo
               name={"edit"}
               size={Scale(14)}
-              color={"#FF4242"}
+              color={"#fff"}
               style={{ marginRight: Scale(5) }}
             />
             <Text
               style={{
                 fontSize: Scale(12),
                 fontWeight: "bold",
-                color: "#FF4242",
+                color: "#fff",
               }}
             >
               Edit
@@ -306,7 +307,7 @@ const Withdraw = ({ navigation }: any) => {
             <AntDesign
               name={"delete"}
               size={Scale(14)}
-              color={"#FF4242"}
+              color={"#fff"}
               style={{ marginRight: Scale(5) }}
             />
           </TouchableOpacity>
@@ -384,7 +385,7 @@ const Withdraw = ({ navigation }: any) => {
   
 
   return (  
-    <View style={{ flex: 1, backgroundColor: "#360400" }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
       <NewAppHeader
         leftIconPress={() => navigation.goBack()}
         centerText={"Withdraw"}
@@ -392,7 +393,7 @@ const Withdraw = ({ navigation }: any) => {
       <ScrollView style={styles.container}>
         {/* Wallet Header */}
         <LinearGradient
-          colors={["#FF4242", "#f6c976ff"]}
+          colors={[COLORS.linearOne,COLORS.linearTwo]}
           style={styles.walletHeader}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
@@ -432,7 +433,8 @@ const Withdraw = ({ navigation }: any) => {
 
           <View style={{}}>
             <LinearGradient
-              colors={["black", "transparent"]}
+              // colors={["black", "transparent"]}
+              colors={['#f5eceb', 'transparent']}
               style={{
                 // backgroundColor: '#909191',
                 borderRadius: 10,
@@ -489,7 +491,7 @@ const Withdraw = ({ navigation }: any) => {
 
           <View
             style={{
-              backgroundColor: "#360400",
+              backgroundColor: COLORS.primary,
               borderRadius: 10,
               padding: Scale(12),
               marginBottom: Scale(12),
@@ -515,12 +517,12 @@ const Withdraw = ({ navigation }: any) => {
           }}
           onPress={() => navigation.navigate("AddBankAccount")}
         >
-          <AntDesign name="plus" size={Scale(30)} color="#FF4242" />
+          <AntDesign name="plus" size={Scale(30)} color="#fff" />
           <Text
             style={{
               textAlign: "center",
               fontSize: Scale(16),
-              color: "#FF4242",
+              color: "#fff",
               fontWeight: "bold",
               marginVertical: Scale(10),
             }}
@@ -564,7 +566,7 @@ const Withdraw = ({ navigation }: any) => {
                         >
                           {isSelected ? (
                             <LinearGradient
-                              colors={["#FF4242", "#f6c976"]}
+                              colors={[COLORS.linearOne, COLORS.linearTwo]}
                               // start={{ x: 0, y: 0 }}
                               // end={{ x: 1, y: 0 }}
                               style={styles.amountChipWithdraw}
@@ -685,7 +687,7 @@ const Withdraw = ({ navigation }: any) => {
             >
               <View
                 style={{
-                  backgroundColor: "#360400",
+                  backgroundColor: COLORS.primary,
                   borderRadius: 10,
                   padding: 20,
                   // marginBottom: 16,
@@ -727,7 +729,7 @@ const Withdraw = ({ navigation }: any) => {
                 <View
                   style={{
                     borderWidth: 1,
-                    borderColor: "#FF4242",
+                    borderColor: "#fff",
                     borderRadius: 8,
                     paddingHorizontal: 12,
                     paddingVertical: 4,
@@ -778,7 +780,7 @@ const Withdraw = ({ navigation }: any) => {
                         >
                           {isSelected ? (
                             <LinearGradient
-                              colors={["#FF4242", "#f6c976"]}
+                              colors={[COLORS.linearOne, COLORS.linearTwo]}
                               // start={{ x: 0, y: 0 }}
                               // end={{ x: 1, y: 0 }}
                               style={styles.amountChip}
@@ -846,7 +848,7 @@ const Withdraw = ({ navigation }: any) => {
                   onPress={handleWithdrawConversion}
                   style={styles.buttonWrapper}>
                     <LinearGradient
-                      colors={["#FF4140", "#FFAD45"]}
+                      colors={[COLORS.linearOne, COLORS.linearTwo]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 0 }}
                       style={styles.signInButton}
@@ -1056,7 +1058,7 @@ const Withdraw = ({ navigation }: any) => {
           onPress={handleWithDrawAmount}
         >
           <LinearGradient
-            colors={["#FF4140", "#FFAD45"]}
+            colors={[COLORS.linearOne, COLORS.linearTwo]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.signInButton}
@@ -1073,7 +1075,7 @@ const createStyles = (Scale: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "#360400",
+      backgroundColor: COLORS.primary,
       padding: Scale(10),
     },
     walletHeader: {
@@ -1132,21 +1134,26 @@ const createStyles = (Scale: any) =>
       marginLeft: Scale(10),
     },
     currentMethod: {
-      marginTop: Scale(12),
-      color: "#fff",
-      fontWeight: "500",
+      marginTop: Scale(10),
+      color: COLORS.primary,
+      fontWeight: "bold",
+      fontSize: Scale(16)
+
     },
     warningText: {
-      color: "#FFF",
+      color: COLORS.primary,
       fontSize: Scale(12),
       marginTop: Scale(4),
       width: Scale(300),
+      fontWeight:'600'
     },
     amountBox: {
-      backgroundColor: "#47231E",
+      backgroundColor: COLORS.primary,
       borderRadius: 10,
       padding: Scale(12),
       marginBottom: Scale(12),
+      borderWidth: 0.2,
+      borderColor: COLORS.white,
     },
     amountInput: {
       color: "#fff",
@@ -1170,7 +1177,7 @@ const createStyles = (Scale: any) =>
       gap: Scale(15),
     },
     amountChipWithdraw: {
-      backgroundColor: "#4B3737",
+      backgroundColor: COLORS.tableTopColor,
       borderRadius: 8,
       paddingVertical: Scale(6),
       paddingHorizontal: Scale(16),
@@ -1179,7 +1186,7 @@ const createStyles = (Scale: any) =>
       marginTop: Scale(10),
     },
     amountChip: {
-      backgroundColor: "#4B3737",
+      backgroundColor: COLORS.tableTopColor,
       borderRadius: 8,
       paddingVertical: Scale(6),
       paddingHorizontal: Scale(16),
@@ -1203,10 +1210,12 @@ const createStyles = (Scale: any) =>
       fontWeight: "bold",
     },
     rechargeSection: {
-      backgroundColor: "#47231E",
+      backgroundColor: COLORS.primary,
       borderRadius: 10,
       padding: Scale(12),
       marginBottom: Scale(12),
+      borderColor: COLORS.white,
+      borderWidth: 0.2,
     },
     sectionTitle: {
       color: "#fff",

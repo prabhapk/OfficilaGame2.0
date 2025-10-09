@@ -8,6 +8,7 @@ import { amountIcon, hIcon, homeAppIcon } from "../../assets/assets";
 import { LinearGradient } from "expo-linear-gradient";
 import { formatToDecimal } from "../Utils/Common";
 import { useContainerScale } from "../hooks/useContainerScale";
+import { COLORS } from "../Constants/Theme";
 interface CountdownTimerProps {
   onLoginPress: () => void;
   onMenuPress: () => void;
@@ -75,7 +76,7 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
         ) : (
           <>
             <TouchableOpacity onPress={onLoginPress} style={styles.loginButton}>
-              <Text style={{ color: "#ff5f5f" }}>Login</Text>
+              <Text style={{ color: "#fff" }}>Login</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -83,7 +84,7 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
               style={styles.registerButton}
             >
               <LinearGradient
-                colors={["#FF4140", "#FFAD45"]}
+                colors={[COLORS.linearOne, COLORS.linearTwo]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.registerGradient}
@@ -118,7 +119,7 @@ const createStyles = (Scale: any) =>
       borderRadius: 50,
       alignItems: "center",
       justifyContent: "center",
-      borderColor: "#ff5f5f",
+      borderColor: COLORS.white,
       borderWidth: 1,
       // marginVertical: 5,
       marginHorizontal: Scale(5),

@@ -4,6 +4,7 @@ import Modal from 'react-native-modal';
 import { close } from '../../../assets/assets';
 import { betAlertImage } from '../../assets/assets';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from '../Constants/Theme';
 
 
 const show30SecondsModal = () => {
@@ -35,7 +36,7 @@ const show30SecondsModal = () => {
 
 const createStyles = (Scale: any) => StyleSheet.create({
   modalContainer: {
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.white,
     borderRadius: Scale(18),
     padding: Scale(20),
     marginBottom: Scale(16),
@@ -58,7 +59,7 @@ const createStyles = (Scale: any) => StyleSheet.create({
     alignItems: 'center',
   },
   bodyText: {
-    color: 'white',
+    color: COLORS.primary,
     fontWeight: 'bold',
     fontSize: Scale(16),
     textAlign: 'center',

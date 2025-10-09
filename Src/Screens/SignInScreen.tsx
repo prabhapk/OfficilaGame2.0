@@ -26,6 +26,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { RootState } from '../Redux/store';
 import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from "../Constants/Theme";
 
 const SignInScreen = ({ navigation }: any) => {
   const [selectedTab, setSelectedTab] = useState<'password' | 'otp'>('password');
@@ -237,7 +238,7 @@ const SignInScreen = ({ navigation }: any) => {
   disabled={isLoading}
 >
   <LinearGradient
-    colors={['#FF4140', '#FFAD45']}
+    colors={[COLORS.linearOne, COLORS.linearTwo]} 
     start={{ x: 0, y: 0 }}
     end={{ x: 1, y: 0 }}
     style={styles.signInButton}
@@ -274,14 +275,14 @@ const createStyles = (Scale: any) =>
   StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.primary,
   },
   topImage: {
     width: '100%',
     height: Scale(260),
   },
   bottomContainer: {
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.primary,
     borderTopRightRadius: Scale(80),
     marginTop: -Scale(70),
     paddingBottom: Scale(30),
@@ -304,13 +305,13 @@ const createStyles = (Scale: any) =>
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#2e0b0b',
+    backgroundColor: COLORS.primary,
     borderRadius: 999,
     marginHorizontal: Scale(20),
     marginTop: Scale(40),
     padding: Scale(4),
     borderWidth: 1,
-    borderColor: '#ff5f5f',
+    borderColor: COLORS.white,
   },
   tab: {
     flex: 1,
@@ -320,7 +321,7 @@ const createStyles = (Scale: any) =>
   },
   activeTab: {
     backgroundColor: '#fff',
-    borderColor: '#ff5f5f',
+    borderColor: COLORS.primary,
     borderWidth: 1,
   },
   tabText: {
@@ -328,10 +329,10 @@ const createStyles = (Scale: any) =>
     fontWeight: 'bold',
   },
   activeText: {
-    color: '#ff5f5f',
+    color: COLORS.primary,
   },
   inactiveText: {
-    color: '#ff5f5f',
+    color: '#fff',
     opacity: 0.6,
   },
   inputWrapper: {

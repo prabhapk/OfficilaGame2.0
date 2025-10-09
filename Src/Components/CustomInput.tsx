@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import { COLORS } from '../Constants/Theme';
 
 interface CustomInputProps extends TextInputProps {
   label: string;
@@ -55,10 +56,10 @@ const CustomInput: React.FC<CustomInputProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#444',
+    borderWidth: 0.2,
+    borderColor: '#fff',
     borderRadius: 8,
-    backgroundColor: '#2a0000',
+    backgroundColor: COLORS.primary,
     padding: 8,
   },
   label: {

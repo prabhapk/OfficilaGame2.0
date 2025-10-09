@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
 import { useNavigation } from '@react-navigation/native';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from '../Constants/Theme';
 
 interface Props {
   openSheet: (event: GestureResponderEvent) => void;
@@ -49,7 +50,7 @@ const GameFooter: React.FC<Props> = ({
         marginVertical: Scale(5),
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: '#3e0d0d',
+        backgroundColor: COLORS.primary,
         paddingVertical: Scale(20),
       }}
     >
@@ -78,7 +79,7 @@ const GameFooter: React.FC<Props> = ({
         onPress={handlePayNow}
       >
         <LinearGradient
-          colors={['#FF4242', '#f6c976ff']}
+          colors={[COLORS.linearOne, COLORS.linearTwo]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={{

@@ -30,6 +30,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import Toast from 'react-native-toast-message';
 import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from '../Constants/Theme';
 
 const SignUpSetPassword = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -169,7 +170,7 @@ const SignUpSetPassword = ({ navigation }: any) => {
             style={[styles.buttonWrapper, { opacity: isFormValid ? 1 : 0.5 }]}
           >
             <LinearGradient
-              colors={['#FF4140', '#FFAD45']}
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.signInButton}
@@ -193,14 +194,14 @@ const createStyles = (Scale: any) =>
   StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.primary,
   },
   topImage: {
     width: '100%',
     height: Scale(260),
   },
   bottomContainer: {
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.primary,
     borderTopRightRadius: Scale(80),
     marginTop: -Scale(70),
     paddingBottom: Scale(30),

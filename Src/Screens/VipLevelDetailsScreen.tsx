@@ -27,6 +27,7 @@ import {
 import VipCard from '../Components/VipCard';
 import NewAppHeader from '../Components/NewAppHeader';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from '../Constants/Theme';
 const VipLevelDetailsScreen = ({navigation}: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -88,7 +89,7 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
     <TouchableOpacity
       style={[
         styles.tableRowContainer,
-        selectedVipIndex === index && {backgroundColor: 'red'}, // highlight
+        selectedVipIndex === index && {backgroundColor: COLORS.gameDetailColor}, // highlight
       ]}
       onPress={() => setSelectedVipIndex(index)}>
       {/* VIP Group */}
@@ -118,7 +119,7 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
   );
 
   return (
-    <View style={{flex: 1, backgroundColor: '#360400'}}>
+    <View style={{flex: 1, backgroundColor: COLORS.primary}}>
       <NewAppHeader
         leftIconPress={() => navigation.goBack()}
         centerText={'VIP'}
@@ -151,9 +152,11 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
         </View>
       </ScrollView>
       <View style={styles.fixedRechargeContainer}>
-        <TouchableOpacity style={styles.buttonWrapper}>
+        <TouchableOpacity 
+        onPress={() => navigation.navigate("WalletScreen")}
+        style={styles.buttonWrapper}>
           <LinearGradient
-            colors={['#FF4140', '#FFAD45']}
+            colors={[COLORS.linearOne,COLORS.linearTwo]}
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
             style={styles.signInButton}>  
@@ -222,7 +225,7 @@ const createStyles = (Scale: any) =>
   vipHeaderContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#812B2B',
+    backgroundColor: COLORS.tableTopColor,
     padding: Scale(10),
     borderTopRightRadius: Scale(10),
     borderTopLeftRadius: Scale(10),
@@ -237,11 +240,11 @@ const createStyles = (Scale: any) =>
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#540F0F',
+    backgroundColor: COLORS.primary,
     paddingVertical: Scale(8),
     paddingHorizontal: Scale(10),
-    borderBottomWidth: Scale(1),
-    borderColor: '#812B2B',
+    borderBottomWidth: Scale(0.2),
+    borderColor: COLORS.white,
   },
   vipColumn: {
     flex: 1,

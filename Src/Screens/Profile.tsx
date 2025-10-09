@@ -37,14 +37,19 @@ import {
   setFreshchatUser,
   openFreshchat,
 } from "../Utils/freshchat";
+import { COLORS } from "../Constants/Theme";
 
 const ProfileScreen = ({ navigation }: any) => {
-  const { isLoggedIn, mainWalletBalance, withdrawBalance } = useSelector(
+  const { isLoggedIn, mainWalletBalance, withdrawBalance, vipLevelDetails, totalDeposit } = useSelector(
     (state: RootState) => state.signInSlice
   );
   console.log("withdrawBalanceScreenProfile==>", mainWalletBalance);
 
   const totalBalance = mainWalletBalance + withdrawBalance;
+
+  const vipLevel = vipLevelDetails[0]?.level;
+  const vipLevelBonus = vipLevelDetails[0]?.bonus;
+  const vipLevelRecharge = vipLevelDetails[0]?.rechargeAmount;
   
   const dispatch = useDispatch();
   const [showLogoutButton, setShowLogoutButton] = useState(true);
@@ -154,7 +159,7 @@ const ProfileScreen = ({ navigation }: any) => {
             style={styles.loginWrapper}
           >
             <LinearGradient
-              colors={["#FF4140", "#FFAD45"]}
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={[styles.loginBox, styles.loginBoxRow]}
@@ -163,7 +168,7 @@ const ProfileScreen = ({ navigation }: any) => {
               <Entypo
                 name="chevron-right"
                 size={Scale(30)}
-                color="white"
+                color= {COLORS.primary}
                 style={styles.chevronIcon}
               />
             </LinearGradient>
@@ -174,8 +179,11 @@ const ProfileScreen = ({ navigation }: any) => {
 
         {/* Wallet Section */}
         <LinearGradient
-          colors={["#851701", "#8F4E01"]}
-          start={{ x: 0, y: 0 }}
+  
+          colors={[COLORS.linearOne, COLORS.linearTwo]}
+
+
+          start={{ x: 0, y: 0, }}
           end={{ x: 1, y: 0 }}
           style={styles.walletCard}
         >
@@ -226,7 +234,9 @@ const ProfileScreen = ({ navigation }: any) => {
           ].map((btn, idx) => (
             <LinearGradient
               key={idx}
-              colors={["#ED310F", "#F5AF1A"]}
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
+
+
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.actionButton}
@@ -268,8 +278,8 @@ const ProfileScreen = ({ navigation }: any) => {
                   style={styles.vipBadgeImage}
                 />
                 <View style={styles.vipTopRight}>
-                  <Text style={styles.vipText}>VIP 1</Text>
-                  <Text style={styles.vipText}>₹500 / ₹1000</Text>
+                  <Text style={styles.vipText}>VIP {vipLevel}</Text>
+                  <Text style={styles.vipText}>₹{totalDeposit ?totalDeposit : 0 } / ₹{vipLevelRecharge?vipLevelRecharge:0}</Text>
                 </View>
               </View>
               <View style={styles.vipProgressBackground}>
@@ -407,7 +417,7 @@ const createStyles = (Scale: any) =>
   StyleSheet.create({
     safeArea: {
       flex: 1,
-      backgroundColor: "#360400",
+      backgroundColor: COLORS.primary,
     },
     container: {
       padding: 16,
@@ -443,7 +453,7 @@ const createStyles = (Scale: any) =>
 
     /* ===== Wallet Card ===== */
     walletCard: {
-      backgroundColor: "#5a0000",
+      backgroundColor: COLORS.primary,
       borderRadius: 16,
       padding: 20,
       marginBottom: 16,
@@ -596,7 +606,7 @@ const createStyles = (Scale: any) =>
     /* ===== Inputs / Rows ===== */
     inputRow: {
       borderBottomWidth: 1,
-      borderBottomColor: "#944040",
+      borderBottomColor: "#fff",
       paddingVertical: 16,
       flexDirection: "row",
       justifyContent: "space-between",
@@ -622,8 +632,8 @@ const createStyles = (Scale: any) =>
     },
     logoutButton: {
       borderWidth: 2,
-      borderColor: "#ff5f5f",
-      backgroundColor: "#2e0b0b",
+      borderColor: "#fff",
+      backgroundColor: COLORS.primary,
       borderRadius: 999,
       paddingVertical: 15,
       paddingHorizontal: 32,
@@ -632,7 +642,7 @@ const createStyles = (Scale: any) =>
       marginVertical: 10,
     },
     logoutText: {
-      color: "#ff5f5f",
+      color: "#fff",
       fontSize: 16,
       fontWeight: "bold",
     },

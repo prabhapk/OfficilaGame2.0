@@ -147,19 +147,19 @@ const createStyles = (Scale: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#250f0fff',
+      backgroundColor: COLORS.primary,
     },
     scrollView: {
       flex: 1,
-      backgroundColor: '#250f0fff',
+      backgroundColor: COLORS.primary,
     },
     introSection: {
-      backgroundColor: '#360400',
+      backgroundColor: COLORS.primary,
       margin: Scale(20),
       padding: Scale(20),
       borderRadius: Scale(12),
       borderWidth: 1,
-      borderColor: '#ff5f5f',
+      borderColor: '#fff',
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
@@ -197,7 +197,7 @@ const createStyles = (Scale: any) =>
     },
     tableHeader: {
       flexDirection: 'row',
-      backgroundColor: '#5A1C1C',
+      backgroundColor: COLORS.tableTopColor,
     },
     tableHeaderCell: {
       flex: 1,
@@ -205,7 +205,7 @@ const createStyles = (Scale: any) =>
       paddingHorizontal: Scale(10),
       alignItems: 'center',
       borderRightWidth: 1,
-      borderRightColor: '#4A1515',
+      borderRightColor: COLORS.tableTopColor,
     },
     tableHeaderText: {
       fontSize: Scale(14),
@@ -248,7 +248,7 @@ const createStyles = (Scale: any) =>
       elevation: 3,
     },
     rulesHeader: {
-      backgroundColor: '#5A1C1C',
+      backgroundColor: COLORS.tableTopColor,
       paddingVertical: Scale(15),
       paddingHorizontal: Scale(20),
     },
@@ -258,10 +258,10 @@ const createStyles = (Scale: any) =>
       color: '#fff',
     },
     rulesContent: {
-      backgroundColor: '#360400',
+      backgroundColor: COLORS.primary,
       padding: Scale(20),
-      borderWidth: 1,
-      borderColor: '#ff5f5f',
+      borderWidth: 2,
+      borderColor: COLORS.tableTopColor,
     },
     ruleItem: {
       flexDirection: 'row',
@@ -270,7 +270,7 @@ const createStyles = (Scale: any) =>
     },
     bulletPoint: {
       fontSize: Scale(16),
-      color: '#ff5f5f',
+      color: '#fff',
       marginRight: Scale(10),
       marginTop: Scale(2),
     },

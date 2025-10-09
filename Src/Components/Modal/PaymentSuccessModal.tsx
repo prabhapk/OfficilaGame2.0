@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import { greenTick } from '../../../assets/assets';
 import { useContainerScale } from '../../hooks/useContainerScale';
+import { COLORS } from '../../Constants/Theme';
 
 type PaymentSuccessModalProps = {
   isVisible: boolean;
@@ -31,7 +32,7 @@ const PaymentSuccessModal: React.FC<PaymentSuccessModalProps> = ({
     >
       <View
         style={{
-          backgroundColor: '#360400',
+          backgroundColor: COLORS.primary,
           borderRadius: 10,
           padding: 20,
           marginBottom: 16,

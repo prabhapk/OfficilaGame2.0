@@ -14,6 +14,7 @@ import { useContainerScale } from "../hooks/useContainerScale";
 import { AppDispatch, RootState } from "../Redux/store";
 import { getWalletBalance } from "../Redux/Slice/signInSlice";
 import { useIsFocused } from "@react-navigation/native";
+import { COLORS } from "../Constants/Theme";
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -116,7 +117,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#250f0fff" }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
       <CustomLoader visible={loader} />
       <CustomHeader
         onMenuPress={openDrawerdd}

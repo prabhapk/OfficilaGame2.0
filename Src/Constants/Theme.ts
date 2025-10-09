@@ -1,9 +1,14 @@
 const COLORS = {
-  primary: '#3e0d0d',
+  primary: '#001F4F',
+  // primary: '#d5f0af',
   secondary: '#5A1C1C',
   white: '#fff',
   black: '#000',
-  // ...
+  linearOne:"#00B4DB",
+  linearTwo:"#001F4F",
+  tableSecondaryColor: '#142033',
+  tableTopColor: '#293d5c',
+  gameDetailColor: '#142238'
 };
 
 const Fonts = {
@@ -17,4 +22,6 @@ const Theme = {
 };
 
 export { COLORS, Fonts }; 
-export default Theme;     
+export default Theme;    
+
+// #250f0fff

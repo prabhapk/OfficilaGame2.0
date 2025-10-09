@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { close } from '../../../assets/assets';
 import { useContainerScale } from '../../hooks/useContainerScale';
+import { COLORS } from '../../Constants/Theme';
 
 type InsufficientBalanceModalProps = {
   isVisible: boolean;
@@ -41,7 +42,7 @@ const InsufficientBalanceModal: React.FC<InsufficientBalanceModalProps> = ({
 };
 const createStyles = (Scale: any) => StyleSheet.create({
   modalContainer: {
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.primary,
     borderRadius: Scale(10),
     padding: Scale(20),
     marginBottom: Scale(16),

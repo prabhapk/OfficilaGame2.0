@@ -69,11 +69,11 @@ import {
     container: {
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#362020',
+      backgroundColor: 'transparent',
     },
     inputContainer: {
-      backgroundColor: '#362020',
-      borderColor: '#FF4242',
+      backgroundColor: 'transparent',
+      borderColor: '#fff',
       borderWidth: Scale(2),
       borderRadius: Scale(4),
       height: Scale(35),

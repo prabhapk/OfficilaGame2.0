@@ -22,7 +22,9 @@ const initialValues: signInSliceState = {
   withdrawBalance: 1,
   walletBalanceLoader: false,
   resetPasswordLoader: false,
-  userId:0
+  userId:0,
+  vipLevelDetails:[],
+  totalDeposit:0
 }
 
 
@@ -319,6 +321,8 @@ export const signInSlice = createSlice({
       console.log("🔑 FULFILLED DEBUG: action.payload.token:", action.payload.token);
       console.log("🔑 FULFILLED DEBUG: action.payload.refreshToken:", action.payload.refreshToken);
       console.log("🔑 FULFILLED DEBUG: action.payload.user:", action.payload.user);
+      console.log("🔑 FULFILLED DEBUG: action.payload.user.vipLevelDetails:", action.payload.user.vipLevels);
+      
       
       state.token = action.payload.token;
       state.refreshAccessToken = action.payload.refreshToken;
@@ -326,6 +330,10 @@ export const signInSlice = createSlice({
       state.mobileNumber = action.payload.user.mobileNumber;
       state.mainWalletBalance = action.payload.user?.walletBalance?.rechargeBalance;
       state.withdrawBalance = action.payload.user?.walletBalance?.withdrawBalance;
+      state.vipLevelDetails = action.payload.user?.vipLevels;
+      state.totalDeposit= action.payload.user?.totalDeposit;
+  
+      
       
       // Ensure login state is properly set
       state.isLoggedIn = true;

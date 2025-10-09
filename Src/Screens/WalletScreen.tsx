@@ -16,9 +16,10 @@ import { formatToDecimal } from '../Utils/Common';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
 import { getWalletBalance } from '../Redux/Slice/signInSlice';
+import { COLORS } from '../Constants/Theme';
 const WalletScreenUI = ({navigation}: any) => {
   const [walletAmount, setWalletAmount] = useState(0);
-  const [selectedAmount, setSelectedAmount] = useState('');
+  const [selectedAmount, setSelectedAmount] = useState('500');
   const amounts = ['500', '1000', '2000', '5000', '10000', '20000', '50000', '300'];
   const [selectedRechargeOption, setSelectedRechargeOption] = useState<'option1' | 'option2' | null>(null);
   const { Scale, verticalScale } = useContainerScale();
@@ -26,7 +27,7 @@ const WalletScreenUI = ({navigation}: any) => {
   const dispatch = useDispatch();
   const {mainWalletBalance } = useSelector((state: RootState) => state.signInSlice);
   return (
-    <View style={{flex: 1, backgroundColor: '#360400'}}>
+    <View style={{flex: 1, backgroundColor: COLORS.primary}}>
       <NewAppHeader
           leftIconPress={() => navigation.goBack()}
           centerText={'Deposit'}
@@ -34,7 +35,7 @@ const WalletScreenUI = ({navigation}: any) => {
     <ScrollView style={styles.container}>
       {/* Wallet Header */}
       <LinearGradient
-        colors={['#FF4242', '#f6c976ff']}
+        colors={[COLORS.linearOne, COLORS.linearTwo]}
         style={styles.walletHeader}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}>
@@ -62,11 +63,7 @@ const WalletScreenUI = ({navigation}: any) => {
             />
           </TouchableOpacity>
         </View>
-        {/* <View style={styles.amountRow}>
-          <Text style={styles.amountText}>₹ 0</Text>
-          <Image source={refresh} style={styles.iconMedium} />
-        </View> */}
-     
+   
         <View style ={{}}>
         <LinearGradient
         colors={['#f5eceb', 'transparent']}
@@ -129,7 +126,7 @@ const WalletScreenUI = ({navigation}: any) => {
                 style={{ borderRadius: Scale(8), overflow: 'hidden' }}>
                 {isSelected ? (
                   <LinearGradient
-                    colors={['#FF4242', '#f6c976']}
+                    colors={[COLORS.linearOne, COLORS.linearTwo]}
                     // start={{ x: 0, y: 0 }}
                     // end={{ x: 1, y: 0 }}
                     style={styles.amountChip}>
@@ -153,7 +150,7 @@ const WalletScreenUI = ({navigation}: any) => {
     style={[
       styles.bankOptionView,
       {
-        borderColor: selectedRechargeOption === 'option1' ? '#FF4242' : 'grey',
+        borderColor: selectedRechargeOption === 'option1' ? COLORS.white : 'grey',
       },
     ]}>
     <View style={styles.optionContent}>
@@ -179,7 +176,7 @@ const WalletScreenUI = ({navigation}: any) => {
     style={[
       styles.bankOptionView,
       {
-        borderColor: selectedRechargeOption === 'option2' ? '#FF4242' : 'grey',
+        borderColor: selectedRechargeOption === 'option2' ? COLORS.white : 'grey',
       },
     ]}>
     <View style={styles.optionContent}>
@@ -223,7 +220,7 @@ const WalletScreenUI = ({navigation}: any) => {
     <View style={{marginBottom: Scale(10)}}>
       <TouchableOpacity style={styles.buttonWrapper}>
             <LinearGradient
-              colors={['#FF4140', '#FFAD45']}
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.signInButton}
@@ -240,7 +237,7 @@ const createStyles = (Scale: any) =>
   StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.primary,
     padding: Scale(10),
   },
   walletHeader: {
@@ -300,20 +297,23 @@ const createStyles = (Scale: any) =>
   },
   currentMethod: {
     marginTop: Scale(12),
-    color: '#fff',
-    fontWeight: '500',
+    color: COLORS.primary,
+    fontWeight: '600',
   },
   warningText: {
-    color: '#FFF',
+    color: COLORS.primary,
     fontSize: Scale(12),
     marginTop: Scale(4),
     width: Scale(300),
+    fontWeight: '600',
   },
   amountBox: {
-    backgroundColor: '#47231E',
+    backgroundColor: COLORS.primary,
     borderRadius: 10,
     padding: Scale(12),
     marginBottom: Scale(12),
+    borderWidth: 0.2,
+    borderColor: COLORS.white,
   },
   amountInput: {
     color: '#fff',
@@ -332,13 +332,15 @@ const createStyles = (Scale: any) =>
     gap: Scale(8),
   },
   amountChip: {
-    backgroundColor: '#4B3737',
+    backgroundColor: COLORS.tableTopColor,
     borderRadius: 8,
     paddingVertical: Scale(6),
     paddingHorizontal: Scale(16),
     marginBottom: Scale(8),
     width: Scale(85),
     marginTop: Scale(10),
+    borderWidth: 0.1,
+    borderColor: COLORS.white,
   },
   chipText: {
     color: '#fff',
@@ -357,10 +359,12 @@ const createStyles = (Scale: any) =>
     fontWeight: 'bold',
   },
   rechargeSection: {
-    backgroundColor: '#47231E',
+    backgroundColor: COLORS.primary,
     borderRadius: 10,
     padding: Scale(12),
     marginBottom: Scale(12),
+    borderWidth: 0.2,
+    borderColor: COLORS.white,
   },
   sectionTitle: {
     color: '#fff',
@@ -379,7 +383,7 @@ const createStyles = (Scale: any) =>
   bankOptionView: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#47231E',
+    backgroundColor: COLORS.primary,
     borderWidth: 1,
     borderRadius: 10,
     padding: Scale(10),
@@ -396,14 +400,16 @@ const createStyles = (Scale: any) =>
     fontWeight: '500',
   },
   attentionBox: {
-    backgroundColor: '#6E4B44',
+    backgroundColor: COLORS.primary,
     padding: Scale(10),
     borderRadius: 8,
     marginBottom: Scale(10),
+    borderWidth: 0.2,
+    borderColor: COLORS.white,
   },
   attentionTitle: {
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#FF6464',
     fontSize: Scale(16),
   },
   attentionText: {
@@ -413,10 +419,13 @@ const createStyles = (Scale: any) =>
     textAlign: 'justify',
   },
   redWarningBox: {
-    backgroundColor: '#5A1414',
+    backgroundColor: COLORS.primary,
     padding: Scale(10),
     borderRadius: 8,
     marginVertical: Scale(10),
+    borderWidth: 0.2,
+    borderColor: COLORS.white,
+    marginBottom: Scale(10),
   },
   redWarningText: {
     color: '#FF6464',
@@ -429,9 +438,9 @@ const createStyles = (Scale: any) =>
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#442727',
-    borderColor: '#FF4242',
-    borderWidth: 3,
+    backgroundColor: COLORS.primary,
+    borderColor: '#fff',
+    borderWidth: 1,
     borderRadius: Scale(12),
     height: Scale(48),
     paddingHorizontal: Scale(10),

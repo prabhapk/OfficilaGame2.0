@@ -53,7 +53,9 @@ export interface CommonSliceState {
     withdrawBalance?: number;
     walletBalanceLoader: boolean,
     resetPasswordLoader: boolean,
-    userId: number
+    userId: number,
+    vipLevelDetails: any,
+    totalDeposit: number,
   }
   export interface signUpSliceState {
     mobileNumber?: string;

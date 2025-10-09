@@ -225,7 +225,7 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
         
         {item.canReceive ? (
           <LinearGradient
-            colors={['#FF4242', '#f6c976']}
+            colors={[COLORS.linearOne, COLORS.linearTwo]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.receiveButton}
@@ -369,17 +369,17 @@ const createStyles = (Scale: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#250f0fff',
+      backgroundColor: COLORS.primary,
     },
     tabsContainer: {
       flexDirection: 'row',
-      backgroundColor: '#5A1C1C',
+      backgroundColor: COLORS.primary,
       paddingHorizontal: Scale(20),
       paddingVertical: Scale(15),
       alignItems: 'center',
       justifyContent: 'space-between',
       borderBottomWidth: 1,
-      borderBottomColor: '#ff5f5f',
+      borderBottomColor: '#fff',
     },
     tabsWrapper: {
       flexDirection: 'row',
@@ -391,19 +391,19 @@ const createStyles = (Scale: any) =>
     },
     tabText: {
       fontSize: Scale(16),
-      color: '#ff5f5f',
+      color: '#fff',
       fontWeight: '500',
       opacity: 0.6,
     },
     selectedTabText: {
-      color: '#ff5f5f',
+      color: '#fff',
       fontWeight: 'bold',
       opacity: 1,
     },
     tabUnderline: {
       width: '100%',
       height: Scale(3),
-      backgroundColor: '#ff5f5f',
+      backgroundColor: '#fff',
       marginTop: Scale(5),
     },
     filterButton: {
@@ -411,14 +411,14 @@ const createStyles = (Scale: any) =>
       alignItems: 'center',
       paddingHorizontal: Scale(15),
       paddingVertical: Scale(8),
-      backgroundColor: '#5A1C1C',
+      backgroundColor: COLORS.primary,
       borderRadius: Scale(20),
       borderWidth: 1,
-      borderColor: '#ff5f5f',
+      borderColor: '#fff',
     },
     filterText: {
       fontSize: Scale(14),
-      color: '#ff5f5f',
+      color: '#fff',
       marginRight: Scale(5),
     },
     filterIcon: {
@@ -431,13 +431,13 @@ const createStyles = (Scale: any) =>
       paddingTop: Scale(10),
     },
     rebateCard: {
-      backgroundColor: '#360400',
+      backgroundColor: COLORS.primary,
       borderRadius: Scale(12),
       padding: Scale(15),
       marginBottom: Scale(15),
-      borderWidth: 1,
-      borderColor: '#ff5f5f',
-      shadowColor: '#000',
+      borderWidth: 0.2,
+      borderColor: '#fff',
+      shadowColor: '#fff',
       shadowOffset: {
         width: 0,
         height: 2,
@@ -502,17 +502,17 @@ const createStyles = (Scale: any) =>
       fontWeight: 'bold',
     },
     disabledButton: {
-      backgroundColor: '#5A1C1C',
+      backgroundColor: COLORS.primary,
       paddingHorizontal: Scale(20),
       paddingVertical: Scale(10),
       borderRadius: Scale(8),
       alignItems: 'center',
       justifyContent: 'center',
-      borderWidth: 1,
-      borderColor: '#ff5f5f',
+      borderWidth: 0.1,
+      borderColor: '#fff',
     },
     disabledButtonText: {
-      color: '#ff5f5f',
+      color: '#fff',
       fontSize: Scale(14),
       fontWeight: 'bold',
       opacity: 0.6,
@@ -529,13 +529,13 @@ const createStyles = (Scale: any) =>
       zIndex: 1000,
     },
     filterModalContent: {
-      backgroundColor: '#5A1C1C',
+      backgroundColor: COLORS.primary,
       borderRadius: Scale(12),
       padding: Scale(20),
       width: '80%',
       maxWidth: Scale(300),
       borderWidth: 1,
-      borderColor: '#ff5f5f',
+      borderColor: '#fff',
     },
     filterModalTitle: {
       fontSize: Scale(18),
@@ -548,7 +548,7 @@ const createStyles = (Scale: any) =>
       paddingVertical: Scale(15),
       paddingHorizontal: Scale(10),
       borderBottomWidth: 1,
-      borderBottomColor: '#ff5f5f',
+      borderBottomColor: '#fff',
     },
     filterOptionText: {
       fontSize: Scale(16),
@@ -556,15 +556,15 @@ const createStyles = (Scale: any) =>
       textAlign: 'center',
     },
     closeFilterButton: {
-      backgroundColor: '#5A1C1C',
+      backgroundColor: COLORS.primary,
       paddingVertical: Scale(12),
       borderRadius: Scale(8),
       marginTop: Scale(20),
       borderWidth: 1,
-      borderColor: '#ff5f5f',
+      borderColor: '#fff',
     },
     closeFilterText: {
-      color: '#ff5f5f',
+      color: '#fff',
       fontSize: Scale(16),
       fontWeight: 'bold',
       textAlign: 'center',

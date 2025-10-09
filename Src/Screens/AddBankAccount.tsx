@@ -17,6 +17,7 @@ import { AddBankAccount, UpdateBankAccount, getBankAccounts, getMobileOtpAddAcco
 import { unwrapResult } from '@reduxjs/toolkit';
 import Toast from 'react-native-toast-message';
 import { ro } from 'react-native-paper-dates';
+import { COLORS } from '../Constants/Theme';
 
 const AddBankCardScreen = ({ navigation, route }: any) => {
   const AccountId= route?.params?.bankAccountId;
@@ -356,7 +357,7 @@ const AddBankCardScreen = ({ navigation, route }: any) => {
           }}
         >
           <LinearGradient
-            colors={['#FF4140', '#FFAD45']}
+            colors={[COLORS.linearOne, COLORS.linearTwo]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.signInButton}
@@ -376,7 +377,7 @@ const createStyles = (Scale: any) =>
   StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.primary,
   },
   content: {
     padding: 16,

@@ -71,9 +71,9 @@ const ResultTable: React.FC<ResultTableProps> = ({
           flexDirection: "row",
           alignItems: "center",
           paddingVertical: Scale(5),
-          backgroundColor: index % 2 === 0 ? "#540000" : "#5C1818",
+          backgroundColor: index % 2 === 0 ? COLORS.primary : COLORS.tableSecondaryColor,
           borderBottomWidth: 1,
-          borderColor: "#5C1818",
+          borderColor: COLORS.primary,
           paddingHorizontal: Scale(10),
         }}
       >
@@ -270,7 +270,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
             style={{
               flexDirection: "row",
               justifyContent: "space-around",
-              backgroundColor: "#360400",
+              backgroundColor: COLORS.primary,
             }}
           >
             {["ResultHistory", "MyOrders"].map((tab) => (
@@ -279,10 +279,10 @@ const ResultTable: React.FC<ResultTableProps> = ({
                 onPress={() => setOnTableSelect(tab)}
                 style={{
                   padding: Scale(10),
-                  backgroundColor: "#360400",
+                  backgroundColor: COLORS.primary,
                   borderBottomWidth: onTableSelect === tab ? Scale(5) : 0,
                   borderBottomColor:
-                    onTableSelect === tab ? "#ff5f5f" : "transparent",
+                    onTableSelect === tab ? "#fff" : "transparent",
                 }}
               >
                 <Text
@@ -306,7 +306,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  backgroundColor: "#812B2B",
+                  backgroundColor: COLORS.tableTopColor,
                   paddingVertical: Scale(5),
                   paddingHorizontal: Scale(10),
                 }}
@@ -360,7 +360,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
                     flexDirection: "row",
                     marginTop: Scale(10),
                     alignSelf: "center",
-                    backgroundColor: "#812B2B",
+                    backgroundColor: COLORS.tableTopColor,
                     width: "110%",
                     alignItems: "center",
                     justifyContent: "center",
@@ -372,12 +372,13 @@ const ResultTable: React.FC<ResultTableProps> = ({
                     style={{
                       borderRadius: Scale(10),
                       padding: Scale(10),
-                      borderColor: "#812B2B",
+                      borderColor: "#fff",
                       borderWidth: 1,
                       height: Scale(40),
                       textAlign: "center",
                       textAlignVertical: "center",
                       fontWeight: "bold",
+                      color: COLORS.white,
                     }}
                   >
                     Total {totalPage}
@@ -390,17 +391,21 @@ const ResultTable: React.FC<ResultTableProps> = ({
                       onPress={() => changePage(page)}
                       style={{
                         backgroundColor:
-                          tableCurrentPage === page ? "gold" : "#812B2B",
+                          tableCurrentPage === page ? COLORS.primary : "#fff",
                         borderRadius: Scale(10),
                         padding: Scale(10),
-                        borderColor: "#812B2B",
+                        borderColor: "#fff",
                         borderWidth: 1,
                         marginHorizontal: Scale(5),
                         alignItems: "center",
                         justifyContent: "center",
                       }}
                     >
-                      <Text>{page}</Text>
+                      <Text
+                      style={{
+                        color: tableCurrentPage === page ? COLORS.white : COLORS.primary,
+                      }}
+                      >{page}</Text>
                     </TouchableOpacity>
                   ))}
 
@@ -409,10 +414,10 @@ const ResultTable: React.FC<ResultTableProps> = ({
                     onPress={() => changePage(tableCurrentPage - 1)}
                     disabled={tableCurrentPage === 1}
                     style={{
-                      backgroundColor: "#5F1616",
+                      backgroundColor: COLORS.primary,
                       borderRadius: Scale(10),
                       padding: Scale(10),
-                      borderColor: "#812B2B",
+                      borderColor: "#fff",
                       borderWidth: 1,
                       height: Scale(40),
                       width: Scale(40),
@@ -433,10 +438,10 @@ const ResultTable: React.FC<ResultTableProps> = ({
                     onPress={() => changePage(tableCurrentPage + 1)}
                     disabled={tableCurrentPage === totalPage}
                     style={{
-                      backgroundColor: "#5F1616",
+                      backgroundColor: COLORS.primary,
                       borderRadius: Scale(10),
                       padding: Scale(10),
-                      borderColor: "#812B2B",
+                      borderColor: "#fff",
                       borderWidth: 1,
                       height: Scale(40),
                       width: Scale(40),

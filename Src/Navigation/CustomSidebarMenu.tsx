@@ -82,7 +82,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
               style={styles.loginButton}
             >
               <LinearGradient
-                colors={["#FF4140", "#FFAD45"]}
+                colors={[COLORS.linearOne, COLORS.linearTwo]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.registerGradient}
@@ -110,7 +110,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
 
       {isLoggedIn && (
         <LinearGradient
-          colors={["#FF4242", "#f6c976ff"]}
+          colors={[COLORS.linearOne, COLORS.linearTwo]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={{
@@ -121,7 +121,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
             zIndex: 100,
             marginHorizontal: 10,
             borderWidth: 1,
-            borderColor: "yellow",
+            borderColor: "#fff",
           }}
         >
           <View
@@ -195,9 +195,11 @@ const CustomSidebarMenu = ({ navigation }: any) => {
 
             <TouchableOpacity
               style={{
-                backgroundColor: "#FF4242",
+                backgroundColor: COLORS.primary,
                 padding: 10,
-                borderRadius: 40,
+                borderRadius: Scale(20),
+                borderWidth: 0.1,
+                borderColor: "#fff",
               }}
             >
               <Text

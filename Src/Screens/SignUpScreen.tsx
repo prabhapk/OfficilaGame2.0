@@ -36,6 +36,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import Toast from 'react-native-toast-message';
 import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from "../Constants/Theme";
 const SignUpScreen = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -269,7 +270,7 @@ const SignUpScreen = ({ navigation }: any) => {
                   ]}
                 >
                   {isEighteenPlus && (
-                    <Ionicons name="checkmark" size={14} color="#fff" />
+                    <Ionicons name="checkmark" size={14} color={COLORS.primary} />
                   )}
                 </View>
               </TouchableOpacity>
@@ -289,7 +290,7 @@ const SignUpScreen = ({ navigation }: any) => {
               >
                 <View style={[styles.circle, isNotify && styles.checkedCircle]}>
                   {isNotify && (
-                    <Ionicons name="checkmark" size={14} color="#fff" />
+                    <Ionicons name="checkmark" size={14} color={COLORS.primary} />
                   )}
                 </View>
               </TouchableOpacity>
@@ -313,7 +314,7 @@ const SignUpScreen = ({ navigation }: any) => {
             style={[styles.buttonWrapper, { opacity: isFormValid ? 1 : 0.5 }]}
           >
             <LinearGradient
-              colors={['#FF4140', '#FFAD45']}
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.signInButton}
@@ -347,14 +348,14 @@ const createStyles = (Scale: any) =>
   StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.primary,
   },
   topImage: {
     width: '100%',
     height: Scale(260),
   },
   bottomContainer: {
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.primary,
     borderTopRightRadius: Scale(80),
     marginTop: -Scale(70),
     paddingBottom: Scale(30),
@@ -377,13 +378,13 @@ const createStyles = (Scale: any) =>
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#2e0b0b',
+    backgroundColor: COLORS.primary,
     borderRadius: 999,
     marginHorizontal: Scale(20),
     marginTop: Scale(40),
     padding: Scale(4),
     borderWidth: 1,
-    borderColor: '#ff5f5f',
+    borderColor: COLORS.primary,
   },
   tab: {
     flex: 1,
@@ -393,7 +394,7 @@ const createStyles = (Scale: any) =>
   },
   activeTab: {
     backgroundColor: '#fff',
-    borderColor: '#ff5f5f',
+    borderColor: COLORS.primary,
     borderWidth: 1,
   },
   tabText: {
@@ -401,10 +402,10 @@ const createStyles = (Scale: any) =>
     fontWeight: 'bold',
   },
   activeText: {
-    color: '#ff5f5f',
+    color: COLORS.primary,
   },
   inactiveText: {
-    color: '#ff5f5f',
+    color: '#fff',
     opacity: 0.6,
   },
   inputWrapper: {
@@ -467,7 +468,7 @@ const createStyles = (Scale: any) =>
     marginTop: Scale(30),
   },
   siginText: {
-    color: '#ff5f5f',
+    color: '#fff',
     fontSize: Scale(16),
     fontWeight: 'bold',
     textDecorationLine: 'underline',
@@ -491,13 +492,13 @@ const createStyles = (Scale: any) =>
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#FF5F5F',
+    borderColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
   },
   checkedCircle: {
-    backgroundColor: '#FF5F5F',
+    backgroundColor: '#fff',
   },
   label: {
     fontSize: Scale(16),

@@ -88,7 +88,7 @@ const BaseURL = "http://8.148.148.185";
          <View
          style={{
            marginTop: 10,
-           backgroundColor: "#5C1818",
+           backgroundColor: COLORS.primary,
            padding: 10,
          }}
        >
@@ -137,7 +137,7 @@ const BaseURL = "http://8.148.148.185";
       <View
         style={{
           marginTop: 10,
-          backgroundColor: "#5C1818",
+          backgroundColor: COLORS.primary,
           padding: 10,
         }}
       >
@@ -185,12 +185,14 @@ const BaseURL = "http://8.148.148.185";
               });
             }}
             style={{
-              backgroundColor: "#61201bff",
+              backgroundColor: COLORS.primary,
               padding: 10,
               borderRadius: 20,
               alignItems: "center",
               justifyContent: "center",
               paddingHorizontal: 20,
+              borderColor: COLORS.white,
+              borderWidth: 1,
             }}
           >
             <Text style={{ fontSize: 16, color: "white" }}>Play Now</Text>
@@ -201,7 +203,7 @@ const BaseURL = "http://8.148.148.185";
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            backgroundColor: "#3C0D0D",
+            backgroundColor: COLORS.tableTopColor,
             padding: 10,
             marginTop: 10,
           }}

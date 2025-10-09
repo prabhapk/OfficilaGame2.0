@@ -319,7 +319,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
             </View>
 
             <LinearGradient
-              colors={["#FF4242", "#f6c976ff"]}
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={{
@@ -495,7 +495,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
             </View>
 
             <LinearGradient
-              colors={["#FF4242", "#f6c976ff"]}
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={{
@@ -736,7 +736,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
             </View>
 
             <LinearGradient
-              colors={["#FF4242", "#f6c976ff"]}
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={{
@@ -929,7 +929,7 @@ const createStyles = (Scale: any) =>
     },
     card: {
       marginTop: Scale(20),
-      backgroundColor: "#362020",
+      backgroundColor: COLORS.gameDetailColor,
       width: "100%",
       borderRadius: 10,
       shadowColor: "#000",
@@ -960,7 +960,7 @@ const createStyles = (Scale: any) =>
       flexDirection: "row",
       justifyContent: "space-between",
       marginTop: 10,
-      backgroundColor: "#5A1C1C",
+      backgroundColor: COLORS.gameDetailColor,
       overflow: "hidden",
     },
     showCountContainer: {
@@ -1019,9 +1019,11 @@ const createStyles = (Scale: any) =>
       top: 1,
     },
     howtoplayBtn: {
-      backgroundColor: COLORS.primary,
+      backgroundColor: COLORS.gameDetailColor,
       marginHorizontal: 10,
       borderRadius: 5,
+      borderWidth: 0.1,
+      borderColor: COLORS.white,
     },
     howtoPlayTxt: {
       fontSize: 14,

@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import { close } from '../../../assets/assets';
 import { useContainerScale } from '../../hooks/useContainerScale';
+import { COLORS } from '../../Constants/Theme';
 
 type WalletInfoModalProps = {
   isVisible: boolean;
@@ -29,7 +30,7 @@ const WalletInfoModal: React.FC<WalletInfoModalProps> = ({
     >
       <View
         style={{
-          backgroundColor: '#360400',
+          backgroundColor: COLORS.white,
           borderRadius: 10,
           padding: 20,
           marginBottom: 16,
@@ -43,7 +44,7 @@ const WalletInfoModal: React.FC<WalletInfoModalProps> = ({
           }}>
           <Text
             style={{
-              color: 'white',
+              color: COLORS.primary,
               fontWeight: 'bold',
               fontSize: Scale(16),
             }}>
@@ -63,7 +64,7 @@ const WalletInfoModal: React.FC<WalletInfoModalProps> = ({
 
         <Text
           style={{
-            color: 'white',
+            color: COLORS.primary,
             fontWeight: '500',
             fontSize: Scale(14),
             lineHeight: Scale(22),

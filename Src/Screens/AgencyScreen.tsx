@@ -181,7 +181,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
           </View>
           
           <LinearGradient
-            colors={['#FF4242', '#f6c976']}
+            colors={[COLORS.linearOne, COLORS.linearTwo]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.invitationLinkButton}
@@ -246,21 +246,21 @@ const createStyles = (Scale: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#250f0fff',
+      backgroundColor: COLORS.primary,
     },
     scrollView: {
       flex: 1,
-      backgroundColor: '#250f0fff',
+      backgroundColor: COLORS.primary,
     },
     profileCard: {
-      backgroundColor: '#360400',
+      backgroundColor: COLORS.primary,
       margin: Scale(20),
       borderRadius: Scale(16),
       padding: Scale(20),
       flexDirection: 'row',
       alignItems: 'center',
       borderWidth: 1,
-      borderColor: '#ff5f5f',
+      borderColor: '#fff',
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
@@ -319,11 +319,11 @@ const createStyles = (Scale: any) =>
     statsContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      backgroundColor: '#360400',
+      backgroundColor: COLORS.primary,
       borderRadius: Scale(12),
       padding: Scale(20),
       borderWidth: 1,
-      borderColor: '#ff5f5f',
+      borderColor: '#fff',
     },
     statItem: {
       alignItems: 'center',
@@ -357,12 +357,12 @@ const createStyles = (Scale: any) =>
     },
     monthStatItem: {
       flex: 1,
-      backgroundColor: '#360400',
+      backgroundColor: COLORS.primary,
       borderRadius: Scale(12),
       padding: Scale(15),
       marginHorizontal: Scale(5),
       borderWidth: 1,
-      borderColor: '#ff5f5f',
+      borderColor: '#fff',
     },
     monthStatHeader: {
       flexDirection: 'row',
@@ -426,16 +426,16 @@ const createStyles = (Scale: any) =>
       color: '#fff',
     },
     resetButton: {
-      backgroundColor: '#5A1C1C',
+      backgroundColor: COLORS.primary,
       paddingHorizontal: Scale(12),
       paddingVertical: Scale(6),
       borderRadius: Scale(16),
       borderWidth: 1,
-      borderColor: '#ff5f5f',
+      borderColor: '#fff',
     },
     resetButtonText: {
       fontSize: Scale(12),
-      color: '#ff5f5f',
+      color: '#fff',
       fontWeight: '500',
     },
     invitationCodeContainer: {
@@ -445,9 +445,9 @@ const createStyles = (Scale: any) =>
     },
     invitationCodeBox: {
       flex: 1,
-      backgroundColor: '#FFD700',
+      backgroundColor: COLORS.gameDetailColor,
       borderWidth: 2,
-      borderColor: '#9C27B0',
+      borderColor: '#fff',
       borderStyle: 'dashed',
       borderRadius: Scale(12),
       padding: Scale(15),
@@ -456,7 +456,7 @@ const createStyles = (Scale: any) =>
     invitationCodeText: {
       fontSize: Scale(20),
       fontWeight: 'bold',
-      color: '#8B4513',
+      color: '#fff',
       marginBottom: Scale(4),
     },
     invitationCodeLabel: {
@@ -464,15 +464,17 @@ const createStyles = (Scale: any) =>
       color: '#fff',
     },
     copyButton: {
-      backgroundColor: '#FFD700',
+      backgroundColor: COLORS.primary,
       paddingHorizontal: Scale(20),
       paddingVertical: Scale(12),
       borderRadius: Scale(8),
+      borderWidth: 1,
+      borderColor: '#fff',
     },
     copyButtonText: {
       fontSize: Scale(14),
       fontWeight: 'bold',
-      color: '#333',
+      color: '#fff',
     },
     invitationLinkButton: {
       borderRadius: Scale(12),
@@ -496,12 +498,12 @@ const createStyles = (Scale: any) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: '#360400',
+      backgroundColor: COLORS.primary,
       padding: Scale(20),
       borderRadius: Scale(12),
       marginBottom: Scale(12),
-      borderWidth: 1,
-      borderColor: '#ff5f5f',
+      borderWidth: 0.5,
+      borderColor: '#fff',
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
@@ -537,7 +539,7 @@ const createStyles = (Scale: any) =>
     },
     navigationArrow: {
       fontSize: Scale(20),
-      color: '#ff5f5f',
+      color: '#fff',
       fontWeight: 'bold',
     },
   });

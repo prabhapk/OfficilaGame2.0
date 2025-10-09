@@ -101,7 +101,7 @@ const ResultScreen = ({ navigation }: any) => {
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: "#560303" }}
+      style={{ flex: 1, backgroundColor: COLORS.primary }}
       stickyHeaderIndices={[0]}
       nestedScrollEnabled={true}
       keyboardShouldPersistTaps="handled"
@@ -158,11 +158,13 @@ const ResultScreen = ({ navigation }: any) => {
                   });
                 }}
                 style={{
-                  backgroundColor: "#360400",
+                  backgroundColor: COLORS.primary,
                   padding: 10,
                   borderRadius: 5,
                   alignItems: "center",
                   justifyContent: "center",
+                  borderColor: '#fff',
+                  borderWidth: 1,
                 }}
               >
                 <Text style={{ fontSize: 16, color: "white" }}>View All</Text>
@@ -263,7 +265,7 @@ const createStyles = (Scale: any) =>
     },
     refImage: { width: Scale(30), height: Scale(30) },
     headrrcontainer: {
-      backgroundColor: "#3C0D0D", // Dark maroon
+      backgroundColor: COLORS.primary, // Dark maroon
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",

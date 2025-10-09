@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { HeaderButton } from '../types'
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from "../Constants/Theme";
 interface Props {
   buttonList: HeaderButton[]
   onButtonPressed: (button: HeaderButton) => void
@@ -57,7 +58,7 @@ const HeaderButtonList: React.FC<Props> = ({
         <View key={"HeaderButton" + category.id}>
           {isSelected ? (
             <LinearGradient
-              colors={['#FF4242', '#f6c976']}
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
               style={styles.gradientWrapper}
             >
               <TouchableOpacity

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView, Text } from 'react-native';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from '../Constants/Theme';
 
 interface TabItem {
   id: number | string;
@@ -30,7 +31,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, index, onIndexChange, sty
   }, [index, tabLayouts]);
 
   return (
-    <View style={[{ backgroundColor: '#481616', }, style]}>
+    <View style={[{ backgroundColor: COLORS.primary, }, style]}>
       <ScrollView
         ref={scrollRef}
         horizontal

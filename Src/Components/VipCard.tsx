@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from '../Constants/Theme';
 
 type VipCardProps = {
   headerText: string;
@@ -15,7 +16,7 @@ const VipCard = ({headerText, bottomText, badgeImage}: VipCardProps) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#851701', '#360400']}
+        colors={[COLORS.linearOne, COLORS.linearTwo]}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
         style={styles.walletCard}>

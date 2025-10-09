@@ -84,7 +84,7 @@ const GameHeader: React.FC<Props> = ({
   return (
     <View style={styles.mainContainer}>
       <LinearGradient
-        colors={['#FF4242', '#f6c976ff']}
+        colors={[COLORS.linearOne, COLORS.linearTwo]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.button}>
@@ -133,8 +133,8 @@ const GameHeader: React.FC<Props> = ({
           </View>
         </View>
         <View style={{
-          marginTop: Scale(30), width: "90%", backgroundColor: COLORS.secondary,
-          borderRadius: 10, padding: Scale(10), zIndex: 100,
+          marginTop: Scale(30), width: "90%", backgroundColor: COLORS.gameDetailColor,
+          borderRadius: 10, padding: Scale(10), zIndex: 100, borderWidth: 0.1, borderColor: COLORS.white,
         }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10, marginTop: Scale(10) }}>
             <View>
@@ -155,14 +155,14 @@ const GameHeader: React.FC<Props> = ({
             <TouchableOpacity
             onPress={onPressWithdraw}
               style={{
-                borderColor: "#ff493a", borderWidth: 1, borderRadius: 30, paddingVertical: Scale(10),
+                borderColor: "#fff", borderWidth: 1, borderRadius: 30, paddingVertical: Scale(10),
                 paddingHorizontal: Scale(20), marginRight: Scale(10)
               }}
 
             >
               <Text
                 style={{
-                  color: '#ff493a',
+                  color: '#fff',
                   fontWeight: 'bold',
                   textAlign: 'center',
                   fontSize: Scale(14),
@@ -172,7 +172,7 @@ const GameHeader: React.FC<Props> = ({
             </TouchableOpacity>
             <LinearGradient
               colors={[
-                '#FF4242', '#f6c976ff'
+                COLORS.linearOne, COLORS.linearTwo
               ]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}

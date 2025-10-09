@@ -15,14 +15,16 @@ const CommonQuickGuess: React.FC<Props> = ({ innerText, onPress }) => {
       <TouchableOpacity
         onPress={onPress}
         style={{
-          backgroundColor: COLORS.secondary,
-          borderRadius: 5,
+          backgroundColor: COLORS.gameDetailColor,
+          borderRadius: 10,
           paddingVertical: Scale(10),
           paddingHorizontal: Scale(20),
           // elevation: 2,
           marginTop: Scale(5),
           marginBottom: Scale(5),
           bottom: 5,
+          borderWidth: 0.1,
+          borderColor: COLORS.white,
         }}>
         <Text
           style={{

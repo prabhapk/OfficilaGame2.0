@@ -594,8 +594,8 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     return (
       <LinearGradient
         colors={[
-          selectedOption === item.name ? "#FF4242" : COLORS.secondary, // fallback color
-          selectedOption === item.name ? "#f6c976ff" : COLORS.secondary,
+          selectedOption === item.name ? COLORS.linearOne : COLORS.gameDetailColor, // fallback color
+          selectedOption === item.name ? COLORS.linearTwo : COLORS.gameDetailColor,
         ]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -884,7 +884,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
       >
         <View
           style={{
-            backgroundColor: "#3e0d0d",
+            backgroundColor: COLORS.primary,
             height: Scale(80),
             elevation: 10,
           }}
@@ -917,7 +917,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 const createStyles = (Scale: any) =>
   StyleSheet.create({
     mainContainer: {
-      backgroundColor: "#3e0d0d",
+      backgroundColor: COLORS.primary,
       flex: 1,
       marginBottom: Scale(0),
     },
@@ -930,7 +930,7 @@ const createStyles = (Scale: any) =>
     },
     card: {
       marginTop: Scale(20),
-      backgroundColor: "#5A1C1C",
+      backgroundColor: COLORS.primary,
       width: "100%",
       borderRadius: 10,
       shadowColor: "#000",
@@ -953,7 +953,7 @@ const createStyles = (Scale: any) =>
     },
     renderDataView: {
       padding: 10,
-      backgroundColor: "#3e0d0d",
+      backgroundColor: COLORS.primary,
       flex: 1,
       borderRadius: 10,
     },
@@ -1027,6 +1027,8 @@ const createStyles = (Scale: any) =>
       justifyContent: "center",
       marginHorizontal: 5,
       height: Scale(100),
+      borderWidth: 1,
+      borderColor: COLORS.primary,
     },
     headerImg: { width: Scale(30), height: Scale(30) },
   });

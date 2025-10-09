@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllTransactionsData, getTransferData, getWinsData, getBetsData, getWalletData, getWithdrawalsData, getVipsData } from '../Redux/Slice/TransactionSlice';
 import { RootState } from '../Redux/store';
+import { COLORS } from '../Constants/Theme';
 
 const Transactions = ({navigation}: any) => {
   const dispatch = useDispatch();
@@ -224,7 +225,7 @@ const {
 
   
   return (
-    <View style={{flex: 1, backgroundColor: '#3E0E0D'}}>
+    <View style={{flex: 1, backgroundColor: COLORS.primary}}>
       <NewAppHeader
           leftIconPress={() => navigation.goBack()}
           rightIconPress={() => navigation.navigate('SignUpScreen')}
@@ -282,12 +283,14 @@ const styles = StyleSheet.create({
   dateButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FF4140',
+    backgroundColor: COLORS.primary,
     padding: 12,
     borderRadius: 10,
     justifyContent: 'space-between',
     marginHorizontal: 20,
     marginVertical: 10,
+    borderWidth: 1,
+    borderColor: COLORS.white,
   },
   dateText: {
     color: '#fff',

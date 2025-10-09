@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
 import { betIconCard } from '../../assets/assets';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from '../Constants/Theme';
 interface Props {
     betAmount: number;
     beforeBalance: number;
@@ -67,10 +68,10 @@ const BetsCard : React.FC<Props> = (
 const createStyles = (Scale: any) =>
   StyleSheet.create({
     cardContainer: {
-      backgroundColor: '#442727',
+      backgroundColor: COLORS.primary,
       borderRadius: Scale(10),
-      borderWidth: 1,
-      borderColor: '#442727',
+      borderWidth: 0.2,
+      borderColor: COLORS.white,
       padding: Scale(12),
       marginVertical: Scale(8),
       marginHorizontal: Scale(10),
@@ -99,7 +100,7 @@ const createStyles = (Scale: any) =>
     amountText: {
       fontSize: Scale(20),
       fontWeight: 'bold',
-      color: '#FF4C4C',
+      color: 'red',
     },
     infoRow: {
       flexDirection: 'row',

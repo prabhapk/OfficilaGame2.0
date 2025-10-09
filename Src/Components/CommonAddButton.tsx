@@ -19,7 +19,7 @@ const CommonAddButton: React.FC<Props> = ({ innerText, onPress, opacity, isDisab
     <View>
       <TouchableOpacity
         onPress={onPress}
-        style={[styles.btnContainer, customStyle, {backgroundColor:COLORS.secondary, opacity }]}
+        style={[styles.btnContainer, customStyle, {backgroundColor:COLORS.gameDetailColor, opacity }]}
         disabled={isDisabled}
       >
         <Text
@@ -37,7 +37,6 @@ export default CommonAddButton
 const createStyles = (Scale: any) =>
   StyleSheet.create({
   btnContainer: {
-    
     // backgroundColor: isDisabled ? '#D9D9D9' : '#9800F5',
     borderRadius: 5,
     paddingVertical: Scale(8),
@@ -46,6 +45,8 @@ const createStyles = (Scale: any) =>
     marginTop: Scale(5),
     marginBottom: Scale(5),
     bottom: 5,
+    borderWidth: 1,
+    borderColor: COLORS.white,
 
   },
   buttonTxt: {
