@@ -8,7 +8,10 @@ const COLORS = {
   linearTwo:"#001F4F",
   tableSecondaryColor: '#142033',
   tableTopColor: '#293d5c',
-  gameDetailColor: '#142238'
+  gameDetailColor: '#142238',
+  buttonTextColor1: '#fff',
+  buttonTextColor2: '#fff',
+  primaryTextColor: '#001F4F',
 };
 
 const Fonts = {

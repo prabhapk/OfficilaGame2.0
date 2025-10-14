@@ -273,7 +273,10 @@ const CustomSidebarMenu = ({ navigation }: any) => {
         />
       </TouchableOpacity>
 
-      <TouchableOpacity style={{ alignItems: "center" }}>
+      <TouchableOpacity 
+        style={{ alignItems: "center" }}
+        onPress={() => navigation.navigate("Promotions")}
+      >
         <Image
           source={promotions}
           style={{ width: "93%", height: Scale(110) }}

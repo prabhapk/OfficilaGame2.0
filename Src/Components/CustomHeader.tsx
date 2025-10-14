@@ -58,7 +58,7 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
               style={{
                 fontSize: Scale(20),
                 fontWeight: "bold",
-                color: "white",
+                color:COLORS.buttonTextColor1,
               }}
             >
               ₹ {formatToDecimal(totalBalance)}
@@ -76,7 +76,7 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
         ) : (
           <>
             <TouchableOpacity onPress={onLoginPress} style={styles.loginButton}>
-              <Text style={{ color: "#fff" }}>Login</Text>
+              <Text style={{ color: COLORS.buttonTextColor1 }}>Login</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -89,7 +89,7 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
                 end={{ x: 1, y: 0 }}
                 style={styles.registerGradient}
               >
-                <Text style={styles.registerText}>REGISTER</Text>
+                <Text style={[styles.registerText, { color: COLORS.buttonTextColor2 }]}>REGISTER</Text>
               </LinearGradient>
             </TouchableOpacity>
           </>
@@ -138,7 +138,7 @@ const createStyles = (Scale: any) =>
 
     registerText: {
       fontSize: 12,
-      color: "#fff",
+      color: COLORS.buttonTextColor1,
       fontWeight: "600",
     },
   });

@@ -26,6 +26,7 @@ import RebateScreen from "../Screens/RebateScreen";
 import AgencyScreen from "../Screens/AgencyScreen";
 import InvitationRulesScreen from "../Screens/InvitationRulesScreen";
 import HomeScreen from "../Screens/HomeScreen";
+import Promotions from "../Screens/Promotions";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +57,7 @@ function MainNavigation() {
         RebateScreen: "rebate",
         AgencyScreen: "agency",
         InvitationRulesScreen: "invitation-rules",
+        Promotions: "promotions",
       },
     },
   };
@@ -128,6 +130,13 @@ function MainNavigation() {
         <Stack.Screen
           name="InvitationRulesScreen"
           component={InvitationRulesScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Promotions"
+          component={Promotions}
           options={{
             headerShown: false,
           }}

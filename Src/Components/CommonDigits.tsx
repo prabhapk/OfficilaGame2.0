@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
 import { useContainerScale } from "../hooks/useContainerScale";
+import { COLORS } from "../Constants/Theme";
 interface Props {
   data: any;
   onPress3Digits: () => void;
@@ -91,7 +92,7 @@ const createStyles = (Scale: any) =>
       resizeMode: "stretch",
       position: "absolute",
     },
-    digitTitle: { fontSize: 12, color: "#350e0eff", fontWeight: "600" },
+    digitTitle: { fontSize: 12, color: COLORS.primaryTextColor, fontWeight: "600" },
     win_priceText: {
       marginLeft: 15,
       fontSize: 16,
