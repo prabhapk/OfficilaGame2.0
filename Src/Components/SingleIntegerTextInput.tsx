@@ -86,12 +86,11 @@ import {
       fontSize: Scale(16),
       fontWeight: 'bold',
       color: 'white',
-      fontFamily: 'Inter',
       height: Scale(40),
       textAlign: 'center',
       textAlignVertical: 'center',
       paddingHorizontal: 0, // Ensures text does not shift
-      width:Scale(40),
+      // width:Scale(40),
       outlineWidth: 0,
     },
     focusedContainer: {
