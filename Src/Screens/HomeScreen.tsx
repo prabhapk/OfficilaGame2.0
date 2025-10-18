@@ -1,6 +1,6 @@
 import React, { use, useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { bannerLuna1, bannerLuna2 } from "../../assets/assets";
+import { annaiBanner, bannerLuna1, bannerLuna2,annaiBanner1 } from "../../assets/assets";
 import CustomHeader from "../Components/CustomHeader";
 import CommonBanner from "../Components/CommonBanner";
 import { HomeScreenFlatlist } from "../Constants/CommonFlatlist";
@@ -27,8 +27,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [loader, setLoader] = useState(false);
   const banners = [
-    { id: 1, name: bannerLuna1 },
-    { id: 2, name: bannerLuna2 },
+    { id: 1, name: annaiBanner },
+    { id: 2, name: annaiBanner1 },
   ];
 
   const { Scale, verticalScale } = useContainerScale();

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Demo",
-    "slug": "Demo",
+    "name": "Annai Lottery",
+    "slug": "annai-lottery",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,9 +27,9 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "demo",
+    "scheme": "annai-lottery",
     "linking": {
-      "prefixes": ["http://localhost:8081", "demo://"]
+      "prefixes": ["http://localhost:8081", "annai-lottery://"]
     },
     "extra": {
       "eas": {

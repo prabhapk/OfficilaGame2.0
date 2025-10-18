@@ -149,3 +149,6 @@ export const promotionBanner1 = require('./Promotions/promotionBanner1.jpg')
 export const promotionBanner2 = require('./Promotions/promotionBanner2.jpg')
 export const promotionBanner3 = require('./Promotions/promotionBanner3.jpg')
 export const promotionBanner4 = require('./Promotions/promotionBanner4.jpg')
+
+export const annaiBanner = require('./Home/annaiBanner.png')
+export const annaiBanner1 = require('./Home/annaiBanner1.png')

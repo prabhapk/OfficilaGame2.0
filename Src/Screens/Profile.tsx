@@ -112,8 +112,8 @@ const ProfileScreen = ({ navigation }: any) => {
     try {
       // Pass real user details here
       await setFreshchatUser({
-        name: "Demo User",
-        email: "demo@example.com",
+        name: "Annai Lottery User",
+        email: "user@annailottery.com",
         phoneCountryCode: "+91",
         phone: "9876543210",
         externalId: "user-123",
