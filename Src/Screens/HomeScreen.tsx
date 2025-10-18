@@ -1,8 +1,9 @@
 import React, { use, useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Platform } from "react-native";
 import { annaiBanner, bannerLuna1, bannerLuna2,annaiBanner1 } from "../../assets/assets";
 import CustomHeader from "../Components/CustomHeader";
 import CommonBanner from "../Components/CommonBanner";
+import DownloadBanner from "../Components/DownloadBanner";
 import { HomeScreenFlatlist } from "../Constants/CommonFlatlist";
 import HomeScreenGameHeaders from "../Components/HomeScreenGameHeaders";
 import CasinoScreen from "./CasinoScreen";
@@ -128,6 +129,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           navigation.navigate("SignUpScreen");
         }}
       />
+      
+      {/* Download Banner - Only show on web */}
+      <DownloadBanner />
+      
       <ScrollView
         ref={scrollViewRef}
         style={styles.container}

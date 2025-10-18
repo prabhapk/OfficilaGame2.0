@@ -368,7 +368,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 setCount={(value) => dispatch(setSingleACount(value))}
                 onHide={() => dispatch(setSingleDigitA(""))}
                 minValue={1}
-                maxValue={10}
+                maxValue={999}
               />
             )}
             <CommonAddButton
@@ -412,7 +412,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 setCount={(value) => dispatch(setSingleBCount(value))}
                 onHide={() => dispatch(setSingleDigitB(""))} // Hide only B
                 minValue={1}
-                maxValue={10}
+                maxValue={999}
               />
             )}
             <CommonAddButton
@@ -456,7 +456,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 setCount={(value) => dispatch(setSingleCCount(value))}
                 onHide={() => dispatch(setSingleDigitC(""))} // Hide only C
                 minValue={1}
-                maxValue={10}
+                maxValue={999}
               />
             )}
             <CommonAddButton
@@ -563,7 +563,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                     dispatch(setDoubleDigitB1(""));
                   }}
                   minValue={1}
-                  maxValue={10}
+                  maxValue={999}
                 />
               </View>
             )}
@@ -628,7 +628,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                     dispatch(setDoubleDigitC1(""));
                   }}
                   minValue={1}
-                  maxValue={10}
+                  maxValue={999}
                 />
               </View>
             )}
@@ -693,7 +693,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                     dispatch(setDoubleDigitC2(""));
                   }}
                   minValue={1}
-                  maxValue={10}
+                  maxValue={999}
                 />
               </View>
             )}
@@ -839,7 +839,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                       dispatch(setThreeDigitC(""));
                     }}
                     minValue={1}
-                    maxValue={10}
+                    maxValue={999}
                   />
                 )}
             </View>

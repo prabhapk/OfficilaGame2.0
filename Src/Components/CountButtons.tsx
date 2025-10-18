@@ -46,6 +46,8 @@ const CountButtons: React.FC<CountButtonsProps> = ({ count, setCount, onHide, mi
         onChangeText={handleTextChange}
         keyboardType="numeric"
         textAlign="center"
+        maxLength={3} 
+        selectTextOnFocus={true} 
       />
       <TouchableOpacity style={styles.button} onPress={handleIncrease}>
         <Text style={styles.symbol}>+</Text>
@@ -60,10 +62,12 @@ const createStyles = (Scale: any) =>
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 30,
-    paddingHorizontal: 2,
+    paddingHorizontal: 4, // Increased padding for better spacing
     height: 40,
     marginLeft: 20,
     backgroundColor:"rgba(0,0,0,0.2)",
+    minWidth: 110, // Increased minimum width for better 3-digit display
+    justifyContent: 'space-between', // Better distribution of elements
   },
   button: {
     backgroundColor: '#E9EDF8',
@@ -78,11 +82,14 @@ const createStyles = (Scale: any) =>
     color: 'black',
   },
   input: {
-    width: 30,
+    minWidth: 40, // Minimum width for 3-digit numbers
+    maxWidth: 60, // Maximum width to prevent excessive expansion
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
+    paddingHorizontal: 8, // Add horizontal padding for better spacing
+    outlineWidth: 0,
   },
 });
 

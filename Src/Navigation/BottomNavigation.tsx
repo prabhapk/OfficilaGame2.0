@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { tabScreens } from "../Constants/CommonFlatlist";
 import { COLORS } from "../Constants/Theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,7 +36,9 @@ export default function BottomNavigation() {
       : isLaptopScreen
       ? 60
       : 65
-    : 60 + insets.bottom;
+    : Platform.OS === "android" 
+      ? 56  // Base height without safe area padding
+      : 60 + insets.bottom;
 
   const iconSize = isWeb
     ? isSmallScreen
@@ -45,7 +48,7 @@ export default function BottomNavigation() {
       : isLaptopScreen
       ? 26
       : 28
-    : 22;
+    : Platform.OS === "android" ? 24 : 22; // Optimized for Android Material Design
 
   const fontSize = isWeb
     ? isSmallScreen
@@ -55,7 +58,7 @@ export default function BottomNavigation() {
       : isLaptopScreen
       ? 13
       : 14
-    : 11;
+    : Platform.OS === "android" ? 12 : 11; // Optimized for Android readability
 
   return (
     <Tab.Navigator
@@ -63,18 +66,47 @@ export default function BottomNavigation() {
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
+        tabBarBackground: () => (
+          <LinearGradient
+            colors={[COLORS.linearOne, COLORS.linearTwo]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={{ flex: 1 }}
+          />
+        ),
+        // Add content padding for Android to prevent content from being hidden behind tab bar
+        ...(Platform.OS === "android" ? {
+          sceneContainerStyle: {
+            paddingBottom: 56 + insets.bottom,
+          }
+        } : {}),
         tabBarStyle: {
-          backgroundColor: COLORS.primary,
-          height: tabBarHeight,
-          paddingBottom:
-            Platform.OS === "android" ? insets.bottom : isWeb ? 2 : 0,
-          paddingTop: isWeb ? 2 : 0,
+          backgroundColor: 'transparent', // Make background transparent for gradient
+          height: Platform.OS === "android" ? 60 : tabBarHeight,
+          paddingBottom: 0,
+          paddingTop: Platform.OS === "android" ? 0 : isWeb ? 2 : 0,
           borderTopWidth: 0,
-          elevation: 8,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: -2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
+          // Android-specific optimizations
+          ...(Platform.OS === "android"
+            ? {
+                paddingHorizontal: 8,
+                justifyContent: "space-around",
+              }
+            : {}),
+          // Clean Android styling - minimal design
+          ...(Platform.OS === "android"
+            ? {
+                elevation: 0,
+                shadowOpacity: 0,
+                borderTopWidth: 0,
+              }
+            : {
+                elevation: 8,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: -2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+              }),
           // Web-specific styles
           ...(isWeb
             ? {
@@ -91,16 +123,30 @@ export default function BottomNavigation() {
                 alignItems: "center",
                 justifyContent: "space-around",
               }
-            : {}),
+            : {
+                // Ensure proper positioning for mobile platforms
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                zIndex: 1000,
+              }),
         },
         tabBarItemStyle: {
-          paddingVertical: 0,
-          paddingHorizontal: 0,
+          paddingVertical: Platform.OS === "android" ? 8 : 0,
+          paddingHorizontal: Platform.OS === "android" ? 1 : 0,
           justifyContent: "center",
           alignItems: "center",
           flex: 1,
           display: "flex",
           flexDirection: "column",
+          // Android-specific tab item styling
+          ...(Platform.OS === "android"
+            ? {
+                minHeight: 40,
+                marginBottom: insets.bottom,
+              }
+            : {}),
         },
       }}
     >
@@ -111,10 +157,11 @@ export default function BottomNavigation() {
           component={tab.component}
           options={{
             tabBarShowLabel: false,
-            tabBarIcon: ({ focused }) => (
-              <View
-                style={{
-                  alignItems: "center",
+            tabBarIcon: ({ focused }) => {
+              return (
+                <View
+                  style={{
+                    alignItems: "center",
                   justifyContent: "center",
                   width: isWeb
                     ? isSmallScreen
@@ -124,7 +171,7 @@ export default function BottomNavigation() {
                       : isLaptopScreen
                       ? 70
                       : 80
-                    : 60,
+                    : Platform.OS === "android" ? 64 : 60,
                   height: isWeb
                     ? isSmallScreen
                       ? 35
@@ -133,12 +180,19 @@ export default function BottomNavigation() {
                       : isLaptopScreen
                       ? 45
                       : 50
-                    : 50,
+                    : Platform.OS === "android" ? 48 : 50,
                   marginTop: 0,
                   paddingHorizontal: isLaptopScreen ? 8 : 4,
                   flex: 1,
                   display: "flex",
                   flexDirection: "column",
+                  // Clean design - no background styling
+                  ...(Platform.OS === "android"
+                    ? {
+                        paddingVertical: 4,
+                        paddingHorizontal: 6,
+                      }
+                    : {}),
                 }}
               >
                 <Image
@@ -152,13 +206,13 @@ export default function BottomNavigation() {
                 />
                 <Text
                   style={{
-                    color: focused ? "#fff" : "grey",
+                    color: focused ? "#fff" :  "rgba(255, 255, 255, 0.7)",
                     marginTop: isWeb ? 1 : 1,
                     textAlign: "center",
-                    fontWeight: focused ? "bold" : "normal",
+                    fontWeight: focused ? "bold" : Platform.OS === "android" ? "400" : "normal",
                     fontSize: fontSize,
-                    lineHeight: fontSize * 1.1,
-                    minHeight: fontSize * 1.2,
+                    lineHeight: fontSize * 1.2,
+                    minHeight: fontSize * 1.3,
                     maxWidth: "100%",
                   }}
                   numberOfLines={1}
@@ -166,8 +220,9 @@ export default function BottomNavigation() {
                 >
                   {tab.label}
                 </Text>
-              </View>
-            ),
+                </View>
+              );
+            },
           }}
         />
       ))}

@@ -92,6 +92,7 @@ import {
       textAlignVertical: 'center',
       paddingHorizontal: 0, // Ensures text does not shift
       width:Scale(40),
+      outlineWidth: 0,
     },
     focusedContainer: {
       borderColor: '#5c4280',
