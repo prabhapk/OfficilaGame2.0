@@ -3,8 +3,8 @@ import React from 'react';
 import { useContainerScale } from '../hooks/useContainerScale';
 
 interface CountButtonsProps {
-  count: number;
-  setCount: (value: number) => void;
+  count: any;
+  setCount: (value: any) => void;
   onHide: () => void;
   minValue?: number;
   maxValue?: number;
@@ -29,7 +29,7 @@ const CountButtons: React.FC<CountButtonsProps> = ({ count, setCount, onHide, mi
     if (!isNaN(numericValue)) {
       setCount(Math.min(maxValue, Math.max(minValue, numericValue)));
     } else if (text === "") {
-      setCount(minValue);
+      setCount("");
     }
   };
   const { Scale, verticalScale } = useContainerScale();

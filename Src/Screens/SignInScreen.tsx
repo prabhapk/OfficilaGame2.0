@@ -82,7 +82,7 @@ const SignInScreen = ({ navigation }: any) => {
     try {
       const resultAction = await dispatch(SignInPassword({ mobileNumber, password,navigation: navigation }));
       unwrapResult(resultAction);
-      navigation.navigate("DrawerNavigation")
+      navigation.replace("DrawerNavigation")
       dispatch(setIsLoggedIn(true))
       Toast.show({
         type: 'success',
@@ -129,7 +129,7 @@ const SignInScreen = ({ navigation }: any) => {
         {/* <Image source={loginImageBackground} style={styles.topImage} /> */}
         <ImageBackground source={loginImageBackground} style={styles.topImage}>
           <TouchableOpacity
-            onPress={() => navigation.navigate("DrawerNavigation")}
+            onPress={() => navigation.replace("DrawerNavigation")}
           >
             <Image source={lefArrow} style={styles.leftArrow} resizeMode="contain" />
           </TouchableOpacity>

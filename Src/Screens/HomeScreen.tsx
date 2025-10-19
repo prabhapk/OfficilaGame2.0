@@ -1,9 +1,10 @@
 import React, { use, useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Platform } from "react-native";
-import { annaiBanner, bannerLuna1, bannerLuna2,annaiBanner1 } from "../../assets/assets";
+import { annaiBanner, bannerLuna1, bannerLuna2,annaiBanner1, promotionBanner1 } from "../../assets/assets";
 import CustomHeader from "../Components/CustomHeader";
 import CommonBanner from "../Components/CommonBanner";
 import DownloadBanner from "../Components/DownloadBanner";
+import PromotionalModal from "../Components/PromotionalModal";
 import { HomeScreenFlatlist } from "../Constants/CommonFlatlist";
 import HomeScreenGameHeaders from "../Components/HomeScreenGameHeaders";
 import CasinoScreen from "./CasinoScreen";
@@ -27,6 +28,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
 
   const scrollViewRef = useRef<ScrollView>(null);
   const [loader, setLoader] = useState(false);
+  const [showPromotionalModal, setShowPromotionalModal] = useState(true);
   const banners = [
     { id: 1, name: annaiBanner },
     { id: 2, name: annaiBanner1 },
@@ -120,6 +122,16 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
       <CustomLoader visible={loader} />
+      
+      {/* Promotional Modal */}
+      <PromotionalModal
+        visible={showPromotionalModal}
+        onClose={() => setShowPromotionalModal(false)}
+        imageSource={promotionBanner1}
+        title="Special Diwali Offer"
+        subtitle="Get 3% Bonus on Every Recharge"
+      />
+      
       <CustomHeader
         onMenuPress={openDrawerdd}
         onLoginPress={() => {

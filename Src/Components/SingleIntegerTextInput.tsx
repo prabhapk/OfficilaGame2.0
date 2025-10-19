@@ -90,7 +90,7 @@ import {
       textAlign: 'center',
       textAlignVertical: 'center',
       paddingHorizontal: 0, // Ensures text does not shift
-      // width:Scale(40),
+       width:"100%",
       outlineWidth: 0,
     },
     focusedContainer: {

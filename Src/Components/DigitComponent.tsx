@@ -373,8 +373,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
             )}
             <CommonAddButton
               innerText="ADD"
-              opacity={singleDigitA !== "" ? 1 : 0.5}
-              isDisabled={singleDigitA !== "" ? false : true}
+              opacity={(singleDigitA && singleACount) !== "" ? 1 : 0.5}
+              isDisabled={(singleDigitA && singleACount) !== "" ? false : true}
               onPress={() =>
                 handleAdd(
                   "A",
@@ -417,8 +417,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
             )}
             <CommonAddButton
               innerText="ADD"
-              opacity={singleDigitB !== "" ? 1 : 0.5}
-              isDisabled={singleDigitB !== "" ? false : true}
+              opacity={(singleDigitB && singleBCount) !== "" ? 1 : 0.5}
+              isDisabled={(singleDigitB && singleBCount) !== "" ? false : true}
               onPress={() =>
                 handleAdd(
                   "B",
@@ -461,8 +461,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
             )}
             <CommonAddButton
               innerText="ADD"
-              opacity={singleDigitC !== "" ? 1 : 0.5}
-              isDisabled={singleDigitC !== "" ? false : true}
+              opacity={(singleDigitC && singleCCount) !== "" ? 1 : 0.5}
+              isDisabled={(singleDigitC && singleCCount) !== "" ? false : true}
               onPress={() =>
                 handleAdd(
                   "C",
@@ -569,9 +569,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
             )}
             <CommonAddButton
               innerText="ADD"
-              opacity={doubleDigitA1 !== "" && doubleDigitB1 !== "" ? 1 : 0.5}
+              opacity={doubleDigitA1 !== "" && doubleDigitB1 !== "" && doubleABCount !== "" ? 1 : 0.5}
               isDisabled={
-                doubleDigitA1 !== "" && doubleDigitB1 !== "" ? false : true
+                doubleDigitA1 !== "" && doubleDigitB1 !== "" && doubleABCount !== "" ? false : true
               }
               onPress={() =>
                 handleAdd(
@@ -634,9 +634,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
             )}
             <CommonAddButton
               innerText="ADD"
-              opacity={doubleDigitA2 !== "" && doubleDigitC1 !== "" ? 1 : 0.5}
+              opacity={doubleDigitA2 !== "" && doubleDigitC1 !== "" && doubleACCount !== "" ? 1 : 0.5}
               isDisabled={
-                doubleDigitA2 !== "" && doubleDigitC1 !== "" ? false : true
+                doubleDigitA2 !== "" && doubleDigitC1 !== "" && doubleACCount !== "" ? false : true
               }
               onPress={() =>
                 handleAdd(
@@ -699,9 +699,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
             )}
             <CommonAddButton
               innerText="ADD"
-              opacity={doubleDigitB2 !== "" && doubleDigitC2 !== "" ? 1 : 0.5}
+              opacity={doubleDigitB2 !== "" && doubleDigitC2 !== "" && doubleBCCount !== "" ? 1 : 0.5}
               isDisabled={
-                doubleDigitB2 !== "" && doubleDigitC2 !== "" ? false : true
+                doubleDigitB2 !== "" && doubleDigitC2 !== "" && doubleBCCount !== "" ? false : true
               }
               onPress={() =>
                 handleAdd(
@@ -853,12 +853,12 @@ const DigitComponent: React.FC<IDigitProps> = ({
               <CommonAddButton
                 innerText={"BOX"}
                 opacity={
-                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== ""
+                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== "" && threeDigitCount !== ""
                     ? 1
                     : 0.5
                 }
                 isDisabled={
-                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== ""
+                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== "" && threeDigitCount !== ""
                     ? false
                     : true
                 }
@@ -874,12 +874,12 @@ const DigitComponent: React.FC<IDigitProps> = ({
               <CommonAddButton
                 innerText="ADD"
                 opacity={
-                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== ""
+                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== "" && threeDigitCount !== ""
                     ? 1
                     : 0.5
                 }
                 isDisabled={
-                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== ""
+                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== "" && threeDigitCount !== ""
                     ? false
                     : true
                 }
