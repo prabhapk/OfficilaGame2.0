@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,12 @@ import { useContainerScale } from '../hooks/useContainerScale';
 import NewAppHeader from '../Components/NewAppHeader';
 import { leftArrowHeader } from '../../assets/assets';
 import { COLORS } from '../Constants/Theme';
+import { useDispatch, useSelector } from 'react-redux';
+import { claimRebate, getRebateList, getRebateSummary } from '../Redux/Slice/rebateSlice';
+import { RootState } from '../Redux/store';
+import { formatDateTime, formatTime24to12, formatToTimeIST } from '../Utils/Common';
+import { unwrapResult } from '@reduxjs/toolkit';
+import Toast from 'react-native-toast-message';
 
 interface RebateItem {
   id: string;
@@ -26,6 +32,12 @@ interface RebateItem {
 }
 
 const RebateScreen = ({ navigation }: { navigation: any }) => {
+
+  const dispatch = useDispatch();
+  const {rebateListData} = useSelector(
+    (state: RootState) => state.rebateSlice
+  );
+  const [claimed, setClaimed] = useState(false);
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
 
@@ -34,9 +46,9 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
   const [selectedDateFilter, setSelectedDateFilter] = useState('ALL');
 
   const tabs = [
-    { id: 'ALL', name: 'ALL' },
-    { id: 'TO_BE_FINISHED', name: 'To Be Finished' },
-    { id: 'TO_BE_COLLECTED', name: 'To Be Collected' },
+    { id: 'ALL', name: 'ALL' ,},
+    { id: 'TO_BE_FINISHED', name: 'To Be Finished',  },
+    { id: 'TO_BE_COLLECTED', name: 'To Be Collected', },
   ];
 
   // Sample rebate data with different states
@@ -162,19 +174,74 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
     navigation.navigate('Profile');
   };
 
-  const handleReceivePress = (item: RebateItem) => {
-    if (item.canReceive) {
-      // Update the item status to claimed
-      const updatedData = allRebateData.map(rebateItem => 
-        rebateItem.id === item.id 
-          ? { ...rebateItem, status: 'Claimed' as const, canReceive: false, category: 'collected' as const }
-          : rebateItem
-      );
-      // In a real app, you would update the state or make an API call here
-      console.log('Rebate claimed for item:', item.id);
-      alert(`Rebate of ₹${item.estimatedRebate.toFixed(2)} has been claimed!`);
+  useEffect(() => {
+    dispatch(getRebateSummary());
+    dispatch(getRebateList({claimed: false}));
+  }, []);
+
+
+  // const handleReceivePress = async () => {
+  //   try {
+  //     const resultAction = await dispatch(claimRebate({ rebateId : item.id }));
+  //     unwrapResult(resultAction);
+  //     dispatch(getRebateList({claimed: true}));
+
+  //     Toast.show({
+  //       type: 'success',
+  //       text1: 'Rebate Claimed successfully',
+  //       position: 'top',
+  //     });
+  //   }
+  //   catch (error: any) {
+  //     console.log('error', error);
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: 'Something went wrong',
+  //       position: 'top',
+  //     });
+  //   }
+  // };
+  
+  const handleReceivePress = async (item) => {
+    try {
+      const resultAction = await dispatch(
+        claimRebate({ rebateId: item.id })
+      ).unwrap();
+  
+      // Refresh list after claiming
+      await dispatch(getRebateList({ claimed: true }));
+  
+      Toast.show({
+        type: 'success',
+        text1: 'Rebate Claimed successfully',
+        position: 'top',
+      });
+  
+    } catch (error) {
+      console.log('error', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Something went wrong',
+        position: 'top',
+      });
     }
   };
+  
+
+
+  // const handleReceivePress = (item: RebateItem) => {
+  //   if (item.canReceive) {
+  //     // Update the item status to claimed
+  //     const updatedData = allRebateData.map(rebateItem => 
+  //       rebateItem.id === item.id 
+  //         ? { ...rebateItem, status: 'Claimed' as const, canReceive: false, category: 'collected' as const }
+  //         : rebateItem
+  //     );
+  //     // In a real app, you would update the state or make an API call here
+  //     console.log('Rebate claimed for item:', item.id);
+  //     alert(`Rebate of ₹${item.estimatedRebate.toFixed(2)} has been claimed!`);
+  //   }
+  // };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -189,15 +256,15 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
     }
   };
 
-  const renderRebateItem = ({ item }: { item: RebateItem }) => (
+  const renderRebateItem = ({ item }) => (
     <View style={styles.rebateCard}>
       <View style={styles.rebateHeader}>
-        <Text style={styles.dateText}>{item.date}</Text>
+        <Text style={styles.dateText}>{formatDateTime(item?.date)}</Text>
         <Text style={[styles.statusText, { color: getStatusColor(item.status) }]}>
           {item.status}
         </Text>
       </View>
-      
+  
       <View style={styles.rebateContent}>
         <View style={styles.bettingInfo}>
           <View style={styles.infoRow}>
@@ -207,10 +274,10 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
               resizeMode="contain"
             />
             <Text style={styles.infoText}>
-              Estimated Betting: ₹{item.estimatedBetting.toFixed(2)}
+              Estimated Recharge: ₹{item?.rebatePercentage?.toFixed(2)}
             </Text>
           </View>
-          
+  
           <View style={styles.infoRow}>
             <Image
               source={require('../../assets/wallet-icon.webp')}
@@ -218,12 +285,12 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
               resizeMode="contain"
             />
             <Text style={styles.infoText}>
-              Estimated Rebate: ₹{item.estimatedRebate.toFixed(2)}
+              Estimated Rebate: ₹{item?.rechargeAmount?.toFixed(2)}
             </Text>
           </View>
         </View>
-        
-        {item.canReceive ? (
+  
+        {item?.claimed === false ? (
           <LinearGradient
             colors={[COLORS.linearOne, COLORS.linearTwo]}
             start={{ x: 0, y: 0 }}
@@ -239,14 +306,13 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
           </LinearGradient>
         ) : (
           <View style={styles.disabledButton}>
-            <Text style={styles.disabledButtonText}>
-              {item.status === 'Claimed' ? 'Claimed' : 'Processing'}
-            </Text>
+            <Text style={styles.disabledButtonText}>Claimed</Text>
           </View>
         )}
       </View>
     </View>
   );
+  
 
   const renderTab = (tab: { id: string; name: string }) => {
     const isSelected = selectedTab === tab.id;
@@ -344,8 +410,8 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
       )}
 
       {/* Rebate List */}
-      <FlatList
-        data={rebateData}
+      {/* <FlatList
+        data={rebateListData}
         renderItem={renderRebateItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
@@ -360,7 +426,25 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
             </Text>
           </View>
         )}
-      />
+      /> */}
+      <FlatList
+  data={rebateListData}
+  renderItem={renderRebateItem}
+  keyExtractor={(item) => item.id.toString()}
+  contentContainerStyle={styles.listContainer}
+  showsVerticalScrollIndicator={false}
+  ListEmptyComponent={() => (
+    <View style={styles.emptyContainer}>
+      <Text style={styles.emptyText}>
+        {selectedDateFilter !== 'ALL'
+          ? `No rebates found for ${selectedDateFilter.toLowerCase().replace('_', ' ')}`
+          : 'No rebates found'}
+      </Text>
+    </View>
+  )}
+/>
+
+      <Toast/>
     </View>
   );
 };

@@ -107,3 +107,27 @@ export interface CommonSliceState {
     vipsData:any
     allTransactionsData:any
   }
+
+  export interface vip {
+    vipLists: any
+    vipListLoader: boolean
+  }
+  export interface depositState {
+    paymentGateWayLists: any,
+    paymentGateWayListsLoader: boolean,
+    depositLoader:boolean,
+    depositData:any
+  }
+
+  export interface agentSliceState {
+    agentLoader:boolean
+    userData: any;
+  }
+  export interface rebateSliceState {
+    rebateData: any;
+    rebateDataLoader: boolean;
+    rebateListData: any;
+    rebateListLoader: boolean;
+    rebateClaimData: any;
+    rebateClaimDataLoader: boolean;
+  }

@@ -48,6 +48,21 @@ export const serviceUrls = {
     win: '/api/Transaction/wins',
     vip: '/api/Transaction/vip',
     allTransactions: '/api/Transaction/all-transactions',
+  },
+  vip: {
+    vipLists: '/api/user/User/vip-config'
+  },
+  payment: {
+      paymentGatewayLists: "/api/admin/payment-config",
+      depositPayment: '/api/Payment/deposit-payment',
+  },
+  Agent: {
+    dailyStats: '/api/Agent/daily-stats',
+  },
+  Rebate: {
+    rebateSummary: '/api/user/rebate/summary',
+    rebateList: '/api/user/rebate/list',
+    rebateClaim: '/api/user/rebate/claim',
   }
 };
 

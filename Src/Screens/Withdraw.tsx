@@ -358,7 +358,7 @@ const Withdraw = ({ navigation }: any) => {
       const resultAction = await dispatch(
         withdrawBalanceConversion({
           amount: withdrawableAmount,
-  transferType: "WalletToRecharge",
+  transferType: "transfer",
         })
       );
       unwrapResult(resultAction);

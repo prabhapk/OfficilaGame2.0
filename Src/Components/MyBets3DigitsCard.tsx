@@ -101,7 +101,7 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
 
         {status === "To Be Drawn" && (
           <LinearGradient
-            colors={["#844d4d", "#82504d"]}
+            colors={[COLORS.linearOne, COLORS.linearTwo]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.toBeDrawnStatusContainer}
@@ -121,7 +121,7 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
 
         {status === "No Won" && (
           <LinearGradient
-            colors={["#844d4d", "#82504d"]}
+            colors={[COLORS.linearOne, COLORS.linearTwo]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.noWonStatusContainer}
@@ -173,7 +173,7 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
           </View>
 
           {/* Table */}
-          <View style={{ backgroundColor: "#812B2B" }}>
+          <View style={{ backgroundColor: COLORS.tableTopColor }}>
             {/* Table Header */}
             <View style={styles.tableHeader}>
               <View style={{ flexDirection: "row" }}>
@@ -203,7 +203,7 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
             {/* Table Rows */}
             {myBetsTableData.map((bet, rowIndex) => {
               const isEvenRow = rowIndex % 2 === 0;
-              const rowBgColor = isEvenRow ? "#550011" : "#812B2B";
+              const rowBgColor = isEvenRow ? COLORS.tableSecondaryColor  : COLORS.tableTopColor;
 
               const totalPaymentAmount = bet?.betCount * bet?.payment;
 
@@ -318,7 +318,7 @@ const createStyles = (Scale: any) =>
       overflow: "hidden",
     },
     headerSection: {
-      backgroundColor: "#4F0001",
+      backgroundColor: COLORS.gameDetailColor,
     },
     drawResultsTitle: {
       color: "white",
@@ -363,12 +363,12 @@ const createStyles = (Scale: any) =>
     },
     dashedDivider: {
       borderWidth: 1,
-      borderColor: "#DE3C3F",
+      borderColor: "#fff",
       marginTop: 20,
       borderStyle: "dashed",
     },
     myBetsSection: {
-      backgroundColor: "#4F0001",
+      backgroundColor:COLORS.gameDetailColor,
     },
     dateStatusRow: {
       flexDirection: "row",
@@ -400,7 +400,7 @@ const createStyles = (Scale: any) =>
     },
     // Status Section Styles
     statusSection: {
-      backgroundColor: "#4F0001",
+      backgroundColor: COLORS.gameDetailColor,
       paddingBottom: Scale(10),
     },
     wonStatusContainer: {

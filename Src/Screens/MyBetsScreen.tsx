@@ -237,7 +237,7 @@ const MyBetsScreen = ({ navigation }: any) => {
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: "#560303" }}
+      style={{ flex: 1, backgroundColor: COLORS.primary }}
       stickyHeaderIndices={[0]}
       nestedScrollEnabled={true}
       keyboardShouldPersistTaps="handled"
@@ -298,7 +298,7 @@ const MyBetsScreen = ({ navigation }: any) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{
-              backgroundColor: "#481616",
+              backgroundColor: COLORS.primary,
               paddingVertical: Scale(10),
               flex: 1
             }}
@@ -376,7 +376,7 @@ const createStyles = (Scale: any) =>
       borderTopWidth: Scale(3),
       width: Scale(30),
     },
-    headerText: { fontSize: Scale(16), color: "#987E7E", top: 3 },
+    headerText: { fontSize: Scale(16), color: 'grey', top: 3 },
     selectedHeaderText: {
       color: "#fff",
       fontWeight: "bold",
@@ -396,7 +396,7 @@ const createStyles = (Scale: any) =>
     },
     refImage: { width: Scale(30), height: Scale(30) },
     headrrcontainer: {
-      backgroundColor: "#3C0D0D", // Dark maroon
+      backgroundColor: COLORS.primary,
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",

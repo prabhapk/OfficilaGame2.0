@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
 import { getWalletBalance } from '../Redux/Slice/signInSlice';
 import { COLORS } from '../Constants/Theme';
+import { DepositPayment, getAllPaymentGateWaysList } from '../Redux/Slice/depositSlice';
+import Toast from 'react-native-toast-message';
 const WalletScreenUI = ({navigation}: any) => {
   const [walletAmount, setWalletAmount] = useState(0);
   const [selectedAmount, setSelectedAmount] = useState('500');
@@ -26,6 +28,28 @@ const WalletScreenUI = ({navigation}: any) => {
   const styles = createStyles(Scale);
   const dispatch = useDispatch();
   const {mainWalletBalance } = useSelector((state: RootState) => state.signInSlice);
+  const {paymentGateWayLists,paymentGateWayListsLoader}  = useSelector((state: RootState) => state.depositSlice);
+
+  useEffect (() =>  {
+    dispatch(getAllPaymentGateWaysList())
+  },[]);
+
+  const handleDeposit = async () => {
+    try {
+      dispatch(DepositPayment({
+        amount: Number(walletAmount),
+        channelId: paymentGateWayLists[0].channelid,
+      }))
+    } catch (error: any) {
+      console.log('error', error);
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong",
+        position: "top",
+      });
+    }
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: COLORS.primary}}>
       <NewAppHeader
@@ -73,7 +97,7 @@ const WalletScreenUI = ({navigation}: any) => {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}>
         <Text style={styles.currentMethod}>
-          Current Method: Bank transfer 4
+          Current Method: {paymentGateWayLists[0]?.gateway}
         </Text>
         <Text style={styles.warningText}>
           Please switch to another method if the current method failed.
@@ -159,7 +183,7 @@ const WalletScreenUI = ({navigation}: any) => {
         style={styles.paytmLogo}
         resizeMode="contain"
       />
-      <Text style={styles.bankText}>Bank transfer 4</Text>
+      <Text style={styles.bankText}>{paymentGateWayLists[0]?.gateway}</Text>
     </View>
 
     {selectedRechargeOption === 'option1' && (
@@ -171,7 +195,7 @@ const WalletScreenUI = ({navigation}: any) => {
     )}
   </TouchableOpacity>
 
-  <TouchableOpacity
+  {/* <TouchableOpacity
     onPress={() => setSelectedRechargeOption('option2')}
     style={[
       styles.bankOptionView,
@@ -195,7 +219,7 @@ const WalletScreenUI = ({navigation}: any) => {
         resizeMode="contain"
       />
     )}
-  </TouchableOpacity>
+  </TouchableOpacity> */}
       </View>
 
       {/* Attention Box */}
@@ -218,7 +242,9 @@ const WalletScreenUI = ({navigation}: any) => {
 
     </ScrollView>
     <View style={{marginBottom: Scale(10)}}>
-      <TouchableOpacity style={styles.buttonWrapper}>
+      <TouchableOpacity style={styles.buttonWrapper}
+      onPress={handleDeposit}
+      >
             <LinearGradient
               colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
@@ -229,6 +255,7 @@ const WalletScreenUI = ({navigation}: any) => {
             </LinearGradient>
           </TouchableOpacity>
           </View>
+          <Toast/>
     </View>
   );
 };

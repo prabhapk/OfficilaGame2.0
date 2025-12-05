@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,10 +13,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useContainerScale } from '../hooks/useContainerScale';
 import NewAppHeader from '../Components/NewAppHeader';
 import { COLORS } from '../Constants/Theme';
+import { useDispatch } from 'react-redux';
+import { getAgentDailyStats } from '../Redux/Slice/agentSlice';
 
 const AgencyScreen = ({ navigation }: { navigation: any }) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
+
+  const dispatch = useDispatch();
 
   const [invitationCode] = useState('FYLAMNNS');
   const [todayData] = useState({
@@ -65,6 +69,10 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
   const handleCustomerService = () => {
     Alert.alert('Customer Service', 'Opening customer service...');
   };
+
+  useEffect(() => {
+dispatch(getAgentDailyStats({agentId: Number(11111), date: '2022-08-01'}))
+  },[])
 
   return (
     <View style={styles.container}>

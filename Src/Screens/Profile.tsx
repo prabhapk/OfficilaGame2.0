@@ -23,6 +23,8 @@ import {
   vipBadgeZero,
   wallet,
   profileTwentyFourImage1,
+  leftArrowHeader,
+  newRebateLogo,
 } from "../../assets/assets";
 import Modal from "react-native-modal";
 import WalletInfoModal from "../Components/Modal/WalletInfoModal";
@@ -60,23 +62,45 @@ const ProfileScreen = ({ navigation }: any) => {
   const [isChatLoading, setIsChatLoading] = useState(false);
 
   const tabItems = [
-    { label: "Lotteries", image: profileLotteriesImage, route: "MyBetsScreen" },
+    { label: "Lotteries", 
+    image: profileLotteriesImage, 
+    rightImage: leftArrowHeader,
+    route: "MyBetsScreen" },
     {
       label: "Commission",
       image: profileCommissionImage,
+      rightImage: leftArrowHeader,
       route: "InviteScreen",
     },
     {
       label: "Transactions",
       image: profileTransactionImage,
+      rightImage: leftArrowHeader,
       route: "Transactions",
     },
     {
-      label: "Customer Service",
+      label: "24/7 Customer Service",
       image: profileCustomerServiceImage,
+      rightImage: leftArrowHeader,
       route: "CustomerService",
     },
   ];
+  // const tabItems = [
+  //   { label: "Lotteries", 
+  //   route: "MyBetsScreen" },
+  //   {
+  //     label: "Commission",
+  //     route: "InviteScreen",
+  //   },
+  //   {
+  //     label: "Transactions",
+  //     route: "Transactions",
+  //   },
+  //   {
+  //     label: "Customer Service",
+  //     route: "CustomerService",
+  //   },
+  // ];
 
   const toggleModalRecharge = () =>
     setRechargeModalVisible(!isRechargeModalVisible);
@@ -167,8 +191,8 @@ const ProfileScreen = ({ navigation }: any) => {
               <Text style={styles.loginText}>Please Login</Text>
               <Entypo
                 name="chevron-right"
-                size={Scale(30)}
-                color= {COLORS.primary}
+                size={Scale(25)}
+                color= {COLORS.white}
                 style={styles.chevronIcon}
               />
             </LinearGradient>
@@ -223,12 +247,10 @@ const ProfileScreen = ({ navigation }: any) => {
           {[
             {
               label: "Recharge",
-              desc: "Recharge without limit",
               route: "WalletScreen",
             },
             {
               label: "Withdraw",
-              desc: "3 seconds to payment",
               route: "Withdraw",
             },
           ].map((btn, idx) => (
@@ -254,7 +276,6 @@ const ProfileScreen = ({ navigation }: any) => {
                     style={styles.buttonIcon}
                   />
                 </View>
-                <Text style={styles.subText}>{btn.desc}</Text>
               </TouchableOpacity>
             </LinearGradient>
           ))}
@@ -288,64 +309,137 @@ const ProfileScreen = ({ navigation }: any) => {
             </ImageBackground>
           </TouchableOpacity>
         ) : null}
-        {/* Bottom Tabs */}
-        <View style={styles.bottomTabs}>
-          {tabItems.map((item) => (
-            <TouchableOpacity
-              onPress={() => handleActionButtonPress(item.route)}
-              key={item.label}
-              style={styles.tabCenter}
-              disabled={item.label === "Customer Service" && isChatLoading}
-            >
-              <View>
-                <Image source={item.image} style={styles.tabIcon} />
-                {item.label === "Customer Service" && (
-                  <Image
-                    source={profileTwentyFourImage1}
-                    style={styles.tabBadge}
-                  />
-                )}
-                {item.label === "Customer Service" && isChatLoading && (
-                  <View style={styles.loadingOverlay}>
-                    <ActivityIndicator size="small" color="#fff" />
-                  </View>
-                )}
-              </View>
-              <Text
-                style={[
-                  styles.tabItem,
-                  isChatLoading &&
-                    item.label === "Customer Service" &&
-                    styles.loadingText,
-                ]}
-              >
-                {item.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
+
+        <View style={{ paddingHorizontal: Scale(10), marginTop: Scale(10) }}>
+          <TouchableOpacity
+           style={{
+            backgroundColor: COLORS.white,
+            borderRadius: Scale(10),
+            paddingVertical: Scale(12),
+            paddingHorizontal: Scale(15),
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.15,
+            shadowRadius: 3,
+            elevation: 3,
+          }}
+          onPress={()=> navigation.navigate('RebateScreen')}
+          > 
+          <Text
+          style ={{
+            color: "#000",
+            fontSize: Scale(14),
+            fontWeight: "500",
+          }}
+          >
+            Rebate
+          </Text>
+          <Image source={newRebateLogo}
+          resizeMethod="resize"
+          style={{marginHorizontal: Scale(10), width: Scale(25), height: Scale(25)}}
+          />
+
+          </TouchableOpacity> 
         </View>
 
-        {/* Settings Rows */}
-        {/* {['Password', 'Languages'].map((label, idx) => (
-          <View style={styles.inputRow} key={idx}>
-            <TouchableOpacity style={styles.inputButton}>
-              <Text style={styles.inputLabel}>{label}</Text>
-              <Entypo name="chevron-right" size={Scale(20)} color="white" />
-            </TouchableOpacity>
-          </View>
-        ))} */}
+        <View style={{ paddingHorizontal: Scale(10), marginTop: Scale(10) }}>
+  {tabItems.map((item) => (
+    <TouchableOpacity
+      key={item.label}
+      onPress={() => handleActionButtonPress(item.route)}
+      disabled={item.label === "Customer Service" && isChatLoading}
+      style={{
+        backgroundColor: COLORS.white,
+        borderRadius: Scale(10),
+        marginVertical: Scale(8),
+        paddingVertical: Scale(12),
+        paddingHorizontal: Scale(15),
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 3,
+        elevation: 3,
+      }}
+    >
+      {/* Left Section (Icon + Label) */}
+      <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+        <Image
+          source={item.image}
+          style={{
+            height: Scale(24),
+            width: Scale(24),
+            resizeMode: "contain",
+            marginRight: Scale(12),
+          }}
+        />
+        <Text
+          style={[
+            {
+              color: "#000",
+              fontSize: Scale(14),
+              fontWeight: "500",
+            },
+            isChatLoading &&
+              item.label === "Customer Service" && { opacity: 0.6 },
+          ]}
+          numberOfLines={1}
+        >
+          {item.label}
+        </Text>
+      </View>
 
-        <View style={styles.inputRow}>
+      {/* Right Chevron */}
+      <Entypo
+        name="chevron-right"
+        size={Scale(20)}
+        color="#000"
+        style={{ marginLeft: Scale(8) }}
+      />
+    </TouchableOpacity>
+  ))}
+</View>
+
+  
+
+<View style={{ paddingHorizontal: Scale(10)}}>
           <TouchableOpacity
             onPress={() => {
               isLoggedIn
                 ? navigation.navigate("ForgotPassword")
                 : navigation.navigate("SignInScreen");
             }}
-            style={styles.inputButton}
+            style={{
+              backgroundColor: COLORS.white,
+              borderRadius: Scale(10),
+              marginVertical: Scale(8),
+              paddingVertical: Scale(12),
+              paddingHorizontal: Scale(10),
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.15,
+              shadowRadius: 3,
+              elevation: 3,
+            }
+          }
           >
-            <Text style={styles.inputLabel}>Password</Text>
-            <Entypo name="chevron-right" size={Scale(20)} color="white" />
+            
+            <Text style={{
+              color: "#000",
+              fontSize: Scale(14),
+              fontWeight: "500",
+            }}>Password</Text>
+            <Entypo name="chevron-right" 
+            style={{marginRight: Scale(8)}}
+            size={Scale(20)} color="black" />
           </TouchableOpacity>
         </View>
 
@@ -511,8 +605,8 @@ const createStyles = (Scale: any) =>
       alignItems: "center",
     },
     buttonIcon: {
-      height: Scale(50),
-      width: Scale(50),
+      height: Scale(40),
+      width: Scale(40),
       marginHorizontal: Scale(5),
     },
     buttonText: {
@@ -568,7 +662,7 @@ const createStyles = (Scale: any) =>
     vipProgressFill: {
       width: "65%",
       height: "100%",
-      backgroundColor: "red",
+      backgroundColor: "white",
       borderRadius: 999,
     },
 
@@ -584,15 +678,17 @@ const createStyles = (Scale: any) =>
       marginHorizontal: Scale(5),
     },
     tabItem: {
-      color: "#fff",
+      color: "#000",
       fontSize: 14,
       textAlign: "left",
       marginVertical: Scale(5),
+      marginLeft: Scale(10),
+      paddingVertical: Scale(10),
     },
     tabIcon: {
-      height: Scale(60),
-      width: Scale(60),
-      marginBottom: Scale(5),
+      height: Scale(25),
+      width: Scale(25),
+      marginHorizontal: Scale(10),
     },
     tabBadge: {
       height: Scale(24),
@@ -620,7 +716,7 @@ const createStyles = (Scale: any) =>
       width: "100%",
     },
     inputLabel: {
-      color: "#fff",
+      color: "black",
       fontSize: Scale(18),
       fontWeight: "bold",
     },

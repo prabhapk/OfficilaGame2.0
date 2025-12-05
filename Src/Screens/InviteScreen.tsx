@@ -128,7 +128,7 @@ const InviteScreen = ({route}: any) => {
 
   const isProfile = route?.params?.isProfile;
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#250f0fff' }} showsVerticalScrollIndicator={false}>
+    <ScrollView style={{ flex: 1, backgroundColor: COLORS.linearTwo}} showsVerticalScrollIndicator={false}>
       {isProfile && <NewAppHeader
         leftIconPress={() => navigation.goBack()}
         centerText={'Invite'}
@@ -495,7 +495,7 @@ const createStyles = (Scale: any) => StyleSheet.create({
     fontWeight: 'bold',
   },
   codeContainer: {
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.tableTopColor,
     borderRadius: Scale(15),
     paddingVertical: Scale(20),
     paddingHorizontal: Scale(20),
@@ -517,11 +517,13 @@ const createStyles = (Scale: any) => StyleSheet.create({
     alignItems: 'center',
   },
   copyButton: {
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.tableTopColor,
     borderRadius: Scale(20),
     paddingVertical: Scale(8),
     paddingHorizontal: Scale(20),
     marginRight: Scale(10),
+    borderColor: COLORS.white,
+    borderWidth: 1
   },
   copyButtonText: {
     fontSize: Scale(12),

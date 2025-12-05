@@ -156,7 +156,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
 
   {status === "No Won" && (
     <LinearGradient
-      colors={["#844d4d", "#82504d"]}
+      colors={[COLORS.linearOne, COLORS.linearTwo]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
       style={{
@@ -216,7 +216,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
   {/* {status === "No Won" && winningNumber === null && ( */}
   {status === "To Be Drawn" &&  (
     <LinearGradient
-      colors={["#844d4d", "#82504d"]}
+    colors={[COLORS.linearOne, COLORS.linearTwo]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
       style={{
@@ -341,7 +341,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
         </View>
 
      {/* Table */}
-<View style={{ backgroundColor: "#812B2B" }}>
+<View style={{ backgroundColor: COLORS.tableTopColor }}>
   {/* Table Header */}
   <View style={styles.tableHeader}>
     <View style={{ flexDirection: "row" }}>
@@ -371,7 +371,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
   {/* Table Rows */}
   {myBetsTableData.map((bet, rowIndex) => {
   const isEvenRow = rowIndex % 2 === 0;
-  const rowBgColor = isEvenRow ? "#550011" : "#812B2B";
+  const rowBgColor = isEvenRow ? COLORS.tableSecondaryColor  : COLORS.tableTopColor;
   console.log('myBetsTableData==>', myBetsTableData);
 
   const totalPaymentAmount = bet?.betCount * bet?.payment;
@@ -437,7 +437,7 @@ const createStyles = (Scale: any) =>
       // marginHorizontal: Scale(10),
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
-      backgroundColor: "#4F0001",
+      backgroundColor: COLORS.gameDetailColor,
     },
     headerRow: { flexDirection: "row", padding: 10 },
     title: { fontWeight: "bold", fontSize: 22, color: "white" },
@@ -457,7 +457,7 @@ const createStyles = (Scale: any) =>
       marginTop: Scale(10),
       // borderTopLeftRadius: 30,
       // borderTopRightRadius: 30,
-      backgroundColor: "#4F0001",
+      backgroundColor: COLORS.gameDetailColor,
     },
     detailsHeader: {
       flexDirection: "row",
@@ -491,13 +491,13 @@ const createStyles = (Scale: any) =>
     },
     dashedDivider: {
       borderWidth: 1,
-      borderColor: "#DE3C3F",
+      borderColor: COLORS.white,
       marginTop: 20,
       borderStyle: "dashed",
     },
     newDivider: {
       borderWidth: 0.5,
-      borderColor: "#DE3C3F",
+      borderColor: COLORS.white,
       marginTop: 10,
     },
     dateStatusRow: {

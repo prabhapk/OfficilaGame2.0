@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   bonusCash,
@@ -28,21 +28,31 @@ import VipCard from '../Components/VipCard';
 import NewAppHeader from '../Components/NewAppHeader';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from '../Constants/Theme';
+import { useDispatch, useSelector } from 'react-redux';
+import { getVipLists } from '../Redux/Slice/vipSlice';
+import { RootState } from '../Redux/store';
 const VipLevelDetailsScreen = ({navigation}: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
+  const dispatch= useDispatch()
+
   const [selectedVipIndex, setSelectedVipIndex] = useState(0);
+  useEffect(() => {
+    dispatch(getVipLists())
+  },[]);
+  const {vipLists} = useSelector((state: RootState) => state.vipSlice);
+
   const tableDatas = [
-    {id: 1, bonus: '0', spin: 'x0', image: levelZeroBadge},
-    {id: 2, bonus: '8', spin: 'x2', image: levelOneBadge},
-    {id: 3, bonus: '5', spin: 'x2', image: levelTwoBadge},
-    {id: 4, bonus: '198', spin: 'x5', image: levelThreeBadge},
-    {id: 5, bonus: '1300', spin: '20', image: levelFourBadge},
-    {id: 6, bonus: '2300', spin: 'x50', image: levelFiveBadge},
-    {id: 7, bonus: '13000', spin: 'x200', image: levelSixBadge},
-    {id: 8, bonus: '23000', spin: 'x500', image: levelSevenBadge},
-    {id: 9, bonus: '130000', spin: 'x1000', image: levelEightBadge},
-    {id: 10, bonus: '560000', spin: 'x4000', image: levelNineBadge},
+    {id: 1, bonus: '0', image: levelZeroBadge},
+    {id: 2, bonus: '8', image: levelOneBadge},
+    {id: 3, bonus: '5', image: levelTwoBadge},
+    {id: 4, bonus: '198',  image: levelThreeBadge},
+    {id: 5, bonus: '1300', image: levelFourBadge},
+    {id: 6, bonus: '2300', image: levelFiveBadge},
+    {id: 7, bonus: '13000', image: levelSixBadge},
+    {id: 8, bonus: '23000', image: levelSevenBadge},
+    {id: 9, bonus: '130000',  image: levelEightBadge},
+    {id: 10, bonus: '560000',  image: levelNineBadge},
   ];
   const vipCardTargets = [
     300, 1000, 10000, 50000, 100000, 500000, 1000000, 2000000, 5000000,
@@ -85,6 +95,8 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
     {target: 10000000, image: vipBadgeZero},
   ];
 
+
+
   const tableRenderData = ({item, index}: any) => (
     <TouchableOpacity
       style={[
@@ -95,7 +107,7 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
       {/* VIP Group */}
       <View style={styles.vipColumn}>
         <Image source={item.image} style={styles.vipImage} />
-        <Text style={styles.vipText}>VIP {item.id - 1}</Text>
+        <Text style={styles.vipText}>VIP {item.level}</Text>
       </View>
 
       {/* Rewards Group */}
@@ -105,18 +117,12 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
             <Image source={bonusCash} style={styles.bonusIcon} />
             <Text style={styles.bonusText}>Bonus</Text>
           </View>
-          <Text style={styles.bonusText}>₹{item.bonus}</Text>
-        </View>
-        <View style={styles.spinContainer}>
-          <View style={styles.spinRow}>
-            <Image source={spin} style={styles.spinIcon} />
-            <Text style={styles.spinText}>Spin</Text>
-          </View>
-          <Text style={styles.spinText}>{item.spin}</Text>
+          <Text style={styles.bonusText}>₹{item.levelupBonus}</Text>
         </View>
       </View>
     </TouchableOpacity>
   );
+
 
   return (
     <View style={{flex: 1, backgroundColor: COLORS.primary}}>
@@ -139,7 +145,7 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
           </View>
 
           <FlatList
-            data={tableDatas}
+            data={vipLists}
             keyExtractor={item => item.id.toString()}
             showsHorizontalScrollIndicator={false}
             renderItem={tableRenderData}
