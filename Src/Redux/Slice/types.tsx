@@ -122,6 +122,18 @@ export interface CommonSliceState {
   export interface agentSliceState {
     agentLoader:boolean
     userData: any;
+    dashboardData: any;
+    dashBoardUserData: any;
+    dashBoardDailyData: any;
+    dashBoardUserDataActiveUser: any;
+    dashBoardUserDataRechargeUser: any;
+    dashBoardUserDataNewUser: any;
+    dashBoardDailyDataRecharge: any;
+    dashBoardDailyDataCommission: any;
+    inviteCode: any;
+    agentCreatedDate: any;
+    rechargeBonusData: any;
+    commissionBonusData: any;
   }
   export interface rebateSliceState {
     rebateData: any;
@@ -130,4 +142,11 @@ export interface CommonSliceState {
     rebateListLoader: boolean;
     rebateClaimData: any;
     rebateClaimDataLoader: boolean;
+    allRebateSummary: any;
+    toBeCollectedList: any;
+    receivedList: any;
+    allRebateSummaryMaster: any
+    toBeCollectedListMaster: any
+    receivedListMaster: any
+
   }

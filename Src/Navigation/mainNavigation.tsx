@@ -27,6 +27,9 @@ import AgencyScreen from "../Screens/AgencyScreen";
 import InvitationRulesScreen from "../Screens/InvitationRulesScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import Promotions from "../Screens/Promotions";
+import AgentTeamReport from "../Screens/AgentTeamReport";
+import AgentCommissionDetail from "../Screens/AgentCommissionDetail";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -137,6 +140,20 @@ function MainNavigation() {
         <Stack.Screen
           name="Promotions"
           component={Promotions}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="AgentTeamReport"
+          component={AgentTeamReport}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="AgentCommissionDetail"
+          component={AgentCommissionDetail}
           options={{
             headerShown: false,
           }}

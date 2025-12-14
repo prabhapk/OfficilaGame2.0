@@ -34,9 +34,16 @@ interface RebateItem {
 const RebateScreen = ({ navigation }: { navigation: any }) => {
 
   const dispatch = useDispatch();
-  const {rebateListData} = useSelector(
-    (state: RootState) => state.rebateSlice
-  );
+  const {
+    rebateListData,
+    allRebateSummary,
+    toBeCollectedList,
+    receivedList,
+    allRebateSummaryMaster,
+    toBeCollectedListMaster,
+    receivedListMaster,
+  } = useSelector((state: RootState) => state.rebateSlice);
+
   const [claimed, setClaimed] = useState(false);
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -46,177 +53,86 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
   const [selectedDateFilter, setSelectedDateFilter] = useState('ALL');
 
   const tabs = [
-    { id: 'ALL', name: 'ALL' ,},
-    { id: 'TO_BE_FINISHED', name: 'To Be Finished',  },
-    { id: 'TO_BE_COLLECTED', name: 'To Be Collected', },
+    { id: 'ALL', name: 'ALL' },
+    { id: 'TO_BE_COLLECTED', name: 'To Be Collected' },
+    { id: 'Received', name: 'Received' },
   ];
 
-  // Sample rebate data with different states
-  const allRebateData: RebateItem[] = [
-    {
-      id: '1',
-      date: 'Mar 14',
-      status: 'Unclaimed',
-      estimatedBetting: 30.00,
-      estimatedRebate: 0.09,
-      canReceive: true,
-      category: 'finished',
-    },
-    {
-      id: '2',
-      date: 'Mar 10',
-      status: 'Unclaimed',
-      estimatedBetting: 207.00,
-      estimatedRebate: 0.62,
-      canReceive: true,
-      category: 'finished',
-    },
-    {
-      id: '3',
-      date: 'Feb 12',
-      status: 'Claimed',
-      estimatedBetting: 99.00,
-      estimatedRebate: 0.30,
-      canReceive: false,
-      category: 'collected',
-    },
-    {
-      id: '4',
-      date: 'Feb 5',
-      status: 'Processing',
-      estimatedBetting: 99.00,
-      estimatedRebate: 0.30,
-      canReceive: false,
-      category: 'pending',
-    },
-    {
-      id: '5',
-      date: 'Feb 4',
-      status: 'Unclaimed',
-      estimatedBetting: 33.00,
-      estimatedRebate: 0.10,
-      canReceive: true,
-      category: 'finished',
-    },
-    {
-      id: '6',
-      date: 'Feb 1',
-      status: 'Claimed',
-      estimatedBetting: 150.00,
-      estimatedRebate: 0.45,
-      canReceive: false,
-      category: 'collected',
-    },
-    {
-      id: '7',
-      date: 'Jan 28',
-      status: 'Processing',
-      estimatedBetting: 75.00,
-      estimatedRebate: 0.23,
-      canReceive: false,
-      category: 'pending',
-    },
-  ];
+  // Helper to check if a date falls in today / this week / this month
+  const isDateInFilter = (dateStr: string) => {
+    if (!dateStr) return false;
+    const date = new Date(dateStr);
+    const now = new Date();
 
-  // Filter data based on selected tab and date filter
-  const getFilteredData = () => {
-    let filteredData = allRebateData;
-    
-    // Apply tab filter
-    switch (selectedTab) {
-      case 'TO_BE_FINISHED':
-        filteredData = allRebateData.filter(item => item.category === 'finished' && item.status === 'Unclaimed');
-        break;
-      case 'TO_BE_COLLECTED':
-        filteredData = allRebateData.filter(item => item.category === 'collected' && item.status === 'Claimed');
-        break;
-      case 'ALL':
-      default:
-        filteredData = allRebateData;
-        break;
-    }
-    
-    // Apply date filter
     switch (selectedDateFilter) {
       case 'TODAY':
-        filteredData = filteredData.filter(item => item.date.includes('Mar 14'));
-        break;
-      case 'THIS_WEEK':
-        filteredData = filteredData.filter(item => 
-          item.date.includes('Mar 14') || item.date.includes('Mar 10')
-        );
-        break;
+        return date.toDateString() === now.toDateString();
+
+      case 'THIS_WEEK': {
+        const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        return date >= weekStart && date <= weekEnd;
+      }
+
       case 'THIS_MONTH':
-        filteredData = filteredData.filter(item => 
-          item.date.includes('Mar') || item.date.includes('Feb')
-        );
-        break;
+        return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+
       case 'ALL':
       default:
-        // No additional filtering
-        break;
+        return true;
     }
-    
-    return filteredData;
+  };
+
+  const getFilteredData = () => {
+    let baseList: RebateItem[] = [];
+
+    switch (selectedTab) {
+      case 'ALL':
+        baseList = allRebateSummaryMaster || [];
+        break;
+
+      case 'TO_BE_COLLECTED':
+        baseList = toBeCollectedListMaster || [];
+        break;
+
+      case 'Received':
+        baseList = receivedListMaster || [];
+        break;
+
+      default:
+        baseList = [];
+    }
+
+    // Apply date filter
+    return baseList.filter(item => isDateInFilter(item.date));
   };
 
   const rebateData = getFilteredData();
 
-  const handleBackPress = () => {
-    navigation.goBack();
-  };
-
-  const handleFilterPress = () => {
-    setShowFilterModal(!showFilterModal);
-  };
-
-  const handleWalletPress = () => {
-    navigation.navigate('Profile');
-  };
+  const handleBackPress = () => navigation.goBack();
+  const handleFilterPress = () => setShowFilterModal(!showFilterModal);
+  const handleWalletPress = () => navigation.navigate('Profile');
 
   useEffect(() => {
-    dispatch(getRebateSummary());
-    dispatch(getRebateList({claimed: false}));
-  }, []);
+    // Fetch all three datasets up front
+    dispatch(getRebateSummary({}));
+    dispatch(getRebateList({ claimed: false }));
+    dispatch(getRebateList({ claimed: true }));
+  }, [dispatch]);
 
-
-  // const handleReceivePress = async () => {
-  //   try {
-  //     const resultAction = await dispatch(claimRebate({ rebateId : item.id }));
-  //     unwrapResult(resultAction);
-  //     dispatch(getRebateList({claimed: true}));
-
-  //     Toast.show({
-  //       type: 'success',
-  //       text1: 'Rebate Claimed successfully',
-  //       position: 'top',
-  //     });
-  //   }
-  //   catch (error: any) {
-  //     console.log('error', error);
-  //     Toast.show({
-  //       type: 'error',
-  //       text1: 'Something went wrong',
-  //       position: 'top',
-  //     });
-  //   }
-  // };
-  
   const handleReceivePress = async (item) => {
     try {
-      const resultAction = await dispatch(
-        claimRebate({ rebateId: item.id })
-      ).unwrap();
-  
-      // Refresh list after claiming
+      await dispatch(claimRebate({ rebateId: item.id })).unwrap();
+      await dispatch(getRebateList({ claimed: false }));
       await dispatch(getRebateList({ claimed: true }));
-  
+      await dispatch(getRebateSummary());
+
       Toast.show({
         type: 'success',
         text1: 'Rebate Claimed successfully',
         position: 'top',
       });
-  
     } catch (error) {
       console.log('error', error);
       Toast.show({
@@ -226,33 +142,13 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
       });
     }
   };
-  
-
-
-  // const handleReceivePress = (item: RebateItem) => {
-  //   if (item.canReceive) {
-  //     // Update the item status to claimed
-  //     const updatedData = allRebateData.map(rebateItem => 
-  //       rebateItem.id === item.id 
-  //         ? { ...rebateItem, status: 'Claimed' as const, canReceive: false, category: 'collected' as const }
-  //         : rebateItem
-  //     );
-  //     // In a real app, you would update the state or make an API call here
-  //     console.log('Rebate claimed for item:', item.id);
-  //     alert(`Rebate of ₹${item.estimatedRebate.toFixed(2)} has been claimed!`);
-  //   }
-  // };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Unclaimed':
-        return '#4A90E2';
-      case 'Claimed':
-        return '#4CAF50';
-      case 'Processing':
-        return '#FF9800';
-      default:
-        return '#666';
+      case 'Unclaimed': return '#4A90E2';
+      case 'Claimed': return '#4CAF50';
+      case 'Processing': return '#FF9800';
+      default: return '#666';
     }
   };
 
@@ -264,7 +160,7 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
           {item.status}
         </Text>
       </View>
-  
+
       <View style={styles.rebateContent}>
         <View style={styles.bettingInfo}>
           <View style={styles.infoRow}>
@@ -277,7 +173,7 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
               Estimated Recharge: ₹{item?.rebatePercentage?.toFixed(2)}
             </Text>
           </View>
-  
+
           <View style={styles.infoRow}>
             <Image
               source={require('../../assets/wallet-icon.webp')}
@@ -289,7 +185,7 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
             </Text>
           </View>
         </View>
-  
+
         {item?.claimed === false ? (
           <LinearGradient
             colors={[COLORS.linearOne, COLORS.linearTwo]}
@@ -312,11 +208,9 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
       </View>
     </View>
   );
-  
 
   const renderTab = (tab: { id: string; name: string }) => {
     const isSelected = selectedTab === tab.id;
-    
     return (
       <TouchableOpacity
         key={tab.id}
@@ -334,8 +228,7 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
-      
-      {/* Header */}
+
       <NewAppHeader
         leftIconPress={handleBackPress}
         centerText="Rebate"
@@ -343,7 +236,6 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
         rightIconPress={handleWalletPress}
       />
 
-      {/* Tabs */}
       <View style={styles.tabsContainer}>
         <View style={styles.tabsWrapper}>
           {tabs.map(renderTab)}
@@ -363,42 +255,20 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
         <View style={styles.filterModal}>
           <View style={styles.filterModalContent}>
             <Text style={styles.filterModalTitle}>Filter by Date</Text>
-            <TouchableOpacity
-              style={styles.filterOption}
-              onPress={() => {
-                setSelectedDateFilter('ALL');
-                setShowFilterModal(false);
-              }}
-            >
-              <Text style={styles.filterOptionText}>All Dates</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.filterOption}
-              onPress={() => {
-                setSelectedDateFilter('TODAY');
-                setShowFilterModal(false);
-              }}
-            >
-              <Text style={styles.filterOptionText}>Today</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.filterOption}
-              onPress={() => {
-                setSelectedDateFilter('THIS_WEEK');
-                setShowFilterModal(false);
-              }}
-            >
-              <Text style={styles.filterOptionText}>This Week</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.filterOption}
-              onPress={() => {
-                setSelectedDateFilter('THIS_MONTH');
-                setShowFilterModal(false);
-              }}
-            >
-              <Text style={styles.filterOptionText}>This Month</Text>
-            </TouchableOpacity>
+            {['ALL', 'TODAY', 'THIS_WEEK', 'THIS_MONTH'].map(filter => (
+              <TouchableOpacity
+                key={filter}
+                style={styles.filterOption}
+                onPress={() => {
+                  setSelectedDateFilter(filter);
+                  setShowFilterModal(false);
+                }}
+              >
+                <Text style={styles.filterOptionText}>
+                  {filter === 'ALL' ? 'All Dates' : filter.replace('_', ' ')}
+                </Text>
+              </TouchableOpacity>
+            ))}
             <TouchableOpacity
               style={styles.closeFilterButton}
               onPress={() => setShowFilterModal(false)}
@@ -409,45 +279,29 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
         </View>
       )}
 
-      {/* Rebate List */}
-      {/* <FlatList
-        data={rebateListData}
+      <FlatList
+        data={rebateData}
         renderItem={renderRebateItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
-              {selectedDateFilter !== 'ALL' 
-                ? `No rebates found for ${selectedDateFilter.toLowerCase().replace('_', ' ')}` 
-                : 'No rebates found for this filter'
-              }
+              {selectedDateFilter !== 'ALL'
+                ? `No rebates found for ${selectedDateFilter.toLowerCase().replace('_', ' ')}`
+                : 'No rebates found'}
             </Text>
           </View>
         )}
-      /> */}
-      <FlatList
-  data={rebateListData}
-  renderItem={renderRebateItem}
-  keyExtractor={(item) => item.id.toString()}
-  contentContainerStyle={styles.listContainer}
-  showsVerticalScrollIndicator={false}
-  ListEmptyComponent={() => (
-    <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>
-        {selectedDateFilter !== 'ALL'
-          ? `No rebates found for ${selectedDateFilter.toLowerCase().replace('_', ' ')}`
-          : 'No rebates found'}
-      </Text>
-    </View>
-  )}
-/>
+      />
 
       <Toast/>
     </View>
   );
 };
+
+
 
 const createStyles = (Scale: any) =>
   StyleSheet.create({

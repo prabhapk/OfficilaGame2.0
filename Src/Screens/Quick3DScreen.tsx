@@ -368,7 +368,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
             onPress: () => {
               setNumbers([]);
               setSelectedOption(value.name);
-
+              resetState();
               triggerAPI(value.name);
             },
           },
@@ -380,6 +380,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 
     setSelectedOption(value.name);
     triggerAPI(value.name);
+    resetState();
   };
 
   const triggerAPI = (selectedOption: string) => {    
@@ -567,6 +568,8 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         const resultAction = await dispatch(payNow(apiData));
         const data = unwrapResult(resultAction);
         if (data.success === true) {
+          console.log('checking');
+          
           resetState();
           dispatch(getWalletBalance());
           dispatch(

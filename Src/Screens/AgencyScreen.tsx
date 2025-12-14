@@ -13,16 +13,19 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useContainerScale } from '../hooks/useContainerScale';
 import NewAppHeader from '../Components/NewAppHeader';
 import { COLORS } from '../Constants/Theme';
-import { useDispatch } from 'react-redux';
-import { getAgentDailyStats } from '../Redux/Slice/agentSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAgentDailyStats, getAgentDashboardData } from '../Redux/Slice/agentSlice';
+import { RootState } from '../Redux/store';
+import { formatToDDMMYYYY } from '../Utils/Common';
+import * as Clipboard from 'expo-clipboard';
 
 const AgencyScreen = ({ navigation }: { navigation: any }) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const dispatch = useDispatch();
 
-  const [invitationCode] = useState('FYLAMNNS');
   const [todayData] = useState({
     active: 0,
     rechargeUsers: 0,
@@ -32,6 +35,13 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
     recharge: 0.00,
     commission: 0.00,
   });
+
+  const { dashBoardUserDataActiveUser, dashBoardUserDataRechargeUser, dashBoardUserDataNewUser, dashBoardDailyDataRecharge, dashBoardDailyDataCommission, inviteCode,agentCreatedDate } = useSelector(
+    (state: RootState) => state.agentSlice
+  );
+  const {mobileNumber } = useSelector(
+    (state: RootState) => state.signInSlice
+  );
 
   const handleBackPress = () => {
     navigation.goBack();
@@ -55,11 +65,12 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
   };
 
   const handleTeamReport = () => {
-    Alert.alert('Team Report', 'Opening team report...');
+    // Alert.alert('Team Report', 'Opening team report...');
+    navigation.navigate('AgentTeamReport');
   };
 
   const handleCommissionDetail = () => {
-    Alert.alert('Commission Detail', 'Opening commission details...');
+    navigation.navigate('AgentCommissionDetail');
   };
 
   const handleInvitationRules = () => {
@@ -70,9 +81,26 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
     Alert.alert('Customer Service', 'Opening customer service...');
   };
 
-  useEffect(() => {
-dispatch(getAgentDailyStats({agentId: Number(11111), date: '2022-08-01'}))
-  },[])
+//   useEffect(() => {
+// // dispatch(getAgentDailyStats({agentId: Number(11111), date: '2022-08-01'}))
+// dispatch(getAgentDashboardData({agentId: Number(1)}))
+//   },[])
+useEffect(() => {
+  dispatch(getAgentDashboardData({ agentId: 1 }));
+}, []);
+
+
+const handleCopyLink = async () => {
+  try {
+    await Clipboard.setStringAsync(shareUrl);
+    Alert.alert('Copied!', 'Link copied to clipboard');
+    setShowShareModal(false);
+  } catch (error) {
+    console.log('Error copying link:', error);
+    Alert.alert('Error', 'Unable to copy link');
+  }
+};
+
 
   return (
     <View style={styles.container}>
@@ -100,8 +128,8 @@ dispatch(getAgentDailyStats({agentId: Number(11111), date: '2022-08-01'}))
             </View>
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userId}>8618110673</Text>
-            <Text style={styles.registerDate}>Register Date: 19/08 2025</Text>
+            <Text style={styles.userId}>{mobileNumber}</Text>
+            <Text style={styles.registerDate}>Register Date: {formatToDDMMYYYY(agentCreatedDate)}</Text>
           </View>
         </View>
 
@@ -113,21 +141,21 @@ dispatch(getAgentDailyStats({agentId: Number(11111), date: '2022-08-01'}))
               <View style={styles.statIcon}>
                 <Text style={styles.statIconText}>👥</Text>
               </View>
-              <Text style={styles.statNumber}>{todayData.active}</Text>
+              <Text style={styles.statNumber}>{dashBoardUserDataActiveUser}</Text>
               <Text style={styles.statLabel}>Active</Text>
             </View>
             <View style={styles.statItem}>
               <View style={styles.statIcon}>
                 <Text style={styles.statIconText}>💳</Text>
               </View>
-              <Text style={styles.statNumber}>{todayData.rechargeUsers}</Text>
+              <Text style={styles.statNumber}>{dashBoardUserDataRechargeUser}</Text>
               <Text style={styles.statLabel}>Recharge Users</Text>
             </View>
             <View style={styles.statItem}>
               <View style={styles.statIcon}>
                 <Text style={styles.statIconText}>👤+</Text>
               </View>
-              <Text style={styles.statNumber}>{todayData.newUser}</Text>
+              <Text style={styles.statNumber}>{dashBoardUserDataNewUser}</Text>
               <Text style={styles.statLabel}>New User</Text>
             </View>
           </View>
@@ -144,7 +172,7 @@ dispatch(getAgentDailyStats({agentId: Number(11111), date: '2022-08-01'}))
                 </View>
                 <Text style={styles.monthStatLabel}>Recharge</Text>
               </View>
-              <Text style={styles.monthStatAmount}>₹{monthData.recharge.toFixed(2)}</Text>
+              <Text style={styles.monthStatAmount}>₹{dashBoardDailyDataRecharge.toFixed(2)}</Text>
               <View style={styles.monthStatChange}>
                 <Text style={styles.monthStatChangeText}>₹{monthData.recharge.toFixed(2)}</Text>
                 <Text style={styles.monthStatArrow}>↗</Text>
@@ -157,9 +185,9 @@ dispatch(getAgentDailyStats({agentId: Number(11111), date: '2022-08-01'}))
                 </View>
                 <Text style={styles.monthStatLabel}>Commission</Text>
               </View>
-              <Text style={styles.monthStatAmount}>₹{monthData.commission.toFixed(2)}</Text>
+              <Text style={styles.monthStatAmount}>₹{dashBoardDailyDataCommission.toFixed(2)}</Text>
               <View style={styles.monthStatChange}>
-                <Text style={styles.monthStatChangeText}>₹{monthData.commission.toFixed(2)}</Text>
+                <Text style={styles.monthStatChangeText}>₹{dashBoardDailyDataCommission.toFixed(2)}</Text>
                 <Text style={styles.monthStatArrow}>↗</Text>
               </View>
             </View>
@@ -180,7 +208,7 @@ dispatch(getAgentDailyStats({agentId: Number(11111), date: '2022-08-01'}))
           
           <View style={styles.invitationCodeContainer}>
             <View style={styles.invitationCodeBox}>
-              <Text style={styles.invitationCodeText}>{invitationCode}</Text>
+              <Text style={styles.invitationCodeText}>{inviteCode}</Text>
               <Text style={styles.invitationCodeLabel}>My invitation code</Text>
             </View>
             <TouchableOpacity style={styles.copyButton} onPress={handleCopyCode}>

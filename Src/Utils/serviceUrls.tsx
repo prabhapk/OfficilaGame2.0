@@ -58,6 +58,7 @@ export const serviceUrls = {
   },
   Agent: {
     dailyStats: '/api/Agent/daily-stats',
+    dashboardData: '/api/Agent/dashboard',
   },
   Rebate: {
     rebateSummary: '/api/user/rebate/summary',
