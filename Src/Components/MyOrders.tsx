@@ -65,6 +65,26 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
     typeof paymentAmount === "number"
     ? Number(paymentAmount)
     : myBetsTableData.reduce((s, b) => s + getRowAmount(b), 0);
+
+    const hasWinningBet = myBetsTableData.some(
+      (bet) => bet.result === "Won"
+    );
+    
+    const hasDrawPending = myBetsTableData.some(
+      (bet) => bet.result === "To Be Drawn"
+    );
+    
+    let derivedStatus: "Won" | "No Won" | "To Be Drawn";
+    
+    if (hasWinningBet) {
+      derivedStatus = "Won";
+    } else if (hasDrawPending) {
+      derivedStatus = "To Be Drawn";
+    } else {
+      derivedStatus = "No Won";
+    }
+    
+
   return (
     <View style={styles.cardContainer}>
       <Text
@@ -105,7 +125,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
         {/* Win Ui  */}
         <View>
   {/* === Status Label Section === */}
-  {status === "Won" && (
+  {derivedStatus === "Won" && (
     <ImageBackground
       source={myOrdersWinLabel}
       style={{
@@ -153,8 +173,9 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
       </View>
     </ImageBackground>
   )}
+  
 
-  {status === "No Won" && (
+  {derivedStatus === "No Won" && (
     <LinearGradient
       colors={[COLORS.linearOne, COLORS.linearTwo]}
       start={{ x: 0, y: 0 }}
@@ -214,7 +235,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
   )}
 
   {/* {status === "No Won" && winningNumber === null && ( */}
-  {status === "To Be Drawn" &&  (
+  {derivedStatus === "To Be Drawn" &&  (
     <LinearGradient
     colors={[COLORS.linearOne, COLORS.linearTwo]}
       start={{ x: 0, y: 0 }}
@@ -296,7 +317,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
 
   {/* === Footer (Win / Loss Message) === */}
   <View style={{ marginTop: Scale(10), marginBottom: Scale(5) }}>
-    {status === "Won" && (
+    {derivedStatus === "Won" && (
       <ImageBackground
         source={winLabel}
         style={{
@@ -322,12 +343,12 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
       </ImageBackground>
     )
   }
-    {status === "No Won" && (
+    {derivedStatus === "No Won" && (
       <Text style={styles.footerText}>
         Sorry, your guess is wrong, Try next time
       </Text>
     )}
-    {status === "To Be Drawn" && (
+    {derivedStatus === "To Be Drawn" && (
       <>
       </>
     )}
@@ -378,48 +399,66 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
 
   return (
     <View
-      key={`${bet.type}-${rowIndex}`}
-      style={[styles.tableRow, { backgroundColor: rowBgColor }]}
-    >
-      {/* Row Balls */}
-      <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
-        {headers.map((colHead) => {
-          let color =
-            colHead === "A" ? "#DE3C3F" :
-            colHead === "B" ? "#EC8204" :
-            "#066FEA";
-
-          const digits = String(bet.value).split("");
-          let showDigit = "-";
-
-          if (bet.type.length === digits.length) {
-            const pos = bet.type.indexOf(colHead);
-            if (pos !== -1) showDigit = digits[pos] || "-";
-          } else if (bet.type.includes(colHead)) {
-            showDigit = digits[0] || "-";
-          }
-
-          return (
-            <TableCommonBall
-              key={colHead}
-              backgroundColor={showDigit !== "-" ? color : "#BFBFBF"}
-              innerText={showDigit}
-              borderColor={showDigit !== "-" ? color : "#BFBFBF"}
-            />
-          );
-        })}
-      </View>
-
-      {/* ✅ Payment from API */}
-      <Text style={{ color: COLORS.white }}>
+    key={`${bet.type}-${rowIndex}`}
+    style={[styles.tableRow, { backgroundColor: rowBgColor }]}
+  >
+    {/* Balls Column */}
+    <View style={styles.ballsColumn}>
+      {headers.map((colHead) => {
+        let color =
+          colHead === "A" ? "#DE3C3F" :
+          colHead === "B" ? "#EC8204" :
+          "#066FEA";
+  
+        const digits = String(bet.value).split("");
+        let showDigit = "-";
+  
+        if (bet.type?.length === digits?.length) {
+          const pos = bet?.type?.indexOf(colHead);
+          if (pos !== -1) showDigit = digits[pos] || "-";
+        } else if (bet?.type?.includes(colHead)) {
+          showDigit = digits[0] || "-";
+        }
+  
+        return (
+          <TableCommonBall
+            key={colHead}
+            backgroundColor={showDigit !== "-" ? color : "#BFBFBF"}
+            innerText={showDigit}
+            borderColor={showDigit !== "-" ? color : "#BFBFBF"}
+          />
+        );
+      })}
+    </View>
+  
+    {/* Payment Column */}
+    <View style={styles.paymentColumn}>
+      <Text style={styles.paymentText}>
         ₹{totalPaymentAmount.toFixed(2)}
       </Text>
-
-      {/* Result */}
-      <Text style={{ color: COLORS.white, marginRight: 20 }}>
-        {status}
+    </View>
+  
+    {/* Result Column */}
+    <View style={styles.resultColumn}>
+      <Text
+        style={[
+          styles.resultText,
+          {
+            color:
+              bet.result === "Won"
+                ? "#2ECC71"
+                : bet.result === "No Won"
+                ? "#E74C3C"
+                : COLORS.white,
+          },
+        ]}
+        numberOfLines={1}
+      >
+        {bet.result}
       </Text>
     </View>
+  </View>
+  
   );
 })}
 
@@ -533,7 +572,35 @@ const createStyles = (Scale: any) =>
       textAlign: "center",
       fontSize: 16,
       color: "white",
-      marginVertical: 30,
+      marginVertical: Scale(30),
+    },
+    ballsColumn: {
+      flex: 1,
+      flexDirection: "row",
+      marginLeft: 10,
+    },
+    
+    paymentColumn: {
+      width: Scale(120),
+      alignItems: "flex-start",
+      paddingRight: 10,
+    },
+    
+    paymentText: {
+      color: COLORS.white,
+      fontSize: 14,
+      fontWeight: "600",
+    },
+    
+    resultColumn: {
+      width: Scale(70),
+      alignItems: "flex-start",
+      paddingRight: 10,
+    },
+    
+    resultText: {
+      fontSize: 14,
+      fontWeight: "600",
     },
   });
 

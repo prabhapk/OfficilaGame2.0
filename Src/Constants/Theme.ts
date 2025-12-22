@@ -12,6 +12,8 @@ const COLORS = {
   buttonTextColor1: '#fff',
   buttonTextColor2: '#fff',
   primaryTextColor: '#001F4F',
+  check: '#794CB7',
+  check1: '#5E319C'
 };
 
 const Fonts = {

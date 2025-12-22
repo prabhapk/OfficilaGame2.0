@@ -212,16 +212,27 @@ const ResultTable: React.FC<ResultTableProps> = ({
 
     return (
       <MyOrders
-        headers={["A", "B", "C"]}
+        headers={["A", "B", "C"]}        
         myBetsTableData={item.bets.map((b) => ({
-          ...b,
-          // attach parent's betCount so MyOrders can multiply if bet doesn't carry its own count
-          betCount: b.betCount ?? item.betCount,
-          // only attach parent totalAmount if there's a single bet in this order AND the bet doesn't already have totalAmount
-          totalAmount:
-            b.totalAmount ??
-            (item.bets.length === 1 ? item.totalAmount : undefined),
+          // ✅ NORMALIZED FIELDS FOR UI
+          type: b.betType,
+          value: b.selectedNumber,
+          payment: b.amount,
+        
+          betCount: b.betCount ?? 1,
+          totalAmount: b.totalAmount,
+        
+          // ✅ result logic (already correct)
+          result:
+            b.isWinning === true
+              ? "Won"
+              : b.isWinning === false && item.winningNumber !== null
+              ? "No Won"
+              : "To Be Drawn",
         }))}
+        
+        
+        
         id={item.betUniqueId}
         bettingTime={item.betTime.split("T")[0]}
         paymentAmount={item.totalAmount} // order total (used by MyOrders to show order total)

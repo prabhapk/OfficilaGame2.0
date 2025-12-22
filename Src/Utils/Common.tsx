@@ -188,25 +188,35 @@ export const groupByOrder = (data: any[]) => {
   data.forEach((item) => {
     if (!grouped[item.betUniqueId]) {
       grouped[item.betUniqueId] = {
-        ...item,       // copy common props (betTime, drawTime, etc.)
-        bets: [],      // collect bets here
-        totalAmount: 0 // recalc total
+        betUniqueId: item.betUniqueId,
+        betTime: item.betTime,
+        nextDrawTime: item.nextDrawTime,
+        winningNumber: item.winningNumber, // ✅ keep at order level
+        gameName: item.gameName,
+        isWinning: item.isWinning, // optional summary
+        bets: [],
+        totalAmount: 0,
       };
     }
 
     grouped[item.betUniqueId].bets.push({
-      type: item.betType,
-      value: item.selectedNumber,
-      payment: item.amount,
-      result: item.isWinning ? "Won" : "No Won",
+      // ✅ NORMALIZED BET DATA
+      betType: item.betType,
+      selectedNumber: item.selectedNumber,
+      amount: item.amount,
+      betCount: item.betCount,
+      totalAmount: item.totalAmount,
+
+      // ✅ THIS IS THE KEY FIX
+      isWinning: item.isWinning,
     });
 
-    // Update total for this order
     grouped[item.betUniqueId].totalAmount += item.amount;
   });
 
   return Object.values(grouped);
 };
+
 
 export type OrderStatus = "pending" | "win" | "loss";
 
