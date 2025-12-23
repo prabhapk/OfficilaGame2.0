@@ -66,6 +66,7 @@ import PaymentSuccessModal from "../Components/Modal/PaymentSuccessModal";
 import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceModal";
 import { getIndividualGameResult } from "../Redux/Slice/resultSlice";
 import NewAppHeader from "../Components/NewAppHeader";
+import ResultTable from "../Components/ResultTable";
 
 const Quick3DScreen = ({ navigation, route }: any) => {
   const { Scale } = useContainerScale();
@@ -110,6 +111,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
       ...item,
       balls: item.winningNumber.split(""),
     })) || [];
+
   const totalPages = individualGameResults?.totalPages || 0;
 
   const handleChildStateChange = (updatedValue: any) => {
@@ -383,15 +385,15 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     resetState();
   };
 
-  const triggerAPI = (selectedOption: string) => {    
+  const triggerAPI = (selectedOption: string) => {
     // dispatch(
     //   getMyOrders({
     //     userId: userId,
     //     groupId: 2,
     //   })
     // );
-    console.log('checkSelectedOption==', selectedOption);
-    
+    console.log("checkSelectedOption==", selectedOption);
+
     if (selectedOption == "1 Mins") {
       dispatch(
         fetchQuick3DGamesData({
@@ -411,6 +413,20 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         })
       );
     }
+    dispatch(
+      getMyOrders({
+        userId: userId,
+        groupId: quick3dGamesGroupId,
+      })
+    );
+    dispatch(
+      getIndividualGameResult({
+        // groupId: quick3dGamesGroupId,
+        GametypeId: quick3dGamesGroupId,
+        page: tableCurrentPage,
+        pageSize: 10,
+      })
+    );
     setLast30sec(false);
   };
 
@@ -568,14 +584,14 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         const resultAction = await dispatch(payNow(apiData));
         const data = unwrapResult(resultAction);
         if (data.success === true) {
-          console.log('checking');
-          
+          console.log("checking");
+
           resetState();
           dispatch(getWalletBalance());
           dispatch(
             getMyOrders({
               userId: userId,
-              groupId: groupId,
+              groupId: quick3dGamesGroupId,
             })
           );
         }
@@ -597,8 +613,12 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     return (
       <LinearGradient
         colors={[
-          selectedOption === item.name ? COLORS.linearOne : COLORS.gameDetailColor, // fallback color
-          selectedOption === item.name ? COLORS.linearTwo : COLORS.gameDetailColor,
+          selectedOption === item.name
+            ? COLORS.linearOne
+            : COLORS.gameDetailColor, // fallback color
+          selectedOption === item.name
+            ? COLORS.linearTwo
+            : COLORS.gameDetailColor,
         ]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -634,11 +654,6 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 
   const renderContent = () => {
     const transformedGameData = transformApiResponse(quick3dGamesList || {});
-    console.log(
-      "islast30sec==>",
-      islast30sec,
-      transformedGameData.targetDateProp
-    );
     return (
       <>
         <DigitComponent
@@ -660,25 +675,30 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           onStateChange={handleChildStateChange}
           targetDateProp={transformedGameData.targetDateProp}
           totalPage={totalPages}
-          // onTimerComplete={() => triggerAPI(selectedOption)}
           onThirtySecondsRemaining={() => {
             setLast30SecStates((prev) => ({
               ...prev,
-              [transformedGameData.groupId]: true, // mark this group as <30s
+              [transformedGameData.groupId]: true, 
             }));
           }}
           onTimerComplete={() => {
             setLast30SecStates((prev) => ({
               ...prev,
-              [transformedGameData.groupId]: false, // reset when timer completes
+              [transformedGameData.groupId]: false,
             }));
-            triggerAPI(selectedOption); // your other reset logic
+            triggerAPI(selectedOption); 
           }}
           gameName={transformedGameData.gameName}
           groupId={transformedGameData.groupId}
           singleDigitGameId={transformedGameData.singleDigitGameId}
           doubleDigitGameId={transformedGameData.doubleDigitGameId}
           threeDigitGameId={transformedGameData.threeDigitGameId}
+        />
+
+        <ResultTable
+          tableData={transformedResultData}
+          totalPage={totalPages}
+          showHeader={true}
         />
       </>
     );

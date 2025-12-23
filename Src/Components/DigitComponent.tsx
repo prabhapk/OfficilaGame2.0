@@ -31,7 +31,11 @@ import {
   setThreeDigitC,
   setThreeDigitCount,
 } from "../Redux/Slice/threeDigitSlice";
-import { gameRules, handleShowAlert, showHowToPlay } from "../Redux/Slice/commonSlice";
+import {
+  gameRules,
+  handleShowAlert,
+  showHowToPlay,
+} from "../Redux/Slice/commonSlice";
 import Show30SecondsModal from "./Show30SecondsModal";
 import { COLORS } from "../Constants/Theme";
 import { LinearGradient } from "expo-linear-gradient";
@@ -51,7 +55,7 @@ export interface IDigitProps {
 
   tableData: any[];
   lastGameWiiningId: string;
-  nextGameId: string;
+  nextGameId: string | number;
   latGameWinningA: string;
   lastGameWinningB: string;
   lastGameWinningC: string;
@@ -238,8 +242,6 @@ const DigitComponent: React.FC<IDigitProps> = ({
       setTargetDate(targetDateProp);
     }
   }, [targetDateProp]);
-
-
 
   return (
     <>
@@ -569,9 +571,19 @@ const DigitComponent: React.FC<IDigitProps> = ({
             )}
             <CommonAddButton
               innerText="ADD"
-              opacity={doubleDigitA1 !== "" && doubleDigitB1 !== "" && doubleABCount !== "" ? 1 : 0.5}
+              opacity={
+                doubleDigitA1 !== "" &&
+                doubleDigitB1 !== "" &&
+                doubleABCount !== ""
+                  ? 1
+                  : 0.5
+              }
               isDisabled={
-                doubleDigitA1 !== "" && doubleDigitB1 !== "" && doubleABCount !== "" ? false : true
+                doubleDigitA1 !== "" &&
+                doubleDigitB1 !== "" &&
+                doubleABCount !== ""
+                  ? false
+                  : true
               }
               onPress={() =>
                 handleAdd(
@@ -634,9 +646,19 @@ const DigitComponent: React.FC<IDigitProps> = ({
             )}
             <CommonAddButton
               innerText="ADD"
-              opacity={doubleDigitA2 !== "" && doubleDigitC1 !== "" && doubleACCount !== "" ? 1 : 0.5}
+              opacity={
+                doubleDigitA2 !== "" &&
+                doubleDigitC1 !== "" &&
+                doubleACCount !== ""
+                  ? 1
+                  : 0.5
+              }
               isDisabled={
-                doubleDigitA2 !== "" && doubleDigitC1 !== "" && doubleACCount !== "" ? false : true
+                doubleDigitA2 !== "" &&
+                doubleDigitC1 !== "" &&
+                doubleACCount !== ""
+                  ? false
+                  : true
               }
               onPress={() =>
                 handleAdd(
@@ -699,9 +721,19 @@ const DigitComponent: React.FC<IDigitProps> = ({
             )}
             <CommonAddButton
               innerText="ADD"
-              opacity={doubleDigitB2 !== "" && doubleDigitC2 !== "" && doubleBCCount !== "" ? 1 : 0.5}
+              opacity={
+                doubleDigitB2 !== "" &&
+                doubleDigitC2 !== "" &&
+                doubleBCCount !== ""
+                  ? 1
+                  : 0.5
+              }
               isDisabled={
-                doubleDigitB2 !== "" && doubleDigitC2 !== "" && doubleBCCount !== "" ? false : true
+                doubleDigitB2 !== "" &&
+                doubleDigitC2 !== "" &&
+                doubleBCCount !== ""
+                  ? false
+                  : true
               }
               onPress={() =>
                 handleAdd(
@@ -853,12 +885,18 @@ const DigitComponent: React.FC<IDigitProps> = ({
               <CommonAddButton
                 innerText={"BOX"}
                 opacity={
-                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== "" && threeDigitCount !== ""
+                  threeDigitA !== "" &&
+                  threeDigitB !== "" &&
+                  threeDigitC !== "" &&
+                  threeDigitCount !== ""
                     ? 1
                     : 0.5
                 }
                 isDisabled={
-                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== "" && threeDigitCount !== ""
+                  threeDigitA !== "" &&
+                  threeDigitB !== "" &&
+                  threeDigitC !== "" &&
+                  threeDigitCount !== ""
                     ? false
                     : true
                 }
@@ -874,12 +912,18 @@ const DigitComponent: React.FC<IDigitProps> = ({
               <CommonAddButton
                 innerText="ADD"
                 opacity={
-                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== "" && threeDigitCount !== ""
+                  threeDigitA !== "" &&
+                  threeDigitB !== "" &&
+                  threeDigitC !== "" &&
+                  threeDigitCount !== ""
                     ? 1
                     : 0.5
                 }
                 isDisabled={
-                  threeDigitA !== "" && threeDigitB !== "" && threeDigitC !== "" && threeDigitCount !== ""
+                  threeDigitA !== "" &&
+                  threeDigitB !== "" &&
+                  threeDigitC !== "" &&
+                  threeDigitCount !== ""
                     ? false
                     : true
                 }
@@ -903,9 +947,10 @@ const DigitComponent: React.FC<IDigitProps> = ({
         </View>
 
         <ResultTable
-         tableData={tableData} 
-         totalPage ={totalPage}
-         showHeader={true} />
+          tableData={tableData}
+          totalPage={totalPage}
+          showHeader={true}
+        />
       </View>
       {showAlert && <Show30SecondsModal />}
     </>
