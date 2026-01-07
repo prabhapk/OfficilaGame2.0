@@ -106,6 +106,8 @@ export interface CommonSliceState {
     winsData:any
     vipsData:any
     allTransactionsData:any
+    rebateData:any
+    commissionData:any
   }
 
   export interface vip {

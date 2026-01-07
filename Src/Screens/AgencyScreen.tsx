@@ -18,6 +18,7 @@ import { getAgentDailyStats, getAgentDashboardData } from '../Redux/Slice/agentS
 import { RootState } from '../Redux/store';
 import { formatToDDMMYYYY } from '../Utils/Common';
 import * as Clipboard from 'expo-clipboard';
+import { agentActiveUser, agentCommission, agentNewUsers, agentRecharge, agentRechargeMonth, resetIcon } from '../../assets/assets';
 
 const AgencyScreen = ({ navigation }: { navigation: any }) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -139,24 +140,35 @@ const handleCopyLink = async () => {
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
               <View style={styles.statIcon}>
-                <Text style={styles.statIconText}>👥</Text>
+                {/* <Text style={styles.statIconText}>👥</Text> */}
+                <Image source={agentActiveUser} style={{
+                  width: Scale(25),
+                  height: Scale(25),
+                }} />
               </View>
               <Text style={styles.statNumber}>{dashBoardUserDataActiveUser}</Text>
-              <Text style={styles.statLabel}>Active</Text>
+              <Text style={styles.statLabel}>ACTIVE</Text>
             </View>
             <View style={styles.statItem}>
               <View style={styles.statIcon}>
-                <Text style={styles.statIconText}>💳</Text>
+                {/* <Text style={styles.statIconText}>💳</Text> */}
+                <Image source={agentRecharge} style={{
+                  width: Scale(25),
+                  height: Scale(25),
+                }} />
               </View>
               <Text style={styles.statNumber}>{dashBoardUserDataRechargeUser}</Text>
-              <Text style={styles.statLabel}>Recharge Users</Text>
+              <Text style={styles.statLabel}>RECHARGE</Text>
             </View>
             <View style={styles.statItem}>
               <View style={styles.statIcon}>
-                <Text style={styles.statIconText}>👤+</Text>
+              <Image source={agentNewUsers} style={{
+                  width: Scale(30),
+                  height: Scale(30),
+                }} />
               </View>
               <Text style={styles.statNumber}>{dashBoardUserDataNewUser}</Text>
-              <Text style={styles.statLabel}>New User</Text>
+              <Text style={styles.statLabel}>NEW USER</Text>
             </View>
           </View>
         </View>
@@ -168,9 +180,12 @@ const handleCopyLink = async () => {
             <View style={styles.monthStatItem}>
               <View style={styles.monthStatHeader}>
                 <View style={styles.monthStatIcon}>
-                  <Text style={styles.monthStatIconText}>💳</Text>
+                <Image source={agentRechargeMonth} style={{
+                  width: Scale(25),
+                  height: Scale(25),
+                }} />
                 </View>
-                <Text style={styles.monthStatLabel}>Recharge</Text>
+                <Text style={styles.monthStatLabel}>RECHARGE</Text>
               </View>
               <Text style={styles.monthStatAmount}>₹{dashBoardDailyDataRecharge.toFixed(2)}</Text>
               <View style={styles.monthStatChange}>
@@ -181,9 +196,12 @@ const handleCopyLink = async () => {
             <View style={styles.monthStatItem}>
               <View style={styles.monthStatHeader}>
                 <View style={styles.monthStatIcon}>
-                  <Text style={styles.monthStatIconText}>💰</Text>
+                <Image source={agentCommission} style={{
+                  width: Scale(25),
+                  height: Scale(25),
+                }} />
                 </View>
-                <Text style={styles.monthStatLabel}>Commission</Text>
+                <Text style={styles.monthStatLabel}>COMMISSION</Text>
               </View>
               <Text style={styles.monthStatAmount}>₹{dashBoardDailyDataCommission.toFixed(2)}</Text>
               <View style={styles.monthStatChange}>
@@ -202,6 +220,11 @@ const handleCopyLink = async () => {
               <Text style={styles.invitationTitle}>My invitation code</Text>
             </View>
             <TouchableOpacity style={styles.resetButton} onPress={handleResetLink}>
+              <Image source={resetIcon} style={{
+                width: Scale(20),
+                height: Scale(20),
+                marginRight: Scale(5),
+              }} />
               <Text style={styles.resetButtonText}>Reset Link</Text>
             </TouchableOpacity>
           </View>
@@ -263,7 +286,7 @@ const handleCopyLink = async () => {
             <Text style={styles.navigationArrow}>›</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.navigationItem} onPress={handleCustomerService}>
+          {/* <TouchableOpacity style={styles.navigationItem} onPress={handleCustomerService}>
             <View style={styles.navigationLeft}>
               <View style={[styles.navigationIcon, { backgroundColor: '#9C27B0' }]}>
                 <Text style={styles.navigationIconText}>🎧</Text>
@@ -271,7 +294,7 @@ const handleCopyLink = async () => {
               <Text style={styles.navigationText}>Agent line customer service</Text>
             </View>
             <Text style={styles.navigationArrow}>›</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </ScrollView>
     </View>
@@ -345,6 +368,7 @@ const createStyles = (Scale: any) =>
     section: {
       marginHorizontal: Scale(20),
       marginBottom: Scale(20),
+      marginTop: Scale(10),
     },
     sectionTitle: {
       fontSize: Scale(18),
@@ -381,10 +405,10 @@ const createStyles = (Scale: any) =>
       fontSize: Scale(24),
       fontWeight: 'bold',
       color: '#fff',
-      marginBottom: Scale(4),
+      marginBottom: Scale(5),
     },
     statLabel: {
-      fontSize: Scale(12),
+      fontSize: Scale(14),
       color: '#ff5f5f',
     },
     monthStatsContainer: {
@@ -406,9 +430,9 @@ const createStyles = (Scale: any) =>
       marginBottom: Scale(10),
     },
     monthStatIcon: {
-      width: Scale(30),
-      height: Scale(30),
-      borderRadius: Scale(15),
+      width: Scale(40),
+      height: Scale(40),
+      borderRadius: Scale(20),
       backgroundColor: '#f0f0f0',
       justifyContent: 'center',
       alignItems: 'center',
@@ -468,6 +492,8 @@ const createStyles = (Scale: any) =>
       borderRadius: Scale(16),
       borderWidth: 1,
       borderColor: '#fff',
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     resetButtonText: {
       fontSize: Scale(12),
@@ -478,6 +504,7 @@ const createStyles = (Scale: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: Scale(15),
+      marginTop: Scale(10),
     },
     invitationCodeBox: {
       flex: 1,
@@ -487,7 +514,7 @@ const createStyles = (Scale: any) =>
       borderStyle: 'dashed',
       borderRadius: Scale(12),
       padding: Scale(15),
-      marginRight: Scale(10),
+      marginRight: Scale(30),
     },
     invitationCodeText: {
       fontSize: Scale(20),
@@ -515,6 +542,7 @@ const createStyles = (Scale: any) =>
     invitationLinkButton: {
       borderRadius: Scale(12),
       alignItems: 'center',
+      marginTop: Scale(20),
     },
     invitationLinkTouchable: {
       paddingVertical: Scale(15),

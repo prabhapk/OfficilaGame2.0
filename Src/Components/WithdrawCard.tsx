@@ -8,17 +8,17 @@ interface Props {
     beforeBalance: number;
     afterBalance: number;
     orderTime: string;
-    game: string;
+    description: string;
     orderNumber: string;
     Type: string;
 }
 
-const BetsCard : React.FC<Props> = (
+const WithdrawCard : React.FC<Props> = (
     {betAmount, 
         beforeBalance, 
         afterBalance, 
         orderTime,
-         game,
+        description,
           orderNumber,
         Type
         }
@@ -33,7 +33,7 @@ const BetsCard : React.FC<Props> = (
       <View style={styles.headerRow}>
         <View style={styles.iconTextRow}>
           <Image source={betIconCard} style={styles.betIcon} />
-          <Text style={styles.betTitle}>BETS</Text>
+          <Text style={styles.betTitle}>WITHDRAW</Text>
         </View>
         <Text style={styles.amountText}>-₹{betAmount} RS</Text>
       </View>
@@ -60,8 +60,8 @@ const BetsCard : React.FC<Props> = (
         <Text style={styles.label}>{Type}</Text>
       </View>
       <View style={styles.infoRow}>
-        <Text style={styles.label}>Game Name</Text>
-        <Text style={styles.label}>{game}</Text>
+        <Text style={styles.label}>Description</Text>
+        <Text style={styles.label}>{description}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Order Number</Text>
@@ -123,4 +123,4 @@ const createStyles = (Scale: any) =>
     },
   });
 
-export default BetsCard
+export default WithdrawCard

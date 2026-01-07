@@ -62,6 +62,12 @@ const ProfileScreen = ({ navigation }: any) => {
   const [isChatLoading, setIsChatLoading] = useState(false);
 
   const tabItems = [
+    {
+      label: "Rebate",
+      image: newRebateLogo,
+      rightImage: leftArrowHeader,
+      route: "RebateScreen",
+    },
     { label: "Lotteries", 
     image: profileLotteriesImage, 
     rightImage: leftArrowHeader,
@@ -283,15 +289,52 @@ const ProfileScreen = ({ navigation }: any) => {
 
         {/* VIP Badge */}
         {isLoggedIn ? (
+          // <TouchableOpacity
+          //   onPress={() => navigation.navigate("VipLevelDetailsScreen")}
+          //   style={styles.vipTouchable}
+          //   activeOpacity={0.8}
+          // >
+          //   <ImageBackground
+          //     source={vipBadgeBackground}
+          //     style={styles.vipImageBackground}
+          //   >
+          //     <View style={styles.vipTopRow}>
+          //       <Image
+          //         source={vipBadgeZero}
+          //         resizeMode="contain"
+          //         style={styles.vipBadgeImage}
+          //       />
+          //       <View style={styles.vipTopRight}>
+          //         <Text style={styles.vipText}>VIP {vipLevel}</Text>
+          //         <Text style={styles.vipText}>₹{totalDeposit ?totalDeposit : 0 } / ₹{vipLevelRecharge?vipLevelRecharge:0}</Text>
+          //       </View>
+          //     </View>
+          //     <View style={styles.vipProgressBackground}>
+          //       <View style={styles.vipProgressFill} />
+          //     </View>
+          //   </ImageBackground>
+          // </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate("VipLevelDetailsScreen")}
             style={styles.vipTouchable}
             activeOpacity={0.8}
           >
-            <ImageBackground
+            {/* <ImageBackground
               source={vipBadgeBackground}
               style={styles.vipImageBackground}
-            >
+            > */}
+            <View style ={{
+              backgroundColor: COLORS.primary,
+              borderRadius: Scale(10),
+              paddingVertical: Scale(12),
+              paddingHorizontal: Scale(15),
+              borderColor: COLORS.white,
+              borderWidth: 0.2,
+              shadowColor: "#fff",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.15,
+              shadowRadius: 3,
+            }}> 
               <View style={styles.vipTopRow}>
                 <Image
                   source={vipBadgeZero}
@@ -306,11 +349,12 @@ const ProfileScreen = ({ navigation }: any) => {
               <View style={styles.vipProgressBackground}>
                 <View style={styles.vipProgressFill} />
               </View>
-            </ImageBackground>
+              </View>
+            {/* </ImageBackground> */}
           </TouchableOpacity>
         ) : null}
 
-        <View style={{ paddingHorizontal: Scale(10), marginTop: Scale(10) }}>
+        {/* <View style={{ paddingHorizontal: Scale(10), marginTop: Scale(10) }}>
           <TouchableOpacity
            style={{
             backgroundColor: COLORS.white,
@@ -339,11 +383,11 @@ const ProfileScreen = ({ navigation }: any) => {
           </Text>
           <Image source={newRebateLogo}
           resizeMethod="resize"
-          style={{marginHorizontal: Scale(10), width: Scale(25), height: Scale(25)}}
+          style={{marginHorizontal: Scale(10), width: Scale(25), height: Scale(25), marginRight: Scale(10)}}
           />
 
           </TouchableOpacity> 
-        </View>
+        </View> */}
 
         <View style={{ paddingHorizontal: Scale(10), marginTop: Scale(10) }}>
   {tabItems.map((item) => (

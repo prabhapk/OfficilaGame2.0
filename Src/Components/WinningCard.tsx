@@ -13,7 +13,7 @@ interface Props {
     Type: string;
 }
 
-const BetsCard : React.FC<Props> = (
+const WinningCard : React.FC<Props> = (
     {betAmount, 
         beforeBalance, 
         afterBalance, 
@@ -33,9 +33,9 @@ const BetsCard : React.FC<Props> = (
       <View style={styles.headerRow}>
         <View style={styles.iconTextRow}>
           <Image source={betIconCard} style={styles.betIcon} />
-          <Text style={styles.betTitle}>BETS</Text>
+          <Text style={styles.betTitle}>WINNING</Text>
         </View>
-        <Text style={styles.amountText}>-₹{betAmount} RS</Text>
+        <Text style={styles.amountText}>+₹{betAmount} RS</Text>
       </View>
 
       {/* Info Rows */}
@@ -45,7 +45,7 @@ const BetsCard : React.FC<Props> = (
       </View> */}
       <View style={styles.infoRow}>
         <Text style={styles.label}>Balance</Text>
-        <Text style={styles.label}>-₹{betAmount}</Text>
+        <Text style={styles.label}>₹{betAmount}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>After Balance</Text>
@@ -107,7 +107,7 @@ const createStyles = (Scale: any) =>
     amountText: {
       fontSize: Scale(20),
       fontWeight: 'bold',
-      color: 'red',
+      color: 'green',
     },
     infoRow: {
       flexDirection: 'row',
@@ -123,4 +123,4 @@ const createStyles = (Scale: any) =>
     },
   });
 
-export default BetsCard
+export default WinningCard

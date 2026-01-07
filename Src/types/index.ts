@@ -32,3 +32,22 @@ export interface BetsData {
     game?: string;
     orderNumber?: string;
   }
+  export enum TransactionType {
+  BET = 'BET',
+  WIN = 'WIN',
+  RECHARGE = 'RECHARGE',
+  WITHDRAW = 'WITHDRAW',
+  COMMISSION = 'COMMISSION',
+  REBATE = 'REBATE',
+  TRANSFER = 'TRANSFER',
+  VIP = 'VIP',
+}
+
+/**
+ * Common base for all transactions
+ */
+export interface BaseTransaction {
+  transactionType: TransactionType;
+  beforeBalance: number;
+  afterBalance: number;
+}

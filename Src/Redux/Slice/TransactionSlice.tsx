@@ -4,6 +4,8 @@ import axios from 'axios';
 import { BaseURL, serviceUrls } from '../../Utils/serviceUrls';
 import axiosInstance from '../../Utils/axiosClient';
 import { RootState } from '../store';
+import { TransactionType } from '../../types/transaction.types';
+import { normalizeTransactionForCard } from '../normalizers/transactionNormalizer';
 
 const initialValues: transactionSliceStates = {
   transactionLoader:false,
@@ -14,6 +16,8 @@ const initialValues: transactionSliceStates = {
   winsData:[],
   vipsData:[],
   allTransactionsData:[],
+  rebateData:[],
+  commissionData:[],
 };
 
 export const getTransferData = createAsyncThunk<
@@ -182,6 +186,60 @@ any,
     }
   }
 );
+export const getRebateData = createAsyncThunk<
+any,
+  {
+    FromDate: string;
+    ToDate: string;
+    UserId: number;
+    Page: number;
+    PageSize: number;
+  },                                             
+  { rejectValue: string }     
+>(
+  'transaction/getRebateData',
+  async ({FromDate, ToDate, UserId, Page, PageSize}, thunkAPI) => {
+    try {
+      console.log('RebateDataApiServiceURLCheck==>',`${serviceUrls.transaction.rebate}?FromDate=${FromDate}&ToDate=${ToDate}&UserId=${UserId}&Page=${Page}&PageSize=${PageSize}`);
+      const response = await axiosInstance.get(
+      `${serviceUrls.transaction.rebate}?FromDate=${FromDate}&ToDate=${ToDate}&UserId=${UserId}&Page=${Page}&PageSize=${PageSize}`,);
+      console.log('RebateDataResponse', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.log('getRebateResultsApiError', error);
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || error.message || error.toString(),
+      );
+    }
+  }
+);
+export const getCommissionData = createAsyncThunk<
+any,
+  {
+    FromDate: string;
+    ToDate: string;
+    UserId: number;
+    Page: number;
+    PageSize: number;
+  },                                             
+  { rejectValue: string }     
+>(
+  'transaction/getCommissionData',
+  async ({FromDate, ToDate, UserId, Page, PageSize}, thunkAPI) => {
+    try {
+      console.log('CommissionDataApiServiceURLCheck==>',`${serviceUrls.transaction.commission}?FromDate=${FromDate}&ToDate=${ToDate}&UserId=${UserId}&Page=${Page}&PageSize=${PageSize}`);
+      const response = await axiosInstance.get(
+      `${serviceUrls.transaction.commission}?FromDate=${FromDate}&ToDate=${ToDate}&UserId=${UserId}&Page=${Page}&PageSize=${PageSize}`,);
+      console.log('CommissionDataResponse', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.log('getCommissionResultsApiError', error);
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || error.message || error.toString(),
+      );
+    }
+  }
+);
 export const getAllTransactionsData = createAsyncThunk<
 any,
   {
@@ -246,37 +304,69 @@ export const TransactionSlice = createSlice({
     });
 
     // Fulfilled
+
     builder.addCase(getTransferData.fulfilled, (state, action) => {
       state.transactionLoader = false;
-      state.transferData = action.payload;
+      state.transferData = (action.payload?.transactions ?? [])
+        .map(normalizeTransactionForCard)
+        .filter(Boolean); // remove null if type not recognized
     });
     builder.addCase(getWalletData.fulfilled, (state, action) => {
       state.transactionLoader = false;
-      state.walletData = action.payload;
+      state.walletData = (action.payload?.transactions ?? [])
+        .map(normalizeTransactionForCard)
+        .filter(Boolean);
     });
+    
     builder.addCase(getWithdrawalsData.fulfilled, (state, action) => {
       state.transactionLoader = false;
-      state.withdrawalsData = action.payload;
+      state.withdrawalsData = (action.payload?.transactions ?? [])
+        .map(normalizeTransactionForCard)
+        .filter(Boolean);
     });
+    
     builder.addCase(getBetsData.fulfilled, (state, action) => {
       state.transactionLoader = false;
-      state.betsData = action.payload;
+      state.betsData = (action.payload?.transactions ?? [])
+        .map(normalizeTransactionForCard)
+        .filter(Boolean);
     });
+    
     builder.addCase(getWinsData.fulfilled, (state, action) => {
       state.transactionLoader = false;
-      state.winsData = action.payload;
+      state.winsData = (action.payload?.transactions ?? [])
+        .map(normalizeTransactionForCard)
+        .filter(Boolean);
     });
+    
     builder.addCase(getVipsData.fulfilled, (state, action) => {
       state.transactionLoader = false;
-      state.vipsData = action.payload;
+      state.vipsData = (action.payload?.transactions ?? [])
+        .map(normalizeTransactionForCard)
+        .filter(Boolean);
     });
+    
+    builder.addCase(getRebateData.fulfilled, (state, action) => {
+      state.transactionLoader = false;
+      state.rebateData = (action.payload?.transactions ?? [])
+        .map(normalizeTransactionForCard)
+        .filter(Boolean);
+    });
+    
+    builder.addCase(getCommissionData.fulfilled, (state, action) => {
+      state.transactionLoader = false;
+      state.commissionData = (action.payload?.transactions ?? [])
+        .map(normalizeTransactionForCard)
+        .filter(Boolean);
+    });
+    
     builder.addCase(getAllTransactionsData.fulfilled, (state, action) => {
       state.transactionLoader = false;
-      // state.allTransactionsData = action.payload;
-      state.allTransactionsData = action.payload.transactions; 
-      console.log("state.allTransactionsData==>", state.allTransactionsData);
-      
+      state.allTransactionsData = (action.payload?.transactions ?? [])
+        .map(normalizeTransactionForCard)
+        .filter(Boolean);
     });
+    
 
     // Rejected
     builder.addCase(getTransferData.rejected, (state, action) => {

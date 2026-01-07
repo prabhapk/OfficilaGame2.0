@@ -8,6 +8,7 @@ import { getAgentDashboardData } from '../Redux/Slice/agentSlice';
 import { RootState } from '../Redux/store';
 import * as Sharing from 'expo-sharing';
 import * as Clipboard from 'expo-clipboard';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const AgentTeamReport = ({navigation}: any) => {
     const dispatch = useDispatch();
@@ -37,6 +38,7 @@ const AgentTeamReport = ({navigation}: any) => {
                 padding: Scale(10),
                 borderWidth: 1,
                 borderColor: '#fff',
+                marginBottom: Scale(10),
             }}>
                 <View style ={{
                     flexDirection: 'row',
@@ -60,7 +62,7 @@ const AgentTeamReport = ({navigation}: any) => {
                 style={{
                     fontSize: Scale(20),
                     fontWeight: 'bold',
-                    color: 'green'
+                    color: '#000'
                 }}
                 >₹{item.bonusAmount}</Text>
                 </View>
@@ -80,6 +82,7 @@ const AgentTeamReport = ({navigation}: any) => {
                         fontSize: Scale(14),
                         fontWeight: '400',
                         color: '#000',
+                        paddingVertical: Scale(5),
                     }}>
                         Number of invites
                     </Text>
@@ -112,7 +115,7 @@ const AgentTeamReport = ({navigation}: any) => {
                     <Text style ={{
                         fontSize: Scale(14),
                         fontWeight: 'bold',
-                        color: 'green'
+                        color: '#000'
                     }}>
                     ₹{item.minimumRechargePerPerson}
                     </Text>
@@ -134,7 +137,7 @@ const AgentTeamReport = ({navigation}: any) => {
                     <Text style ={{
                         fontSize: Scale(16),
                         fontWeight: 'bold',
-                        color: 'green',
+                        color: 'red',
                     }}>
                         0/
                     </Text>
@@ -167,7 +170,7 @@ const AgentTeamReport = ({navigation}: any) => {
                     <Text style ={{
                         fontSize: Scale(16),
                         fontWeight: 'bold',
-                        color: 'green'
+                        color: 'red'
                     }}>
                         0/
                     </Text>
@@ -191,7 +194,7 @@ const AgentTeamReport = ({navigation}: any) => {
                 </View>
                 <View>
     
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                     style ={{
                         backgroundColor: '#00B612',
                         padding: Scale(10),
@@ -209,7 +212,21 @@ const AgentTeamReport = ({navigation}: any) => {
                         }}>
                             Go Complete
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+                    <LinearGradient
+            // colors={[COLORS.linearOne, COLORS.linearTwo]}
+            colors={['red', 'grey']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.invitationLinkButton}
+          >
+            <TouchableOpacity
+              style={styles.invitationLinkTouchable}
+              onPress={handleInvite}
+            >
+              <Text style={styles.invitationLinkText}>Go Complete</Text>
+            </TouchableOpacity>
+          </LinearGradient>
     
                 </View>
             </View>
@@ -431,6 +448,27 @@ const createStyles = (Scale: any) =>
           shareOptionText: {
             fontSize: 12,
             color: '#333',
+            textAlign: 'center',
+          },
+          invitationLinkButton: {
+            borderRadius: Scale(12),
+            alignItems: 'center',
+            // width: Scale(200),
+            justifyContent: 'center',
+            alignSelf: 'center',
+            marginTop: Scale(20),
+            height: Scale(40),
+          },
+          invitationLinkTouchable: {
+            paddingVertical: Scale(10),
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingHorizontal: Scale(20),
+          },
+          invitationLinkText: {
+            fontSize: Scale(16),
+            fontWeight: 'bold',
+            color: '#fff',
             textAlign: 'center',
           },
     })

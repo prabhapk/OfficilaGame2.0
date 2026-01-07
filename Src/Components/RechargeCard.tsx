@@ -2,13 +2,19 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import React from 'react';
 import { rechargeIconCard } from '../../assets/assets';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from '../Constants/Theme';
 interface Props {
     rechargeAmount: number;
     beforeBalance: number;
     afterBalance: number;
     rechargeTime: string;
     rechargeNumber: string;
-    ssr: string;
+    // ssr: string;
+    type: string;
+    channelName: string;
+    description: string;
+    paymentType: string;
+
 }
 
 const RechargeCard : React.FC<Props> = (
@@ -17,7 +23,12 @@ const RechargeCard : React.FC<Props> = (
         afterBalance, 
         rechargeTime,
         rechargeNumber,
-        ssr}
+        // ssr,
+        type,
+        channelName,
+        description,
+        paymentType
+        }
     : Props
 ) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -31,14 +42,14 @@ const RechargeCard : React.FC<Props> = (
           <Image source={rechargeIconCard} style={styles.betIcon} />
           <Text style={styles.betTitle}>RECHARGE</Text>
         </View>
-        <Text style={styles.amountText}>₹{rechargeAmount} RS</Text>
+        <Text style={styles.amountText}>+₹{rechargeAmount}</Text>
       </View>
 
       {/* Info Rows */}
-      <View style={styles.infoRow}>
+      {/* <View style={styles.infoRow}>
         <Text style={styles.label}>Before Balance</Text>
         <Text style={styles.label}>₹{beforeBalance}</Text>
-      </View>
+      </View> */}
       <View style={styles.infoRow}>
         <Text style={styles.label}>Balance</Text>
         <Text style={styles.label}> ₹{rechargeAmount}</Text>
@@ -48,16 +59,32 @@ const RechargeCard : React.FC<Props> = (
         <Text style={styles.label}>₹{afterBalance}</Text>
       </View>
       <View style={styles.infoRow}>
+        <Text style={styles.label}>Type</Text>
+        <Text style={styles.label}>₹{type}</Text>
+      </View>
+      <View style={styles.infoRow}>
+        <Text style={styles.label}>Channel Name</Text>
+        <Text style={styles.label}>{channelName}</Text>
+      </View>
+      <View style={styles.infoRow}>
+        <Text style={styles.label}>Description</Text>
+        <Text style={styles.label}>{description}</Text>
+      </View>
+      <View style={styles.infoRow}>
+        <Text style={styles.label}>Payment Type</Text>
+        <Text style={styles.label}>{paymentType}</Text>
+      </View>
+      <View style={styles.infoRow}>
         <Text style={styles.label}>Order Time</Text>
         <Text style={styles.label}>{rechargeTime}</Text>
       </View>
-      <View style={styles.infoRow}>
+      {/* <View style={styles.infoRow}>
         <Text style={styles.label}>Game</Text>
         <Text style={styles.label}>{rechargeNumber}</Text>
-      </View>
+      </View> */}
       <View style={styles.infoRow}>
         <Text style={styles.label}>Order Number</Text>
-        <Text style={styles.label}>{ssr}</Text>
+        <Text style={styles.label}>{rechargeNumber}</Text>
       </View>
     </View>
     </View>
@@ -67,10 +94,10 @@ const RechargeCard : React.FC<Props> = (
 const createStyles = (Scale: any) =>
   StyleSheet.create({
     cardContainer: {
-      backgroundColor: '#442727',
+      backgroundColor: 'transparent',
       borderRadius: Scale(10),
       borderWidth: 1,
-      borderColor: '#442727',
+      borderColor: COLORS.white,
       padding: Scale(12),
       marginVertical: Scale(8),
       marginHorizontal: Scale(10),
@@ -99,7 +126,7 @@ const createStyles = (Scale: any) =>
     amountText: {
       fontSize: Scale(20),
       fontWeight: 'bold',
-      color: '#FF4C4C',
+      color: 'green',
     },
     infoRow: {
       flexDirection: 'row',

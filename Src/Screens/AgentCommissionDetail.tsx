@@ -10,6 +10,7 @@ import { getAgentDashboardData } from '../Redux/Slice/agentSlice';
 import { RootState } from '../Redux/store';
 import * as Sharing from 'expo-sharing';
 import * as Clipboard from 'expo-clipboard';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const AgentCommissionDetail = ({navigation}: any) => {
     const dispatch = useDispatch();
@@ -71,52 +72,60 @@ const AgentCommissionDetail = ({navigation}: any) => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    backgroundColor: '#F1F2F6',
+                    backgroundColor: '#fff',
                     padding: Scale(5),
-                    borderWidth: 1,
+                    borderWidth: 0.2,
                     borderRadius: Scale(4),
-                    marginVertical: Scale(5),
-                    borderColor: '#F1F2F6',
-                    marginTop: Scale(10),
+                    marginVertical: Scale(2),
+                    borderBottomColor: '#000',
+                    borderTopColor: 'transparent',
+                    borderLeftColor: 'transparent',
+                    borderRightColor: 'transparent',
+                    marginTop: Scale(5),
                 }}>
                      <Text style= {{
                         fontSize: Scale(14),
                         fontWeight: '400',
                         color: '#000',
+                        paddingVertical: Scale(5),
                     }}>
                         level1Commission
                     </Text>
                     <Text style= {{
                         fontSize: Scale(14),
                         fontWeight: 'bold',
-                        color: 'green'
+                        color: '#000'
                     }}>
                       ₹{item.level1Commission}
                     </Text>
                 </View>
                 <View style ={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    backgroundColor: '#F1F2F6',
-                    padding: Scale(5),
-                    borderWidth: 1,
-                    borderRadius: Scale(4),
-                    marginVertical: Scale(2),
-                    borderColor: '#F1F2F6',
-                    marginTop: Scale(5),
+                     flexDirection: 'row',
+                     justifyContent: 'space-between',
+                     alignItems: 'center',
+                     backgroundColor: '#fff',
+                     padding: Scale(5),
+                     borderWidth: 0.2,
+                     borderRadius: Scale(4),
+                     marginVertical: Scale(2),
+                     borderBottomColor: '#000',
+                     borderTopColor: 'transparent',
+                     borderLeftColor: 'transparent',
+                     borderRightColor: 'transparent',
+                     marginTop: Scale(5),
                 }}>
                     <Text style= {{
                         fontSize: Scale(14),
                         fontWeight: '400',
                         color: '#000',
+                        paddingVertical: Scale(5),
                     }}>
                         Level2Commission
                     </Text>
                     <Text style ={{
                         fontSize: Scale(14),
                         fontWeight: 'bold',
-                        color: 'green'
+                        color: '#000'
                     }}>
                     ₹{item.level2Commission}
                     </Text>
@@ -125,12 +134,15 @@ const AgentCommissionDetail = ({navigation}: any) => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    backgroundColor: '#F1F2F6',
+                    backgroundColor: '#fff',
                     padding: Scale(5),
-                    borderWidth: 1,
+                    borderWidth: 0.2,
                     borderRadius: Scale(4),
                     marginVertical: Scale(2),
-                    borderColor: '#F1F2F6',
+                    borderBottomColor: '#000',
+                    borderTopColor: 'transparent',
+                    borderLeftColor: 'transparent',
+                    borderRightColor: 'transparent',
                     marginTop: Scale(5),
                 }}>
                     <Text style= {{
@@ -143,7 +155,8 @@ const AgentCommissionDetail = ({navigation}: any) => {
                     <Text style ={{
                         fontSize: Scale(14),
                         fontWeight: 'bold',
-                        color: 'green'
+                        color: '#000',
+                        paddingVertical: Scale(5),
                     }}>
                     ₹{item.level3Commission}
                     </Text>
@@ -152,33 +165,42 @@ const AgentCommissionDetail = ({navigation}: any) => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    backgroundColor: '#F1F2F6',
+                    backgroundColor: '#fff',
                     padding: Scale(5),
-                    borderWidth: 1,
+                    borderWidth: 0.2,
                     borderRadius: Scale(4),
                     marginVertical: Scale(2),
-                    borderColor: '#F1F2F6',
+                    borderBottomColor: '#000',
+                    borderTopColor: 'transparent',
+                    borderLeftColor: 'transparent',
+                    borderRightColor: 'transparent',
                     marginTop: Scale(5),
                 }}>
                     <Text style= {{
                         fontSize: Scale(14),
                         fontWeight: '400',
                         color: '#000',
+                        paddingVertical: Scale(5),
                     }}>
                         Level4Commission
                     </Text>
                     <Text style ={{
                         fontSize: Scale(14),
                         fontWeight: 'bold',
-                        color: 'green'
+                        color: '#000'
                     }}>
                     ₹{item.level4Commission}
                     </Text>
                 </View>
              
                 <View>
-    
-                    <TouchableOpacity
+                {/* <LinearGradient
+            colors={[COLORS.linearOne, COLORS.linearTwo]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.invitationLinkButton}
+          >
+          <TouchableOpacity
                     style ={{
                         backgroundColor: '#00B612',
                         padding: Scale(10),
@@ -188,15 +210,31 @@ const AgentCommissionDetail = ({navigation}: any) => {
                     }}
                     onPress={handleInvite}
                     >
-                        <Text style ={{
+             <Text style ={{
                             color: COLORS.white,
                             fontSize: Scale(14),
                             fontWeight: 'bold',
                             textAlign: 'center',
-                        }}>
-                            Go Complete
-                        </Text>
-                    </TouchableOpacity>
+                        }}>Go Complete</Text>
+            </TouchableOpacity>
+          </LinearGradient> */}
+          <LinearGradient
+            // colors={[COLORS.linearOne, COLORS.linearTwo]}
+            colors={['black', 'grey']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.invitationLinkButton}
+          >
+            <TouchableOpacity
+              style={styles.invitationLinkTouchable}
+              onPress={handleInvite}
+            >
+              <Text style={styles.invitationLinkText}>Go Complete</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+    
+                    
+                    
     
                 </View>
             </View>
@@ -275,190 +313,6 @@ const AgentCommissionDetail = ({navigation}: any) => {
         leftIconPress={handleBackPress}
         centerText="Commission Details"
       />
-        {/* <View style ={{
-            backgroundColor: COLORS.white,
-            marginHorizontal: Scale(20),
-            marginTop: Scale(10),
-            borderRadius: Scale(6),
-            padding: Scale(10),
-            borderWidth: 1,
-            borderColor: '#fff',
-        }}>
-            <View style ={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderBottomColor: COLORS.black,
-                borderBottomWidth: 1,
-                padding: Scale(5),
-                borderTopColor: 'transparent',
-                borderTopWidth: 0,
-                borderLeftColor: 'transparent',
-                borderRightColor: 'transparent',
-            
-            }}> 
-            <Text style= {{
-                fontSize: Scale(20),
-                fontWeight: 'bold',
-                color: '#000',
-            }}>Level 1</Text>
-            <Text
-            style={{
-                fontSize: Scale(20),
-                fontWeight: 'bold',
-                color: 'green'
-            }}
-            >₹100</Text>
-            </View>
-            <View style ={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                backgroundColor: '#F1F2F6',
-                padding: Scale(5),
-                borderWidth: 1,
-                borderRadius: Scale(4),
-                marginVertical: Scale(5),
-                borderColor: '#F1F2F6',
-                marginTop: Scale(10),
-            }}>
-                 <Text style= {{
-                    fontSize: Scale(14),
-                    fontWeight: '400',
-                    color: '#000',
-                }}>
-                    Number of invites
-                </Text>
-                <Text style= {{
-                    fontSize: Scale(14),
-                    fontWeight: 'bold',
-                    color: '#000',
-                }}>
-                  1
-                </Text>
-            </View>
-            <View style ={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                backgroundColor: '#F1F2F6',
-                padding: Scale(5),
-                borderWidth: 1,
-                borderRadius: Scale(4),
-                marginVertical: Scale(2),
-                borderColor: '#F1F2F6',
-                marginTop: Scale(5),
-            }}>
-                <Text style= {{
-                    fontSize: Scale(14),
-                    fontWeight: '400',
-                    color: '#000',
-                }}>
-                    Recharge per people
-                </Text>
-                <Text style ={{
-                    fontSize: Scale(14),
-                    fontWeight: 'bold',
-                    color: 'green'
-                }}>
-                ₹200
-                </Text>
-            </View>
-            <View style ={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-            }}>
-                <View style ={{
-                    marginHorizontal: Scale(20),
-                    marginTop: Scale(20),
-                }}>
-                    <View style ={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginLeft: Scale(20),
-                    }}> 
-                <Text style ={{
-                    fontSize: Scale(16),
-                    fontWeight: 'bold',
-                    color: 'green',
-                }}>
-                    0/
-                </Text>
-                <Text style ={{
-                    fontSize: Scale(16),
-                    fontWeight: 'bold',
-                    color: COLORS.black
-                }}>
-                    1
-                </Text>
-                </View> 
-                <Text style ={{
-                    fontSize: Scale(12),
-                    fontWeight: '600',
-                    color: COLORS.black,
-                    marginVertical: Scale(5),
-                }}>
-                    Number of invites
-                </Text>
-                </View>
-                <View style ={{
-                    marginHorizontal: Scale(20),
-                    marginTop: Scale(20),
-                }}> 
-                <View style ={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginLeft: Scale(20),
-                }}> 
-                <Text style ={{
-                    fontSize: Scale(16),
-                    fontWeight: 'bold',
-                    color: 'green'
-                }}>
-                    0/
-                </Text>
-                <Text style ={{
-                    fontSize: Scale(16),
-                    fontWeight: 'bold',
-                    color: COLORS.black
-                }}>
-                    1
-                </Text>
-                </View>
-                <Text style ={{
-                    fontSize: Scale(12),
-                    fontWeight: '600',
-                    color: COLORS.black,
-                    marginVertical: Scale(5),
-                }}>
-                   Deposit number
-                </Text>
-                </View>
-            </View>
-            <View>
-
-                <TouchableOpacity
-                style ={{
-                    backgroundColor: '#00B612',
-                    padding: Scale(10),
-                    borderRadius: Scale(20),
-                    marginTop: Scale(15),
-                    marginHorizontal: Scale(10),
-                }}
-                >
-                    <Text style ={{
-                        color: COLORS.white,
-                        fontSize: Scale(14),
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                    }}>
-                        Go Complete
-                    </Text>
-                </TouchableOpacity>
-
-            </View>
-        </View> */}
 
 <View>
   <View
@@ -477,7 +331,7 @@ const AgentCommissionDetail = ({navigation}: any) => {
           paddingVertical: Scale(8),
           paddingHorizontal: Scale(15),
           borderRadius: Scale(20),
-          backgroundColor: selectedLevel === level ? '#00B612' : '#F1F2F6',
+          backgroundColor: selectedLevel === level ? 'grey' : '#F1F2F6',
         }}
       >
         <Text
@@ -631,5 +485,27 @@ const createStyles = (Scale: any) =>
             color: '#333',
             textAlign: 'center',
           },
+          invitationLinkButton: {
+            borderRadius: Scale(12),
+            alignItems: 'center',
+            // width: Scale(200),
+            justifyContent: 'center',
+            alignSelf: 'center',
+            marginTop: Scale(20),
+            height: Scale(40),
+          },
+          invitationLinkTouchable: {
+            paddingVertical: Scale(10),
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingHorizontal: Scale(20),
+          },
+          invitationLinkText: {
+            fontSize: Scale(16),
+            fontWeight: 'bold',
+            color: '#fff',
+            textAlign: 'center',
+          },
     })
+    
 export default AgentCommissionDetail

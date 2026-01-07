@@ -145,13 +145,6 @@ export const ThreeDigitsLottery = [
     focusedIcon:casinoActiveTab,
     unfocusedIcon: casinoTab,
   },
-   {
-    name: 'Result',
-    component: ResultScreen,
-    label: 'Result',
-    focusedIcon: resultActiveTab,
-    unfocusedIcon: resultTab,
-  },
   {
     name: 'Invite',
     component: InviteScreen,
@@ -159,6 +152,14 @@ export const ThreeDigitsLottery = [
     focusedIcon: inviteActiveTab,
     unfocusedIcon: inviteTab,
   },
+   {
+    name: 'Result',
+    component: ResultScreen,
+    label: 'Result',
+    focusedIcon: resultActiveTab,
+    unfocusedIcon: resultTab,
+  },
+ 
    {
     name: 'Me',
     component: Profile,

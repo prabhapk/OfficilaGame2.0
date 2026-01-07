@@ -209,7 +209,7 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
 
               return (
                 <View
-                  key={`${bet.type}-${rowIndex}`}
+                  key={`${bet?.type}-${rowIndex}`}
                   style={[styles.tableRow, { backgroundColor: rowBgColor }]}
                 >
                   {/* Row Balls */}
@@ -225,10 +225,10 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
                       const digits = String(bet.value).split("");
                       let showDigit = "-";
 
-                      if (bet.type.length === digits.length) {
-                        const pos = bet.type.indexOf(colHead);
+                      if (bet?.type?.length === digits.length) {
+                        const pos = bet?.type?.indexOf(colHead);
                         if (pos !== -1) showDigit = digits[pos] || "-";
-                      } else if (bet.type.includes(colHead)) {
+                      } else if (bet?.type?.includes(colHead)) {
                         showDigit = digits[0] || "-";
                       }
 

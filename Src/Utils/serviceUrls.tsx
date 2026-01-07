@@ -48,6 +48,8 @@ export const serviceUrls = {
     win: '/api/Transaction/wins',
     vip: '/api/Transaction/vip',
     allTransactions: '/api/Transaction/all-transactions',
+    rebate: '/api/Transaction/rebate',
+    commission: '/api/Transaction/comissions',
   },
   vip: {
     vipLists: '/api/user/User/vip-config'

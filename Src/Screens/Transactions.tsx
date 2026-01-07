@@ -1,68 +1,152 @@
-import {View, Text, Image, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import HeaderButtonList from '../Components/HeaderButtonList';
-import {AllData, BetsData, HeaderButton, RechargeData, transactionData} from '../types';
-import BetsCard from '../Components/BetsCard';
-import RechargeCard from '../Components/RechargeCard';
-import { leftArrowHeader } from '../../assets/assets';
-import NewAppHeader from '../Components/NewAppHeader';
-import { useContainerScale } from '../hooks/useContainerScale';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DatePickerModal } from 'react-native-paper-dates';
 import { format } from 'date-fns';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllTransactionsData, getTransferData, getWinsData, getBetsData, getWalletData, getWithdrawalsData, getVipsData } from '../Redux/Slice/TransactionSlice';
-import { RootState } from '../Redux/store';
+
+import NewAppHeader from '../Components/NewAppHeader';
+import HeaderButtonList from '../Components/HeaderButtonList';
+
+import BetsCard from '../Components/BetsCard';
+import RechargeCard from '../Components/RechargeCard';
+import WinningCard from '../Components/WinningCard';
+import WithdrawCard from '../Components/WithdrawCard';
+import CommissionCard from '../Components/CommissionCard';
+import RebateCard from '../Components/RebateCard';
+import TransferCard from '../Components/TransferCard';
+import VipTransactionCard from '../Components/VipTransactionCard';
+
+import { leftArrowHeader } from '../../assets/assets';
 import { COLORS } from '../Constants/Theme';
 
-const Transactions = ({navigation}: any) => {
-  const dispatch = useDispatch();
-  const {userId} = useSelector(
-    (state: RootState) => state.signInSlice
-  );
-  const [allData, setAllData] = useState<AllData[]>([]);
-  const [winData, setWinData] = useState<BetsData[]>([]);
-  const [rechargeData, setRechargeData] = useState<RechargeData[]>([]);
-  // const [betsData, setBetsData] = useState<BetsData[]>([]);
-  const [withDrawData, setWithDrawData] = useState<RechargeData[]>([]);
-  const [commissionData, setCommissionData] = useState<RechargeData[]>([]);
-  const [rebateData, setRebateData] = useState<RechargeData[]>([]);
-  // const [transferData, setTransferData] = useState<RechargeData[]>([]);
-  const [vipData, setVipData] = useState<RechargeData[]>([]);
-  const { Scale, verticalScale } = useContainerScale();
-  const buttons = [
-    {id: 1, name: 'All'},
-    {id: 2, name: 'WIN'},
-    {id: 3, name: 'RECHARGE'},
-    {id: 4, name: 'BETS'},
-    {id: 5, name: 'WITHDRAW'},
-    {id: 6, name: 'COMMISSION'},
-    {id: 7, name: 'REBATE'},
-    {id: 8, name: 'TRANSFER'},
-    {id: 9, name: 'VIP'},
-  ];
-  const [selectedButton, setSelectedButton] = useState<HeaderButton | null>(
-    buttons[0],
-  );
+import {
+  getAllTransactionsData,
+  getTransferData,
+  getWinsData,
+  getBetsData,
+  getWalletData,
+  getWithdrawalsData,
+  getVipsData,
+  getRebateData,
+  getCommissionData,
+} from '../Redux/Slice/TransactionSlice';
 
-  // const handleButtonPress = (button: HeaderButton) => {
-  //   setSelectedButton(button);
-  // };
-  const handleButtonPress = (button: HeaderButton) => {
-    setSelectedButton(button);
-  
-    const dateParams = {
+console.log('getAllTransactionsData==>', getAllTransactionsData);
+console.log('getTransferData==>', getTransferData);
+console.log('getWinsData==>', getWinsData);
+console.log('getBetsData==>', getBetsData);
+console.log('getWalletData==>', getWalletData);
+console.log('getWithdrawalsData==>', getWithdrawalsData);
+console.log('getVipsData==>', getVipsData);
+console.log('getRebateData==>', getRebateData);  
+console.log('getCommissionData==>', getCommissionData);
+
+
+
+import { RootState } from '../Redux/store';
+import { TransactionType } from '../types/transaction.types';
+
+const Transactions = ({ navigation }: any) => {
+  const dispatch = useDispatch();
+  const { userId } = useSelector((state: RootState) => state.signInSlice);
+
+  const {
+    allTransactionsData,
+    transferData,
+    walletData,
+    withdrawalsData,
+    betsData,
+    winsData,
+    vipsData,
+    rebateData,
+    commissionData,
+    transactionLoader,
+  } = useSelector((state: RootState) => state.TransactionSlice);
+
+  const buttons = [
+    { id: 1, name: 'All' },
+    { id: 2, name: 'WIN' },
+    { id: 3, name: 'RECHARGE' },
+    { id: 4, name: 'BETS' },
+    { id: 5, name: 'WITHDRAW' },
+    { id: 6, name: 'COMMISSION' },
+    { id: 7, name: 'REBATE' },
+    { id: 8, name: 'TRANSFER' },
+    { id: 9, name: 'VIP' },
+  ];
+
+
+
+  const [selectedButton, setSelectedButton] = useState(buttons[0]);
+  const [open, setOpen] = useState(false);
+  const [range, setRange] = useState<{ startDate?: Date; endDate?: Date }>({});
+
+  /* -------------------- Date Params -------------------- */
+  const dateParams = useMemo(
+    () => ({
       FromDate: range.startDate
-        ? format(range.startDate, "yyyy-MM-dd")
-        : "2025-01-01",   // default fallback
+        ? format(range.startDate, 'yyyy-MM-dd')
+        : '',
       ToDate: range.endDate
-        ? format(range.endDate, "yyyy-MM-dd")
-        : format(new Date(), "yyyy-MM-dd"),
+        ? format(range.endDate, 'yyyy-MM-dd')
+        : '',
       UserId: userId,
       Page: 1,
       PageSize: 20,
+    }),
+    [range.startDate, range.endDate, userId]
+  );
+  // ======> 
+    const fetchBySelectedTab = (params: any) => {
+      switch (selectedButton.id) {
+        case 1:
+          dispatch(getAllTransactionsData(params));
+          break;
+        case 2:
+          dispatch(getWinsData(params));
+          break;
+        case 3:
+          dispatch(getWalletData(params));
+          break;
+        case 4:
+          dispatch(getBetsData(params));
+          break;
+        case 5:
+          dispatch(getWithdrawalsData(params));
+          break;
+        case 6:
+          dispatch(getCommissionData(params));
+          break;
+        case 7:
+          dispatch(getRebateData(params));
+          break;
+        case 8:
+          dispatch(getTransferData(params));
+          break;
+        case 9:
+          dispatch(getVipsData(params));
+          break;
+      }
     };
-  
+    useEffect(() => {
+      fetchBySelectedTab({
+        ...dateParams,
+        Page: 1,
+      });
+    }, [dateParams]);
+    
+  /* -------------------- Button Handler -------------------- */
+  const handleButtonPress = (button: any) => {
+    setSelectedButton(button);
+
     switch (button.id) {
       case 1:
         dispatch(getAllTransactionsData(dateParams));
@@ -79,202 +163,142 @@ const Transactions = ({navigation}: any) => {
       case 5:
         dispatch(getWithdrawalsData(dateParams));
         break;
+        case 6:
+        dispatch(getCommissionData(dateParams));
+        break;
+        case 7:
+        dispatch(getRebateData(dateParams));
+        break;
       case 8:
         dispatch(getTransferData(dateParams));
         break;
       case 9:
         dispatch(getVipsData(dateParams));
         break;
+    }
+  };
+
+  useEffect(() => {
+    console.log('ALL TRANSACTIONS SAMPLE', allTransactionsData[0]);
+  }, [allTransactionsData]);
+
+  const normalizedData = useMemo(() => {
+    switch (selectedButton.id) {
+      case 2: return winsData;
+      case 3: return walletData;
+      case 4: return betsData;
+      case 5: return withdrawalsData;
+      case 6: return commissionData;
+      case 7: return rebateData;
+      case 8: return transferData;
+      case 9: return vipsData;
+      default: return allTransactionsData;
+    }
+  }, [
+    selectedButton,
+    winsData,
+    walletData,
+    betsData, 
+    withdrawalsData,
+    transferData,
+    vipsData,
+    allTransactionsData,
+    commissionData,
+    rebateData,
+  ]);
+  
+ 
+
+  /* -------------------- Card Renderer -------------------- */
+  const renderItem = ({ item }: any) => {
+    switch (item?.transactionType) {
+      case TransactionType?.BET:
+        return <BetsCard {...item} />;
+      case TransactionType?.CREDIT_WIN:
+        return <WinningCard {...item} />;
+      case TransactionType?.RECHARGE:
+        return <RechargeCard {...item} />;
+      case TransactionType?.WITHDRAW:
+        return <WithdrawCard {...item} />;
+      case TransactionType?.TRANSFER:
+        return <TransferCard {...item} />;
+      case TransactionType?.VIP_BONUS:
+        return <VipTransactionCard {...item} />;
+      case TransactionType?.REBATE:
+        return <RebateCard {...item} />;
+      case TransactionType?.COMMISSION:
+        return <CommissionCard {...item} />;
       default:
-        break;
+        return null;
     }
   };
-  
-const [range, setRange] = React.useState({ startDate: undefined, endDate: undefined });
 
-const {
-  allTransactionsData,
-  transferData,
-  walletData,
-  withdrawalsData,
-  betsData,
-  winsData,
-  vipsData,
-  transactionLoader,
-} = useSelector((state: RootState) => state.TransactionSlice);
-
-  const [open, setOpen] = React.useState(false);
-
-  const onDismiss = React.useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
-
-  const onConfirm = React.useCallback(
-    ({ startDate, endDate }) => {
-      setOpen(false);
-      setRange({ startDate, endDate });
-    },
-    [setOpen, setRange]
-  );
-
-  const displayText =
-  range.startDate && range.endDate
-    ? `${format(range.startDate, 'yyyy-MM-dd')} → ${format(range.endDate, 'yyyy-MM-dd')}`
-    : range.startDate
-    ? format(range.startDate, 'yyyy-MM-dd')
-    : 'Pick range';
-
-    useEffect(() => {
-      dispatch(getAllTransactionsData({
-        // FromDate: range.startDate,
-        // ToDate: range.endDate,
-        FromDate: '',
-        ToDate: '',
-        UserId: userId,
-        Page: 1,
-        PageSize: 10,
-      }))
-    }, [
-      dispatch,
-      range.startDate,
-      range.endDate,
-      userId,
-    ]);
-
-  const renderItem = ({item}: {item: any}) => {
-    console.log('Render item:', item);
-  
-    if (item.amount !== undefined) {
-      return (
-        <BetsCard
-          betAmount={item.amount}
-          beforeBalance={item.beforeBalance}
-          afterBalance={item.afterBalance}
-          orderTime={item.orderTime}
-          game={item.game}
-          orderNumber={item.orderNumber}
-        />
-      );
-    } else if (item.rechargeAmount !== undefined) {
-      return (
-        <RechargeCard
-          rechargeAmount={item.rechargeAmount}
-          beforeBalance={item.beforeBalance}
-          afterBalance={item.afterBalance}
-          rechargeTime={item.rechargeTime}
-          rechargeNumber={item.rechargeNumber}
-          ssr={item.ssr}
-        />
-      );
-    } else {
-      return <Text style={{color: 'white'}}>Invalid data</Text>;
-    }
-  };
-  
-  // const getSelectedData = () => {
-  //   switch (selectedButton?.id) {
-  //     case 1:
-  //       return allData;
-  //     case 2:
-  //       return winData;
-  //     case 3:
-  //       return rechargeData;
-  //     case 4:
-  //       return betsData;
-  //     case 5:
-  //       return withDrawData;
-  //     case 6:
-  //       return commissionData;
-  //     case 7:
-  //       return rebateData;
-  //     case 8:
-  //       return transferData;
-  //     default:
-  //       return vipData;
-  //   }
-  // };
-
-  const getSelectedData = () => {
-    switch (selectedButton?.id) {
-      case 1:
-        return allTransactionsData;
-      case 2:
-        return winsData;
-      case 3:
-        return walletData;
-      case 4:
-        return betsData;
-      case 5:
-        return withdrawalsData;
-      case 8:
-        return transferData;
-      case 9:
-        return vipsData;
-      default:
-        return [];
-    }
-  };
+  /* -------------------- Initial Load -------------------- */
   useEffect(() => {
     handleButtonPress(buttons[0]);
   }, []);
 
- 
 
 
-
-
-  
+  /* -------------------- UI -------------------- */
   return (
-    <View style={{flex: 1, backgroundColor: COLORS.primary}}>
+    <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
       <NewAppHeader
-          leftIconPress={() => navigation.goBack()}
-          rightIconPress={() => navigation.navigate('SignUpScreen')}
-          leftIcon={leftArrowHeader}
-          centerText={'Transactions'}
-        />
-    <HeaderButtonList
-      buttonList={buttons}
-      onButtonPressed={handleButtonPress}
-      selectedButtonObject = {selectedButton}
-    />
-    <View style={{}}>
-    <TouchableOpacity
-        style={styles.dateButton}
+        leftIconPress={() => navigation.goBack()}
+        leftIcon={leftArrowHeader}
+        centerText="Transactions"
+      />
+
+      <HeaderButtonList
+        buttonList={buttons}
+        onButtonPressed={handleButtonPress}
+        selectedButtonObject={selectedButton}
+      />
+
+      <TouchableOpacity
+        style={{ padding: 12, flexDirection: 'row', alignItems: 'center' }}
         onPress={() => setOpen(true)}
-        activeOpacity={0.7}
       >
-        <Icon name="calendar" size={22} color="#fff" style={styles.icon} />
-        <Text style={styles.dateText}>{displayText}</Text>
-        <Icon name="chevron-down" size={20} color="#fff" />
+        <Icon name="calendar" size={22} color="#fff" />
+        <Text style={{ color: '#fff', marginHorizontal: 10 }}>
+          {range.startDate && range.endDate
+            ? `${format(range.startDate, 'yyyy-MM-dd')} → ${format(
+                range.endDate,
+                'yyyy-MM-dd',
+              )}`
+            : 'Pick range'}
+        </Text>
       </TouchableOpacity>
-        <DatePickerModal
-          locale="en"
-          mode="range"
-          visible={open}
-          onDismiss={onDismiss}
-          startDate={range.startDate}
-          endDate={range.endDate}
-          onConfirm={onConfirm}
-          startYear={2025}
-          endYear={2028}
-        />
-      </View>
+
+      <DatePickerModal
+        locale="en"
+        mode="range"
+        visible={open}
+        onDismiss={() => setOpen(false)}
+        startDate={range.startDate}
+        endDate={range.endDate}
+        onConfirm={({ startDate, endDate }) => {
+          setOpen(false);
+          setRange({ startDate, endDate });
+        }}
+      />
 
       <FlatList
-  data={getSelectedData() || []}
-  renderItem={renderItem}
-  keyExtractor={(item, index) => index.toString()}
-  ListEmptyComponent={() =>
-    transactionLoader ? (
-      <Text style={{color: 'white', textAlign: 'center'}}>Loading...</Text>
-    ) : (
-      <Text style={{color: 'white', textAlign: 'center'}}>No data available</Text>
-    )
-  }
-/>
-  </View>
+        data={normalizedData}
+        renderItem={renderItem}
+        keyExtractor={(_, i) => i.toString()}
+        ListEmptyComponent={
+          <Text style={{ color: 'white', textAlign: 'center', marginTop: 20 }}>
+            {transactionLoader ? 'Loading...' : 'No data available'}
+          </Text>
+        }
+      />
+    </View>
   );
 };
+
+export default Transactions;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -301,4 +325,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Transactions;

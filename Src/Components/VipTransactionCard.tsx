@@ -4,23 +4,23 @@ import { betIconCard } from '../../assets/assets';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from '../Constants/Theme';
 interface Props {
+    orderNumber: string;
+    orderTime: string;
     betAmount: number;
     beforeBalance: number;
     afterBalance: number;
-    orderTime: string;
-    game: string;
-    orderNumber: string;
     Type: string;
+    description: string;
 }
 
-const BetsCard : React.FC<Props> = (
+const VipTransactionCard : React.FC<Props> = (
     {betAmount, 
         beforeBalance, 
         afterBalance, 
         orderTime,
-         game,
           orderNumber,
-        Type
+        Type,
+        description
         }
     : Props
 ) => {
@@ -33,36 +33,31 @@ const BetsCard : React.FC<Props> = (
       <View style={styles.headerRow}>
         <View style={styles.iconTextRow}>
           <Image source={betIconCard} style={styles.betIcon} />
-          <Text style={styles.betTitle}>BETS</Text>
+          <Text style={styles.betTitle}>VIP BONUS</Text>
         </View>
-        <Text style={styles.amountText}>-₹{betAmount} RS</Text>
+        <Text style={styles.amountText}>₹{betAmount} RS</Text>
       </View>
-
-      {/* Info Rows */}
-      {/* <View style={styles.infoRow}>
-        <Text style={styles.label}>Before Balance</Text>
-        <Text style={styles.label}>₹{beforeBalance}</Text>
-      </View> */}
       <View style={styles.infoRow}>
         <Text style={styles.label}>Balance</Text>
-        <Text style={styles.label}>-₹{betAmount}</Text>
+        <Text style={styles.label}>₹{betAmount}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>After Balance</Text>
         <Text style={styles.label}>₹{afterBalance}</Text>
       </View>
       <View style={styles.infoRow}>
-        <Text style={styles.label}>Order Time</Text>
-        <Text style={styles.label}>{orderTime}</Text>
-      </View>
-      <View style={styles.infoRow}>
         <Text style={styles.label}>Type</Text>
         <Text style={styles.label}>{Type}</Text>
       </View>
       <View style={styles.infoRow}>
-        <Text style={styles.label}>Game Name</Text>
-        <Text style={styles.label}>{game}</Text>
+        <Text style={styles.label}>Description</Text>
+        <Text style={styles.label}>{description}</Text>
       </View>
+      <View style={styles.infoRow}>
+        <Text style={styles.label}>Order Time</Text>
+        <Text style={styles.label}>{orderTime}</Text>
+      </View>
+     
       <View style={styles.infoRow}>
         <Text style={styles.label}>Order Number</Text>
         <Text style={styles.label}>{orderNumber}</Text>
@@ -107,7 +102,7 @@ const createStyles = (Scale: any) =>
     amountText: {
       fontSize: Scale(20),
       fontWeight: 'bold',
-      color: 'red',
+      color: 'green',
     },
     infoRow: {
       flexDirection: 'row',
@@ -123,4 +118,4 @@ const createStyles = (Scale: any) =>
     },
   });
 
-export default BetsCard
+export default VipTransactionCard

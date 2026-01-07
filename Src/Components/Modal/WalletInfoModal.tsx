@@ -34,6 +34,10 @@ const WalletInfoModal: React.FC<WalletInfoModalProps> = ({
           borderRadius: 10,
           padding: 20,
           marginBottom: 16,
+          // width: '90%',
+          // maxWidth: 380,
+          // maxHeight: '80%',
+          // marginHorizontal: Scale(10),
         }}>
         <View
           style={{

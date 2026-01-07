@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React, { useEffect } from "react";
 import MainNavigation from "./Navigation/mainNavigation";
 import CustomLoader from "./Components/Modal/CustomLoader";
