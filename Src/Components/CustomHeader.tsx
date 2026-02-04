@@ -31,7 +31,7 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <View style={{ flexDirection: "row", alignItems: "center" , }}>
         <TouchableOpacity
           style={styles.menuContainer}
           onPress={() => onMenuPress()}
@@ -107,10 +107,12 @@ const createStyles = (Scale: any) =>
       alignItems: "center",
       paddingHorizontal: 10,
       paddingVertical: 10,
+      backgroundColor: COLORS.primary,
     },
     menuContainer: {
       flexDirection: "row",
       alignItems: "center",
+      
     },
     loginButton: {
       padding: 5,

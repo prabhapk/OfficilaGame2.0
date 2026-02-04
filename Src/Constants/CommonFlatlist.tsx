@@ -1,4 +1,4 @@
-import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, fiveMin3DImage, homeActiveTab, homeTab, hot, inviteActiveTab, inviteTab, jdb, Jili, lottery1, meActiveTab, meTab, oneMin3DImage, pg, promotions, quick3dMenu, quick3min, resultActiveTab, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
+import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, fiveMin3DImage, homeActiveTab, homeTab, hot, inviteActiveTab, inviteTab, jdb, Jili, lottery1, meActiveTab, meTab, multiUserIcon, oneMin3DImage, pg, promotions, quick3dMenu, quick3min, resultActiveTab, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
 import CasinoScreen from "../Screens/CasinoScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import InviteScreen from "../Screens/InviteScreen";
@@ -9,9 +9,9 @@ import Promotions from "../Screens/Promotions";
 export const HomeScreenFlatlist = [
     // {id: 1, isSelected:true, image:casino},
     {id: 1, isSelected:true, image:lottery1},
-    // {id:3, isSelected:false, image:scratch},
-    // {id:4, isSelected:false, image:rummy},
-    // {id:5, isSelected:false, image:sports}
+    {id:2, isSelected:false, image:scratch},
+    {id:3, isSelected:false, image:rummy},
+    {id:4, isSelected:false, image:sports}
 ]
 
 export const CasionHeadersList = [
@@ -149,8 +149,8 @@ export const ThreeDigitsLottery = [
     name: 'Invite',
     component: InviteScreen,
     label: 'Invite',
-    focusedIcon: inviteActiveTab,
-    unfocusedIcon: inviteTab,
+    focusedIcon: multiUserIcon,
+    unfocusedIcon: multiUserIcon,
   },
    {
     name: 'Result',

@@ -4,6 +4,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { gameTypeAct } from '../../assets/assets';
 import { Image } from 'expo-image';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from '../Constants/Theme';
 interface HeaderProps {
   onPress: () => void;
   headerList: any[];
@@ -34,7 +35,11 @@ const HomeScreenGameHeaders: React.FC<HeaderProps> = ({
         const isSelected = item.id === selectedId;
 
         return (
-          <TouchableOpacity onPress={() => onSelect(item.id)}>
+          <TouchableOpacity
+          style= {{
+            backgroundColor: isSelected ? COLORS.primary : COLORS.white,
+          }}
+          onPress={() => onSelect(item.id)}>
             <ImageBackground
               source={isSelected ? gameTypeAct : null}
               style={{

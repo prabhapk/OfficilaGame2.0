@@ -120,7 +120,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomLoader visible={loader} />
       
       {/* Promotional Modal */}

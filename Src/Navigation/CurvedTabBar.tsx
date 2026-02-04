@@ -12,10 +12,10 @@ import { COLORS } from "../Constants/Theme";
 
 const { width } = Dimensions.get("window");
 
-const TAB_BAR_HEIGHT = 50;
+const TAB_BAR_HEIGHT = 70;
 const CENTER_BUTTON_SIZE = 72;
 const CURVE_WIDTH = 90;
-const CURVE_HEIGHT = 34;
+const CURVE_HEIGHT = 35;
 
 
 export default function CurvedTabBar({
@@ -53,7 +53,7 @@ export default function CurvedTabBar({
             H0
             Z
           `}
-          fill="#FFFFFF"
+          fill={COLORS.primary}
         />
       </Svg>
 
@@ -114,7 +114,7 @@ export default function CurvedTabBar({
         ]?.options?.tabBarIcon?.({
           focused: state.routes[state.index].name === "Invite",
           color: "#fff",
-          size: 28,
+          size: 50,
         })}
       </TouchableOpacity>
     </View>
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     width: CENTER_BUTTON_SIZE,
     height: CENTER_BUTTON_SIZE,
     borderRadius: CENTER_BUTTON_SIZE / 2,
-    backgroundColor: COLORS.test,
+    backgroundColor: '#fff',
     justifyContent: "center",
     alignItems: "center",
     elevation: 10,

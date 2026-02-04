@@ -52,8 +52,6 @@ export default function BottomNavigation() {
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
-
-        // IMPORTANT: remove all tabBarStyle & background logic
         sceneContainerStyle:
           Platform.OS === "android"
             ? { paddingBottom: 70 + insets.bottom }
@@ -80,14 +78,14 @@ export default function BottomNavigation() {
           options={{
             tabBarShowLabel: false,
 
-            tabBarIcon: ({ focused }) => (
+            tabBarIcon: ({ focused, size }) => (
               <View
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <Image
+                {/* <Image
                   source={focused ? tab.focusedIcon : tab.unfocusedIcon}
                   style={{
                     width: iconSize,
@@ -95,7 +93,15 @@ export default function BottomNavigation() {
                     marginBottom: 2,
                   }}
                   resizeMode="contain"
-                />
+                /> */}
+                 <Image
+    source={focused ? tab.focusedIcon : tab.unfocusedIcon}
+    style={{
+      width: size,
+      height: size,
+    }}
+    resizeMode="contain"
+  />
 
                 {/* <Text
                   style={{
