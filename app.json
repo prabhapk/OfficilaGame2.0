@@ -28,9 +28,6 @@
       "favicon": "./assets/favicon.png"
     },
     "scheme": "annai-lottery",
-    "linking": {
-      "prefixes": ["http://localhost:8081", "annai-lottery://"]
-    },
     "extra": {
       "eas": {
         "projectId": "40bc88ac-9f46-4364-b391-35541389ad1d"
