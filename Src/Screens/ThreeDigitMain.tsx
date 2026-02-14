@@ -91,6 +91,7 @@ import AlertSuccessModal from "../Components/Modal/AlertSuccessModal";
 import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceModal";
 import { useContainerScale } from "../hooks/useContainerScale";
 import NewAppHeader from "../Components/NewAppHeader";
+import Modal from "react-native-modal";
 
 const ThreeDigitMain = ({ navigation, route }: any) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -133,6 +134,10 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const [last30SecStates, setLast30SecStates] = useState<{
     [key: string]: boolean;
   }>({});
+  const [switchSlotConfirmVisible, setSwitchSlotConfirmVisible] =
+    useState(false);
+  const [pendingSlotValue, setPendingSlotValue] = useState<any>(null);
+  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
 
   const handleChildStateChange = (updatedValue: any) => {
     console.log("Received from DigitComponent:", updatedValue);
@@ -164,20 +169,20 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
 
     const first = individualGameData[0];
 
-    // ✅ CASE 1: no interval
+    // ✅ CASE 1: no interval — one option per groupId (time slot), id = groupId for header selection
     if (first.intervaltime === "00:00:00") {
       return Object.values(
         individualGameData.reduce((acc, item) => {
           if (!acc[item.groupId]) {
             acc[item.groupId] = {
               id: item.groupId,
-              groupedId: item.groupedId,
+              groupedId: item.groupId,
               name: minutesTo12Hr(timeToMinutes(item.endtime)),
               isSelected: Object.keys(acc).length === 0,
             };
           }
           return acc;
-        }, {} as Record<number, { id: number; name: string; isSelected: boolean }>)
+        }, {} as Record<number, { id: number; groupedId: number; name: string; isSelected: boolean }>)
       );
     }
 
@@ -254,11 +259,6 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const groupId = route.params.gameData?.groupId;
   const gameTypeId = route.params.gameData?.gameTypeId;
   console.log("groupId==>", groupId, gameTypeId);
-  const WinningBalls = individualGameData[0]?.lastResult?.winningNumber.split(
-    ""
-  ) || ["1", "2", "3"];
-  console.log("WinningBalls==>", WinningBalls, individualGameData);
-  // const WinningBalls = "123"
 
   const renderContent = () => {
     // Add safety check for individualGameData
@@ -274,20 +274,36 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     }
 
     let matchedGame;
+    // Games for the selected time slot (Single, Double, Triple) — used for gameId, prices, etc.
+    let gamesForSelectedSlot: any[];
 
     // Handle different cases based on interval time
     if (first?.intervaltime === "00:00:00") {
-      // Case 1: No interval - selectedOption corresponds to groupId
+      // Case 1: No interval - selectedOption is groupId; each slot has its own group
       matchedGame = individualGameData?.find(
         (game) => game.groupId === selectedOption
       );
+      gamesForSelectedSlot = individualGameData?.filter(
+        (game) => game.groupId === selectedOption
+      ) || [];
     } else {
-      // Case 2: With interval - selectedOption is sequential (1, 2, 3...)
-      // All slots use the same groupId (first.groupId)
+      // Case 2: With interval - selectedOption is sequential (1, 2, 3...); all slots share first.groupId
       matchedGame = individualGameData?.find(
         (game) => game.groupId === first.groupId
       );
+      gamesForSelectedSlot = individualGameData?.filter(
+        (game) => game.groupId === first.groupId
+      ) || [];
     }
+
+    // Resolve Single / Double / Triple by sectiontype so correct gameId is passed per bet type
+    const singleGame = gamesForSelectedSlot.find((g: any) => g.sectiontype === "Single");
+    const doubleGame = gamesForSelectedSlot.find((g: any) => g.sectiontype === "Double");
+    const tripleGame = gamesForSelectedSlot.find((g: any) => g.sectiontype === "Triple");
+
+    const WinningBalls = matchedGame?.lastResult?.winningNumber?.split("") ||
+      individualGameData[0]?.lastResult?.winningNumber?.split("") ||
+      ["1", "2", "3"];
 
     console.log(
       "matchedGame==>",
@@ -372,23 +388,23 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           latGameWinningA={WinningBalls[0] || "1"}
           lastGameWinningB={WinningBalls[1] || "2"}
           lastGameWinningC={WinningBalls[2] || "3"}
-          singleDigitPrice={Number(individualGameData[0]?.ticketprize)}
-          singleDigitWinningPrice={Number(individualGameData[0]?.prizeamount)}
+          singleDigitPrice={Number(singleGame?.ticketprize)}
+          singleDigitWinningPrice={Number(singleGame?.prizeamount)}
           handleAdd={handleAdd}
           selectedOption={selectedOption}
-          doubleDigitPrice={Number(individualGameData[1]?.ticketprize)}
-          doubleDigitWinningPrice={Number(individualGameData[1]?.prizeamount)}
+          doubleDigitPrice={Number(doubleGame?.ticketprize)}
+          doubleDigitWinningPrice={Number(doubleGame?.prizeamount)}
           tableData={transformedData}
           handleGenerate={handleGenerate}
-          threeDigitWinningPrice={Number(individualGameData[2]?.prizeamount)}
-          threeDigitPrice={Number(individualGameData[2]?.ticketprize)}
+          threeDigitWinningPrice={Number(tripleGame?.prizeamount)}
+          threeDigitPrice={Number(tripleGame?.ticketprize)}
           onStateChange={handleChildStateChange}
           targetDateProp={nextResultTime}
           // onTimerComplete={handleTimerComplete}
-          gameName={individualGameData[0]?.name}
-          singleDigitGameId={individualGameData[0]?.id}
-          doubleDigitGameId={individualGameData[1]?.id}
-          threeDigitGameId={individualGameData[2]?.id}
+          gameName={singleGame?.name ?? individualGameData[0]?.name}
+          singleDigitGameId={singleGame?.id ?? 0}
+          doubleDigitGameId={doubleGame?.id ?? 0}
+          threeDigitGameId={tripleGame?.id ?? 0}
           groupId={groupId}
           totalPage={totalPages}
           onThirtySecondsRemaining={() => {
@@ -481,6 +497,17 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     setIsOnFocus(false);
   };
   const refRBSheet: any = useRef();
+
+  // On web, RBSheet portals outside mobile container; use ref bridge to in-place sheet
+  useEffect(() => {
+    if (Platform.OS === "web") {
+      refRBSheet.current = {
+        open: () => setBottomSheetVisible(true),
+        close: () => setBottomSheetVisible(false),
+      };
+    }
+  }, []);
+
   // const navigation = useNavigation();
   const goBack = () => {
     navigation.goBack();
@@ -555,35 +582,33 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     }
   };
   const handleHeader = (value: any) => {
-    const isAdded = numbers.find((item: any) => item.type !== value.name);
+    const hasItemsForOtherSlot = numbers.some(
+      (item: any) => item.type !== value.id
+    );
 
-    if (isAdded) {
-      Alert.alert(
-        "Confirmation Reminder",
-        `You have placed an order for the Text\n${selectedOption} time.\nAre you sure you want to remove your previous selections?`,
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
-          },
-          {
-            text: "Confirm",
-            onPress: () => {
-              setNumbers([]);
-              setSelectedOption(value.id);
-              setSelectedTime(value.name);
-            },
-          },
-        ],
-        { cancelable: false }
-      );
-
+    if (hasItemsForOtherSlot) {
+      setPendingSlotValue(value);
+      setSwitchSlotConfirmVisible(true);
       return;
     }
 
     setSelectedOption(value.id);
     setSelectedTime(value.name);
+  };
+
+  const handleSwitchSlotConfirm = () => {
+    if (pendingSlotValue) {
+      setNumbers([]);
+      setSelectedOption(pendingSlotValue.id);
+      setSelectedTime(pendingSlotValue.name);
+    }
+    setPendingSlotValue(null);
+    setSwitchSlotConfirmVisible(false);
+  };
+
+  const handleSwitchSlotCancel = () => {
+    setPendingSlotValue(null);
+    setSwitchSlotConfirmVisible(false);
   };
 
   const getRandomNumber = () => Math.floor(Math.random() * 10);
@@ -614,6 +639,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     console.log("resetState");
     setNumbers([]);
     setCartValues([]);
+    if (Platform.OS === "web") setBottomSheetVisible(false);
     // setSelectedOption(null);
     setSingleACount(3);
     setSingleBCount(3);
@@ -752,15 +778,16 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
 
   const renderHeader = ({ item }: any) => {
     console.log("item==>asasa", item);
+    const isSelected = selectedOption === item.id;
     return (
       <LinearGradient
         colors={[
-          selectedOption === item.id ? COLORS.linearOne : COLORS.gameDetailColor, // fallback color
-          selectedOption === item.id ? COLORS.linearTwo : COLORS.gameDetailColor,
+          isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
+          isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
         ]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
-        style={[styles.headerBtn]}
+        style={[styles.headerBtn, !isSelected && { borderColor: COLORS.tabInactiveBorder }]}
       >
         <TouchableOpacity
           style={{ justifyContent: "center", alignItems: "center" }}
@@ -772,13 +799,14 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
             style={styles.headerImg}
           />
           <Text
-            style={{
-              color: "white",
-              marginLeft: 5,
-              fontSize: Scale(14),
-              fontWeight: "bold",
-              marginTop: Scale(5),
-            }}
+            style={[
+              styles.headerBtnText,
+              {
+                marginLeft: 5,
+                marginTop: Scale(5),
+                color: isSelected ? COLORS.tabActiveText : COLORS.tabInactiveText,
+              },
+            ]}
           >
             {item.name}
           </Text>
@@ -882,6 +910,52 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     dispatch(gameRules({ gameTypeId: groupId }));
   }, [groupId]);
 
+  const renderMyNumbersSheetContent = () => (
+    <View style={styles.myNumbersSheetContent}>
+      <View style={styles.myNumbersSheetHeader}>
+        <Text style={styles.myNumbersSheetTitle}>My Numbers</Text>
+        <TouchableOpacity onPress={() => setNumbers([])}>
+          <AntDesign
+            name="delete"
+            size={Scale(18)}
+            color={COLORS.primaryTextColor}
+            style={{ marginRight: Scale(10) }}
+          />
+        </TouchableOpacity>
+      </View>
+      {islast30sec ? (
+        <View>
+          <Text style={styles.myNumbersSheetEmpty}>Empty</Text>
+        </View>
+      ) : (
+        <View style={styles.myNumbersSheetList}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: Scale(10) }}>
+            {numbers.map((item) => (
+              <View key={item.id} style={styles.myNumbersChip}>
+                <Text style={styles.myNumbersChipText}>
+                  {item.label} = {item.value}
+                </Text>
+                <View style={styles.myNumbersChipCount}>
+                  <Text style={styles.myNumbersChipCountText}>x{item.count}</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => removeNumber(item.id)}
+                  style={styles.myNumbersChipRemove}
+                >
+                  <Image
+                    source={cancel}
+                    style={{ width: Scale(10), height: Scale(10) }}
+                    tintColor={COLORS.primaryTextColor}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
+    </View>
+  );
+
   return (
     <View style={styles.mainContainer}>
       {/* {islast30sec && <Show30SecondsModal />} */}
@@ -900,12 +974,14 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       )}
 
       <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingBottom: Scale(100),
-          paddingTop: showStickyHeader ? Scale(80) : 0, // Only add padding when sticky header is visible
-        }}
+        style={styles.scrollView}
+        contentContainerStyle={[
+          styles.scrollContent,
+          {
+            paddingBottom: Scale(100),
+            paddingTop: showStickyHeader ? Scale(80) : 0,
+          },
+        ]}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
         scrollEventThrottle={16}
@@ -953,155 +1029,54 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           </View>
         </View>
       </ScrollView>
-      <RBSheet
-        ref={refRBSheet}
-        height={Platform.OS === "ios" ? Scale(400) : Scale(350)} // Reduced height
-        draggable={true}
-        closeOnPressMask={true}
-        customStyles={{
-          wrapper: {
-            backgroundColor: "transparent",
-          },
-          container: {
-            borderTopLeftRadius: Scale(20),
-            borderTopRightRadius: Scale(20),
-            paddingHorizontal: Scale(10),
-            marginBottom: Scale(80),
-          },
-          draggableIcon: {
-            width: Scale(75),
-            height: Scale(5),
-            backgroundColor: "#D9D9D9",
-            borderRadius: Scale(2.5),
-            marginVertical: Scale(10),
-          },
-        }}
-      >
-        <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 20 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: "bold",
-                fontSize: Scale(16),
-                color: "black",
-                marginHorizontal: Scale(10),
-              }}
-            >
-              My Numbers
-            </Text>
-            <TouchableOpacity onPress={() => setNumbers([])}>
-              <AntDesign
-                name={"delete"}
-                size={Scale(18)}
-                color={"black"}
-                style={{ marginRight: Scale(10) }}
-              />
-            </TouchableOpacity>
+
+      {/* Native: RBSheet (on web it portals outside mobile container) */}
+      {Platform.OS !== "web" && (
+        <RBSheet
+          ref={refRBSheet}
+          height={Platform.OS === "ios" ? Scale(400) : Scale(350)}
+          draggable={true}
+          closeOnPressMask={true}
+          customStyles={{
+            wrapper: { backgroundColor: "transparent" },
+            container: {
+              borderTopLeftRadius: Scale(20),
+              borderTopRightRadius: Scale(20),
+              paddingHorizontal: Scale(10),
+              marginBottom: Scale(80),
+              backgroundColor: COLORS.cardBg,
+            },
+            draggableIcon: {
+              width: Scale(75),
+              height: Scale(5),
+              backgroundColor: COLORS.cardBorder,
+              borderRadius: Scale(2.5),
+              marginVertical: Scale(10),
+            },
+          }}
+        >
+          {renderMyNumbersSheetContent()}
+        </RBSheet>
+      )}
+
+      {/* Web: in-place bottom sheet so it stays inside mobile container */}
+      {Platform.OS === "web" && bottomSheetVisible && (
+        <View style={styles.webSheetOverlay} pointerEvents="box-none">
+          <TouchableOpacity
+            style={StyleSheet.absoluteFill}
+            activeOpacity={1}
+            onPress={() => setBottomSheetVisible(false)}
+          />
+          <View style={styles.webSheetContainer}>
+            <View style={styles.webSheetHandle} />
+            {renderMyNumbersSheetContent()}
           </View>
-          {/* inside */}
-          {islast30sec ? (
-            <View>
-              <Text>Empty</Text>
-            </View>
-          ) : (
-            <View style={{ marginHorizontal: Scale(10), marginTop: Scale(20) }}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  gap: Scale(10),
-                }}
-              >
-                {numbers.map((item) => (
-                  <View
-                    key={item.id}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      backgroundColor: "#F1F1F3",
-                      borderRadius: Scale(20),
-                      paddingHorizontal: Scale(15),
-                      paddingVertical: Scale(8),
-                      position: "relative",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: Scale(14),
-                        fontWeight: "bold",
-                        color: "#000",
-                      }}
-                    >
-                      {item.label} = {item.value}
-                    </Text>
-
-                    <View
-                      style={{
-                        backgroundColor: "#F27842",
-                        borderRadius: Scale(5),
-                        paddingHorizontal: Scale(5),
-                        marginLeft: Scale(5),
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: Scale(12),
-                          fontWeight: "bold",
-                          color: "white",
-                        }}
-                      >
-                        x{item.count}
-                      </Text>
-                    </View>
-
-                    {/* Remove Button */}
-                    <TouchableOpacity
-                      onPress={() => removeNumber(item.id)}
-                      style={{
-                        position: "absolute",
-                        top: Scale(-5),
-                        right: Scale(-5),
-                        backgroundColor: "white",
-                        width: Scale(18),
-                        height: Scale(18),
-                        borderRadius: Scale(9),
-                        justifyContent: "center",
-                        alignItems: "center",
-                        shadowColor: "#000",
-                        shadowOpacity: 0.2,
-                        shadowRadius: 3,
-                        elevation: 3, // Android shadow
-                      }}
-                    >
-                      <Image
-                        source={cancel}
-                        style={{ width: Scale(10), height: Scale(10) }}
-                        tintColor={"black"}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </View>
-            </View>
-          )}
         </View>
-      </RBSheet>
+      )}
       <SafeAreaView
         style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
       >
-        <View
-          style={{
-            backgroundColor: COLORS.primary,
-            height: Scale(80),
-            elevation: 10,
-          }}
-        >
+        <View style={styles.footerWrapper}>
           <GameFooter
             openSheet={() => refRBSheet.current.open()}
             totalAmount={sum}
@@ -1109,6 +1084,47 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
             isDisabled={sum1 === 0 || last30SecStates[groupId]}
             handlePayNow={handlePayNow}
           />
+          {Platform.OS !== "web" && (
+            <Modal
+              isVisible={switchSlotConfirmVisible}
+              onBackdropPress={handleSwitchSlotCancel}
+              backdropOpacity={0.5}
+              animationIn="fadeIn"
+              animationOut="fadeOut"
+            >
+              <View style={styles.switchSlotModalContainer}>
+                <Text style={styles.switchSlotModalTitle}>
+                  Confirmation Reminder
+                </Text>
+                <Text style={styles.switchSlotModalMessage}>
+                  You have placed an order for the {selectedTime} time. Are you
+                  sure you want to remove your previous selections?
+                </Text>
+                <View style={styles.switchSlotModalButtons}>
+                  <TouchableOpacity
+                    style={[
+                      styles.switchSlotModalBtn,
+                      styles.switchSlotModalCancel,
+                    ]}
+                    onPress={handleSwitchSlotCancel}
+                  >
+                    <Text style={styles.switchSlotModalCancelText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.switchSlotModalBtn,
+                      styles.switchSlotModalConfirm,
+                    ]}
+                    onPress={handleSwitchSlotConfirm}
+                  >
+                    <Text style={styles.switchSlotModalConfirmText}>
+                      Confirm
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+          )}
           <PaymentSuccessModal
             headerImage
             isVisible={paymentSuccessModalVisible}
@@ -1124,15 +1140,67 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           />
         </View>
       </SafeAreaView>
+
+      {/* Web: in-place overlay so modal stays inside mobile container */}
+      {Platform.OS === "web" && switchSlotConfirmVisible && (
+        <View style={styles.switchSlotModalOverlay} pointerEvents="box-none">
+          <TouchableOpacity
+            style={StyleSheet.absoluteFill}
+            activeOpacity={1}
+            onPress={handleSwitchSlotCancel}
+          />
+          <View style={styles.switchSlotModalContainer}>
+            <Text style={styles.switchSlotModalTitle}>
+              Confirmation Reminder
+            </Text>
+            <Text style={styles.switchSlotModalMessage}>
+              You have placed an order for the {selectedTime} time. Are you sure
+              you want to remove your previous selections?
+            </Text>
+            <View style={styles.switchSlotModalButtons}>
+              <TouchableOpacity
+                style={[
+                  styles.switchSlotModalBtn,
+                  styles.switchSlotModalCancel,
+                ]}
+                onPress={handleSwitchSlotCancel}
+              >
+                <Text style={styles.switchSlotModalCancelText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.switchSlotModalBtn,
+                  styles.switchSlotModalConfirm,
+                ]}
+                onPress={handleSwitchSlotConfirm}
+              >
+                <Text style={styles.switchSlotModalConfirmText}>Confirm</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
 const createStyles = (Scale: any) =>
   StyleSheet.create({
     mainContainer: {
-      backgroundColor: COLORS.primary,
+      backgroundColor: COLORS.primaryBackground,
       flex: 1,
       marginBottom: Scale(0),
+    },
+    scrollView: {
+      flex: 1,
+      backgroundColor: COLORS.gamesBackground,
+    },
+    scrollContent: {
+      flexGrow: 1,
+    },
+    footerWrapper: {
+      backgroundColor: COLORS.headerBackground,
+      height: Scale(80),
+      elevation: 10,
     },
     subContainer: {
       marginTop: Scale(10),
@@ -1143,7 +1211,7 @@ const createStyles = (Scale: any) =>
     },
     card: {
       marginTop: Scale(20),
-      backgroundColor: COLORS.primary,
+      backgroundColor: COLORS.cardBg,
       width: "100%",
       borderRadius: 10,
       shadowColor: "#000",
@@ -1163,7 +1231,7 @@ const createStyles = (Scale: any) =>
     },
     renderDataView: {
       padding: 10,
-      backgroundColor: COLORS.primary,
+      backgroundColor: COLORS.gamesBackground,
       borderRadius: 10,
     },
     gameDetailView: {
@@ -1171,7 +1239,7 @@ const createStyles = (Scale: any) =>
       justifyContent: "space-between",
       paddingHorizontal: 10,
       marginTop: 10,
-      backgroundColor: "#DBCEFB",
+      backgroundColor: COLORS.sectionHeaderBg,
       overflow: "hidden",
     },
     showCountContainer: {
@@ -1219,12 +1287,12 @@ const createStyles = (Scale: any) =>
       borderRadius: 10,
     },
     DigitTitleText: {
-      color: "#000",
+      color: COLORS.primaryTextColor,
       fontWeight: "bold",
       fontSize: Scale(16),
     },
     DigitTitleText1: {
-      color: "#000",
+      color: COLORS.primaryTextColor,
       fontWeight: "bold",
       fontSize: Scale(14),
       top: 1,
@@ -1237,9 +1305,172 @@ const createStyles = (Scale: any) =>
       marginHorizontal: 5,
       height: Scale(100),
       borderWidth: 0.1,
-      borderColor: COLORS.white,
+      borderColor: COLORS.tabInactiveBorder,
     },
     headerImg: { width: 30, height: 30 },
+    headerBtnText: {
+      fontSize: Scale(14),
+      fontWeight: "bold",
+    },
+
+    webSheetOverlay: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      justifyContent: "flex-end",
+      zIndex: 9998,
+    },
+    webSheetContainer: {
+      backgroundColor: COLORS.cardBg,
+      borderTopLeftRadius: Scale(20),
+      borderTopRightRadius: Scale(20),
+      paddingHorizontal: Scale(10),
+      paddingBottom: Scale(80),
+      maxHeight: "70%",
+    },
+    webSheetHandle: {
+      width: Scale(75),
+      height: Scale(5),
+      backgroundColor: COLORS.cardBorder,
+      borderRadius: Scale(2.5),
+      alignSelf: "center",
+      marginVertical: Scale(10),
+    },
+    myNumbersSheetContent: {
+      flex: 1,
+      marginHorizontal: 10,
+      marginVertical: 20,
+    },
+    myNumbersSheetHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    myNumbersSheetTitle: {
+      fontWeight: "bold",
+      fontSize: Scale(16),
+      color: COLORS.primaryTextColor,
+      marginHorizontal: Scale(10),
+    },
+    myNumbersSheetEmpty: {
+      fontSize: Scale(14),
+      color: COLORS.secondaryTextColor,
+    },
+    myNumbersSheetList: {
+      marginHorizontal: Scale(10),
+      marginTop: Scale(20),
+    },
+    myNumbersChip: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: COLORS.listRowBg,
+      borderRadius: Scale(20),
+      paddingHorizontal: Scale(15),
+      paddingVertical: Scale(8),
+      position: "relative",
+      borderWidth: 1,
+      borderColor: COLORS.gameTileBorder,
+    },
+    myNumbersChipText: {
+      fontSize: Scale(14),
+      fontWeight: "bold",
+      color: COLORS.primaryTextColor,
+    },
+    myNumbersChipCount: {
+      backgroundColor: COLORS.tabActiveBg,
+      borderRadius: Scale(5),
+      paddingHorizontal: Scale(5),
+      marginLeft: Scale(5),
+    },
+    myNumbersChipCountText: {
+      fontSize: Scale(12),
+      fontWeight: "bold",
+      color: COLORS.white,
+    },
+    myNumbersChipRemove: {
+      position: "absolute",
+      top: Scale(-5),
+      right: Scale(-5),
+      backgroundColor: COLORS.headerBackground,
+      width: Scale(18),
+      height: Scale(18),
+      borderRadius: Scale(9),
+      justifyContent: "center",
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+      elevation: 3,
+      borderWidth: 1,
+      borderColor: COLORS.cardBorder,
+    },
+
+    switchSlotModalOverlay: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 9999,
+    },
+    switchSlotModalContainer: {
+      backgroundColor: COLORS.cardBg,
+      borderRadius: Scale(12),
+      padding: Scale(20),
+      marginHorizontal: Scale(20),
+      borderWidth: 1,
+      borderColor: COLORS.cardBorder,
+    },
+    switchSlotModalTitle: {
+      fontSize: Scale(18),
+      fontWeight: "bold",
+      color: COLORS.primaryTextColor,
+      textAlign: "center",
+      marginBottom: Scale(12),
+    },
+    switchSlotModalMessage: {
+      fontSize: Scale(14),
+      color: COLORS.secondaryTextColor,
+      textAlign: "center",
+      marginBottom: Scale(24),
+      lineHeight: Scale(20),
+    },
+    switchSlotModalButtons: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      gap: Scale(12),
+    },
+    switchSlotModalBtn: {
+      flex: 1,
+      paddingVertical: Scale(12),
+      borderRadius: Scale(8),
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    switchSlotModalCancel: {
+      backgroundColor: COLORS.tabInactiveBg,
+      borderWidth: 1,
+      borderColor: COLORS.cardBorder,
+    },
+    switchSlotModalConfirm: {
+      backgroundColor: COLORS.tabActiveBg,
+    },
+    switchSlotModalCancelText: {
+      color: COLORS.primaryTextColor,
+      fontSize: Scale(15),
+      fontWeight: "600",
+    },
+    switchSlotModalConfirmText: {
+      color: COLORS.white,
+      fontSize: Scale(15),
+      fontWeight: "600",
+    },
 
     // Sticky Header Styles
     stickyHeader: {

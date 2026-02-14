@@ -610,21 +610,18 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   ];
 
   const renderHeader = ({ item }: any) => {
+    const isSelected = selectedOption === item.name;
     return (
       <LinearGradient
         colors={[
-          selectedOption === item.name
-            ? COLORS.linearOne
-            : COLORS.gameDetailColor, // fallback color
-          selectedOption === item.name
-            ? COLORS.linearTwo
-            : COLORS.gameDetailColor,
+          isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
+          isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
         ]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={[
           styles.headerBtn,
-          { backgroundColor: selectedOption === item.name ? "pink" : "white" },
+          !isSelected && { borderColor: COLORS.tabInactiveBorder },
         ]}
       >
         <TouchableOpacity
@@ -637,13 +634,14 @@ const Quick3DScreen = ({ navigation, route }: any) => {
             style={styles.headerImg}
           />
           <Text
-            style={{
-              color: "white",
-              marginLeft: 5,
-              fontSize: Scale(14),
-              fontWeight: "bold",
-              marginTop: Scale(5),
-            }}
+            style={[
+              styles.headerBtnText,
+              {
+                marginLeft: 5,
+                marginTop: Scale(5),
+                color: isSelected ? COLORS.tabActiveText : COLORS.tabInactiveText,
+              },
+            ]}
           >
             {item.name}
           </Text>
@@ -715,12 +713,14 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         />
       )}
       <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingBottom: Scale(100),
-          paddingTop: showStickyHeader ? Scale(80) : 0, // Only add padding when sticky header is visible
-        }}
+        style={styles.scrollView}
+        contentContainerStyle={[
+          styles.scrollContent,
+          {
+            paddingBottom: Scale(100),
+            paddingTop: showStickyHeader ? Scale(80) : 0,
+          },
+        ]}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
         scrollEventThrottle={16}
@@ -765,134 +765,62 @@ const Quick3DScreen = ({ navigation, route }: any) => {
       </ScrollView>
       <RBSheet
         ref={refRBSheet}
-        height={Platform.OS === "ios" ? Scale(400) : Scale(350)} // Reduced height
+        height={Platform.OS === "ios" ? Scale(400) : Scale(350)}
         draggable={true}
         closeOnPressMask={true}
         customStyles={{
-          wrapper: {
-            backgroundColor: "transparent",
-          },
+          wrapper: { backgroundColor: "transparent" },
           container: {
             borderTopLeftRadius: Scale(20),
             borderTopRightRadius: Scale(20),
             paddingHorizontal: Scale(10),
             marginBottom: Scale(80),
+            backgroundColor: COLORS.cardBg,
           },
           draggableIcon: {
             width: Scale(75),
             height: Scale(5),
-            backgroundColor: "#D9D9D9",
+            backgroundColor: COLORS.cardBorder,
             borderRadius: Scale(2.5),
             marginVertical: Scale(10),
           },
         }}
       >
-        <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 20 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: "bold",
-                fontSize: Scale(16),
-                color: "black",
-                marginHorizontal: Scale(10),
-              }}
-            >
-              My Numbers
-            </Text>
+        <View style={styles.myNumbersSheetContent}>
+          <View style={styles.myNumbersSheetHeader}>
+            <Text style={styles.myNumbersSheetTitle}>My Numbers</Text>
             <TouchableOpacity onPress={() => setNumbers([])}>
               <AntDesign
-                name={"delete"}
+                name="delete"
                 size={Scale(18)}
-                color={"black"}
+                color={COLORS.primaryTextColor}
                 style={{ marginRight: Scale(10) }}
               />
             </TouchableOpacity>
           </View>
-          {/* inside */}
           {islast30sec ? (
             <View>
-              <Text>Empty</Text>
+              <Text style={styles.myNumbersSheetEmpty}>Empty</Text>
             </View>
           ) : (
-            <View style={{ marginHorizontal: Scale(10), marginTop: Scale(20) }}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  gap: Scale(10),
-                }}
-              >
+            <View style={styles.myNumbersSheetList}>
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: Scale(10) }}>
                 {numbers.map((item) => (
-                  <View
-                    key={item.id}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      backgroundColor: "#F1F1F3",
-                      borderRadius: Scale(20),
-                      paddingHorizontal: Scale(15),
-                      paddingVertical: Scale(8),
-                      position: "relative",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: Scale(14),
-                        fontWeight: "bold",
-                        color: "#000",
-                      }}
-                    >
+                  <View key={item.id} style={styles.myNumbersChip}>
+                    <Text style={styles.myNumbersChipText}>
                       {item.label} = {item.value}
                     </Text>
-
-                    <View
-                      style={{
-                        backgroundColor: "#F27842",
-                        borderRadius: Scale(5),
-                        paddingHorizontal: Scale(5),
-                        marginLeft: Scale(5),
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: Scale(12),
-                          fontWeight: "bold",
-                          color: "white",
-                        }}
-                      >
-                        x{item.count}
-                      </Text>
+                    <View style={styles.myNumbersChipCount}>
+                      <Text style={styles.myNumbersChipCountText}>x{item.count}</Text>
                     </View>
-
-                    {/* Remove Button */}
                     <TouchableOpacity
                       onPress={() => removeNumber(item.id)}
-                      style={{
-                        position: "absolute",
-                        top: Scale(-5),
-                        right: Scale(-5),
-                        backgroundColor: "white",
-                        width: Scale(18),
-                        height: Scale(18),
-                        borderRadius: Scale(9),
-                        justifyContent: "center",
-                        alignItems: "center",
-                        shadowColor: "#000",
-                        shadowOpacity: 0.2,
-                        shadowRadius: 3,
-                        elevation: 3, // Android shadow
-                      }}
+                      style={styles.myNumbersChipRemove}
                     >
                       <Image
                         source={cancel}
                         style={{ width: Scale(10), height: Scale(10) }}
-                        tintColor={"black"}
+                        tintColor={COLORS.primaryTextColor}
                       />
                     </TouchableOpacity>
                   </View>
@@ -905,13 +833,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
       <SafeAreaView
         style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
       >
-        <View
-          style={{
-            backgroundColor: COLORS.primary,
-            height: Scale(80),
-            elevation: 10,
-          }}
-        >
+        <View style={styles.footerWrapper}>
           <GameFooter
             openSheet={() => refRBSheet.current.open()}
             totalAmount={sum}
@@ -940,9 +862,21 @@ const Quick3DScreen = ({ navigation, route }: any) => {
 const createStyles = (Scale: any) =>
   StyleSheet.create({
     mainContainer: {
-      backgroundColor: COLORS.primary,
+      backgroundColor: COLORS.primaryBackground,
       flex: 1,
       marginBottom: Scale(0),
+    },
+    scrollView: {
+      flex: 1,
+      backgroundColor: COLORS.gamesBackground,
+    },
+    scrollContent: {
+      flexGrow: 1,
+    },
+    footerWrapper: {
+      backgroundColor: COLORS.headerBackground,
+      height: Scale(80),
+      elevation: 10,
     },
     subContainer: {
       marginTop: Scale(10),
@@ -953,7 +887,7 @@ const createStyles = (Scale: any) =>
     },
     card: {
       marginTop: Scale(20),
-      backgroundColor: COLORS.primary,
+      backgroundColor: COLORS.cardBg,
       width: "100%",
       borderRadius: 10,
       shadowColor: "#000",
@@ -968,15 +902,12 @@ const createStyles = (Scale: any) =>
       marginTop: Scale(10),
     },
     startView: {
-      // flexDirection: 'row',
-      // borderRadius: 10,
-      // width: '100%',
       justifyContent: "center",
       flex: 1,
     },
     renderDataView: {
       padding: 10,
-      backgroundColor: COLORS.primary,
+      backgroundColor: COLORS.gamesBackground,
       flex: 1,
       borderRadius: 10,
     },
@@ -985,60 +916,60 @@ const createStyles = (Scale: any) =>
       justifyContent: "space-between",
       paddingHorizontal: 10,
       marginTop: 10,
-      backgroundColor: "#DBCEFB",
+      backgroundColor: COLORS.sectionHeaderBg,
       overflow: "hidden",
     },
     showCountContainer: {
       flexDirection: "row",
       alignItems: "center",
-      backgroundColor: "#EEF0F6",
+      backgroundColor: COLORS.listRowBg,
       borderRadius: 30,
       paddingHorizontal: 5,
       height: 40,
       marginLeft: 30,
     },
     button: {
-      backgroundColor: "#F5F7FB",
+      backgroundColor: COLORS.tabInactiveBg,
       width: 30,
       height: 30,
       borderRadius: 15,
       justifyContent: "center",
       alignItems: "center",
-      // marginHorizontal: 20,
     },
     symbol: {
       fontSize: 15,
-      color: "black",
+      color: COLORS.primaryTextColor,
     },
     input: {
-      width: 50, // Set an explicit width to ensure visibility
+      width: 50,
       fontSize: 18,
       fontWeight: "bold",
-      color: "#000", // Ensure text is visible
+      color: COLORS.primaryTextColor,
       textAlign: "center",
     },
     buttonText: {
-      color: "#fff",
+      color: COLORS.white,
       fontSize: 16,
     },
     valueText: {
       marginTop: 20,
       fontSize: 18,
       fontWeight: "bold",
+      color: COLORS.primaryTextColor,
     },
     boxButton: {
-      backgroundColor: "#007AFF",
+      backgroundColor: COLORS.tabActiveBg,
       paddingVertical: 12,
       paddingHorizontal: 20,
       borderRadius: 10,
     },
     DigitTitleText: {
-      color: "#000",
+      color: COLORS.primaryTextColor,
       fontWeight: "bold",
       fontSize: Scale(16),
     },
     DigitTitleText1: {
-      color: "#000",
+      color: COLORS.primaryTextColor,
       fontWeight: "bold",
       fontSize: Scale(14),
       top: 1,
@@ -1050,9 +981,81 @@ const createStyles = (Scale: any) =>
       justifyContent: "center",
       marginHorizontal: 5,
       height: Scale(100),
-      borderWidth: 1,
-      borderColor: COLORS.primary,
+      borderWidth: 0.1,
+      borderColor: COLORS.tabInactiveBorder,
+    },
+    headerBtnText: {
+      fontSize: Scale(14),
+      fontWeight: "bold",
     },
     headerImg: { width: Scale(30), height: Scale(30) },
+    myNumbersSheetContent: {
+      flex: 1,
+      marginHorizontal: 10,
+      marginVertical: 20,
+    },
+    myNumbersSheetHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    myNumbersSheetTitle: {
+      fontWeight: "bold",
+      fontSize: Scale(16),
+      color: COLORS.primaryTextColor,
+      marginHorizontal: Scale(10),
+    },
+    myNumbersSheetEmpty: {
+      fontSize: Scale(14),
+      color: COLORS.secondaryTextColor,
+    },
+    myNumbersSheetList: {
+      marginHorizontal: Scale(10),
+      marginTop: Scale(20),
+    },
+    myNumbersChip: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: COLORS.listRowBg,
+      borderRadius: Scale(20),
+      paddingHorizontal: Scale(15),
+      paddingVertical: Scale(8),
+      position: "relative",
+      borderWidth: 1,
+      borderColor: COLORS.gameTileBorder,
+    },
+    myNumbersChipText: {
+      fontSize: Scale(14),
+      fontWeight: "bold",
+      color: COLORS.primaryTextColor,
+    },
+    myNumbersChipCount: {
+      backgroundColor: COLORS.tabActiveBg,
+      borderRadius: Scale(5),
+      paddingHorizontal: Scale(5),
+      marginLeft: Scale(5),
+    },
+    myNumbersChipCountText: {
+      fontSize: Scale(12),
+      fontWeight: "bold",
+      color: COLORS.white,
+    },
+    myNumbersChipRemove: {
+      position: "absolute",
+      top: Scale(-5),
+      right: Scale(-5),
+      backgroundColor: COLORS.headerBackground,
+      width: Scale(18),
+      height: Scale(18),
+      borderRadius: Scale(9),
+      justifyContent: "center",
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+      elevation: 3,
+      borderWidth: 1,
+      borderColor: COLORS.cardBorder,
+    },
   });
 export default Quick3DScreen;

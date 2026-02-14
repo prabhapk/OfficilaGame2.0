@@ -4,6 +4,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { gameTypeAct } from '../../assets/assets';
 import { Image } from 'expo-image';
 import { useContainerScale } from '../hooks/useContainerScale';
+import { COLORS } from '../Constants/Theme';
+
 interface HeaderProps {
   onPress: () => void;
   headerList: any[];
@@ -50,36 +52,53 @@ const CasionGames: React.FC<HeaderProps> = ({
 const createStyles = (Scale: any) =>StyleSheet.create({
   container: {
     alignItems: 'center',
-    padding: 5, justifyContent: "center",
-    width: "33%",
+    padding: 5,
+    justifyContent: 'center',
+    width: '33%',
     marginVertical: Scale(5),
+    backgroundColor: COLORS.casinoCardBg,
+    borderRadius: Scale(8),
+    borderWidth: 1,
+    borderColor: COLORS.casinoCardBorder,
   },
   selectedContainer: {
-    backgroundColor: '#502424',
-    borderBottomColor: '#FF5A5A',
+    backgroundColor: COLORS.casinoHeaderBg,
+    borderBottomColor: COLORS.check,
     borderTopLeftRadius: Scale(5),
     borderTopRightRadius: Scale(5),
-    borderBottomWidth: Scale(2)
+    borderBottomWidth: Scale(2),
   },
-  headerText: { fontSize: Scale(12), color: '#987E7E', marginLeft: Scale(5), top: 3 },
+  headerText: {
+    fontSize: Scale(12),
+    color: COLORS.casinoHeaderSubtext,
+    marginLeft: Scale(5),
+    top: 3,
+  },
   selectedHeaderText: {
-    color: "#fff",
+    color: COLORS.casinoHeaderText,
     fontWeight: 'bold',
     fontSize: Scale(14),
     marginTop: Scale(10),
   },
   menuContainer: {
-    flexDirection: 'row', alignItems: 'center'
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   loginButton: {
     padding: 8,
     paddingHorizontal: 20,
-    backgroundColor: '#ccc',
+    backgroundColor: COLORS.gameCardBorder,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  refImage: { width: Scale(120), height: Scale(120), resizeMode: 'contain', borderRadius: Scale(15), },
+  refImage: {
+    width: Scale(120),
+    height: Scale(120),
+    resizeMode: 'contain',
+    borderRadius: Scale(15),
+    backgroundColor: COLORS.casinoCardBg,
+  },
 
 });
 

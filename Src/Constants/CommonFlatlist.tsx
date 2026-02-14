@@ -1,4 +1,4 @@
-import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, fiveMin3DImage, homeActiveTab, homeTab, hot, inviteActiveTab, inviteTab, jdb, Jili, lottery1, meActiveTab, meTab, multiUserIcon, oneMin3DImage, pg, promotions, quick3dMenu, quick3min, resultActiveTab, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
+import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, fiveMin3DImage, homeActiveTab, homeTab, hot, inviteActiveTab, inviteTab, jdb, Jili, lottery1, meActiveTab, meTab, multiUserIcon, oneMin3DImage, pg, promotions, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
 import CasinoScreen from "../Screens/CasinoScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import InviteScreen from "../Screens/InviteScreen";
@@ -7,11 +7,10 @@ import ResultScreen from "../Screens/ResultScreen";
 import Promotions from "../Screens/Promotions";
 
 export const HomeScreenFlatlist = [
-    // {id: 1, isSelected:true, image:casino},
-    {id: 1, isSelected:true, image:lottery1},
-    {id:2, isSelected:false, image:scratch},
-    {id:3, isSelected:false, image:rummy},
-    {id:4, isSelected:false, image:sports}
+    { id: 1, name: 'Hot', image: hot },
+    { id: 2, name: 'Lottery', image: lottery1 },
+    { id: 4, name: 'Casino', image: casino },
+    { id: 5, name: 'Live', image: casino },
 ]
 
 export const CasionHeadersList = [
@@ -35,9 +34,9 @@ export const lotteryGamesList = [
 ]
 
 export const ThreeDigitsLottery = [
-       {id: 1, name:"1minGame", image:oneMin3DImage},
-    {id: 2, name:"3minGame", image:threeMin3DImage},
-    {id:3, name:"5minGame", image:fiveMin3DImage}
+  { id: 1, name: "1minGame", image: quick3d1min },
+  { id: 2, name: "3minGame", image: quick3d3min },
+  { id: 3, name: "5minGame", image: quick3d5min },
 ]
 
  export const ThreeDigits = [

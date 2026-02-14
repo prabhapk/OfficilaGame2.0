@@ -14,31 +14,43 @@ interface CustomTabsProps {
   onIndexChange: (idx: number) => void;
   style?: any;
   onSelectGroupId?: (groupId: string) => void;
+  /** When true, use dark text and purple accent (for light backgrounds) */
+  lightTheme?: boolean;
 }
 
-const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, index, onIndexChange, style, onSelectGroupId }) => {
+const CustomTabs: React.FC<CustomTabsProps> = ({
+  tabs,
+  index,
+  onIndexChange,
+  style,
+  onSelectGroupId,
+  lightTheme = false,
+}) => {
   const scrollRef = useRef<ScrollView>(null);
   const [tabLayouts, setTabLayouts] = useState<{ x: number; width: number }[]>([]);
-  const { Scale, verticalScale } = useContainerScale();
+  const { Scale } = useContainerScale();
+
+  const textColor = lightTheme ? COLORS.sectionHeaderText : '#fff';
+  const borderColor = lightTheme ? COLORS.check : '#fff';
 
   useEffect(() => {
     if (tabLayouts[index] && scrollRef.current) {
       scrollRef.current.scrollTo({
-        x: Math.max(tabLayouts[index].x - 50, 0), // Keep selected tab in view
+        x: Math.max(tabLayouts[index].x - 50, 0),
         animated: true,
       });
     }
   }, [index, tabLayouts]);
 
   return (
-    <View style={[{ backgroundColor: COLORS.primary, }, style]}>
+    <View style={[{ backgroundColor: lightTheme ? COLORS.sectionHeaderBg : COLORS.primary }, style]}>
       <ScrollView
         ref={scrollRef}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ alignItems: 'center' }}
       >
-        {tabs.map((tab:any, idx) => (
+        {tabs.map((tab: any, idx) => (
           <TouchableOpacity
             key={tab.id}
             style={{
@@ -47,7 +59,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, index, onIndexChange, sty
               justifyContent: 'center',
               paddingVertical: 12,
               borderBottomWidth: 3,
-              borderBottomColor: idx === index ? '#fff' : 'transparent',
+              borderBottomColor: idx === index ? borderColor : 'transparent',
             }}
             onPress={() => {
               onIndexChange(idx);
@@ -64,7 +76,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({ tabs, index, onIndexChange, sty
           >
             <Text
               style={{
-                color:  '#fff',
+                color: textColor,
                 fontWeight: idx === index ? '700' : '500',
               }}
             >

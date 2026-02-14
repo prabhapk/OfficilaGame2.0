@@ -1,91 +1,94 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
-import { gameTypeAct } from '../../assets/assets';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from '../Constants/Theme';
+
 interface HeaderProps {
-  onPress: () => void;
-  headerList: any[];
+  onPress?: () => void;
+  headerList: { id: number; name: string; image: any }[];
   selectedId: number;
   onSelect: (id: number) => void;
 }
 
 const HomeScreenGameHeaders: React.FC<HeaderProps> = ({
-  onPress,
   headerList,
   selectedId,
   onSelect,
 }) => {
-  const { Scale, verticalScale } = useContainerScale();
+  const { Scale } = useContainerScale();
   const styles = createStyles(Scale);
 
   return (
-    <FlatList
-      contentContainerStyle={{
-        justifyContent: 'center',
-        flex: 1,
-        marginHorizontal: Scale(10),
-        marginVertical: Scale(5),
-      }}
-      data={headerList}
-      horizontal
-      renderItem={({ item }) => {
+    <View style={styles.listContent}>
+      {headerList.map((item) => {
         const isSelected = item.id === selectedId;
-
         return (
           <TouchableOpacity
-          style= {{
-            backgroundColor: isSelected ? COLORS.primary : COLORS.white,
-          }}
-          onPress={() => onSelect(item.id)}>
-            <ImageBackground
-              source={isSelected ? gameTypeAct : null}
-              style={{
-                width: Scale(75),
-                height: Scale(115),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              resizeMode="cover"
-            >
+            key={item.id}
+            style={[styles.tab, isSelected && styles.tabSelected]}
+            onPress={() => onSelect(item.id)}
+            activeOpacity={0.8}
+          >
+           
               <Image
                 source={item.image}
-                style={styles.refImage}
+                style={styles.icon}
                 contentFit="contain"
-              />
-            </ImageBackground>
+                />
+              
+           
           </TouchableOpacity>
         );
-      }}
-      keyExtractor={(item) => item.id.toString()}
-    />
+      })}
+    </View>
   );
 };
 
-
-const createStyles = (Scale: any) =>
+const createStyles = (Scale: (n: number) => number) =>
   StyleSheet.create({
-    container: {
+    listContent: {
+      paddingHorizontal: Scale(12),
+      paddingVertical: Scale(10),
       flexDirection: 'row',
       justifyContent: 'space-between',
-      padding: 10,
-      alignItems: 'center',
+      width: '100%',
     },
-    menuContainer: {
-      flexDirection: 'row', alignItems: 'center'
-    },
-    loginButton: {
-      padding: 8,
-      paddingHorizontal: 20,
-      backgroundColor: '#ccc',
-      borderRadius: 50,
+    tab: {
+      flex: 1,
+      backgroundColor: COLORS.tabInactiveBg,
+      borderRadius: Scale(12),
+      paddingVertical: Scale(10),
+      paddingHorizontal: Scale(6),
       alignItems: 'center',
       justifyContent: 'center',
+      marginHorizontal: Scale(4),
+      borderWidth: 1,
+      borderColor: COLORS.tabInactiveBorder,
     },
-    refImage: { width: Scale(70), height: Scale(80), resizeMode: 'cover' },
-
+    tabSelected: {
+      backgroundColor: COLORS.tabActiveBg,
+      borderColor: COLORS.tabActiveBg,
+    },
+    iconWrap: {
+      width: Scale(56),
+      height: Scale(56),
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: Scale(4),
+    },
+    icon: {
+      width: Scale(54),
+      height: Scale(54),
+    },
+    label: {
+      fontSize: Scale(12),
+      fontWeight: '600',
+      color: COLORS.tabInactiveText,
+    },
+    labelSelected: {
+      color: COLORS.tabActiveText,
+    },
   });
 
 export default HomeScreenGameHeaders;

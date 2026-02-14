@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, Image, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import TableCommonBall from "./TableCommonBall";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -17,6 +17,8 @@ interface ResultTableProps {
   customStyle?: any;
   hidePages?: boolean;
   totalPage?: any;
+  /** When true, use light theme row bg and text (e.g. on Result screen) */
+  useLightTheme?: boolean;
 }
 
 const ResultTable: React.FC<ResultTableProps> = ({
@@ -25,9 +27,11 @@ const ResultTable: React.FC<ResultTableProps> = ({
   customStyle,
   hidePages = false,
   totalPage = 1,
+  useLightTheme = false,
 }) => {
   const dispatch = useDispatch();
   const { Scale, verticalScale } = useContainerScale();
+  const styles = createStyles(Scale);
   const [onTableSelect, setOnTableSelect] = useState("ResultHistory");
   // const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -64,6 +68,11 @@ const ResultTable: React.FC<ResultTableProps> = ({
 
   const tableRenderItem = ({ item, index }: { item: any; index: number }) => {
     const winningBalls = item.winningNumber.split("");
+    const rowBg = useLightTheme
+      ? (index % 2 === 0 ? COLORS.resultTableRowEven : COLORS.resultTableRowOdd)
+      : (index % 2 === 0 ? COLORS.sectionHeaderBg : COLORS.listRowBg);
+    const textColor = useLightTheme ? COLORS.resultTableText : COLORS.primaryTextColor;
+    const borderColor = useLightTheme ? COLORS.resultTableBorder : COLORS.gameCardBorder;
 
     return (
       <View
@@ -71,19 +80,19 @@ const ResultTable: React.FC<ResultTableProps> = ({
           flexDirection: "row",
           alignItems: "center",
           paddingVertical: Scale(5),
-          backgroundColor: index % 2 === 0 ? COLORS.primary : COLORS.tableSecondaryColor,
+          backgroundColor: rowBg,
           borderBottomWidth: 1,
-          borderColor: COLORS.primary,
+          borderColor,
           paddingHorizontal: Scale(10),
         }}
       >
         <View style={{ flex: 1.5 }}>
-          <Text style={{ color: COLORS.white }}>
+          <Text style={{ color: textColor }}>
             {item.uid} {item?.gamename.startsWith("QUICK3D") && item.gamename}
           </Text>
         </View>
         <View style={{ flex: 1.2, alignItems: "center" }}>
-          <Text style={{ color: COLORS.white }}>
+          <Text style={{ color: textColor }}>
             {formatDateTime(item.gameTime)}
           </Text>
         </View>
@@ -277,32 +286,21 @@ const ResultTable: React.FC<ResultTableProps> = ({
     <View>
       <View style={{ marginTop: Scale(10), ...customStyle }}>
         {showHeader && (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              backgroundColor: COLORS.primary,
-            }}
-          >
+          <View style={styles.tabsRow}>
             {["ResultHistory", "MyOrders"].map((tab) => (
               <TouchableOpacity
                 key={tab}
                 onPress={() => setOnTableSelect(tab)}
-                style={{
-                  padding: Scale(10),
-                  backgroundColor: COLORS.primary,
-                  borderBottomWidth: onTableSelect === tab ? Scale(5) : 0,
-                  borderBottomColor:
-                    onTableSelect === tab ? "#fff" : "transparent",
-                }}
+                style={[
+                  styles.tabButton,
+                  onTableSelect === tab && styles.tabButtonActive,
+                ]}
               >
                 <Text
-                  style={{
-                    fontSize: 16,
-                    color: "white",
-                    padding: Scale(10),
-                    fontWeight: onTableSelect === tab ? "bold" : "400",
-                  }}
+                  style={[
+                    styles.tabText,
+                    onTableSelect === tab && styles.tabTextActive,
+                  ]}
                 >
                   {tab === "ResultHistory" ? "Result History" : "My Order"}
                 </Text>
@@ -314,21 +312,18 @@ const ResultTable: React.FC<ResultTableProps> = ({
           {onTableSelect === "ResultHistory" ? (
             <>
               <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: COLORS.tableTopColor,
-                  paddingVertical: Scale(5),
-                  paddingHorizontal: Scale(10),
-                }}
+                style={[
+                  styles.tableHeaderRow,
+                  { backgroundColor: useLightTheme ? COLORS.sectionHeaderBg : COLORS.sectionHeaderBg },
+                ]}
               >
                 <View style={{ flex: 1.5 }}>
-                  <Text style={{ color: COLORS.white, fontWeight: "bold" }}>
+                  <Text style={[styles.tableHeaderText, { color: useLightTheme ? COLORS.resultTableText : COLORS.sectionHeaderText }]}>
                     Issue
                   </Text>
                 </View>
                 <View style={{ flex: 1.3, alignItems: "center" }}>
-                  <Text style={{ color: COLORS.white, fontWeight: "bold" }}>
+                  <Text style={[styles.tableHeaderText, { color: useLightTheme ? COLORS.resultTableText : COLORS.sectionHeaderText }]}>
                     Time
                   </Text>
                 </View>
@@ -366,104 +361,49 @@ const ResultTable: React.FC<ResultTableProps> = ({
 
               {/* Pagination Controls */}
               {!hidePages && (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    marginTop: Scale(10),
-                    alignSelf: "center",
-                    backgroundColor: COLORS.tableTopColor,
-                    width: "110%",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    paddingVertical: Scale(10),
-                    marginVertical: Scale(20),
-                  }}
-                >
-                  <Text
-                    style={{
-                      borderRadius: Scale(10),
-                      padding: Scale(10),
-                      borderColor: "#fff",
-                      borderWidth: 1,
-                      height: Scale(40),
-                      textAlign: "center",
-                      textAlignVertical: "center",
-                      fontWeight: "bold",
-                      color: COLORS.white,
-                    }}
-                  >
+                <View style={styles.paginationWrap}>
+                  <Text style={styles.paginationTotalText}>
                     Total {totalPage}
                   </Text>
-
-                  {/* Page Numbers */}
                   {getVisiblePages(tableCurrentPage, totalPage).map((page) => (
                     <TouchableOpacity
                       key={page}
                       onPress={() => changePage(page)}
-                      style={{
-                        backgroundColor:
-                          tableCurrentPage === page ? COLORS.primary : "#fff",
-                        borderRadius: Scale(10),
-                        padding: Scale(10),
-                        borderColor: "#fff",
-                        borderWidth: 1,
-                        marginHorizontal: Scale(5),
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
+                      style={[
+                        styles.pageButton,
+                        tableCurrentPage === page && styles.pageButtonActive,
+                      ]}
                     >
                       <Text
-                      style={{
-                        color: tableCurrentPage === page ? COLORS.white : COLORS.primary,
-                      }}
-                      >{page}</Text>
+                        style={[
+                          styles.pageButtonText,
+                          tableCurrentPage === page && styles.pageButtonTextActive,
+                        ]}
+                      >
+                        {page}
+                      </Text>
                     </TouchableOpacity>
                   ))}
-
-                  {/* Left Arrow */}
                   <TouchableOpacity
                     onPress={() => changePage(tableCurrentPage - 1)}
                     disabled={tableCurrentPage === 1}
-                    style={{
-                      backgroundColor: COLORS.primary,
-                      borderRadius: Scale(10),
-                      padding: Scale(10),
-                      borderColor: "#fff",
-                      borderWidth: 1,
-                      height: Scale(40),
-                      width: Scale(40),
-                      marginHorizontal: Scale(5),
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
+                    style={styles.arrowButton}
                   >
                     <FontAwesome5
-                      name={"chevron-left"}
+                      name="chevron-left"
                       size={15}
-                      color={tableCurrentPage === 1 ? "grey" : "white"}
+                      color={tableCurrentPage === 1 ? COLORS.secondaryTextColor : COLORS.primaryTextColor}
                     />
                   </TouchableOpacity>
-
-                  {/* Right Arrow */}
                   <TouchableOpacity
                     onPress={() => changePage(tableCurrentPage + 1)}
                     disabled={tableCurrentPage === totalPage}
-                    style={{
-                      backgroundColor: COLORS.primary,
-                      borderRadius: Scale(10),
-                      padding: Scale(10),
-                      borderColor: "#fff",
-                      borderWidth: 1,
-                      height: Scale(40),
-                      width: Scale(40),
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
+                    style={styles.arrowButton}
                   >
                     <FontAwesome5
-                      name={"chevron-right"}
+                      name="chevron-right"
                       size={15}
-                      color={tableCurrentPage === totalPage ? "grey" : "white"}
+                      color={tableCurrentPage === totalPage ? COLORS.secondaryTextColor : COLORS.primaryTextColor}
                     />
                   </TouchableOpacity>
                 </View>
@@ -518,14 +458,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
                         marginVertical: Scale(20),
                       }}
                     />
-                    <Text
-                      style={{
-                        color: "white",
-                        fontSize: 16,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {" "}
+                    <Text style={styles.emptyStateText}>
                       Please place the order to see your bets!
                     </Text>
                   </View>
@@ -538,5 +471,104 @@ const ResultTable: React.FC<ResultTableProps> = ({
     </View>
   );
 };
+
+const createStyles = (Scale: (n: number) => number) =>
+  StyleSheet.create({
+    tabsRow: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      backgroundColor: COLORS.sectionHeaderBg,
+    },
+    tabButton: {
+      padding: Scale(10),
+      backgroundColor: "transparent",
+      borderBottomWidth: 0,
+    },
+    tabButtonActive: {
+      borderBottomWidth: Scale(5),
+      borderBottomColor: COLORS.tabActiveBg,
+    },
+    tabText: {
+      fontSize: 16,
+      color: COLORS.sectionHeaderText,
+      padding: Scale(10),
+      fontWeight: "400",
+    },
+    tabTextActive: {
+      color: COLORS.tabActiveBg,
+      fontWeight: "bold",
+    },
+    tableHeaderRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingVertical: Scale(5),
+      paddingHorizontal: Scale(10),
+    },
+    tableHeaderText: {
+      fontWeight: "bold",
+    },
+    paginationWrap: {
+      flexDirection: "row",
+      marginTop: Scale(10),
+      alignSelf: "center",
+      backgroundColor: COLORS.cardBg,
+      width: "110%",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: Scale(10),
+      marginVertical: Scale(20),
+      borderWidth: 1,
+      borderColor: COLORS.cardBorder,
+      borderRadius: Scale(8),
+    },
+    paginationTotalText: {
+      borderRadius: Scale(10),
+      padding: Scale(10),
+      borderColor: COLORS.cardBorder,
+      borderWidth: 1,
+      height: Scale(40),
+      textAlign: "center",
+      textAlignVertical: "center",
+      fontWeight: "bold",
+      color: COLORS.primaryTextColor,
+    },
+    pageButton: {
+      backgroundColor: COLORS.listRowBg,
+      borderRadius: Scale(10),
+      padding: Scale(10),
+      borderColor: COLORS.cardBorder,
+      borderWidth: 1,
+      marginHorizontal: Scale(5),
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    pageButtonActive: {
+      backgroundColor: COLORS.tabActiveBg,
+      borderColor: COLORS.tabActiveBg,
+    },
+    pageButtonText: {
+      color: COLORS.primaryTextColor,
+    },
+    pageButtonTextActive: {
+      color: COLORS.white,
+    },
+    arrowButton: {
+      backgroundColor: COLORS.sectionHeaderBg,
+      borderRadius: Scale(10),
+      padding: Scale(10),
+      borderColor: COLORS.cardBorder,
+      borderWidth: 1,
+      height: Scale(40),
+      width: Scale(40),
+      marginHorizontal: Scale(5),
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    emptyStateText: {
+      color: COLORS.secondaryTextColor,
+      fontSize: 16,
+      fontWeight: "bold",
+    },
+  });
 
 export default ResultTable;

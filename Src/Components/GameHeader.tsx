@@ -84,123 +84,69 @@ const GameHeader: React.FC<Props> = ({
   return (
     <View style={styles.mainContainer}>
       <LinearGradient
-        colors={[COLORS.linearOne, COLORS.linearTwo]}
+        colors={[COLORS.tabActiveBg, COLORS.check1]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.button}>
-
-        <View
-          style={{
-
-            marginTop: Scale(15),
-            width: "100%",
-            marginHorizontal: 20
-          }}>
-          <View style={{
-            marginHorizontal: 10, flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
+        <View style={styles.topRowWrap}>
+          <View style={styles.topRow}>
             <TouchableOpacity style={styles.leftImageStyle} onPress={leftonPress}>
               <Image
                 source={leftImage}
-                contentFit='contain' 
-                tintColor={'white'}
+                contentFit="contain"
+                tintColor={COLORS.white}
                 style={styles.leftImageSize}
               />
             </TouchableOpacity>
-
-            <View style={{ marginTop: 10, }}>
+            <View style={styles.headerTextWrap}>
               <Text style={styles.headerTextStyle}>{HeaderText}</Text>
             </View>
             <TouchableOpacity
               onPress={onPressChat}
-              style={{ flexDirection: 'row', alignItems: 'center' }}
+              style={styles.chatButtonWrap}
               disabled={isChatLoading}>
-
-              <View style={{ position: 'relative' }}>
+              <View style={{ position: "relative" }}>
                 <Image
                   source={CustomerServiceIcon}
-                  contentFit='contain' 
-                  style={{ width: 30, height: 30, marginLeft: Scale(10) }}
+                  contentFit="contain"
+                  style={styles.customerServiceIcon}
                 />
                 {isChatLoading && (
                   <View style={styles.loadingOverlay}>
-                    <ActivityIndicator size="small" color="#fff" />
+                    <ActivityIndicator size="small" color={COLORS.white} />
                   </View>
                 )}
               </View>
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{
-          marginTop: Scale(30), width: "90%", backgroundColor: COLORS.gameDetailColor,
-          borderRadius: 10, padding: Scale(10), zIndex: 100, borderWidth: 0.1, borderColor: COLORS.white,
-        }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10, marginTop: Scale(10) }}>
+        <View style={styles.walletCard}>
+          <View style={styles.walletRow}>
             <View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                <Image source={walletIcon} style={{ width: Scale(30), height: Scale(30), }} />
-                <Text style={{ marginLeft: Scale(5), color: "#fff", fontSize: Scale(14) }}>Total Wallet</Text>
+              <View style={styles.walletLabelRow}>
+                <Image source={walletIcon} style={styles.walletIcon} />
+                <Text style={styles.walletLabel}>Total Wallet</Text>
               </View>
-              <Text style={{ marginLeft: Scale(5), fontSize: Scale(26), color: "#fff", fontWeight: "bold", }}>{walletBalance}</Text>
+              <Text style={styles.walletBalance}>{walletBalance}</Text>
             </View>
-            <TouchableOpacity 
-            onPress={onPressRefresh}
-            >
-              <Image source={refreshIcon} style={{ width: Scale(40), height: Scale(40), }} />
+            <TouchableOpacity onPress={onPressRefresh}>
+              <Image source={refreshIcon} style={styles.refreshIcon} />
             </TouchableOpacity>
           </View>
-
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10, marginTop: Scale(20) }}>
-            <TouchableOpacity
-            onPress={onPressWithdraw}
-              style={{
-                borderColor: "#fff", borderWidth: 1, borderRadius: 30, paddingVertical: Scale(10),
-                paddingHorizontal: Scale(20), marginRight: Scale(10)
-              }}
-
-            >
-              <Text
-                style={{
-                  color: '#fff',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  fontSize: Scale(14),
-                }}>
-                {"Withdraw"}
-              </Text>
+          <View style={styles.walletButtonsRow}>
+            <TouchableOpacity onPress={onPressWithdraw} style={styles.withdrawButton}>
+              <Text style={styles.withdrawButtonText}>Withdraw</Text>
             </TouchableOpacity>
             <LinearGradient
-              colors={[
-                COLORS.linearOne, COLORS.linearTwo
-              ]}
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={{
-                borderRadius: 30,
-                paddingVertical: Scale(8),
-                paddingHorizontal: Scale(18),
-                marginTop: Scale(5),
-                marginBottom: Scale(5),
-                bottom: 5, alignItems: "center", justifyContent: "center"
-              }}>
-
-              <TouchableOpacity
-              onPress={onPressRecharge}
-              >
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    fontSize: Scale(14),
-                  }}>
-                  {"Recharge"}
-                </Text>
+              style={styles.rechargeGradient}>
+              <TouchableOpacity onPress={onPressRecharge}>
+                <Text style={styles.rechargeButtonText}>Recharge</Text>
               </TouchableOpacity>
             </LinearGradient>
           </View>
-
         </View>
       </LinearGradient>
     </View>
@@ -210,63 +156,137 @@ const GameHeader: React.FC<Props> = ({
 
 const createStyles = (Scale: any, insets: any) =>
   StyleSheet.create({
-  mainContainer: {
-    height: Scale(270),
-  },
-  leftImageStyle: {
-    // backgroundColor: 'white',
-    // height: 33,
-    // width: 33,
-    // padding: 8,
-    // marginVertical: 5,
-    // borderRadius: 10,
-    // borderWidth: 1,
-    // borderColor: 'white',
-  },
-  leftImageSize: {
-    alignItems: 'center',
-    marginHorizontal: 4,
-    marginVertical: 2,
-    resizeMode: 'contain',
-    height: 20,
-    width: 20,
-    marginTop: 10,
-  },
-  headerTextStyle: {
-    textAlign: 'center',
-    fontSize: Scale(18),
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  rightImageStyle: {
-    backgroundColor: 'transparent',
-    height: 33,
-    width: 33,
-    padding: 8,
-    marginVertical: 5,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: 'white',
-  },
-  logo: {
-    marginLeft: Scale(40),
-  },
-  button: {
-    height: Scale(170),
-    alignItems: 'center',
-  },
-  loadingOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    borderRadius: Scale(15),
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: Scale(10),
-  },
-});
+    mainContainer: {
+      height: Scale(270),
+    },
+    topRowWrap: {
+      marginTop: Scale(15),
+      width: "100%",
+      marginHorizontal: 20,
+    },
+    topRow: {
+      marginHorizontal: 10,
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    leftImageStyle: {},
+    leftImageSize: {
+      alignItems: "center",
+      marginHorizontal: 4,
+      marginVertical: 2,
+      resizeMode: "contain",
+      height: 20,
+      width: 20,
+      marginTop: 10,
+    },
+    headerTextWrap: { marginTop: 10 },
+    headerTextStyle: {
+      textAlign: "center",
+      fontSize: Scale(18),
+      fontWeight: "bold",
+      color: COLORS.white,
+    },
+    chatButtonWrap: { flexDirection: "row", alignItems: "center" },
+    customerServiceIcon: {
+      width: 30,
+      height: 30,
+      marginLeft: Scale(10),
+    },
+    walletCard: {
+      marginTop: Scale(30),
+      width: "90%",
+      backgroundColor: COLORS.cardBg,
+      borderRadius: 10,
+      padding: Scale(10),
+      zIndex: 100,
+      borderWidth: 1,
+      borderColor: COLORS.cardBorder,
+    },
+    walletRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginHorizontal: 10,
+      marginTop: Scale(10),
+    },
+    walletLabelRow: { flexDirection: "row", alignItems: "center" },
+    walletIcon: { width: Scale(30), height: Scale(30) },
+    walletLabel: {
+      marginLeft: Scale(5),
+      color: COLORS.sectionHeaderSubtext,
+      fontSize: Scale(14),
+    },
+    walletBalance: {
+      marginLeft: Scale(5),
+      fontSize: Scale(26),
+      color: COLORS.primaryTextColor,
+      fontWeight: "bold",
+    },
+    refreshIcon: { width: Scale(40), height: Scale(40) },
+    walletButtonsRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginHorizontal: 10,
+      marginTop: Scale(20),
+    },
+    withdrawButton: {
+      borderColor: COLORS.tabActiveBg,
+      borderWidth: 1,
+      borderRadius: 30,
+      paddingVertical: Scale(10),
+      paddingHorizontal: Scale(20),
+      marginRight: Scale(10),
+    },
+    withdrawButtonText: {
+      color: COLORS.tabActiveBg,
+      fontWeight: "bold",
+      textAlign: "center",
+      fontSize: Scale(14),
+    },
+    rechargeGradient: {
+      borderRadius: 30,
+      paddingVertical: Scale(8),
+      paddingHorizontal: Scale(18),
+      marginTop: Scale(5),
+      marginBottom: Scale(5),
+      bottom: 5,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    rechargeButtonText: {
+      color: COLORS.white,
+      fontWeight: "bold",
+      textAlign: "center",
+      fontSize: Scale(14),
+    },
+    rightImageStyle: {
+      backgroundColor: "transparent",
+      height: 33,
+      width: 33,
+      padding: 8,
+      marginVertical: 5,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: COLORS.cardBorder,
+    },
+    logo: { marginLeft: Scale(40) },
+    button: {
+      height: Scale(170),
+      alignItems: "center",
+    },
+    loadingOverlay: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      borderRadius: Scale(15),
+      justifyContent: "center",
+      alignItems: "center",
+      marginLeft: Scale(10),
+    },
+  });
 
 export default GameHeader;

@@ -1,95 +1,41 @@
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, Text, FlatList, ScrollView, StyleSheet } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
-import { chipIcon, lotteryHeader } from "../../../assets/assets";
-import { ThreeDigitsLottery } from "../../Constants/CommonFlatlist";
+import { chipIcon, multiUserIcon, quick3dMenu } from "../../../assets/assets";
 import CommonDigits from "../../Components/CommonDigits";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { useContainerScale } from "../../hooks/useContainerScale";
+import { COLORS } from "../../Constants/Theme";
 
 const LotteryScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const { allGamesList } = useSelector((state: any) => state.homeSlice);
-  const { Scale, verticalScale } = useContainerScale();
+  const { Scale } = useContainerScale();
+  const styles = createStyles(Scale);
   return (
-    <ScrollView>
-      <View style={{ alignItems: "center", justifyContent: "center" }}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      {/* 3Digit Game header - same style as Quick3DigitsMenu */}
+      <View style={styles.headerBar}>
         <Image
-          source={lotteryHeader}
-          style={{ width: 150, height: 30 }}
+          source={quick3dMenu}
+          style={styles.headerLogo}
           contentFit="contain"
         />
-
-        <FlatList
-          data={ThreeDigitsLottery}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("Quick3DScreen", { gameData: item });
-                }}
-              >
-                <Image
-                  source={item.image}
-                  style={{ width: Scale(70), height: Scale(80) }}
-                  contentFit="contain"
-                />
-              </TouchableOpacity>
-            );
-          }}
+        <Text style={styles.headerTitle}>Lottery Games</Text>
+        <Text style={styles.headerNumber}>179256</Text>
+        <Image
+          source={multiUserIcon}
+          style={styles.headerPeopleIcon}
+          contentFit="contain"
         />
       </View>
-      <View
-        style={{
-          flex: 1,
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
-          borderTopColor: "yellow",
-          borderWidth: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: Scale(20),
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: Scale(10),
-          }}
-        >
-          <Image
-            source={chipIcon}
-            style={{ width: Scale(25), height: Scale(25) }}
-            contentFit="contain"
-          />
-          <Text
-            style={{ fontSize: Scale(16), fontWeight: "bold", color: "white" }}
-          >
-            3 Digit Games
-          </Text>
-        </View>
+      <View style={styles.gameListWrap}>
         <FlatList
           data={allGamesList}
           keyExtractor={(subItem, index) => index.toString()}
           numColumns={2}
-          contentContainerStyle={{
-            marginHorizontal: Scale(10),
-            marginVertical: Scale(10),
-          }}
+          contentContainerStyle={styles.gameListContent}
           renderItem={({ item }) => {
             return (
               <CommonDigits
@@ -105,5 +51,51 @@ const LotteryScreen = () => {
     </ScrollView>
   );
 };
+
+const createStyles = (Scale: (n: number) => number) =>
+  StyleSheet.create({
+    headerBar: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: COLORS.sectionHeaderBg,
+      marginHorizontal: Scale(12),
+      marginTop: Scale(8),
+      marginBottom: Scale(4),
+      paddingVertical: Scale(10),
+      paddingHorizontal: Scale(12),
+      borderRadius: Scale(10),
+    },
+    headerLogo: {
+      width: Scale(36),
+      height: Scale(36),
+      marginRight: Scale(8),
+    },
+    headerTitle: {
+      fontSize: Scale(16),
+      fontWeight: "bold",
+      color: COLORS.sectionHeaderText,
+      flex: 1,
+    },
+    headerNumber: {
+      fontSize: Scale(14),
+      fontWeight: "600",
+      color: COLORS.sectionHeaderSubtext,
+      marginRight: Scale(8),
+    },
+    headerPeopleIcon: {
+      width: Scale(28),
+      height: Scale(28),
+    },
+    gameListWrap: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: COLORS.gamesBackground,
+    },
+    gameListContent: {
+      marginHorizontal: Scale(10),
+      marginVertical: Scale(10),
+    },
+  });
 
 export default LotteryScreen;
