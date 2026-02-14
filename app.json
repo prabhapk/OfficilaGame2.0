@@ -14,12 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ajay-gaming.Demo"
+      "bundleIdentifier": "com.ajay-gaming.annailottery"
     },
     "android": {
+      "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "package": "com.ajay_gaming.annailottery"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.ajay_gaming.Demo"
@@ -28,14 +30,12 @@
       "favicon": "./assets/favicon.png"
     },
     "scheme": "annai-lottery",
+    "runtimeVersion": "1.0.0",
     "extra": {
       "eas": {
-        "projectId": "40bc88ac-9f46-4364-b391-35541389ad1d"
+        "projectId": "3c46bc81-fea3-4830-923d-4db9c2b21170"
       }
     },
-    "runtimeVersion": "1.0.0",
-    "updates": {
-      "url": "https://u.expo.dev/40bc88ac-9f46-4364-b391-35541389ad1d"
-    }
+    "owner": "ajay_gaming"
   }
 }
