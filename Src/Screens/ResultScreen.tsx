@@ -109,6 +109,7 @@ const ResultScreen = ({ navigation }: any) => {
         flex: 1,
         backgroundColor: COLORS.primary,
         paddingBottom: scale(30),
+        marginBottom: scale(30),
       }}
       stickyHeaderIndices={[0]}
       nestedScrollEnabled={true}

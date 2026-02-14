@@ -12,10 +12,10 @@ import { COLORS } from "../Constants/Theme";
 
 const { width } = Dimensions.get("window");
 
-const TAB_BAR_HEIGHT = 50;
+const TAB_BAR_HEIGHT = 70;
 const CENTER_BUTTON_SIZE = 72;
 const CURVE_WIDTH = 90;
-const CURVE_HEIGHT = 35;
+const CURVE_HEIGHT = 30;
 
 
 export default function CurvedTabBar({
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: TAB_BAR_HEIGHT + CURVE_HEIGHT,
     // backgroundColor: COLORS.test,
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
     
   },
   svg: {

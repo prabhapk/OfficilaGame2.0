@@ -83,6 +83,7 @@ export default function BottomNavigation() {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
+                  
                 }}
               >
                 {/* <Image
