@@ -22,21 +22,34 @@ const Promotions = ({ navigation }: { navigation: any }) => {
   const promotionCards = [
     {
       id: 1,
-      image: promotionBanner1,
+      images: {
+        uri1: promotionBanner1,
+        uri2: promotionBanner2,
+      },
     },
     {
       id: 2,
-      image: promotionBanner2,
+      images: {
+        uri1: promotionBanner1,
+        uri2: promotionBanner2,
+      },
     },
     {
       id: 3,
-      image: promotionBanner3,
+      images: {
+        uri1: promotionBanner3,
+        uri2: promotionBanner3,
+      },
     },
     {
       id: 4,
-      image: promotionBanner4,
+      images: {
+        uri1: promotionBanner4,
+        uri2: promotionBanner4,
+      },
     },
   ];
+  
 
   const handleJoinPress = (cardId: number) => {
     // Handle join button press
@@ -56,18 +69,39 @@ const Promotions = ({ navigation }: { navigation: any }) => {
   };
 
   const renderPromotionCard = ({ item }: { item: any }) => (
-    <View style={styles.cardContainer}>
-      <Image source={item.image} style={styles.bannerImage} resizeMode="cover" />
-      <View style={styles.buttonOverlay}>
-        <TouchableOpacity
-          style={styles.joinButton}
-          onPress={() => handleJoinPress(item.id)}
-        >
-          <Text style={styles.joinButtonText}>Join Now</Text>
-        </TouchableOpacity>
+    <TouchableOpacity
+      activeOpacity={0.9}
+      onPress={() =>
+        navigation.navigate("PromotionsMain", {
+          bannerImage: item.images.uri2,
+        })
+      }
+    >
+      <View style={styles.cardContainer}>
+        <Image
+          source={item.images.uri1}
+          style={styles.bannerImage}
+          resizeMode="cover"
+        />
+  
+        <View style={styles.buttonOverlay}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.joinButton}
+            onPress={() =>
+              navigation.navigate("PromotionsMain", {
+                bannerImage: item.images.uri2,
+              })
+            }
+          >
+            <Text style={styles.joinButtonText}>Join Now</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
+  
+  
 
   return (
     <View style={styles.container}>

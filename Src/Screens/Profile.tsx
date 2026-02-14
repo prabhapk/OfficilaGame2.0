@@ -556,6 +556,7 @@ const createStyles = (Scale: any) =>
     safeArea: {
       flex: 1,
       backgroundColor: COLORS.primary,
+      paddingBottom: 30,
     },
     container: {
       padding: 16,

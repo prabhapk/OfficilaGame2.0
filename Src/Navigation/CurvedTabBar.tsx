@@ -12,7 +12,7 @@ import { COLORS } from "../Constants/Theme";
 
 const { width } = Dimensions.get("window");
 
-const TAB_BAR_HEIGHT = 70;
+const TAB_BAR_HEIGHT = 50;
 const CENTER_BUTTON_SIZE = 72;
 const CURVE_WIDTH = 90;
 const CURVE_HEIGHT = 35;

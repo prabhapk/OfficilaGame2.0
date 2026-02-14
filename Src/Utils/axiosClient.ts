@@ -9,7 +9,7 @@ import { setSessionExpiredVisible } from '../Redux/Slice/commonSlice';
 const axiosInstance = axios.create({
   // baseURL: process.env.API_BASE_URL,
   // baseURL: process.env.urlOne,
-   baseURL: 'https://47.102.194.30/',
+   baseURL: 'http://47.102.194.30',
 });
 
 const resetAction = CommonActions.reset({

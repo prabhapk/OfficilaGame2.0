@@ -20,43 +20,58 @@ const DownloadBanner: React.FC<DownloadBannerProps> = ({ onClose }) => {
     onClose?.();
   };
 
-  const handleDownload = async () => {
-    // APK download URL - you can update this later
-    const downloadUrl = 'https://file-examples.com/wp-content/storage/2017/10/file-sample_150kB.pdf';
+  // const handleDownload = async () => {
+  //   // APK download URL - you can update this later
+  //   const downloadUrl = 'https://expo.dev/artifacts/eas/nWTKeCvNAj13jWFXUUH6K8.apk';
     
-    try {
-      if (Platform.OS === 'web') {
-        // Check if it's a mobile browser
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  //   try {
+  //     if (Platform.OS === 'web') {
+  //       // Check if it's a mobile browser
+  //       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
-        if (isMobile) {
-          // For mobile browsers, open in new tab
-          window.open(downloadUrl, '_blank');
-        } else {
-          // For desktop browsers, trigger direct download
-          const link = document.createElement('a');
-          link.href = downloadUrl;
-          link.download = 'AnnaiLotteryApp.apk'; // Set the filename
-          link.target = '_blank';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-      } else {
-        // For React Native mobile apps (if needed)
-        const supported = await Linking.canOpenURL(downloadUrl);
-        if (supported) {
-          await Linking.openURL(downloadUrl);
-        } else {
-          console.log('Cannot open URL:', downloadUrl);
-        }
-      }
-    } catch (error) {
-      console.error('Download failed:', error);
-      // Fallback: open URL in new tab
-      if (Platform.OS === 'web') {
-        window.open(downloadUrl, '_blank');
-      }
+  //       if (isMobile) {
+  //         // For mobile browsers, open in new tab
+  //         window.open(downloadUrl, '_blank');
+  //       } else {
+  //         // For desktop browsers, trigger direct download
+  //         const link = document.createElement('a');
+  //         link.href = downloadUrl;
+  //         link.download = 'AnnaiLotteryApp.apk'; // Set the filename
+  //         link.target = '_blank';
+  //         document.body.appendChild(link);
+  //         link.click();
+  //         document.body.removeChild(link);
+  //       }
+  //     } else {
+  //       // For React Native mobile apps (if needed)
+  //       const supported = await Linking.canOpenURL(downloadUrl);
+  //       if (supported) {
+  //         await Linking.openURL(downloadUrl);
+  //       } else {
+  //         console.log('Cannot open URL:', downloadUrl);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Download failed:', error);
+  //     // Fallback: open URL in new tab
+  //     if (Platform.OS === 'web') {
+  //       window.open(downloadUrl, '_blank');
+  //     }
+  //   }
+  // };
+  
+  const handleDownload = () => {
+    const downloadUrl = 'https://expo.dev/artifacts/eas/nWTKeCvNAj13jWFXUUH6K8.apk';
+  
+    if (Platform.OS === 'web') {
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = 'AnnaiLotteryApp.apk';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      Linking.openURL(downloadUrl);
     }
   };
 

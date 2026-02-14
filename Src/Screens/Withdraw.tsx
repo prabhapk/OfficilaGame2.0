@@ -838,7 +838,7 @@ const Withdraw = ({ navigation }: any) => {
                       marginLeft: Scale(5),
                     }}
                   >
-                    ₹
+                    ₹ {withdrawableAmount}
                   </Text>
                 </View>
                 <View

@@ -85,6 +85,7 @@ export interface CommonSliceState {
     resultScreenCommonLoader: boolean;
     allResultData: any;
     individualGameResults: any;
+    resultLoader: boolean;
   }
 
   export interface Quick3DState {

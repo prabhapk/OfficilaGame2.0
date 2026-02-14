@@ -9,6 +9,7 @@ const initialValues: resultSliceState = {
   resultScreenCommonLoader: false,
   allResultData: [],
   individualGameResults: [],
+  resultLoader: false,
 };
 
 export const getAllResults = createAsyncThunk<
@@ -82,12 +83,14 @@ export const resultSlice = createSlice({
     // Pending
     builder.addCase(getAllResults.pending, (state, action) => {
       state.resultScreenCommonLoader = true;
+      state.resultLoader = true;
     });
     builder.addCase(getIndividualGameResult.pending, (state, action) => {});
     // Fulfilled
     builder.addCase(getAllResults.fulfilled, (state, action) => {
       state.resultScreenCommonLoader = false;
       state.allResultData = action.payload;
+      state.resultLoader = false;
     });
     builder.addCase(getIndividualGameResult.fulfilled, (state, action) => {
       state.individualGameResults = action.payload;
@@ -95,6 +98,7 @@ export const resultSlice = createSlice({
     // Rejected
     builder.addCase(getAllResults.rejected, (state, action) => {
       state.resultScreenCommonLoader = true;
+      state.resultLoader = true;
     });
     builder.addCase(getIndividualGameResult.rejected, (state, action) => {});
   },

@@ -11,8 +11,6 @@ import {
   SafeAreaView,
   Platform,
   Dimensions,
-  TouchableWithoutFeedback,
-  GestureResponderEvent,
 } from "react-native";
 import React, { use, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -110,6 +108,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
   const { individualGameData, individualGameDataLoader } = useSelector(
     (state: RootState) => state.homeSlice
   );
+  console.log("individualGameData==>", individualGameData);
+  
   const { isLoggedIn, mainWalletBalance, userId, withdrawBalance } =
     useSelector((state: RootState) => state.signInSlice);
   const {
@@ -581,7 +581,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
 
       return;
     }
-
+      
     setSelectedOption(value.id);
     setSelectedTime(value.name);
   };
@@ -752,6 +752,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
 
   const renderHeader = ({ item }: any) => {
     console.log("item==>asasa", item);
+    console.log("itemgropupIdCheck==>", item.groupId);
     return (
       <LinearGradient
         colors={[

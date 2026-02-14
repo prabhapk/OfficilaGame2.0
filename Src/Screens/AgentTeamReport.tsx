@@ -303,81 +303,81 @@ const AgentTeamReport = ({navigation}: any) => {
         
     
   return (
+
     <View style={styles.container}>
-         <ScrollView> 
     <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
+
     <NewAppHeader
-        leftIconPress={handleBackPress}
-        centerText="Team Report"
-      />
-     
+      leftIconPress={handleBackPress}
+      centerText="Team Report"
+    />
 
-        <View>
-            <FlatList
-            data ={rechargeBonusData}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderTeamReportItem}
-            showsVerticalScrollIndicator
-            />
-        </View>
-        <Modal
-        visible={showShareModal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setShowShareModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.shareModal}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowShareModal(false)}
-            >
-              <Text style={styles.closeButtonText}>×</Text>
+    <FlatList
+      data={rechargeBonusData}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={renderTeamReportItem}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: Scale(40) }}
+    />
+
+    <Modal
+      visible={showShareModal}
+      transparent
+      animationType="fade"
+      onRequestClose={() => setShowShareModal(false)}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.shareModal}>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setShowShareModal(false)}
+          >
+            <Text style={styles.closeButtonText}>×</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.shareTitle}>Share</Text>
+
+          <View style={styles.shareOptions}>
+            <TouchableOpacity style={styles.shareOption} onPress={handleFacebookShare}>
+              <View style={[styles.shareIcon, { backgroundColor: '#1877F2' }]}>
+                <Text style={styles.shareIconText}>f</Text>
+              </View>
+              <Text style={styles.shareOptionText}>Facebook</Text>
             </TouchableOpacity>
-            
-            <Text style={styles.shareTitle}>Share</Text>
-            
-            <View style={styles.shareOptions}>
-              <TouchableOpacity style={styles.shareOption} onPress={handleFacebookShare}>
-                <View style={[styles.shareIcon, { backgroundColor: '#1877F2' }]}>
-                  <Text style={styles.shareIconText}>f</Text>
-                </View>
-                <Text style={styles.shareOptionText}>Facebook</Text>
-              </TouchableOpacity>
 
-              <TouchableOpacity style={styles.shareOption} onPress={handleTelegramShare}>
-                <View style={[styles.shareIcon, { backgroundColor: '#0088CC' }]}>
-                  <Text style={styles.shareIconText}>✈</Text>
-                </View>
-                <Text style={styles.shareOptionText}>Telegram</Text>
-              </TouchableOpacity>
+            <TouchableOpacity style={styles.shareOption} onPress={handleTelegramShare}>
+              <View style={[styles.shareIcon, { backgroundColor: '#0088CC' }]}>
+                <Text style={styles.shareIconText}>✈</Text>
+              </View>
+              <Text style={styles.shareOptionText}>Telegram</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity style={styles.shareOption} onPress={handleWhatsAppShare}>
-                <View style={[styles.shareIcon, { backgroundColor: '#25D366' }]}>
-                  <Text style={styles.shareIconText}>💬</Text>
-                </View>
-                <Text style={styles.shareOptionText}>WhatsApp</Text>
-              </TouchableOpacity>
+            <TouchableOpacity style={styles.shareOption} onPress={handleWhatsAppShare}>
+              <View style={[styles.shareIcon, { backgroundColor: '#25D366' }]}>
+                <Text style={styles.shareIconText}>💬</Text>
+              </View>
+              <Text style={styles.shareOptionText}>WhatsApp</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity style={styles.shareOption} onPress={handleInstagramShare}>
-                <View style={[styles.shareIcon, { backgroundColor: '#E4405F' }]}>
-                  <Text style={styles.shareIconText}>📷</Text>
-                </View>
-                <Text style={styles.shareOptionText}>Instagram</Text>
-              </TouchableOpacity>
+            <TouchableOpacity style={styles.shareOption} onPress={handleInstagramShare}>
+              <View style={[styles.shareIcon, { backgroundColor: '#E4405F' }]}>
+                <Text style={styles.shareIconText}>📷</Text>
+              </View>
+              <Text style={styles.shareOptionText}>Instagram</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity style={styles.shareOption} onPress={handleCopyLink}>
-                <View style={[styles.shareIcon, { backgroundColor: '#007AFF' }]}>
-                  <Text style={styles.shareIconText}>🔗</Text>
-                </View>
-                <Text style={styles.shareOptionText}>Copy Link</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.shareOption} onPress={handleCopyLink}>
+              <View style={[styles.shareIcon, { backgroundColor: '#007AFF' }]}>
+                <Text style={styles.shareIconText}>🔗</Text>
+              </View>
+              <Text style={styles.shareOptionText}>Copy Link</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </Modal>
-        </ScrollView> 
-    </View>
+      </View>
+    </Modal>
+  </View>
+
   )
 }
 const createStyles = (Scale: any) =>

@@ -23,9 +23,11 @@ import { useContainerScale } from "../hooks/useContainerScale";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllResults } from "../Redux/Slice/resultSlice";
 import { RootState } from "../Redux/store";
+import { scale } from "react-native-size-matters";
+import CustomLoader from "../Components/CustomLoader";
 const ResultScreen = ({ navigation }: any) => {
   const dispatch = useDispatch();
-  const { allResultData } = useSelector(
+  const { allResultData, resultLoader } = useSelector(
     (state: RootState) => state.resultSlice
   );
   console.log("allResultData==>", allResultData);
@@ -100,8 +102,14 @@ const ResultScreen = ({ navigation }: any) => {
   }, []);
 
   return (
+    <>
+    <CustomLoader visible={resultLoader} />
     <ScrollView
-      style={{ flex: 1, backgroundColor: COLORS.primary }}
+      style={{
+        flex: 1,
+        backgroundColor: COLORS.primary,
+        paddingBottom: scale(30),
+      }}
       stickyHeaderIndices={[0]}
       nestedScrollEnabled={true}
       keyboardShouldPersistTaps="handled"
@@ -163,7 +171,7 @@ const ResultScreen = ({ navigation }: any) => {
                   borderRadius: 5,
                   alignItems: "center",
                   justifyContent: "center",
-                  borderColor: '#fff',
+                  borderColor: "#fff",
                   borderWidth: 1,
                 }}
               >
@@ -223,6 +231,7 @@ const ResultScreen = ({ navigation }: any) => {
         </View>
       </Modal>
     </ScrollView>
+    </>
   );
 };
 
