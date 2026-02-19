@@ -57,7 +57,7 @@ const createStyles = (Scale: (n: number) => number) =>
     headerBar: {
       flexDirection: "row",
       alignItems: "center",
-      backgroundColor: COLORS.sectionHeaderBg,
+      backgroundColor: COLORS.primary,
       marginHorizontal: Scale(12),
       marginTop: Scale(8),
       marginBottom: Scale(4),
@@ -73,13 +73,13 @@ const createStyles = (Scale: (n: number) => number) =>
     headerTitle: {
       fontSize: Scale(16),
       fontWeight: "bold",
-      color: COLORS.sectionHeaderText,
+      color: COLORS.white,
       flex: 1,
     },
     headerNumber: {
       fontSize: Scale(14),
       fontWeight: "600",
-      color: COLORS.sectionHeaderSubtext,
+      color: COLORS.white,
       marginRight: Scale(8),
     },
     headerPeopleIcon: {

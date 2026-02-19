@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { close } from '../../../assets/assets';
 import { useContainerScale } from '../../hooks/useContainerScale';
+import { Image } from 'expo-image';
 
 type AlertErrorModalProps = {
   isVisible: boolean;

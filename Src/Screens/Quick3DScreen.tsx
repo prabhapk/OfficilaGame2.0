@@ -3,12 +3,10 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Image,
   StyleSheet,
   Alert,
   ScrollView,
   FlatList,
-  SafeAreaView,
   Platform,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
@@ -25,6 +23,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import GameHeader from "../Components/GameHeader";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { RootState } from "../Redux/store";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   setDoubleDigitA1,
   setDoubleDigitA2,
@@ -67,6 +66,7 @@ import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceMod
 import { getIndividualGameResult } from "../Redux/Slice/resultSlice";
 import NewAppHeader from "../Components/NewAppHeader";
 import ResultTable from "../Components/ResultTable";
+import { Image } from 'expo-image';
 
 const Quick3DScreen = ({ navigation, route }: any) => {
   const { Scale } = useContainerScale();
@@ -630,7 +630,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         >
           <Image
             source={sameClock}
-            resizeMode="contain"
+            contentFit="contain"
             style={styles.headerImg}
           />
           <Text

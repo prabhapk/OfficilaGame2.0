@@ -4,9 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ScrollView,
-  SafeAreaView,
   ImageBackground,
 } from 'react-native';
 import Scale from '../Components/Scale';
@@ -37,6 +35,8 @@ import Toast from 'react-native-toast-message';
 import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from "../Constants/Theme";
+import { Image } from 'expo-image';
+import { SafeAreaView } from 'react-native-safe-area-context';
 const SignUpScreen = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -146,7 +146,7 @@ const SignUpScreen = ({ navigation }: any) => {
             <Image
               source={lefArrow}
               style={styles.leftArrow}
-              resizeMode="contain"
+              contentFit="contain"
             />
           </TouchableOpacity>
         </ImageBackground>
@@ -156,7 +156,7 @@ const SignUpScreen = ({ navigation }: any) => {
             <Image
               source={signInLogo}
               style={styles.logo}
-              resizeMode="contain"
+              contentFit="contain"
             />
             <Text style={styles.headerText}>Sign up</Text>
           </View>
@@ -243,7 +243,7 @@ const SignUpScreen = ({ navigation }: any) => {
                   <Image
                     source={referral}
                     style={{ width: Scale(18), height: Scale(18) }}
-                    resizeMode="contain"
+                    contentFit="contain"
                     tintColor={'#999'}
                   />
                 }

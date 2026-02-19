@@ -127,10 +127,10 @@ const createStyles = (Scale: (n: number) => number) =>
       position: "relative",
     },
     card: {
-      backgroundColor: COLORS.leaderboardCardBg,
+      backgroundColor: COLORS.primary,
       borderRadius: Scale(16),
       borderWidth: 2,
-      borderColor: COLORS.cardBorderAccent,
+      borderColor: COLORS.primary,
       overflow: "hidden",
     },
     titleWrap: {
@@ -226,7 +226,7 @@ const createStyles = (Scale: (n: number) => number) =>
       color: COLORS.black,
     },
     listSection: {
-      backgroundColor: COLORS.leaderboardListBg,
+      backgroundColor: COLORS.white,
       paddingHorizontal: Scale(12),
       paddingTop: Scale(8),
       paddingBottom: Scale(16),
@@ -243,7 +243,7 @@ const createStyles = (Scale: (n: number) => number) =>
       borderColor: COLORS.listRowBorder,
     },
     rankBadge: {
-      backgroundColor: COLORS.rankBadgeBg,
+      backgroundColor: COLORS.primary,
       borderRadius: Scale(8),
       paddingVertical: Scale(4),
       paddingHorizontal: Scale(8),
@@ -258,7 +258,7 @@ const createStyles = (Scale: (n: number) => number) =>
       width: Scale(32),
       height: Scale(32),
       borderRadius: Scale(16),
-      backgroundColor: COLORS.rankBadgeBg,
+      backgroundColor: COLORS.primary,
       opacity: 0.8,
       marginRight: Scale(8),
     },
@@ -269,7 +269,7 @@ const createStyles = (Scale: (n: number) => number) =>
       color: COLORS.sectionHeaderText,
     },
     listWinningsPill: {
-      backgroundColor: COLORS.rankBadgeBg,
+      backgroundColor: COLORS.primary,
       paddingVertical: Scale(6),
       paddingHorizontal: Scale(12),
       borderRadius: Scale(16),

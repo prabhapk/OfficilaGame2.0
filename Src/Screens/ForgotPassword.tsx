@@ -4,9 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ScrollView,
-  SafeAreaView,
   ImageBackground,
 } from 'react-native';
 import CommonTextInput from '../Components/CommonTextInput';
@@ -17,6 +15,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import {lefArrow, loginImageBackground, signInLogo} from '../../assets/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../Redux/store';
+import { Image } from 'expo-image';
 import {
   GetForgetPasswordOtp,
   resetPassword,
@@ -32,6 +31,7 @@ import Toast from 'react-native-toast-message';
 import { useContainerScale } from '../hooks/useContainerScale';
 import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
 import { COLORS } from '../Constants/Theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ForgotPassword = ({navigation}: any) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -120,7 +120,7 @@ const ForgotPassword = ({navigation}: any) => {
             <Image
               source={lefArrow}
               style={styles.leftArrow}
-              resizeMode="contain"
+              contentFit="contain"
             />
           </TouchableOpacity>
         </ImageBackground>
@@ -129,7 +129,7 @@ const ForgotPassword = ({navigation}: any) => {
             <Image
               source={signInLogo}
               style={styles.logo}
-              resizeMode="contain"
+              contentFit="contain"
             />
             <Text style={styles.headerText}>Set password</Text>
           </View>

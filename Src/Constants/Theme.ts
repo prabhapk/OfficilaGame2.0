@@ -18,7 +18,7 @@ const COLORS = {
   check1: '#5E319C',
 
   // Screen & section backgrounds
-  primaryBackground: '#F2EEF8',
+  primaryBackground: 'white',
   gamesBackground: '#F2EEF8',
   headerBackground: '#FFFFFF',
 

@@ -7,7 +7,6 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Modal,
-  Image,
 } from "react-native";
 import { resultFilterList } from "../Constants/CommonFlatlist";
 import { COLORS } from "../Constants/Theme";
@@ -19,6 +18,7 @@ import { getAllResults } from "../Redux/Slice/resultSlice";
 import { AppDispatch, RootState } from "../Redux/store";
 import { checked, unchecked } from "../../assets/assets";
 import CasinoResult from "./CasinoResult";
+import { Image } from 'expo-image';
 
 const MAIN_TABS = [
   { id: "lottery", name: "Lottery" },

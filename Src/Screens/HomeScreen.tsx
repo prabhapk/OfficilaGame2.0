@@ -23,6 +23,7 @@ import RecentWinnersList from "../Components/RecentWinnersList";
 import CasinoScreen from "./CasinoScreen";
 import LotteryScreen from "./Lottery/LotteryScreen";
 import Quick3DigitsMenu from "./Lottery/Quick3DigitsMenu";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 // -----------------------------------------------------------------------------
 // Constants
@@ -123,8 +124,8 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <View style={styles.screen}>
-      <CustomLoader visible={howScreenCommonLoader} />
+    <SafeAreaView style={styles.screen}>
+      {/* <CustomLoader visible={howScreenCommonLoader} /> */}
 
       <PromotionalModal
         visible={showPromotionalModal}
@@ -161,7 +162,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
 
         <View style={styles.gameContent}>{renderGameContent()}</View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -173,21 +174,21 @@ const createStyles = (Scale: (n: number) => number) =>
   StyleSheet.create({
     screen: {
       flex: 1,
-      backgroundColor: COLORS.primaryBackground,
+      backgroundColor: COLORS.primary,
     },
     headerWrapper: {
-      backgroundColor: COLORS.headerBackground,
+      backgroundColor: COLORS.primary,
     },
     scrollView: {
       flex: 1,
-      backgroundColor: COLORS.gamesBackground,
+      backgroundColor: COLORS.white,
     },
     scrollContent: {
       flexGrow: 1,
     },
     gameContent: {
       paddingBottom: Scale(100),
-      backgroundColor: COLORS.gamesBackground,
+      backgroundColor: COLORS.white,
     },
     placeholderText: {
       fontSize: Scale(14),

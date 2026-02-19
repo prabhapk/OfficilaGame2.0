@@ -151,7 +151,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
                   height: Scale(30),
                   marginLeft: Scale(15),
                 }}
-                resizeMode="contain"
+                contentFit="contain"
               />
             </View>
           </View>
@@ -269,7 +269,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
         <Image
           source={superAgent}
           style={{ width: "93%", height: Scale(110) }}
-          resizeMode={"stretch"}
+          contentFit="fill"
         />
       </TouchableOpacity>
 
@@ -280,7 +280,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
         <Image
           source={promotions}
           style={{ width: "93%", height: Scale(110) }}
-          resizeMode={"stretch"}
+          contentFit="fill"
         />
       </TouchableOpacity>
     </ScrollView>

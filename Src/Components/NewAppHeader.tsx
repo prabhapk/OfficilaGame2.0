@@ -1,9 +1,10 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image, GestureResponderEvent, Platform, ImageSourcePropType} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, GestureResponderEvent, Platform, ImageSourcePropType} from 'react-native';
 import React from 'react';
 import { lefArrow } from '../../assets/assets';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '../Constants/Theme';
+import { Image } from 'expo-image';
 
 interface customHeaderProps {
   leftIconPress: (event: GestureResponderEvent) => void;
@@ -29,7 +30,7 @@ const NewAppHeader: React.FC<customHeaderProps> = ({
         <Image
           source={lefArrow}
           tintColor={COLORS.headerTextColor}
-          resizeMode="contain"
+          contentFit="contain"
           style={{ width: Scale(20), height: Scale(20) }}
         />
       </TouchableOpacity>

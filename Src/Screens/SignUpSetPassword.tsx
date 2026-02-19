@@ -4,9 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ScrollView,
-  SafeAreaView,
   ImageBackground,
 } from 'react-native';
 import CommonTextInput from '../Components/CommonTextInput';
@@ -31,6 +29,8 @@ import Toast from 'react-native-toast-message';
 import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from '../Constants/Theme';
+import { Image } from 'expo-image';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SignUpSetPassword = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -104,7 +104,7 @@ const SignUpSetPassword = ({ navigation }: any) => {
             <Image
               source={lefArrow}
               style={styles.leftArrow}
-              resizeMode="contain"
+              contentFit="contain"
             />
           </TouchableOpacity>
         </ImageBackground>
@@ -113,7 +113,7 @@ const SignUpSetPassword = ({ navigation }: any) => {
             <Image
               source={signInLogo}
               style={styles.logo}
-              resizeMode="contain"
+              contentFit="contain"
             />
             <Text style={styles.headerText}>Set password</Text>
           </View>

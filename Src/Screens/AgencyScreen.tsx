@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
   StatusBar,
   Alert,
 } from 'react-native';
@@ -19,6 +18,7 @@ import { RootState } from '../Redux/store';
 import { formatToDDMMYYYY } from '../Utils/Common';
 import * as Clipboard from 'expo-clipboard';
 import { agentActiveUser, agentCommission, agentNewUsers, agentRecharge, agentRechargeMonth, resetIcon } from '../../assets/assets';
+import { Image } from 'expo-image';
 
 const AgencyScreen = ({ navigation }: { navigation: any }) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -122,7 +122,7 @@ const handleCopyLink = async () => {
             <Image
               source={require('../../assets/ProfileScreen/wallet3DImage.webp')}
               style={styles.avatar}
-              resizeMode="cover"
+              contentFit="cover"
             />
             <View style={styles.levelBadge}>
               <Text style={styles.levelText}>Lv.1</Text>

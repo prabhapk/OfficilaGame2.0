@@ -2,7 +2,6 @@
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   GestureResponderEvent,
 } from 'react-native';
@@ -14,6 +13,7 @@ import { RootState } from '../Redux/store';
 import { useNavigation } from '@react-navigation/native';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from '../Constants/Theme';
+import { Image } from 'expo-image';
 
 interface Props {
   openSheet: (event: GestureResponderEvent) => void;
@@ -60,7 +60,8 @@ const GameFooter: React.FC<Props> = ({
       >
         <Image
           source={FooterWallet}
-          style={{ width: 30, height: 30, resizeMode: 'contain' }}
+          contentFit="contain"
+          style={{ width: 30, height: 30, }}
         />
         <View style={{ marginHorizontal: Scale(10) }}>
           <Text

@@ -36,6 +36,9 @@ const HomeScreenGameHeaders: React.FC<HeaderProps> = ({
                 style={styles.icon}
                 contentFit="contain"
                 />
+                <Text style={{
+                  color: isSelected ? 'white' : '#000',
+                }}>{item.name}</Text>
               
            
           </TouchableOpacity>
@@ -53,6 +56,7 @@ const createStyles = (Scale: (n: number) => number) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       width: '100%',
+      marginTop: Scale(20),
     },
     tab: {
       flex: 1,
@@ -67,8 +71,8 @@ const createStyles = (Scale: (n: number) => number) =>
       borderColor: COLORS.tabInactiveBorder,
     },
     tabSelected: {
-      backgroundColor: COLORS.tabActiveBg,
-      borderColor: COLORS.tabActiveBg,
+      backgroundColor: COLORS.primary,
+      borderColor: COLORS.primary,
     },
     iconWrap: {
       width: Scale(56),

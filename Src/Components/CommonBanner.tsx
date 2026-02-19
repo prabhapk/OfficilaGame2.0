@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet,} from 'react-native';
 import Swiper from 'react-native-web-swiper';
+import { Image } from 'expo-image';
 
 interface Props {
   banners: { id: number; name: any }[]; // Ensure proper type for banners
@@ -17,7 +18,7 @@ const CommonBanner: React.FC<Props> = ({ banners }) => {
       >
         {banners.map((banner) => (
           <View key={banner.id} style={styles.slide}>
-            <Image source={banner.name} style={styles.bannerImage} resizeMode="stretch" />
+            <Image source={banner.name} style={styles.bannerImage} contentFit='fill' />
           </View>
         ))}
       </Swiper>

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, Image, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import TableCommonBall from "./TableCommonBall";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
 import MyOrders from "./MyOrders";
 import { setTableCurrentPage } from "../Redux/Slice/commonSlice";
+import { Image } from "expo-image";
 interface ResultTableProps {
   tableData: any[];
   showHeader?: boolean;

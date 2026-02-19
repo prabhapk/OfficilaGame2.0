@@ -4,8 +4,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
-  Image,
+
   StatusBar,
 } from 'react-native';
 import { useContainerScale } from '../hooks/useContainerScale';

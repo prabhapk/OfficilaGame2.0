@@ -5,6 +5,7 @@ import React from 'react'
 import FastImage from 'react-native-fast-image'
 import { gifAgent, gifLottery, gifPromotion, gifRefer } from '../../assets/assets'
 import CommonDigits from '../Components/CommonDigits'
+import { Image, ImageBackground } from 'expo-image'
 
 const UnusedCode = () => {
 

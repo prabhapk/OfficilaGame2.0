@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, Image, StatusBar } from "react-native";
+import { View, StyleSheet, StatusBar } from "react-native";
 import { newSplashScreen } from "../../assets/assets";
+import { Image } from "expo-image";
 
 const SplashScreen = ({ navigation }: { navigation: any }) => {
   useEffect(() => {

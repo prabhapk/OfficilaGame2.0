@@ -3,12 +3,10 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Image,
   StyleSheet,
   Alert,
   ScrollView,
   FlatList,
-  SafeAreaView,
   Platform,
   Dimensions,
   TouchableWithoutFeedback,
@@ -42,6 +40,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import CommonAddButton from "../Components/CommonAddButton";
 import CommonQuickGuess from "../Components/CommonQuickGuess";
 import { RootState } from "../Redux/store";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   setDoubleDigitA1,
   setDoubleDigitA2,
@@ -92,6 +91,7 @@ import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceMod
 import { useContainerScale } from "../hooks/useContainerScale";
 import NewAppHeader from "../Components/NewAppHeader";
 import Modal from "react-native-modal";
+import { Image } from 'expo-image';
 
 const ThreeDigitMain = ({ navigation, route }: any) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -795,7 +795,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
         >
           <Image
             source={sameClock}
-            resizeMode="contain"
+            contentFit="contain"
             style={styles.headerImg}
           />
           <Text

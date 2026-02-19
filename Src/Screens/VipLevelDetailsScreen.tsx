@@ -2,7 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   FlatList,
   TouchableOpacity,
   ScrollView,
@@ -31,6 +30,7 @@ import { COLORS } from '../Constants/Theme';
 import { useDispatch, useSelector } from 'react-redux';
 import { getVipLists } from '../Redux/Slice/vipSlice';
 import { RootState } from '../Redux/store';
+import { Image } from 'expo-image';
 const VipLevelDetailsScreen = ({navigation}: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);

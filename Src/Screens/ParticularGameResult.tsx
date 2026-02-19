@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ScrollView,
 } from "react-native";
 import { COLORS } from "../Constants/Theme";
@@ -18,6 +17,7 @@ import { AppDispatch, RootState } from "../Redux/store";
 import { setTableCurrentPage } from "../Redux/Slice/commonSlice";
 import { getIndividualGameData } from "../Redux/Slice/HomeSlice";
 import { formatToTimeIST } from "../Utils/Common";
+import { Image } from 'expo-image';
 
 const QUICK3D_SUB_TABS = [
   { id: "1min", name: "1 min" },

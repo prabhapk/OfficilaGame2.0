@@ -10,7 +10,7 @@ export const HomeScreenFlatlist = [
     { id: 1, name: 'Hot', image: hot },
     { id: 2, name: 'Lottery', image: lottery1 },
     { id: 4, name: 'Casino', image: casino },
-    { id: 5, name: 'Live', image: casino },
+    // { id: 5, name: 'Live', image: casino },
 ]
 
 export const CasionHeadersList = [

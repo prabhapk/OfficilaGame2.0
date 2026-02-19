@@ -106,7 +106,7 @@ const createStyles = (Scale: (n: number) => number) =>
       height: Scale(120),
     },
     listSection: {
-      backgroundColor: COLORS.leaderboardListBg,
+      backgroundColor: COLORS.white,
       paddingHorizontal: Scale(12),
       paddingTop: Scale(90),
       paddingBottom: Scale(16),
@@ -131,7 +131,7 @@ const createStyles = (Scale: (n: number) => number) =>
       width: Scale(44),
       height: Scale(44),
       borderRadius: Scale(8),
-      backgroundColor: COLORS.sectionHeaderBg,
+      backgroundColor: COLORS.primary,
       marginRight: Scale(10),
     },
     details: {
