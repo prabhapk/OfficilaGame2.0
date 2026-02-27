@@ -1,10 +1,14 @@
-import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, fiveMin3DImage, homeActiveTab, homeTab, hot, inviteActiveTab, inviteTab, jdb, Jili, lottery1, meActiveTab, meTab, multiUserIcon, oneMin3DImage, pg, promotions, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
+import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, fiveMin3DImage, homeActiveTab, homeTab, hot, inviteActiveTab, inviteTab, jdb, Jili, lottery1, meActiveTab, meTab, multiUserIcon, oneMin3DImage, pg, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
 import CasinoScreen from "../Screens/CasinoScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import InviteScreen from "../Screens/InviteScreen";
 import Profile from "../Screens/Profile";
 import ResultScreen from "../Screens/ResultScreen";
 import Promotions from "../Screens/Promotions";
+import RebateScreen from "../Screens/RebateScreen";
+import ThreeDigitMain from "../Screens/ThreeDigitMain";
+import Quick3DScreen from "../Screens/Quick3DScreen";
+import AgencyScreen from "../Screens/AgencyScreen";
 
 export const HomeScreenFlatlist = [
     { id: 1, name: 'Hot', image: hot },
@@ -34,9 +38,12 @@ export const lotteryGamesList = [
 ]
 
 export const ThreeDigitsLottery = [
-  { id: 1, name: "1minGame", image: quick3d1min },
-  { id: 2, name: "3minGame", image: quick3d3min },
-  { id: 3, name: "5minGame", image: quick3d5min },
+  // { id: 1, name: "1minGame", image: quick3d1min },
+  // { id: 2, name: "3minGame", image: quick3d3min },
+  // { id: 3, name: "5minGame", image: quick3d5min },
+  { id: 1, name: "1minGame", image: quick1 },
+  { id: 2, name: "3minGame", image: quick2 },
+  { id: 3, name: "5minGame", image: quick3 },
 ]
 
  export const ThreeDigits = [
@@ -122,11 +129,14 @@ export const ThreeDigitsLottery = [
   ];
 
   export const MenuBarList = [
-    {id: 1, name:"Quick 3D", image:quick3dMenu},
-    {id: 2, name:"Official 3 Digits", image:digitMenu},
-    {id:3, name:"Casino", image:casinMenu},
-    {id:4, name:"Scratch", image:scratchMenu},
-    {id:5, name:"Sport", image:sportMenu}
+    {id:1, name:"Rebate", image:scratchMenu, component:RebateScreen},
+    {id: 2, name:"Promotions", image:quick3dMenu, component:Promotions},
+    {id: 3, name:"Super Agent", image:quick3dMenu, component:AgencyScreen},
+    // {id: 2, name:"Quick 3D", image:quick3dMenu, component:Quick3DScreen},
+    // {id: 3, name:"Official 3 Digits", image:digitMenu, component:ThreeDigitMain},
+    // {id:4, name:"Casino", image:casinMenu, component:HomeScreen},
+    // {id:4, name:"Scratch", image:scratchMenu},
+    // {id:5, name:"Sport", image:sportMenu}
   ]
 
   export const tabScreens = [

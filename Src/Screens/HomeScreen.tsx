@@ -30,9 +30,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 // -----------------------------------------------------------------------------
 
 const BANNERS = [
-  { id: 1, name: annaiBanner },
-  { id: 2, name: annaiBanner1 },
+  {
+    id: 1,
+    name: annaiBanner,
+    url: "https://chat.whatsapp.com/Ck2bsOOMiqzH5v7SlQaSiP",
+  },
+  {
+    id: 2,
+    name: annaiBanner1,
+    url: "https://t.me/+WyhSvyD9IOYxNWZl",
+  },
 ];
+
+
 
 // Do not change this order: Quick3DigitsMenu → LotteryScreen → LeaderboardList → RecentWinnersList
 const HOT_TAB_CONTENT = [

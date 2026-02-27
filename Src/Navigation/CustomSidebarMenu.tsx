@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-
+import Modal from "react-native-modal";
 import { COLORS } from "../Constants/Theme";
 import {
   bigSpin,
@@ -25,8 +25,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MenuBarList } from "../Constants/CommonFlatlist";
 import Entypo from "react-native-vector-icons/Entypo";
 import { ScrollView } from "react-native";
-import { useSelector } from "react-redux";
-import { RootState } from "../Redux/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, persistor, resetState, } from "../Redux/store";
 import { formatToDecimal } from "../Utils/Common";
 import { useContainerScale } from "../hooks/useContainerScale";
 const CustomSidebarMenu = ({ navigation }: any) => {
@@ -34,6 +34,8 @@ const CustomSidebarMenu = ({ navigation }: any) => {
   const styles = createStyles(Scale);
   const { isLoggedIn, userDetails, mainWalletBalance, withdrawBalance } =
     useSelector((state: RootState) => state.signInSlice);
+    const dispatch = useDispatch();
+    const [showModal, setShowModal] = useState(false);
 
   const totalBalance = mainWalletBalance + withdrawBalance;
 
@@ -42,7 +44,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
       <TouchableOpacity
         key={item.id}
         style={styles.menuContainer}
-        onPress={() => navigation.navigate(item.name)}
+        onPress={() => navigation.navigate(item.component)}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
@@ -61,20 +63,31 @@ const CustomSidebarMenu = ({ navigation }: any) => {
       </TouchableOpacity>
     );
   };
+  const handleLogout = async () => {
+    try {
+      dispatch(resetState());
+      setShowModal(false);
+      await persistor.flush();
+      persistor.purge();
+      navigation.replace("DrawerNavigation");
+    } catch (error) {
+      console.error("Error resetting state:", error);
+    }
+  };
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: COLORS.primary }}
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.container}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
           <Image
             source={homeAppIcon}
             contentFit="contain"
             style={{ width: Scale(140), height: Scale(60) }}
           />
-          {/* <Text style={{ color: '#fff' }}>AppName</Text> */}
-          {!isLoggedIn && (
+          <View>
+          {!isLoggedIn ? (
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("SignInScreen");
@@ -90,9 +103,26 @@ const CustomSidebarMenu = ({ navigation }: any) => {
                 <Text style={{ color: "#fff" }}>Login</Text>
               </LinearGradient>
             </TouchableOpacity>
-          )}
+          ):
+          (
+            <TouchableOpacity
+            onPress={() => setShowModal(true)}
+              style={styles.loginButton}
+            >
+              <LinearGradient
+                colors={[COLORS.linearOne, COLORS.linearTwo]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.registerGradient}
+              >
+                <Text style={{ color: "#fff" }}>Logout</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )
+          }
+           </View>
         </View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             navigation.toggleDrawer();
           }}
@@ -102,7 +132,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
             style={{ width: Scale(30), height: Scale(30) }}
             tintColor={"#fff"}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View
         style={{ borderTopWidth: 1, borderTopColor: "#ccc", bottom: 10 }}
@@ -217,7 +247,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
         </LinearGradient>
       )}
 
-      <View style={styles.referalView}>
+      {/* <View style={styles.referalView}>
         <TouchableOpacity
           style={styles.refButton}
           onPress={() => navigation.navigate("RebateScreen")}
@@ -253,7 +283,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
           />
           <Text style={styles.refText}>Free Lottery</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       <FlatList
         data={MenuBarList}
@@ -262,7 +292,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
         renderItem={renderMenuItem}
       />
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{ alignItems: "center" }}
         onPress={() => navigation.navigate("AgencyScreen")}
       >
@@ -271,8 +301,8 @@ const CustomSidebarMenu = ({ navigation }: any) => {
           style={{ width: "93%", height: Scale(110) }}
           contentFit="fill"
         />
-      </TouchableOpacity>
-
+      </TouchableOpacity> */}
+{/* 
       <TouchableOpacity 
         style={{ alignItems: "center" }}
         onPress={() => navigation.navigate("Promotions")}
@@ -282,7 +312,36 @@ const CustomSidebarMenu = ({ navigation }: any) => {
           style={{ width: "93%", height: Scale(110) }}
           contentFit="fill"
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+      <Modal
+          isVisible={showModal}
+          animationIn="flipInX"
+          animationOut="flipOutX"
+          backdropOpacity={0.5}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalHeaderText}>Logout?</Text>
+            </View>
+            <Text style={styles.modalBodyText}>
+              Are you sure you want to logout?
+            </Text>
+            <View style={styles.modalButtonRow}>
+              <TouchableOpacity
+                onPress={() => setShowModal(false)}
+                style={styles.modalButton}
+              >
+                <Text style={styles.modalCancelText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleLogout}
+                style={styles.modalButton}
+              >
+                <Text style={styles.modalLogoutText}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
     </ScrollView>
   );
 };
@@ -341,7 +400,8 @@ const createStyles = (Scale: any) =>
 
     referalView: {
       flexDirection: "row",
-      justifyContent: "space-between",
+      // justifyContent: "space-between",
+      justifyContent: "space-evenly",
       marginHorizontal: 10,
       marginTop: 30,
     },
@@ -366,6 +426,61 @@ const createStyles = (Scale: any) =>
       paddingHorizontal: 20,
       alignItems: "center",
       justifyContent: "center",
+    },
+    modalContainer: {
+      backgroundColor: "white",
+      borderRadius: 10,
+      padding: 20,
+      marginBottom: 16,
+    },
+    modalHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: Scale(20),
+    },
+    modalHeaderText: {
+      color: "black",
+      fontWeight: "bold",
+      fontSize: Scale(24),
+    },
+    modalBodyText: {
+      color: "black",
+      fontWeight: "bold",
+      fontSize: Scale(16),
+      textAlign: "center",
+    },
+    modalButtonRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginHorizontal: Scale(10),
+      marginTop: Scale(40),
+      justifyContent: "space-evenly",
+    },
+    modalButton: {
+      borderRadius: Scale(10),
+      backgroundColor: "white",
+      paddingVertical: Scale(10),
+      paddingHorizontal: Scale(20),
+      alignItems: "center",
+      justifyContent: "center",
+      borderWidth: 1,
+      borderColor: "black",
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    modalCancelText: {
+      color: "black",
+      fontWeight: "bold",
+      fontSize: Scale(14),
+    },
+    modalLogoutText: {
+      color: "red",
+      fontWeight: "bold",
+      fontSize: Scale(14),
     },
   });
 

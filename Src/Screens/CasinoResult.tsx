@@ -15,7 +15,6 @@ const CASINO_LEADERBOARD_MOCK = [
   { rank: 9, gameName: "Gladiator'sGlory", user: "player98******66", winning: "₹18,750.00" },
   { rank: 10, gameName: "FortuneGems3", user: "player99******77", winning: "₹15,200.00" },
   { rank: 11, gameName: "Aviator", user: "player89******88", winning: "₹12,400.00" },
-  
 ];
 
 const getRankBadgeColor = (rank: number) => {
@@ -89,7 +88,7 @@ const createStyles = (Scale: (n: number) => number) =>
     },
     card: {
       flex: 1,
-      backgroundColor: COLORS.leaderboardCardBg,
+      backgroundColor: COLORS.white,
       borderRadius: Scale(12),
       borderWidth: 1,
       borderColor: COLORS.cardBorder,
@@ -98,7 +97,7 @@ const createStyles = (Scale: (n: number) => number) =>
     tableHeader: {
       flexDirection: "row",
       alignItems: "center",
-      backgroundColor: COLORS.sectionHeaderBg,
+      backgroundColor: COLORS.primary,
       paddingVertical: Scale(10),
       paddingHorizontal: Scale(10),
       borderBottomWidth: 1,
@@ -107,7 +106,7 @@ const createStyles = (Scale: (n: number) => number) =>
     headerCell: {
       fontSize: Scale(13),
       fontWeight: "700",
-      color: COLORS.sectionHeaderText,
+      color: COLORS.white,
     },
     colRank: { width: Scale(44), textAlign: "center" },
     colGame: { flex: 1.2, marginLeft: Scale(6) },

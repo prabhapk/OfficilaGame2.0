@@ -30,8 +30,8 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
   const [tabLayouts, setTabLayouts] = useState<{ x: number; width: number }[]>([]);
   const { Scale } = useContainerScale();
 
-  const textColor = lightTheme ? COLORS.sectionHeaderText : '#fff';
-  const borderColor = lightTheme ? COLORS.check : '#fff';
+  const textColor = lightTheme ? COLORS.white : '#fff';
+  const borderColor = lightTheme ? COLORS.white : '#fff';
 
   useEffect(() => {
     if (tabLayouts[index] && scrollRef.current) {
@@ -43,7 +43,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
   }, [index, tabLayouts]);
 
   return (
-    <View style={[{ backgroundColor: lightTheme ? COLORS.sectionHeaderBg : COLORS.primary }, style]}>
+    <View style={[{ backgroundColor: lightTheme ? COLORS.primary : COLORS.primary }, style]}>
       <ScrollView
         ref={scrollRef}
         horizontal

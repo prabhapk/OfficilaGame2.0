@@ -23,7 +23,7 @@ const CommonQuickGuess: React.FC<Props> = ({ innerText, onPress }) => {
           marginTop: Scale(5),
           marginBottom: Scale(5),
           bottom: 5,
-          borderWidth: 0.1,
+          borderWidth: 0.5,
           borderColor: COLORS.white,
         }}>
         <Text

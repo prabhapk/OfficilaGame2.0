@@ -18,7 +18,7 @@ import { getAllResults } from "../Redux/Slice/resultSlice";
 import { AppDispatch, RootState } from "../Redux/store";
 import { checked, unchecked } from "../../assets/assets";
 import CasinoResult from "./CasinoResult";
-import { Image } from 'expo-image';
+import { Image } from "expo-image";
 
 const MAIN_TABS = [
   { id: "lottery", name: "Lottery" },
@@ -33,7 +33,9 @@ const QUICK3D_SUB_TABS = [
 
 const ResultScreen = ({ navigation }: any) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { allResultData } = useSelector((state: RootState) => state.resultSlice);
+  const { allResultData } = useSelector(
+    (state: RootState) => state.resultSlice
+  );
   const { Scale } = useContainerScale();
   const styles = createStyles(Scale);
 
@@ -96,7 +98,10 @@ const ResultScreen = ({ navigation }: any) => {
         {MAIN_TABS.map((tab, idx) => (
           <TouchableOpacity
             key={tab.id}
-            style={[styles.mainTab, idx === mainTabIndex && styles.mainTabActive]}
+            style={[
+              styles.mainTab,
+              idx === mainTabIndex && styles.mainTabActive,
+            ]}
             onPress={() => setMainTabIndex(idx)}
           >
             <Text
@@ -166,12 +171,18 @@ const ResultScreen = ({ navigation }: any) => {
                     <Text style={styles.viewAllText}>View All</Text>
                   </TouchableOpacity>
                 </View>
-                <ResultTable
-                  tableData={data}
-                  customStyle={styles.resultTableWrap}
-                  hidePages
-                  useLightTheme
-                />
+                <View
+                  style={{
+                    marginHorizontal: Scale(10),
+                  }}
+                >
+                  <ResultTable
+                    tableData={data}
+                    customStyle={styles.resultTableWrap}
+                    hidePages
+                    useLightTheme
+                  />
+                </View>
               </View>
             ))}
           </ScrollView>
@@ -250,10 +261,12 @@ const createStyles = (Scale: (n: number) => number) =>
     },
     mainTabsRow: {
       flexDirection: "row",
-      backgroundColor: COLORS.sectionHeaderBg,
+      backgroundColor: COLORS.white,
       paddingHorizontal: Scale(12),
       paddingVertical: Scale(8),
       gap: Scale(8),
+      marginBottom: Scale(10),
+      marginTop: Scale(10),
     },
     mainTab: {
       flex: 1,
@@ -264,9 +277,14 @@ const createStyles = (Scale: (n: number) => number) =>
       backgroundColor: COLORS.tabInactiveBg,
       borderWidth: 1,
       borderColor: COLORS.tabInactiveBorder,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: -3 },
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+      elevation: 10,
     },
     mainTabActive: {
-      backgroundColor: COLORS.tabActiveBg,
+      backgroundColor: COLORS.primary,
       borderColor: COLORS.tabActiveBg,
     },
     mainTabText: {
@@ -279,6 +297,7 @@ const createStyles = (Scale: (n: number) => number) =>
     },
     lotteryTabsWrapper: {
       backgroundColor: COLORS.gamesBackground,
+      marginLeft: Scale(10),
     },
     quick3dSubRow: {
       flexDirection: "row",
@@ -330,7 +349,7 @@ const createStyles = (Scale: (n: number) => number) =>
       color: COLORS.sectionHeaderText,
     },
     viewAllButton: {
-      backgroundColor: COLORS.tabActiveBg,
+      backgroundColor: COLORS.primary,
       padding: Scale(10),
       borderRadius: Scale(8),
       alignItems: "center",

@@ -196,7 +196,7 @@ const createStyles = (Scale: (n: number) => number) =>
     top3Name: {
       fontSize: Scale(10),
       fontWeight: "600",
-      color: COLORS.black,
+      color: COLORS.white,
       maxWidth: Scale(75),
       textAlign: "center",
       marginBottom: Scale(4),

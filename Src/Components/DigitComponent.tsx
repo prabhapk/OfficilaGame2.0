@@ -301,7 +301,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               }}
               onComplete={onTimerComplete}
             />
-            <Text style={styles.gameNameText}>{nextGameId}</Text>
+            <Text style={[styles.gameNameText, { marginTop: Scale(10) }]}>{nextGameId}</Text>
           </View>
         </View>
 
@@ -960,7 +960,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
 const createStyles = (Scale: any) =>
   StyleSheet.create({
     mainContainer: {
-      backgroundColor: COLORS.gamesBackground,
+      // backgroundColor: COLORS.gamesBackground,
       flex: 1,
       marginBottom: Scale(0),
     },
@@ -974,7 +974,7 @@ const createStyles = (Scale: any) =>
     },
     card: {
       marginTop: Scale(20),
-      backgroundColor: COLORS.sectionHeaderBg,
+      backgroundColor: COLORS.primary,
       width: "100%",
       borderRadius: 10,
       shadowColor: "#000",
@@ -983,7 +983,7 @@ const createStyles = (Scale: any) =>
       shadowRadius: 2,
       elevation: 3,
       borderWidth: 1,
-      borderColor: COLORS.gameCardBorder,
+      borderColor: COLORS.primary,
     },
     cancelImage: {
       height: Scale(24),
@@ -1004,8 +1004,16 @@ const createStyles = (Scale: any) =>
       flexDirection: "row",
       justifyContent: "space-between",
       marginTop: 10,
-      backgroundColor: COLORS.sectionHeaderBg,
+      backgroundColor: COLORS.primary,
       overflow: "hidden",
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: -3 },
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+      elevation: 10,
+      borderWidth: 1,
+      borderColor: COLORS.primary,
+      borderRadius: 10,
     },
     showCountContainer: {
       flexDirection: "row",
@@ -1054,44 +1062,46 @@ const createStyles = (Scale: any) =>
       borderRadius: 10,
     },
     DigitTitleText: {
-      color: COLORS.primaryTextColor,
+      color: COLORS.white,
       fontWeight: "bold",
       fontSize: Scale(18),
     },
     DigitTitleText1: {
-      color: COLORS.primaryTextColor,
+      color: COLORS.white,
       fontWeight: "bold",
       fontSize: Scale(12),
       top: 1,
     },
     howtoplayBtn: {
-      backgroundColor: COLORS.sectionHeaderBg,
-      marginHorizontal: 10,
+      backgroundColor: COLORS.primary,
+      marginHorizontal: 20,
       borderRadius: 5,
       borderWidth: 1,
-      borderColor: COLORS.cardBorder,
+      borderColor: COLORS.white,
+      bottom: 5,
+      marginBottom: 5,
     },
     howtoPlayTxt: {
       fontSize: 14,
       fontWeight: "400",
       paddingHorizontal: 5,
       paddingVertical: 5,
-      color: COLORS.sectionHeaderText,
+      color: COLORS.white,
     },
     gameNameText: {
       fontSize: 14,
       fontWeight: "bold",
-      color: COLORS.primaryTextColor,
+      color: COLORS.white,
     },
     ballsView: {
       flexDirection: "row",
-      backgroundColor: COLORS.sectionHeaderBg,
+      backgroundColor: COLORS.primary,
       paddingVertical: 5,
       borderRadius: 10,
-      marginTop: 5,
+      marginTop: 10,
       padding: 5,
       borderWidth: 1,
-      borderColor: COLORS.gameCardBorder,
+      borderColor: COLORS.white,
     },
     gameHeader: {
       flexDirection: "row",

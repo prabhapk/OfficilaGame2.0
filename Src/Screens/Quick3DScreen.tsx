@@ -612,18 +612,34 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const renderHeader = ({ item }: any) => {
     const isSelected = selectedOption === item.name;
     return (
+      // <LinearGradient
+      //   colors={[
+      //     isSelected ? COLORS.linearOne : COLORS.linearTwo,
+      //     isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
+      //   ]}
+      //   start={{ x: 0, y: 0 }}
+      //   end={{ x: 1, y: 0 }}
+      //   style={[
+      //     styles.headerBtn,
+      //     !isSelected && { borderColor: COLORS.tabInactiveBorder },
+      //   ]}
+      // >
       <LinearGradient
-        colors={[
-          isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
-          isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
-        ]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={[
-          styles.headerBtn,
-          !isSelected && { borderColor: COLORS.tabInactiveBorder },
-        ]}
-      >
+      colors={[
+        selectedOption === item.name
+          ? COLORS.linearOne
+          : COLORS.gameDetailColor, // fallback color
+        selectedOption === item.name
+          ? COLORS.linearTwo
+          : COLORS.gameDetailColor,
+      ]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      style={[
+        styles.headerBtn,
+        { backgroundColor: selectedOption === item.name ? "pink" : "white" },
+      ]}
+    >
         <TouchableOpacity
           style={{ justifyContent: "center", alignItems: "center" }}
           onPress={() => handleHeader(item)}
@@ -639,7 +655,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
               {
                 marginLeft: 5,
                 marginTop: Scale(5),
-                color: isSelected ? COLORS.tabActiveText : COLORS.tabInactiveText,
+                color: isSelected ? COLORS.tabActiveText : COLORS.tabActiveText,
               },
             ]}
           >
@@ -703,7 +719,12 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    // <View style={styles.mainContainer}>
+    <LinearGradient
+    colors={[COLORS.white, COLORS.primary]}
+    start={{ x: 0, y: 0 }}
+    end={{ x: 1, y: 0 }}
+    style={styles.mainContainer}>
       {showStickyHeader && (
         <NewAppHeader
           leftIconPress={goBack}
@@ -831,7 +852,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
         </View>
       </RBSheet>
       <SafeAreaView
-        style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
+        style={{ position: "absolute", bottom: Scale(-30), left: 0, right: 0 }}
       >
         <View style={styles.footerWrapper}>
           <GameFooter
@@ -856,25 +877,26 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           bodyText="Please add funds to your wallet to continue"
         />
       </SafeAreaView>
-    </View>
+
+    </LinearGradient>
   );
 };
 const createStyles = (Scale: any) =>
   StyleSheet.create({
     mainContainer: {
-      backgroundColor: COLORS.primaryBackground,
+      // backgroundColor: COLORS.gamesBackground,
       flex: 1,
       marginBottom: Scale(0),
     },
     scrollView: {
       flex: 1,
-      backgroundColor: COLORS.gamesBackground,
+      // backgroundColor: COLORS.gamesBackground,
     },
     scrollContent: {
       flexGrow: 1,
     },
     footerWrapper: {
-      backgroundColor: COLORS.headerBackground,
+      // backgroundColor: COLORS.headerBackground,
       height: Scale(80),
       elevation: 10,
     },
@@ -887,7 +909,7 @@ const createStyles = (Scale: any) =>
     },
     card: {
       marginTop: Scale(20),
-      backgroundColor: COLORS.cardBg,
+      backgroundColor: 'red',
       width: "100%",
       borderRadius: 10,
       shadowColor: "#000",
@@ -907,7 +929,7 @@ const createStyles = (Scale: any) =>
     },
     renderDataView: {
       padding: 10,
-      backgroundColor: COLORS.gamesBackground,
+      // backgroundColor: COLORS.gamesBackground,
       flex: 1,
       borderRadius: 10,
     },

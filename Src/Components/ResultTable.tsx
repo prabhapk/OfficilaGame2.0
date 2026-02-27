@@ -70,9 +70,12 @@ const ResultTable: React.FC<ResultTableProps> = ({
   const tableRenderItem = ({ item, index }: { item: any; index: number }) => {
     const winningBalls = item.winningNumber.split("");
     const rowBg = useLightTheme
-      ? (index % 2 === 0 ? COLORS.resultTableRowEven : COLORS.resultTableRowOdd)
-      : (index % 2 === 0 ? COLORS.sectionHeaderBg : COLORS.listRowBg);
-    const textColor = useLightTheme ? COLORS.resultTableText : COLORS.primaryTextColor;
+      ? (index % 2 === 1 ? COLORS.resultTableRowOdd : COLORS.resultTableRowOdd)
+      : (index % 2 === 1 ? COLORS.resultTableRowOdd : COLORS.listRowBg);
+    const textColor = useLightTheme
+      ? (index % 2 === 1 ? COLORS.primaryTextColor : COLORS.primaryTextColor)
+      : (index % 2 === 1 ? COLORS.primaryTextColor : COLORS.primaryTextColor);
+    // const textColor = useLightTheme ? COLORS.primaryTextColor : COLORS.white;
     const borderColor = useLightTheme ? COLORS.resultTableBorder : COLORS.gameCardBorder;
 
     return (
@@ -277,7 +280,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
         }
         imageSource={hot}
         winOrLossId={item.betUniqueId}
-        gameName={item.gameName || "AvisGaming"}
+        gameName={item.gameName || "AnnaiGaming"}
         totalWinningAmount={item.totalAmount}
       />
     );
@@ -294,7 +297,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
                 onPress={() => setOnTableSelect(tab)}
                 style={[
                   styles.tabButton,
-                  onTableSelect === tab && styles.tabButtonActive,
+                  // onTableSelect === tab && styles.tabButtonActive,
                 ]}
               >
                 <Text
@@ -315,16 +318,16 @@ const ResultTable: React.FC<ResultTableProps> = ({
               <View
                 style={[
                   styles.tableHeaderRow,
-                  { backgroundColor: useLightTheme ? COLORS.sectionHeaderBg : COLORS.sectionHeaderBg },
+                  { backgroundColor: useLightTheme ? COLORS.primary : COLORS.primary },
                 ]}
               >
                 <View style={{ flex: 1.5 }}>
-                  <Text style={[styles.tableHeaderText, { color: useLightTheme ? COLORS.resultTableText : COLORS.sectionHeaderText }]}>
+                  <Text style={[styles.tableHeaderText, { color: useLightTheme ? COLORS.white : COLORS.white }]}>
                     Issue
                   </Text>
                 </View>
                 <View style={{ flex: 1.3, alignItems: "center" }}>
-                  <Text style={[styles.tableHeaderText, { color: useLightTheme ? COLORS.resultTableText : COLORS.sectionHeaderText }]}>
+                  <Text style={[styles.tableHeaderText, { color: useLightTheme ? COLORS.white : COLORS.white }]}>
                     Time
                   </Text>
                 </View>
@@ -393,7 +396,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
                     <FontAwesome5
                       name="chevron-left"
                       size={15}
-                      color={tableCurrentPage === 1 ? COLORS.secondaryTextColor : COLORS.primaryTextColor}
+                      color={tableCurrentPage === 1 ? COLORS.secondaryTextColor : COLORS.white}
                     />
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -404,7 +407,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
                     <FontAwesome5
                       name="chevron-right"
                       size={15}
-                      color={tableCurrentPage === totalPage ? COLORS.secondaryTextColor : COLORS.primaryTextColor}
+                      color={tableCurrentPage === totalPage ? COLORS.secondaryTextColor : COLORS.white}
                     />
                   </TouchableOpacity>
                 </View>
@@ -478,7 +481,7 @@ const createStyles = (Scale: (n: number) => number) =>
     tabsRow: {
       flexDirection: "row",
       justifyContent: "space-around",
-      backgroundColor: COLORS.sectionHeaderBg,
+      backgroundColor: COLORS.primary,
     },
     tabButton: {
       padding: Scale(10),
@@ -487,17 +490,18 @@ const createStyles = (Scale: (n: number) => number) =>
     },
     tabButtonActive: {
       borderBottomWidth: Scale(5),
-      borderBottomColor: COLORS.tabActiveBg,
+      borderBottomColor: COLORS.white,
     },
     tabText: {
       fontSize: 16,
-      color: COLORS.sectionHeaderText,
+      color: COLORS.white,
       padding: Scale(10),
       fontWeight: "400",
     },
     tabTextActive: {
-      color: COLORS.tabActiveBg,
+      color: COLORS.white,
       fontWeight: "bold",
+      fontSize: 18,
     },
     tableHeaderRow: {
       flexDirection: "row",
@@ -513,7 +517,7 @@ const createStyles = (Scale: (n: number) => number) =>
       marginTop: Scale(10),
       alignSelf: "center",
       backgroundColor: COLORS.cardBg,
-      width: "110%",
+      width: "100%",
       alignItems: "center",
       justifyContent: "center",
       paddingVertical: Scale(10),
@@ -544,8 +548,8 @@ const createStyles = (Scale: (n: number) => number) =>
       justifyContent: "center",
     },
     pageButtonActive: {
-      backgroundColor: COLORS.tabActiveBg,
-      borderColor: COLORS.tabActiveBg,
+      backgroundColor: COLORS.primary,
+      borderColor: COLORS.primary,
     },
     pageButtonText: {
       color: COLORS.primaryTextColor,

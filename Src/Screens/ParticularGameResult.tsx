@@ -148,6 +148,9 @@ const ParticularGameResult = ({ route, navigation }: any) => {
             />
           </View>
         )}
+        <View style ={{
+          marginHorizontal: Scale(10)
+        }}> 
 
         <ResultTable
           tableData={transformedData}
@@ -155,6 +158,7 @@ const ParticularGameResult = ({ route, navigation }: any) => {
           totalPage={totalPages}
           useLightTheme
         />
+        </View>
       </ScrollView>
     </View>
   );
@@ -177,7 +181,7 @@ const createStyles = (Scale: (n: number) => number) =>
     },
     headerCard: {
       marginTop: Scale(10),
-      backgroundColor: COLORS.sectionHeaderBg,
+      backgroundColor: COLORS.primary,
       padding: Scale(12),
       marginHorizontal: Scale(10),
       borderRadius: Scale(10),
@@ -201,25 +205,25 @@ const createStyles = (Scale: (n: number) => number) =>
     categoryTitle: {
       fontWeight: "bold",
       fontSize: Scale(16),
-      color: COLORS.sectionHeaderText,
+      color: COLORS.white,
       marginLeft: Scale(10),
     },
     drawResultsLabel: {
       fontSize: Scale(14),
-      color: COLORS.sectionHeaderSubtext,
+      color: COLORS.white,
       marginLeft: Scale(10),
     },
     playNowButton: {
-      backgroundColor: COLORS.tabActiveBg,
+      backgroundColor: COLORS.white,
       padding: Scale(10),
       borderRadius: Scale(20),
       paddingHorizontal: Scale(20),
       borderWidth: 1,
-      borderColor: COLORS.tabActiveBg,
+      borderColor: COLORS.primary,
     },
     playNowText: {
       fontSize: Scale(16),
-      color: COLORS.tabActiveText,
+      color: COLORS.primary,
       fontWeight: "600",
     },
     quick3dSubRow: {
@@ -240,8 +244,8 @@ const createStyles = (Scale: (n: number) => number) =>
       borderColor: COLORS.gameCardBorder,
     },
     quick3dSubTabActive: {
-      backgroundColor: COLORS.tabActiveBg,
-      borderColor: COLORS.tabActiveBg,
+      backgroundColor: COLORS.primary,
+      borderColor: COLORS.primary,
     },
     quick3dSubText: {
       fontSize: Scale(14),
@@ -255,7 +259,7 @@ const createStyles = (Scale: (n: number) => number) =>
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      backgroundColor: COLORS.sectionHeaderBg,
+      backgroundColor: COLORS.primary,
       padding: Scale(12),
       marginHorizontal: Scale(10),
       marginTop: Scale(10),
@@ -266,11 +270,11 @@ const createStyles = (Scale: (n: number) => number) =>
     nextDrawTitle: {
       fontWeight: "bold",
       fontSize: Scale(16),
-      color: COLORS.sectionHeaderText,
+      color: COLORS.white,
     },
     nextDrawTime: {
       fontSize: Scale(14),
-      color: COLORS.sectionHeaderSubtext,
+      color: COLORS.white,
       marginTop: Scale(4),
     },
     resultTableWrap: {

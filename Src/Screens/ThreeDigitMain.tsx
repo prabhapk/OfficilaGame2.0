@@ -780,15 +780,31 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     console.log("item==>asasa", item);
     const isSelected = selectedOption === item.id;
     return (
+      // <LinearGradient
+      //   colors={[
+      //     isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
+      //     isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
+      //   ]}
+      //   start={{ x: 0, y: 0 }}
+      //   end={{ x: 1, y: 0 }}
+      //   style={[styles.headerBtn, !isSelected && { borderColor: COLORS.tabInactiveBorder }]}
+      // >
       <LinearGradient
-        colors={[
-          isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
-          isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
-        ]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={[styles.headerBtn, !isSelected && { borderColor: COLORS.tabInactiveBorder }]}
-      >
+      colors={[
+        selectedOption === item.id
+          ? COLORS.linearOne
+          : COLORS.gameDetailColor, // fallback color
+        selectedOption === item.id
+          ? COLORS.linearTwo
+          : COLORS.gameDetailColor,
+      ]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      style={[
+        styles.headerBtn,
+        { backgroundColor: selectedOption === item.name ? "pink" : "white" },
+      ]}
+    >
         <TouchableOpacity
           style={{ justifyContent: "center", alignItems: "center" }}
           onPress={() => handleHeader(item)}
@@ -804,7 +820,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
               {
                 marginLeft: 5,
                 marginTop: Scale(5),
-                color: isSelected ? COLORS.tabActiveText : COLORS.tabInactiveText,
+                color: isSelected ? COLORS.tabActiveText : COLORS.tabActiveText,
               },
             ]}
           >
@@ -1074,7 +1090,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
         </View>
       )}
       <SafeAreaView
-        style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
+        style={{ position: "absolute", bottom: Scale(-28), left: 0, right: 0, }}
       >
         <View style={styles.footerWrapper}>
           <GameFooter
@@ -1198,7 +1214,7 @@ const createStyles = (Scale: any) =>
       flexGrow: 1,
     },
     footerWrapper: {
-      backgroundColor: COLORS.headerBackground,
+      // backgroundColor: COLORS.headerBackground,
       height: Scale(80),
       elevation: 10,
     },

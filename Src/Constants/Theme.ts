@@ -16,14 +16,17 @@ const COLORS = {
   headerTextColor: '#001F4F',
   check: '#794CB7',
   check1: '#5E319C',
+  check3: '#beceeb',
 
   // Screen & section backgrounds
   primaryBackground: 'white',
-  gamesBackground: '#F2EEF8',
+  // gamesBackground: '#F2EEF8',
+  gamesBackground: '#FFFFFF',
   headerBackground: '#FFFFFF',
 
   // Section headers (e.g. 3Digit Game bar, Lottery header)
-  sectionHeaderBg: '#E8DDF5',
+  // sectionHeaderBg: '#E8DDF5',
+  sectionHeaderBg: '#293d5c',
   sectionHeaderText: '#1A1A2E',
   sectionHeaderSubtext: '#4A4A6A',
 

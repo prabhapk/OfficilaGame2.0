@@ -84,7 +84,7 @@ const GameHeader: React.FC<Props> = ({
   return (
     <View style={styles.mainContainer}>
       <LinearGradient
-        colors={[COLORS.tabActiveBg, COLORS.check1]}
+        colors={[COLORS.white, COLORS.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.button}>
@@ -94,7 +94,7 @@ const GameHeader: React.FC<Props> = ({
               <Image
                 source={leftImage}
                 contentFit="contain"
-                tintColor={COLORS.white}
+                tintColor={!isChatLoading ? COLORS.primary : COLORS.white}
                 style={styles.leftImageSize}
               />
             </TouchableOpacity>
@@ -134,9 +134,18 @@ const GameHeader: React.FC<Props> = ({
             </TouchableOpacity>
           </View>
           <View style={styles.walletButtonsRow}>
-            <TouchableOpacity onPress={onPressWithdraw} style={styles.withdrawButton}>
+            {/* <TouchableOpacity onPress={onPressWithdraw} style={styles.withdrawButton}>
               <Text style={styles.withdrawButtonText}>Withdraw</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+             <LinearGradient
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.rechargeGradient}>
+              <TouchableOpacity onPress={onPressRecharge}>
+              <Text style={styles.rechargeButtonText}>Withdraw</Text>
+              </TouchableOpacity>
+            </LinearGradient>
             <LinearGradient
               colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
@@ -195,12 +204,12 @@ const createStyles = (Scale: any, insets: any) =>
     walletCard: {
       marginTop: Scale(30),
       width: "90%",
-      backgroundColor: COLORS.cardBg,
+      backgroundColor: COLORS.primary,
       borderRadius: 10,
       padding: Scale(10),
       zIndex: 100,
       borderWidth: 1,
-      borderColor: COLORS.cardBorder,
+      borderColor: COLORS.primary,
     },
     walletRow: {
       flexDirection: "row",
@@ -213,13 +222,13 @@ const createStyles = (Scale: any, insets: any) =>
     walletIcon: { width: Scale(30), height: Scale(30) },
     walletLabel: {
       marginLeft: Scale(5),
-      color: COLORS.sectionHeaderSubtext,
+      color: COLORS.white,
       fontSize: Scale(14),
     },
     walletBalance: {
       marginLeft: Scale(5),
       fontSize: Scale(26),
-      color: COLORS.primaryTextColor,
+      color: COLORS.white,
       fontWeight: "bold",
     },
     refreshIcon: { width: Scale(40), height: Scale(40) },
