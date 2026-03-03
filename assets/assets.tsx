@@ -184,3 +184,18 @@ export const recentWinnersHeading = require('./leaderBoard/Recentwinnersheading.
 // Home logo
 export const homeIcon = require('./Home/logo.png')
 
+// new bannerImages 
+
+
+export const bannerWhatsapp = require('./Home/joinWhatsapp.webp')
+export const bannerTelegram = require('./Home/JOINANNAILOTTERY.webp')
+export const bannerliveCasionoGames = require('./Home/LIVECASINOANNAILOT.webp')
+export const bannerColorGames = require('./Home/colorgameannai.webp')
+export const bannerDiceGames = require('./Home/diceannai.webp')
+// export const newLogo = require('./Home/newAnnaiHomeLogo.png')
+export const newLogo = require('./Home/a.png')
+export const newHomeWallet = require('./Home/newHomeWallet.webp')
+export const newHomeWallet1 = require('./Home/newWallet1.png')
+export const offerImage1 = require('./Home/OfferImage1.png')
+export const offerImage2 = require('./Home/OfferImage2.png')
+

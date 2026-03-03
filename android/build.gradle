@@ -12,55 +12,11 @@ buildscript {
   }
 }
 
-def reactNativeAndroidDir = new File(
-  providers.exec {
-    workingDir(rootDir)
-    commandLine("node", "--print", "require.resolve('react-native/package.json')")
-  }.standardOutput.asText.get().trim(),
-  "../android"
-)
-
 allprojects {
   repositories {
-    maven {
-      // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-      url(reactNativeAndroidDir)
-    }
-
     google()
     mavenCentral()
     maven { url 'https://www.jitpack.io' }
-  }
-}
-
-subprojects { subproject ->
-  // Exclude old Android Support libraries to prevent duplicate classes with AndroidX
-  subproject.configurations.all {
-    exclude group: 'com.android.support', module: 'support-media-compat'
-    exclude group: 'com.android.support', module: 'support-compat'
-    exclude group: 'com.android.support', module: 'support-v4'
-    exclude group: 'com.android.support', module: 'support-annotations'
-  }
-  
-  afterEvaluate {
-    // Add androidx.localbroadcastmanager to all Android library projects
-    // This is required for react-native-freshchat-sdk
-    if (subproject.plugins.hasPlugin('com.android.library')) {
-      subproject.dependencies {
-        implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
-      }
-    }
-    
-    // Disable lint checks for all Android projects to prevent build failures
-    if (subproject.hasProperty('android')) {
-      subproject.android {
-        lint {
-          abortOnError false
-          checkReleaseBuilds false
-          quiet true
-        }
-      }
-    }
   }
 }
 

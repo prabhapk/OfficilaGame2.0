@@ -319,8 +319,8 @@ const createStyles = (Scale: (n: number) => number) =>
       borderColor: COLORS.gameCardBorder,
     },
     quick3dSubTabActive: {
-      backgroundColor: COLORS.tabActiveBg,
-      borderColor: COLORS.tabActiveBg,
+      backgroundColor: COLORS.primary,
+      borderColor: COLORS.primary,
     },
     quick3dSubText: {
       fontSize: Scale(13),

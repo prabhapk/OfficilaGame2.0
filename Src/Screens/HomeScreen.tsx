@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 
-import { annaiBanner, annaiBanner1, promotionBanner1 } from "../../assets/assets";
+import { annaiBanner, annaiBanner1, bannerColorGames, bannerliveCasionoGames, bannerTelegram, bannerWhatsapp, offerImage1, offerImage2, promotionBanner1 } from "../../assets/assets";
 import { HomeScreenFlatlist } from "../Constants/CommonFlatlist";
 import { COLORS } from "../Constants/Theme";
 import { AppDispatch, RootState } from "../Redux/store";
@@ -32,12 +32,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const BANNERS = [
   {
     id: 1,
-    name: annaiBanner,
+    name: bannerWhatsapp,
     url: "https://chat.whatsapp.com/Ck2bsOOMiqzH5v7SlQaSiP",
   },
   {
     id: 2,
-    name: annaiBanner1,
+    name: bannerTelegram,
+    url: "https://t.me/+WyhSvyD9IOYxNWZl",
+  },
+  {
+    id: 3,
+    name: bannerliveCasionoGames,
+    url: "https://t.me/+WyhSvyD9IOYxNWZl",
+  },
+  {
+    id: 4,
+    name: bannerColorGames,
     url: "https://t.me/+WyhSvyD9IOYxNWZl",
   },
 ];
@@ -132,18 +142,19 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   // ---------------------------------------------------------------------------
   // Render
   // ---------------------------------------------------------------------------
-
+const offerImages =[
+offerImage1,
+    offerImage2
+]
   return (
     <SafeAreaView style={styles.screen}>
       {/* <CustomLoader visible={howScreenCommonLoader} /> */}
 
-      <PromotionalModal
-        visible={showPromotionalModal}
-        onClose={() => setShowPromotionalModal(false)}
-        imageSource={promotionBanner1}
-        title="Special Diwali Offer"
-        subtitle="Get 3% Bonus on Every Recharge"
-      />
+     <PromotionalModal
+  visible={showPromotionalModal}
+  onClose={() => setShowPromotionalModal(false)}
+  images={offerImages}
+/>
 
       <View style={styles.headerWrapper}>
         <CustomHeader

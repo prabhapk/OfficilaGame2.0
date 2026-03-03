@@ -709,11 +709,11 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           threeDigitGameId={transformedGameData.threeDigitGameId}
         />
 
-        <ResultTable
+        {/* <ResultTable
           tableData={transformedResultData}
           totalPage={totalPages}
           showHeader={true}
-        />
+        /> */}
       </>
     );
   };

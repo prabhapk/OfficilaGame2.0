@@ -3,12 +3,13 @@ import { StyleSheet, Text, View, TouchableOpacity,} from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
-import { amountIcon, hIcon, homeAppIcon } from "../../assets/assets";
+import { amountIcon, hIcon, homeAppIcon, newHomeWallet, newHomeWallet1, newLogo } from "../../assets/assets";
 import { Image } from 'expo-image';
 import { LinearGradient } from "expo-linear-gradient";
 import { formatToDecimal } from "../Utils/Common";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { COLORS } from "../Constants/Theme";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 interface CountdownTimerProps {
   onLoginPress: () => void;
   onMenuPress: () => void;
@@ -36,45 +37,44 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
           style={styles.menuContainer}
           onPress={() => onMenuPress()}
         >
-          <Image
-            source={hIcon}
-            contentFit="contain"
-            style={{ width: 30, height: 30, }}
-          />
+           <Ionicons
+                          name={'reorder-three'}
+                          size={Scale(30)}
+                          color={'white'}
+                        style={{  height: 30, }}
+                        />
+
         </TouchableOpacity>
         <Image
-          source={homeAppIcon}
-          contentFit="contain"
+          source={newLogo}
+          // contentFit="contain"
           style={{
-            width: 120,
-            marginLeft: Scale(10),
-            height: 30,
+            width: 180,
+            marginLeft: Scale(5),
+            height: 35,
           }}
         />
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        {isLoggedIn ? (
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text
-              style={{
-                fontSize: Scale(20),
-                fontWeight: "bold",
-                color:COLORS.buttonTextColor1,
-              }}
-            >
-              ₹ {formatToDecimal(totalBalance)}
-            </Text>
-            <Image
-              source={amountIcon}
-              contentFit="contain"
-              style={{
-                width: 30,
-                height: 30,
-                marginHorizontal: Scale(10),
-              }}
-            />
-          </View>
-        ) : (
+       {isLoggedIn ? (
+  <View style={styles.walletContainer}>
+    {/* Top Row */}
+    <View style={styles.walletTopRow}>
+      <Image
+        source={newHomeWallet1}
+        contentFit="contain"
+        style={styles.walletIcon}
+        tintColor="white"
+      />
+      <Text style={styles.balanceLabel}>Balance</Text>
+    </View>
+
+    {/* Bottom Row */}
+    <Text style={styles.balanceAmount}>
+      ₹ {formatToDecimal(totalBalance)}
+    </Text>
+  </View>
+) : (
           <>
             <TouchableOpacity onPress={onLoginPress} style={styles.loginButton}>
               <Text style={{ color: COLORS.buttonTextColor1 }}>Login</Text>
@@ -107,7 +107,7 @@ const createStyles = (Scale: any) =>
       justifyContent: "space-between",
       alignItems: "center",
       paddingHorizontal: 10,
-      paddingVertical: 10,
+      paddingVertical:10,
       backgroundColor: COLORS.primary,
     },
     menuContainer: {
@@ -144,6 +144,34 @@ const createStyles = (Scale: any) =>
       color: COLORS.buttonTextColor1,
       fontWeight: "600",
     },
+    walletContainer: {
+  alignItems: "flex-end",
+},
+
+walletTopRow: {
+  flexDirection: "row",
+  alignItems: "center",
+},
+
+walletIcon: {
+  width: 18,
+  height: 18,
+  marginRight: 6,
+},
+
+balanceLabel: {
+  fontSize: 13,
+  fontWeight: "600",
+  color: COLORS.buttonTextColor1,
+},
+
+balanceAmount: {
+  fontSize: 16,
+  fontWeight: "bold",
+  color: COLORS.buttonTextColor1,
+  marginTop: 2,
+},
+
   });
 
 export default CustomHeader;

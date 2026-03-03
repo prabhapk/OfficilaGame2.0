@@ -14,6 +14,7 @@ import {
   drawerLevel,
   freeLottery,
   homeAppIcon,
+  newLogo,
   promotions,
   rebateMenu,
   robMoney,
@@ -81,11 +82,13 @@ const CustomSidebarMenu = ({ navigation }: any) => {
     >
       <View style={styles.container}>
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+          <View> 
           <Image
-            source={homeAppIcon}
+            source={newLogo}
             contentFit="contain"
-            style={{ width: Scale(140), height: Scale(60) }}
+            style={{ width: Scale(160), height: Scale(80) }}
           />
+          </View>
           <View>
           {!isLoggedIn ? (
             <TouchableOpacity
@@ -122,17 +125,6 @@ const CustomSidebarMenu = ({ navigation }: any) => {
           }
            </View>
         </View>
-        {/* <TouchableOpacity
-          onPress={() => {
-            navigation.toggleDrawer();
-          }}
-        >
-          <Image
-            source={cancel}
-            style={{ width: Scale(30), height: Scale(30) }}
-            tintColor={"#fff"}
-          />
-        </TouchableOpacity> */}
       </View>
       <View
         style={{ borderTopWidth: 1, borderTopColor: "#ccc", bottom: 10 }}
@@ -395,7 +387,7 @@ const createStyles = (Scale: any) =>
       justifyContent: "space-between",
     },
     loginButton: {
-      marginLeft: Scale(10),
+      marginHorizontal: Scale(30),
     },
 
     referalView: {

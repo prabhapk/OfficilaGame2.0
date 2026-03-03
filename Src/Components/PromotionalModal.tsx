@@ -9,11 +9,12 @@ import {
 } from "react-native";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { Image } from "expo-image";
+import { COLORS } from "../Constants/Theme";
 
 interface PromotionalModalProps {
   visible: boolean;
   onClose: () => void;
-  imageSource: any; // Static image from assets
+  images: any[];
   title?: string;
   subtitle?: string;
 }
@@ -21,47 +22,50 @@ interface PromotionalModalProps {
 const PromotionalModal: React.FC<PromotionalModalProps> = ({
   visible,
   onClose,
-  imageSource,
-  title = "Special Offer",
-  subtitle = "Limited Time Offer",
+  images,
 }) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale, verticalScale);
 
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+
+  const handleClose = () => {
+    if (currentIndex < images.length - 1) {
+      // Show next image
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      // All images shown → reset + close modal
+      setCurrentIndex(0);
+      onClose();
+    }
+  };
+
   return (
     <Modal
       visible={visible}
-      transparent={true}
+      transparent
       animationType="fade"
-      onRequestClose={onClose}
+      onRequestClose={handleClose}
     >
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
-          {/* Close Button */}
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+          <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
             <Text style={styles.closeButtonText}>×</Text>
           </TouchableOpacity>
 
-          {/* Modal Content */}
           <View style={styles.contentContainer}>
-            {/* Title */}
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.subtitle}>{subtitle}</Text>
-
-            {/* Image */}
-            <View style={styles.imageContainer}>
-              <Image
-                source={imageSource}
-                style={styles.modalImage}
-                contentFit="contain"
-              />
-            </View>
+            <Image
+              source={images[currentIndex]}
+              style={styles.modalImage}
+              contentFit="contain"
+            />
           </View>
         </View>
       </View>
     </Modal>
   );
 };
+
 
 const createStyles = (Scale: any, verticalScale: any) =>
   StyleSheet.create({
@@ -77,11 +81,11 @@ const createStyles = (Scale: any, verticalScale: any) =>
       width: "90%",
       maxWidth: 380,
       maxHeight: "80%",
-      backgroundColor: "#fff",
+      backgroundColor: "transparent",
       borderRadius: 20,
       padding: 20,
       position: "relative",
-      shadowColor: "#000",
+      shadowColor: "transparent",
       shadowOffset: {
         width: 0,
         height: 2,
@@ -97,7 +101,7 @@ const createStyles = (Scale: any, verticalScale: any) =>
       width: 30,
       height: 30,
       borderRadius: 15,
-      backgroundColor: "rgba(0, 0, 0, 0.1)",
+      backgroundColor: COLORS.white,
       justifyContent: "center",
       alignItems: "center",
       zIndex: 1,
@@ -105,7 +109,7 @@ const createStyles = (Scale: any, verticalScale: any) =>
     closeButtonText: {
       fontSize: 20,
       fontWeight: "bold",
-      color: "#666",
+      color: 'black',
     },
     contentContainer: {
       alignItems: "center",
@@ -127,10 +131,11 @@ const createStyles = (Scale: any, verticalScale: any) =>
     imageContainer: {
       width: "100%",
       alignItems: "center",
+      height: 200
     },
     modalImage: {
       width: "100%",
-      height: 300,
+      height: 500,
       borderRadius: 10,
     },
   });

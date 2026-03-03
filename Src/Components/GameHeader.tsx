@@ -20,6 +20,7 @@ import CommonAddButton from './CommonAddButton';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { initFreshchat, setFreshchatUser, openFreshchat } from '../Utils/freshchat';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Entypo from 'react-native-vector-icons/Entypo';
 interface Props {
   HeaderText: string;
   leftonPress: (event: GestureResponderEvent) => void;
@@ -91,12 +92,17 @@ const GameHeader: React.FC<Props> = ({
         <View style={styles.topRowWrap}>
           <View style={styles.topRow}>
             <TouchableOpacity style={styles.leftImageStyle} onPress={leftonPress}>
-              <Image
-                source={leftImage}
-                contentFit="contain"
-                tintColor={!isChatLoading ? COLORS.primary : COLORS.white}
-                style={styles.leftImageSize}
-              />
+               <Entypo
+                              name={'chevron-left'}
+                              size={Scale(30)}
+                             tintColor={!isChatLoading ? COLORS.primary : COLORS.white}
+                             style={{
+                                alignItems: "center",
+      marginHorizontal: 4,
+      marginVertical: 2,
+      marginTop: 10,
+                             }}
+                            />
             </TouchableOpacity>
             <View style={styles.headerTextWrap}>
               <Text style={styles.headerTextStyle}>{HeaderText}</Text>

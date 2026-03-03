@@ -139,79 +139,6 @@ const ResultTable: React.FC<ResultTableProps> = ({
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
 
-  // const myOrderRenterItem = ({ item }: { item: any; index: number }) => {
-  //   const winningStatus = item.isWinning ? "Won" : "No Won";
-
-  //   // Build row per bet
-  //   const myBetsTableData = [
-  //     {
-  //       type: item.betType,
-  //       value: item.selectedNumber,
-  //       payment: item.amount,
-  //       result: winningStatus,
-  //     },
-  //   ];
-
-  //   // Winning number split into balls
-  //   const winningNumber = item.winningNumber;
-  //   const bottomBalls =
-  //     winningNumber && winningNumber.length > 0
-  //       ? winningNumber.split("").map((digit, idx) => {
-  //           let color =
-  //             idx === 0 ? "#DE3C3F" :
-  //             idx === 1 ? "#EC8204" :
-  //             "#066FEA";
-  //           return { text: digit, color };
-  //         })
-  //       : [
-  //           { text: "?", color: "#DE3C3F" },
-  //           { text: "?", color: "#EC8204" },
-  //           { text: "?", color: "#066FEA" },
-  //         ];
-
-  //   return (
-  //     <MyOrders
-  //     headers={["A", "B", "C"]}
-  //     myBetsTableData={item.bets}
-  //     id={item.betUniqueId}
-  //     bettingTime={item.betTime}
-  //     paymentAmount={item.totalAmount}
-  //     drawTime={
-  //       item.nextDrawTime !== "0001-01-01T00:00:00"
-  //         ? item.nextDrawTime
-  //         : "-"
-  //     }
-  //     topBalls={[
-  //       { text: "A", color: "#DE3C3F" },
-  //       { text: "B", color: "#EC8204" },
-  //       { text: "C", color: "#066FEA" },
-  //     ]}
-  //     bottomBalls={
-  //       item.winningNumber
-  //         ? item.winningNumber.split("").map((digit, idx) => {
-  //             let color =
-  //               idx === 0
-  //                 ? "#DE3C3F"
-  //                 : idx === 1
-  //                 ? "#EC8204"
-  //                 : "#066FEA";
-  //             return { text: digit, color };
-  //           })
-  //         : [
-  //             { text: "?", color: "#DE3C3F" },
-  //             { text: "?", color: "#EC8204" },
-  //             { text: "?", color: "#066FEA" },
-  //           ]
-  //     }
-  //     date={item.betTime.split("T")[0]}
-  //     status={item.isWinning ? "Won" : "No Won"}
-  //     imageSource={hot}
-  //     winOrLossId={item.betUniqueId}
-  //     gameName={item.gameName || "AvisGaming"}
-  //     totalWinningAmount={item.totalAmount}
-  //   />
-  //   );
-  // };
   const myOrderRenterItem = ({ item }: { item: any; index: number }) => {
     let status: string;
 
@@ -415,32 +342,6 @@ const ResultTable: React.FC<ResultTableProps> = ({
             </>
           ) : (
             <>
-              {/* <MyBets3DigitsCard
-                headers={["A", "B", "C"]}
-                myBetsTableData={[
-                  { type: "A", value: 2, payment: 33, result: "No Won" },
-                  { type: "B", value: 3, payment: 33, result: "No Won" },
-                  { type: "C", value: 4, payment: 33, result: "No Won" }
-                ]}
-                id="PK56283947"
-                bettingTime="01-08-2022 12:00 PM"
-                paymentAmount={33}
-                drawTime="01-08-2022 12:00 PM"
-                topBalls={[
-                  { text: "A", color: "#DE3C3F" },
-                  { text: "B", color: "#EC8204" },
-                  { text: "C", color: "#066FEA" }
-                ]}
-                bottomBalls={[
-                  { text: "2", color: "#DE3C3F" },
-                  { text: "3", color: "#EC8204" },
-                  { text: "4", color: "#066FEA" }
-                ]}
-                date="01-08-2022"
-                
-                status="NO WON"
-                imageSource={hot}
-              /> */}
               <FlatList
                 data={groupedOrders}
                 keyExtractor={(item, index) => index.toString()}
