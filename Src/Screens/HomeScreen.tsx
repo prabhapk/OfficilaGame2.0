@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 
@@ -23,7 +23,7 @@ import RecentWinnersList from "../Components/RecentWinnersList";
 import CasinoScreen from "./CasinoScreen";
 import LotteryScreen from "./Lottery/LotteryScreen";
 import Quick3DigitsMenu from "./Lottery/Quick3DigitsMenu";
-import { SafeAreaView } from "react-native-safe-area-context";
+// import { SafeAreaView } from "react-native-safe-area-context";
 
 // -----------------------------------------------------------------------------
 // Constants
@@ -147,7 +147,7 @@ offerImage1,
     offerImage2
 ]
   return (
-    <SafeAreaView style={styles.screen}>
+    <View style={styles.screen}>
       {/* <CustomLoader visible={howScreenCommonLoader} /> */}
 
      <PromotionalModal
@@ -183,7 +183,7 @@ offerImage1,
 
         <View style={styles.gameContent}>{renderGameContent()}</View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -195,10 +195,10 @@ const createStyles = (Scale: (n: number) => number) =>
   StyleSheet.create({
     screen: {
       flex: 1,
-      backgroundColor: COLORS.primary,
+      backgroundColor: 'red',
     },
     headerWrapper: {
-      backgroundColor: COLORS.primary,
+      backgroundColor: 'yellow',
     },
     scrollView: {
       flex: 1,
