@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity,} from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
 import { amountIcon, hIcon, homeAppIcon } from "../../assets/assets";
-
+import { Image } from 'expo-image';
 import { LinearGradient } from "expo-linear-gradient";
 import { formatToDecimal } from "../Utils/Common";
 import { useContainerScale } from "../hooks/useContainerScale";
@@ -38,12 +38,13 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
         >
           <Image
             source={hIcon}
-            style={{ width: 30, height: 30, resizeMode: "contain" }}
+            contentFit="contain"
+            style={{ width: 30, height: 30, }}
           />
         </TouchableOpacity>
         <Image
           source={homeAppIcon}
-          resizeMode="contain"
+          contentFit="contain"
           style={{
             width: 120,
             marginLeft: Scale(10),
@@ -65,7 +66,7 @@ const CustomHeader: React.FC<CountdownTimerProps> = ({
             </Text>
             <Image
               source={amountIcon}
-              resizeMode="contain"
+              contentFit="contain"
               style={{
                 width: 30,
                 height: 30,

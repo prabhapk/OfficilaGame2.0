@@ -133,8 +133,8 @@ export const homeSlice = createSlice({
     });
     // Rejected
     builder.addCase(getAllGamesList.rejected, (state, action) => {
-      state.howScreenCommonLoader = true;
-
+      state.howScreenCommonLoader = false;
+      console.error('❌ getAllGamesList failed:', action.payload);
     });
     builder.addCase(getIndividualGameData.rejected, (state, action) => {
       state.individualGameDataLoader = false;

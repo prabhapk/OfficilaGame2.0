@@ -2,15 +2,16 @@
 import React from "react";
 import {
   Platform,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   useWindowDimensions,
   View,
+  SafeAreaView
 } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from "../Constants/Theme";
+// import { SafeAreaView } from "react-native-safe-area-context";
 
 export const MobileContainerContext = React.createContext<number>(414); // default iPhone width
 
@@ -63,5 +64,6 @@ const styles = StyleSheet.create({
   },
   nativeContainer: {
     flex: 1,
+    backgroundColor: COLORS.primary
   },
 });

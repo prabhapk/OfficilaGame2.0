@@ -6,13 +6,12 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
-  Image,
   ScrollView,
 } from 'react-native';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { hideHowToPlay } from '../Redux/Slice/commonSlice';
 import { cancel } from '../../assets/assets';
-
+import { Image } from 'expo-image';
 const HowToPlayModal = () => {
   const modalVisible = useSelector(
     (state: any) => state.commonSlice.howToPlayVisible,

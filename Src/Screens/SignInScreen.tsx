@@ -4,9 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ScrollView,
-  SafeAreaView,
   ImageBackground,
   Alert,
 } from 'react-native';
@@ -27,6 +25,8 @@ import { RootState } from '../Redux/store';
 import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from "../Constants/Theme";
+import { Image } from 'expo-image';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SignInScreen = ({ navigation }: any) => {
   const [selectedTab, setSelectedTab] = useState<'password' | 'otp'>('password');
@@ -137,7 +137,7 @@ const SignInScreen = ({ navigation }: any) => {
 
         <View style={styles.bottomContainer}>
           <View style={styles.logoHeader}>
-            <Image source={signInLogo} style={styles.logo} resizeMode="contain" />
+            <Image source={signInLogo} style={styles.logo} contentFit="contain" />
             <Text style={styles.headerText}>Log in</Text>
           </View>
 
@@ -261,7 +261,7 @@ const SignInScreen = ({ navigation }: any) => {
           <View style={styles.customerViewLogo}>
             <Image source={signInCustomerLogo}
               style={styles.signInCustomerLogoStyle}
-              resizeMode="contain" />
+              contentFit="contain" />
           </View>
         </View>
       </ScrollView>

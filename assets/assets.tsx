@@ -134,6 +134,14 @@ export const wallet3dImage1 = require('./ProfileScreen/wallet3dImage1.webp')
 export const oneMin3DImage = require('./LotteryImages/1min3D.png')
 export const threeMin3DImage = require('./LotteryImages/3min3D.png')
 export const fiveMin3DImage = require('./LotteryImages/5min3D.png')
+
+// Quick 3D menu (new images)
+export const quick3d1min = require('./quick3dImages/quick3d1min.png')
+export const quick3d3min = require('./quick3dImages/quick3d3min.png')
+export const quick3d5min = require('./quick3dImages/quick3d5min.png')
+export const quick1 = require('./quick3dImages/1.jpg')
+export const quick2 = require('./quick3dImages/2.jpg')
+export const quick3 = require('./quick3dImages/3.jpg')
 // export const vipBadgeBackground = require('./vipBadgeBackground.webp')
 export const vipBadgeBackground = require('./vipBadgeBackground.png')
 export const greenTick = require('./greenTick.png')
@@ -163,3 +171,16 @@ export const agentCommission = require('./commission(2).png')
 export const resetIcon = require('./resetNew.png')
 // export const multiUserIcon = require('./BottomTabs/multiUser.png')
 export const multiUserIcon = require('./BottomTabs/multi.png')
+
+// Leaderboard
+export const leaderboardHeading = require('./leaderBoard/leaderboardheading.png')
+export const leaderboardFireworks = require('./leaderBoard/fireworks.png')
+export const leaderboardFirst = require('./leaderBoard/first.png')
+export const leaderboardSecond = require('./leaderBoard/second.png')
+export const leaderboardThird = require('./leaderBoard/third.png')
+
+// Recent Winners (same folder as leaderBoard)
+export const recentWinnersHeading = require('./leaderBoard/Recentwinnersheading.png')
+// Home logo
+export const homeIcon = require('./Home/logo.png')
+

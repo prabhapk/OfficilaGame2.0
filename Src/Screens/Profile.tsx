@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
   ImageBackground,
   Alert,
   ActivityIndicator,
@@ -40,6 +39,7 @@ import {
   openFreshchat,
 } from "../Utils/freshchat";
 import { COLORS } from "../Constants/Theme";
+import { Image } from 'expo-image';
 
 const ProfileScreen = ({ navigation }: any) => {
   const { isLoggedIn, mainWalletBalance, withdrawBalance, vipLevelDetails, totalDeposit } = useSelector(
@@ -278,7 +278,7 @@ const ProfileScreen = ({ navigation }: any) => {
                   <Text style={styles.buttonText}>{btn.label}</Text>
                   <Image
                     source={wallet}
-                    resizeMode="contain"
+                    contentFit="contain"
                     style={styles.buttonIcon}
                   />
                 </View>
@@ -338,7 +338,7 @@ const ProfileScreen = ({ navigation }: any) => {
               <View style={styles.vipTopRow}>
                 <Image
                   source={vipBadgeZero}
-                  resizeMode="contain"
+                  contentFit="contain"
                   style={styles.vipBadgeImage}
                 />
                 <View style={styles.vipTopRight}>

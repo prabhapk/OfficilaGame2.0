@@ -1,9 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image, Platform, Text, View, Dimensions } from "react-native";
+import { Platform, Text, View, Dimensions } from "react-native";
 import React, { useState, useEffect } from "react";
 import { tabScreens } from "../Constants/CommonFlatlist";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CurvedTabBar from "./CurvedTabBar";
+import { Image } from "expo-image";
 
 const Tab = createBottomTabNavigator();
 
@@ -101,7 +102,7 @@ export default function BottomNavigation() {
       width: size,
       height: size,
     }}
-    resizeMode="contain"
+    contentFit="contain"
   />
 
                 {/* <Text

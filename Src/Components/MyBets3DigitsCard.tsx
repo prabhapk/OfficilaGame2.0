@@ -2,7 +2,6 @@ import React from "react";
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   TouchableOpacity,
   Alert,
@@ -15,6 +14,7 @@ import { ImageBackground } from "expo-image";
 import { copyImage, myOrdersWinLabel, winLabel } from "../../assets/assets";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Clipboard from "expo-clipboard";
+import { Image } from 'expo-image';
 
 type BetData = {
   type: string;

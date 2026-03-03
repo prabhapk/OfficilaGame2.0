@@ -1,6 +1,7 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image, GestureResponderEvent} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, GestureResponderEvent} from 'react-native';
 import { useContainerScale } from '../hooks/useContainerScale';
 import React from 'react';
+import { Image } from 'expo-image';
 
 interface customHeaderProps {
   leftIconPress: (event: GestureResponderEvent) => void;
@@ -26,7 +27,8 @@ const CustomHeaderRegister: React.FC<customHeaderProps> = ({
         onPress={leftIconPress}>
         <Image
           source={leftIcon}
-          style={{width: 30, height: 50, resizeMode: 'contain', }}
+          style={{width: 30, height: 50,}}
+          contentFit="contain"
         />
       </TouchableOpacity>
       <View>
@@ -45,7 +47,8 @@ const CustomHeaderRegister: React.FC<customHeaderProps> = ({
         style={{marginHorizontal: Scale(10)}}>
         <Image
           source={rightIcon}
-          style={{width: 30, height: 30, resizeMode: 'contain'}}
+          contentFit="contain"
+          style={{width: 30, height: 30}}
         />
       </TouchableOpacity>
     </View>

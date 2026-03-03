@@ -1,28 +1,36 @@
+import React, { useState, useMemo, useEffect } from "react";
 import {
   View,
   Text,
   ScrollView,
-  Touchable,
   TouchableOpacity,
-  FlatList,
   StyleSheet,
   TouchableWithoutFeedback,
   Modal,
-  Image,
 } from "react-native";
-import React, { useState, useMemo, use, useEffect } from "react";
 import { resultFilterList } from "../Constants/CommonFlatlist";
 import { COLORS } from "../Constants/Theme";
 import ResultTable from "../Components/ResultTable";
-import { tableData } from "../Utils/Constants";
-import Icon from "react-native-vector-icons/Feather"; // for filter icon
-import Entypo from "react-native-vector-icons/Entypo";
-import { checked, hot, lottery1, unchecked } from "../../assets/assets";
 import CustomTabs from "../Components/CustomTabsHeader";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllResults } from "../Redux/Slice/resultSlice";
-import { RootState } from "../Redux/store";
+import { AppDispatch, RootState } from "../Redux/store";
+import { checked, unchecked } from "../../assets/assets";
+import CasinoResult from "./CasinoResult";
+import { Image } from "expo-image";
+
+const MAIN_TABS = [
+  { id: "lottery", name: "Lottery" },
+  { id: "casino", name: "Casino" },
+];
+
+const QUICK3D_SUB_TABS = [
+  { id: "1min", name: "1 min" },
+  { id: "3min", name: "3 min" },
+  { id: "5min", name: "5 min" },
+];
+
 import { scale } from "react-native-size-matters";
 import CustomLoader from "../Components/CustomLoader";
 const ResultScreen = ({ navigation }: any) => {
@@ -30,178 +38,175 @@ const ResultScreen = ({ navigation }: any) => {
   const { allResultData, resultLoader } = useSelector(
     (state: RootState) => state.resultSlice
   );
-  console.log("allResultData==>", allResultData);
+  const { Scale } = useContainerScale();
+  const styles = createStyles(Scale);
 
-  const [selectedHeaderId, setSelectedHeaderId] = useState(1);
-  const [selectedFilerId, setSelectedFilerId] = useState(1);
+  const [mainTabIndex, setMainTabIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [quick3dSubIndex, setQuick3dSubIndex] = useState(0);
+  const [selectedFilerId, setSelectedFilerId] = useState(1);
   const [showFilter, setShowFilter] = useState(false);
   const onClose = () => setShowFilter(false);
 
-  const resultHeaderList = [
-    { id: 1, name: "All" },
-    ...Object.keys(allResultData).map((key, index) => {
-      let displayName = key;
+  const resultHeaderList = useMemo(
+    () => [
+      { id: 1, name: "All" },
+      ...Object.keys(allResultData || {}).map((key, index) => {
+        const displayName = key.startsWith("QUICK3D") ? "Quick 3D" : key;
+        return { id: index + 2, name: displayName };
+      }),
+    ],
+    [allResultData]
+  );
 
-      if (key.startsWith("QUICK3D")) {
-        displayName = "Quick 3D";
-      }
-
-      return {
-        id: index + 2,
-        name: displayName,
-      };
-    }),
-  ];
-
-  const selectedTabName = resultHeaderList[selectedIndex].name;
-  const { Scale, verticalScale } = useContainerScale();
-  const styles = createStyles(Scale);
+  const selectedTabName = resultHeaderList[selectedIndex]?.name ?? "All";
+  const isQuick3DSelected = selectedTabName === "Quick 3D";
 
   const filteredData = useMemo(() => {
-    const allCategories: any = allResultData;
-
-    // helper function to normalize display names
-    const formatCategoryName = (key: string) => {
-      if (key.startsWith("QUICK3D")) {
-        return "Quick 3D";
-      }
-      return key; // fallback: keep original
-    };
+    const allCategories: any = allResultData || {};
+    const formatCategoryName = (key: string) =>
+      key.startsWith("QUICK3D") ? "Quick 3D" : key;
 
     if (selectedTabName === "All") {
-      // Show all categories
       return Object.keys(allCategories).map((key) => ({
         category: formatCategoryName(key),
         data: allCategories[key],
       }));
-    } else {
-      // Show only selected category with first 15 items
-      const categoryKey = Object.keys(allCategories).find(
-        (key) =>
-          formatCategoryName(key).toLowerCase() ===
-          selectedTabName.toLowerCase()
-      );
-
-      if (categoryKey) {
-        return [
-          {
-            category: formatCategoryName(categoryKey),
-            data: allCategories[categoryKey]?.slice(0, 15),
-          },
-        ];
-      }
-      return [];
     }
-  }, [selectedTabName, allResultData]);
 
-  console.log("filteredData==>", filteredData);
+    const categoryKey = Object.keys(allCategories).find(
+      (key) =>
+        formatCategoryName(key).toLowerCase() === selectedTabName.toLowerCase()
+    );
+    if (categoryKey) {
+      const data = allCategories[categoryKey]?.slice(0, 15) ?? [];
+      return [{ category: formatCategoryName(categoryKey), data }];
+    }
+    return [];
+  }, [selectedTabName, allResultData]);
 
   useEffect(() => {
     dispatch(getAllResults());
-  }, []);
+  }, [dispatch]);
 
   return (
-    <>
-    <CustomLoader visible={resultLoader} />
-    <ScrollView
-      style={{
-        flex: 1,
-        backgroundColor: COLORS.primary,
-        paddingBottom: scale(30),
-        marginBottom: scale(30),
-      }}
-      stickyHeaderIndices={[0]}
-      nestedScrollEnabled={true}
-      keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={{ backgroundColor: COLORS.primary, elevation: 10 }}>
-        <View style={styles.headrrcontainer}>
-          <Text style={styles.resultText}>Result</Text>
-        </View>
-        <View>
-          <CustomTabs
-            tabs={resultHeaderList}
-            index={selectedIndex}
-            onIndexChange={setSelectedIndex}
-          />
-        </View>
+    <View style={styles.screen}>
+      <View style={styles.headerSection}>
+        <Text style={styles.resultTitle}>Result</Text>
       </View>
-      {/* <ResultTable tableData={tableData} /> */}
-      <ScrollView>
-        {filteredData.map(({ category, data }) => (
-          <View key={category}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginHorizontal: 10,
-                marginTop: 10,
-              }}
+      <CustomLoader visible={resultLoader} />
+      {/* Lottery / Casino main tabs - above existing tabs */}
+      <View style={styles.mainTabsRow}>
+        {MAIN_TABS.map((tab, idx) => (
+          <TouchableOpacity
+            key={tab.id}
+            style={[
+              styles.mainTab,
+              idx === mainTabIndex && styles.mainTabActive,
+            ]}
+            onPress={() => setMainTabIndex(idx)}
+          >
+            <Text
+              style={[
+                styles.mainTabText,
+                idx === mainTabIndex && styles.mainTabTextActive,
+              ]}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: 16,
-                    color: "white",
-                    marginLeft: 10,
-                  }}
-                >
-                  {category}
-                </Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("ParticularGameResult", {
-                    category,
-                    data,
-                  });
-                }}
-                style={{
-                  backgroundColor: COLORS.primary,
-                  padding: 10,
-                  borderRadius: 5,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderColor: "#fff",
-                  borderWidth: 1,
-                }}
-              >
-                <Text style={{ fontSize: 16, color: "white" }}>View All</Text>
-              </TouchableOpacity>
-            </View>
+              {tab.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
-            <ResultTable
-              tableData={data}
-              customStyle={{ marginTop: -10 }}
-              hidePages
+      {mainTabIndex === 0 ? (
+        <>
+          <View style={styles.lotteryTabsWrapper}>
+            <CustomTabs
+              tabs={resultHeaderList}
+              index={selectedIndex}
+              onIndexChange={setSelectedIndex}
+              lightTheme
             />
           </View>
-        ))}
-      </ScrollView>
+
+          {isQuick3DSelected && (
+            <View style={styles.quick3dSubRow}>
+              {QUICK3D_SUB_TABS.map((sub, idx) => (
+                <TouchableOpacity
+                  key={sub.id}
+                  style={[
+                    styles.quick3dSubTab,
+                    idx === quick3dSubIndex && styles.quick3dSubTabActive,
+                  ]}
+                  onPress={() => setQuick3dSubIndex(idx)}
+                >
+                  <Text
+                    style={[
+                      styles.quick3dSubText,
+                      idx === quick3dSubIndex && styles.quick3dSubTextActive,
+                    ]}
+                  >
+                    {sub.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+
+          <ScrollView
+            style={styles.contentScroll}
+            showsVerticalScrollIndicator={false}
+          >
+            {filteredData.map(({ category, data }) => (
+              <View key={category}>
+                <View style={styles.categoryRow}>
+                  <Text style={styles.categoryTitle}>{category}</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("ParticularGameResult", {
+                        category,
+                        data,
+                      })
+                    }
+                    style={styles.viewAllButton}
+                  >
+                    <Text style={styles.viewAllText}>View All</Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    marginHorizontal: Scale(10),
+                  }}
+                >
+                  <ResultTable
+                    tableData={data}
+                    customStyle={styles.resultTableWrap}
+                    hidePages
+                    useLightTheme
+                  />
+                </View>
+              </View>
+            ))}
+          </ScrollView>
+        </>
+      ) : (
+        <View style={styles.casinoResultWrap}>
+          <CasinoResult />
+        </View>
+      )}
+
       <Modal
         transparent
         visible={showFilter}
         animationType="fade"
         onRequestClose={onClose}
       >
-        {/* Semi-transparent backdrop */}
         <TouchableWithoutFeedback onPress={onClose}>
           <View style={styles.modalBackdrop} />
         </TouchableWithoutFeedback>
-
         <View style={styles.modalContainer}>
           <ScrollView
-            nestedScrollEnabled={true}
+            nestedScrollEnabled
             contentContainerStyle={styles.scrollContent}
             keyboardShouldPersistTaps="handled"
           >
@@ -231,75 +236,136 @@ const ResultScreen = ({ navigation }: any) => {
           </ScrollView>
         </View>
       </Modal>
-    </ScrollView>
-    </>
+    </View>
   );
 };
 
 export default ResultScreen;
 
-const createStyles = (Scale: any) =>
+const createStyles = (Scale: (n: number) => number) =>
   StyleSheet.create({
-    container: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginHorizontal: Scale(10),
-      padding: 5,
-      justifyContent: "center",
-      paddingHorizontal: Scale(12),
+    screen: {
+      flex: 1,
+      backgroundColor: COLORS.primaryBackground,
     },
-    selectedContainer: {
-      borderTopColor: "#FF5A5A",
-      borderTopLeftRadius: Scale(5),
-      borderTopRightRadius: Scale(5),
-      borderTopWidth: Scale(3),
-      width: Scale(30),
-    },
-    headerText: { fontSize: Scale(16), color: "#987E7E", top: 3 },
-    selectedHeaderText: {
-      color: "#fff",
-      fontWeight: "bold",
-      fontSize: Scale(16),
-    },
-    menuContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-    },
-    loginButton: {
-      padding: 8,
-      paddingHorizontal: 20,
-      backgroundColor: "#ccc",
-      borderRadius: 50,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    refImage: { width: Scale(30), height: Scale(30) },
-    headrrcontainer: {
-      backgroundColor: COLORS.primary, // Dark maroon
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
+    headerSection: {
+      backgroundColor: COLORS.headerBackground,
       paddingHorizontal: 16,
-      paddingVertical: 12,
+      paddingVertical: Scale(12),
+      borderBottomWidth: 1,
+      borderBottomColor: COLORS.gameCardBorder,
     },
-    resultText: {
-      fontSize: 16,
+    resultTitle: {
+      fontSize: Scale(18),
       fontWeight: "bold",
-      color: "white",
+      color: COLORS.sectionHeaderText,
       textAlign: "center",
     },
-    filterButton: {
+    mainTabsRow: {
       flexDirection: "row",
-      alignItems: "center",
-      borderWidth: 1,
-      borderColor: "white",
-      borderRadius: 6,
-      paddingHorizontal: 10,
-      paddingVertical: 5,
+      backgroundColor: COLORS.white,
+      paddingHorizontal: Scale(12),
+      paddingVertical: Scale(8),
+      gap: Scale(8),
+      marginBottom: Scale(10),
+      marginTop: Scale(10),
     },
-    filterText: {
-      color: "white",
-      fontSize: 14,
+    mainTab: {
+      flex: 1,
+      paddingVertical: Scale(12),
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: Scale(8),
+      backgroundColor: COLORS.tabInactiveBg,
+      borderWidth: 1,
+      borderColor: COLORS.tabInactiveBorder,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: -3 },
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+      elevation: 10,
+    },
+    mainTabActive: {
+      backgroundColor: COLORS.primary,
+      borderColor: COLORS.tabActiveBg,
+    },
+    mainTabText: {
+      fontSize: Scale(15),
+      fontWeight: "600",
+      color: COLORS.tabInactiveText,
+    },
+    mainTabTextActive: {
+      color: COLORS.tabActiveText,
+    },
+    lotteryTabsWrapper: {
+      backgroundColor: COLORS.gamesBackground,
+      marginLeft: Scale(10),
+    },
+    quick3dSubRow: {
+      flexDirection: "row",
+      backgroundColor: COLORS.gamesBackground,
+      paddingHorizontal: Scale(12),
+      paddingVertical: Scale(8),
+      gap: Scale(6),
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    quick3dSubTab: {
+      paddingVertical: Scale(8),
+      paddingHorizontal: Scale(16),
+      borderRadius: Scale(8),
+      backgroundColor: COLORS.cardBg,
+      borderWidth: 1,
+      borderColor: COLORS.gameCardBorder,
+    },
+    quick3dSubTabActive: {
+      backgroundColor: COLORS.tabActiveBg,
+      borderColor: COLORS.tabActiveBg,
+    },
+    quick3dSubText: {
+      fontSize: Scale(13),
+      fontWeight: "600",
+      color: COLORS.tabInactiveText,
+    },
+    quick3dSubTextActive: {
+      color: COLORS.tabActiveText,
+    },
+    contentScroll: {
+      flex: 1,
+      backgroundColor: COLORS.gamesBackground,
+    },
+    casinoResultWrap: {
+      flex: 1,
+      backgroundColor: COLORS.gamesBackground,
+    },
+    categoryRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginHorizontal: Scale(10),
+      marginTop: Scale(12),
+    },
+    categoryTitle: {
+      fontWeight: "bold",
+      fontSize: Scale(16),
+      color: COLORS.sectionHeaderText,
+    },
+    viewAllButton: {
+      backgroundColor: COLORS.primary,
+      padding: Scale(10),
+      borderRadius: Scale(8),
+      alignItems: "center",
+      justifyContent: "center",
+      borderWidth: 1,
+      borderColor: COLORS.tabActiveBg,
+    },
+    viewAllText: {
+      fontSize: Scale(14),
+      color: COLORS.tabActiveText,
+      fontWeight: "600",
+    },
+    resultTableWrap: {
+      marginTop: Scale(-10),
     },
     modalBackdrop: {
       flex: 1,
@@ -307,13 +373,15 @@ const createStyles = (Scale: any) =>
     },
     modalContainer: {
       position: "absolute",
-      top: Scale(100), // Adjust based on your layout
+      top: Scale(100),
       width: "100%",
       alignSelf: "center",
       maxHeight: Scale(250),
-      backgroundColor: "#481616",
-      borderRadius: Scale(5),
+      backgroundColor: COLORS.cardBg,
+      borderRadius: Scale(8),
       paddingVertical: Scale(10),
+      borderWidth: 1,
+      borderColor: COLORS.cardBorder,
     },
     scrollContent: {
       marginHorizontal: Scale(5),
@@ -322,12 +390,12 @@ const createStyles = (Scale: any) =>
       flexDirection: "row",
       alignItems: "center",
       paddingVertical: Scale(5),
-      backgroundColor: "#481616",
+      backgroundColor: "transparent",
       justifyContent: "space-between",
     },
     optionText: {
-      fontSize: 16,
-      color: "white",
+      fontSize: Scale(16),
+      color: COLORS.sectionHeaderText,
       padding: Scale(10),
       fontWeight: "400",
     },

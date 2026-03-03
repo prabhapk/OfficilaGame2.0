@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
   StatusBar,
   Alert,
 } from "react-native";
@@ -30,6 +29,7 @@ import {
   resetIcon,
 } from "../../assets/assets";
 import { CommonActions } from "@react-navigation/native";
+import { Image } from 'expo-image';
 
 const AgencyScreen = ({ navigation }: { navigation: any }) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -158,7 +158,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
             <Image
               source={require("../../assets/ProfileScreen/wallet3DImage.webp")}
               style={styles.avatar}
-              resizeMode="cover"
+              contentFit="cover"
             />
             <View style={styles.levelBadge}>
               <Text style={styles.levelText}>Lv.1</Text>

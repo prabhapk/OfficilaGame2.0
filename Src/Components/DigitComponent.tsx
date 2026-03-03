@@ -301,7 +301,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               }}
               onComplete={onTimerComplete}
             />
-            <Text style={styles.gameNameText}>{nextGameId}</Text>
+            <Text style={[styles.gameNameText, { marginTop: Scale(10) }]}>{nextGameId}</Text>
           </View>
         </View>
 
@@ -960,7 +960,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
 const createStyles = (Scale: any) =>
   StyleSheet.create({
     mainContainer: {
-      backgroundColor: "#f7fbff",
+      // backgroundColor: COLORS.gamesBackground,
       flex: 1,
       marginBottom: Scale(0),
     },
@@ -974,7 +974,7 @@ const createStyles = (Scale: any) =>
     },
     card: {
       marginTop: Scale(20),
-      backgroundColor: COLORS.gameDetailColor,
+      backgroundColor: COLORS.primary,
       width: "100%",
       borderRadius: 10,
       shadowColor: "#000",
@@ -982,6 +982,8 @@ const createStyles = (Scale: any) =>
       shadowOpacity: 0.2,
       shadowRadius: 2,
       elevation: 3,
+      borderWidth: 1,
+      borderColor: COLORS.primary,
     },
     cancelImage: {
       height: Scale(24),
@@ -989,15 +991,12 @@ const createStyles = (Scale: any) =>
       marginTop: Scale(10),
     },
     startView: {
-      // flexDirection: 'row',
-      // borderRadius: 10,
-      // width: '100%',
       marginHorizontal: 10,
       justifyContent: "space-between",
     },
     renderDataView: {
       padding: 10,
-      backgroundColor: "#f7fbff",
+      backgroundColor: COLORS.gamesBackground,
       flex: 1,
       borderRadius: 10,
     },
@@ -1005,86 +1004,104 @@ const createStyles = (Scale: any) =>
       flexDirection: "row",
       justifyContent: "space-between",
       marginTop: 10,
-      backgroundColor: COLORS.gameDetailColor,
+      backgroundColor: COLORS.primary,
       overflow: "hidden",
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: -3 },
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+      elevation: 10,
+      borderWidth: 1,
+      borderColor: COLORS.primary,
+      borderRadius: 10,
     },
     showCountContainer: {
       flexDirection: "row",
       alignItems: "center",
-      backgroundColor: "#EEF0F6",
+      backgroundColor: COLORS.listRowBg,
       borderRadius: 30,
       paddingHorizontal: 5,
       height: 40,
       marginLeft: 30,
+      borderWidth: 1,
+      borderColor: COLORS.gameTileBorder,
     },
     button: {
-      backgroundColor: "#F5F7FB",
+      backgroundColor: COLORS.tabInactiveBg,
       width: 30,
       height: 30,
       borderRadius: 15,
       justifyContent: "center",
       alignItems: "center",
-      // marginHorizontal: 20,
     },
     symbol: {
       fontSize: 15,
-      color: "black",
+      color: COLORS.primaryTextColor,
     },
     input: {
-      width: 50, // Set an explicit width to ensure visibility
+      width: 50,
       fontSize: 18,
       fontWeight: "bold",
-      color: "#000", // Ensure text is visible
+      color: COLORS.primaryTextColor,
       textAlign: "center",
     },
     buttonText: {
-      color: "#fff",
+      color: COLORS.white,
       fontSize: 16,
     },
     valueText: {
       marginTop: 20,
       fontSize: 18,
       fontWeight: "bold",
+      color: COLORS.primaryTextColor,
     },
     boxButton: {
-      backgroundColor: "#007AFF",
+      backgroundColor: COLORS.tabActiveBg,
       paddingVertical: 12,
       paddingHorizontal: 20,
       borderRadius: 10,
     },
     DigitTitleText: {
-      color: "#fff",
+      color: COLORS.white,
       fontWeight: "bold",
       fontSize: Scale(18),
     },
     DigitTitleText1: {
-      color: "#fff",
+      color: COLORS.white,
       fontWeight: "bold",
       fontSize: Scale(12),
       top: 1,
     },
     howtoplayBtn: {
-      backgroundColor: COLORS.gameDetailColor,
-      marginHorizontal: 10,
+      backgroundColor: COLORS.primary,
+      marginHorizontal: 20,
       borderRadius: 5,
-      borderWidth: 0.1,
+      borderWidth: 1,
       borderColor: COLORS.white,
+      bottom: 5,
+      marginBottom: 5,
     },
     howtoPlayTxt: {
       fontSize: 14,
       fontWeight: "400",
       paddingHorizontal: 5,
       paddingVertical: 5,
-      color: "#fff",
+      color: COLORS.white,
     },
-    gameNameText: { fontSize: 14, fontWeight: "bold", color: "white" },
+    gameNameText: {
+      fontSize: 14,
+      fontWeight: "bold",
+      color: COLORS.white,
+    },
     ballsView: {
       flexDirection: "row",
       backgroundColor: COLORS.primary,
       paddingVertical: 5,
       borderRadius: 10,
-      marginTop: 5,
+      marginTop: 10,
       padding: 5,
+      borderWidth: 1,
+      borderColor: COLORS.white,
     },
     gameHeader: {
       flexDirection: "row",

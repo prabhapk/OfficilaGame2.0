@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import { greenTick } from '../../../assets/assets';
 import { useContainerScale } from '../../hooks/useContainerScale';
 import { COLORS } from '../../Constants/Theme';
+import { Image } from 'expo-image';
 
 type PaymentSuccessModalProps = {
   isVisible: boolean;

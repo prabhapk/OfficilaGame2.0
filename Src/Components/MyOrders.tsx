@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import CommonBall from "./CommonBall"; // adjust path
 import TableCommonBall from "./TableCommonBall"; // adjust path
 import { COLORS } from "../Constants/Theme";
@@ -8,6 +8,7 @@ import { ImageBackground } from "expo-image";
 import { copyImage, myOrdersWinLabel, winLabel } from "../../assets/assets";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Clipboard from 'expo-clipboard';
+import { Image } from 'expo-image';
 
 type BetData = {
   type: string;

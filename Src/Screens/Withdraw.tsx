@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   ScrollView,
   TextInput,
@@ -34,6 +33,7 @@ import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { set } from "date-fns";
 import { getWalletBalance } from "../Redux/Slice/signInSlice";
 import { COLORS } from "../Constants/Theme";
+import { Image } from 'expo-image';
 
 const Withdraw = ({ navigation }: any) => {
   const dispatch = useDispatch();
@@ -426,7 +426,7 @@ const Withdraw = ({ navigation }: any) => {
               <Image
                 source={lefArrow}
                 style={styles.arrowIcon}
-                resizeMode="contain"
+                contentFit="contain"
               />
             </TouchableOpacity>
           </View>
@@ -467,7 +467,7 @@ const Withdraw = ({ navigation }: any) => {
                     <Image
                       source={lefArrow}
                       style={styles.arrowIcon}
-                      resizeMode="contain"
+                      contentFit="contain"
                     />
                   </TouchableOpacity>
                 </View>

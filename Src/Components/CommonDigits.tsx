@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import CountdownTimer from "./CountdownTimer";
 import {
   setMin1TargetDate,
@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { COLORS } from "../Constants/Theme";
+import { Image } from 'expo-image';
 interface Props {
   data: any;
   onPress3Digits: () => void;
@@ -64,10 +65,10 @@ const CommonDigits: React.FC<Props> = ({ data, onPress3Digits }) => {
         />
       </View>
       <View style={{ position: "absolute", bottom: 0 }}>
-        <Text style={{ margin: 5 }}>
+        <Text style={{ margin: 5, color: COLORS.gameTileTitle, fontSize: 12 }}>
           ₹{data.ticketPrice}
-          {"/"}
-          <Text style={{ color: "grey", fontSize: 10 }}>Ticket</Text>
+          {" / "}
+          <Text style={{ color: COLORS.gameTileSubtext, fontSize: 10, }}>Ticket</Text>
         </Text>
       </View>
     </TouchableOpacity>
@@ -78,11 +79,13 @@ const createStyles = (Scale: any) =>
   StyleSheet.create({
     container: {
       margin: 5,
-      width:Scale(190),
+      width: Scale(190),
       borderRadius: 10,
       marginTop: 5,
       height: 180,
-      backgroundColor: "white",
+      backgroundColor: COLORS.gameTileBg,
+      borderWidth: 1,
+      borderColor: COLORS.gameTileBorder,
     },
     subConatiner: {
       borderTopLeftRadius: 10,
@@ -92,14 +95,23 @@ const createStyles = (Scale: any) =>
       resizeMode: "stretch",
       position: "absolute",
     },
-    digitTitle: { fontSize: 12, color: COLORS.primaryTextColor, fontWeight: "600" },
+    digitTitle: {
+      fontSize: 12,
+      color: COLORS.gameTileTitle,
+      fontWeight: "600",
+    },
     win_priceText: {
       marginLeft: 15,
       fontSize: 16,
-      color: "#f0f879ff",
+      color: COLORS.gameTilePrice,
       fontWeight: "bold",
     },
-    priceText: { fontSize: 30, color: "white", fontWeight: "bold", bottom: 10 },
+    priceText: {
+      fontSize: 30,
+      color: COLORS.sectionHeaderText,
+      fontWeight: "bold",
+      bottom: 10,
+    },
   });
 
 export default CommonDigits;

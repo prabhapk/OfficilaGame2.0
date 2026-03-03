@@ -1,8 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from '../Constants/Theme';
+import { Image } from 'expo-image';
 
 type VipCardProps = {
   headerText: string;
@@ -29,7 +30,7 @@ const VipCard = ({headerText, bottomText, badgeImage}: VipCardProps) => {
             </View>
           </View>
           <Image 
-          resizeMode='contain'
+          contentFit='contain'
           source={badgeImage} style={styles.badgeImage} />
         </View>
 

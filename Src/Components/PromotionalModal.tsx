@@ -4,11 +4,11 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   Modal,
   Dimensions,
 } from "react-native";
 import { useContainerScale } from "../hooks/useContainerScale";
+import { Image } from "expo-image";
 
 interface PromotionalModalProps {
   visible: boolean;
@@ -53,7 +53,7 @@ const PromotionalModal: React.FC<PromotionalModalProps> = ({
               <Image
                 source={imageSource}
                 style={styles.modalImage}
-                resizeMode="contain"
+                contentFit="contain"
               />
             </View>
           </View>

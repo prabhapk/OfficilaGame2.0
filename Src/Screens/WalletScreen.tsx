@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   ScrollView,
   TextInput,
@@ -19,6 +18,7 @@ import { getWalletBalance } from '../Redux/Slice/signInSlice';
 import { COLORS } from '../Constants/Theme';
 import { DepositPayment, getAllPaymentGateWaysList } from '../Redux/Slice/depositSlice';
 import Toast from 'react-native-toast-message';
+import { Image } from 'expo-image';
 const WalletScreenUI = ({navigation}: any) => {
   const [walletAmount, setWalletAmount] = useState(0);
   const [selectedAmount, setSelectedAmount] = useState('500');
@@ -83,7 +83,7 @@ const WalletScreenUI = ({navigation}: any) => {
             <Image
               source={lefArrow}
               style={styles.arrowIcon}
-              resizeMode="contain"
+              contentFit="contain"
             />
           </TouchableOpacity>
         </View>
@@ -181,7 +181,7 @@ const WalletScreenUI = ({navigation}: any) => {
       <Image
         source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Paytm_Logo.png' }}
         style={styles.paytmLogo}
-        resizeMode="contain"
+        contentFit="contain"
       />
       <Text style={styles.bankText}>{paymentGateWayLists[0]?.gateway}</Text>
     </View>
@@ -190,7 +190,7 @@ const WalletScreenUI = ({navigation}: any) => {
       <Image
         source={checkBox}
         style={styles.checkIcon}
-        resizeMode="contain"
+        contentFit="contain"
       />
     )}
   </TouchableOpacity>

@@ -5,6 +5,7 @@ import { getNavigation } from '../Utils/getNavigation';
 import noTokenUrls from './noTokenUrls';
 import Toast from 'react-native-toast-message';
 import { setSessionExpiredVisible } from '../Redux/Slice/commonSlice';
+import { API_BASE_URL } from '../Config/env';
 
 const axiosInstance = axios.create({
   // baseURL: process.env.API_BASE_URL,
@@ -32,8 +33,9 @@ axiosInstance.interceptors.request.use(
       console.log('🔑 AUTH DEBUG: Token length:', token?.length);
       
       if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-        console.log('✅ TOKEN ADDED:', token.substring(0, 20) + '...');
+        const tokenStr = String(token);
+        config.headers.Authorization = `Bearer ${tokenStr}`;
+        console.log('✅ TOKEN ADDED:', tokenStr.substring(0, 20) + '...');
       } else {
         console.warn('❌ NO TOKEN FOUND for authenticated API:', config.url);
       }
@@ -54,8 +56,9 @@ axiosInstance.interceptors.request.use(
       url: config.url,
       fullUrl: config.baseURL + config.url,
       hasToken: !!config.headers.Authorization,
-      tokenPreview: config.headers.Authorization ? 
-        config.headers.Authorization.substring(0, 20) + '...' : 'NO TOKEN',
+      tokenPreview: typeof config.headers.Authorization === 'string'
+        ? config.headers.Authorization.substring(0, 20) + '...'
+        : 'NO TOKEN',
       body: config.data,
       params: config.params
     });

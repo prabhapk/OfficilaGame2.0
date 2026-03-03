@@ -5,13 +5,13 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Image,
   Dimensions,
 } from "react-native";
 import CustomHeader from "../Components/CustomHeader";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { COLORS } from "../Constants/Theme";
 import { promotionBanner1, promotionBanner2, promotionBanner3, promotionBanner4 } from "../../assets/assets";
+import { Image } from "expo-image";
 
 const { width } = Dimensions.get("window");
 

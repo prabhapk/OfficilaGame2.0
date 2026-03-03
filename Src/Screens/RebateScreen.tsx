@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
-  Image,
   StatusBar,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -20,6 +19,7 @@ import { RootState } from '../Redux/store';
 import { formatDateTime, formatTime24to12, formatToTimeIST } from '../Utils/Common';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Toast from 'react-native-toast-message';
+import { Image } from 'expo-image';
 
 interface RebateItem {
   id: string;
@@ -167,7 +167,7 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
             <Image
               source={require('../../assets/wallet-icon.webp')}
               style={styles.icon}
-              resizeMode="contain"
+              contentFit="contain"
             />
             <Text style={styles.infoText}>
               Estimated Recharge: ₹{item?.rebatePercentage?.toFixed(2)}
@@ -245,7 +245,7 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
           <Image
             source={require('../../assets/leftArrow.png')}
             style={styles.filterIcon}
-            resizeMode="contain"
+            contentFit="contain"
           />
         </TouchableOpacity>
       </View>

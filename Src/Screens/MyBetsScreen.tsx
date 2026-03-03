@@ -8,7 +8,6 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Modal,
-  Image,
   Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -44,6 +43,7 @@ import { RootState } from "../Redux/store";
 import { getMyOrders } from "../Redux/Slice/threeDigitSlice";
 import { groupByOrder } from "../Utils/Common";
 import MyOrders from "../Components/MyOrders";
+import { Image } from 'expo-image';
 const MyBetsScreen = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -255,7 +255,7 @@ const MyBetsScreen = ({ navigation }: any) => {
             <Image
               source={lefArrow}
               tintColor={"#fff"}
-              resizeMode="contain"
+              contentFit="contain"
               style={{ width: Scale(20), height: Scale(20) }}
             />
           </TouchableOpacity>
