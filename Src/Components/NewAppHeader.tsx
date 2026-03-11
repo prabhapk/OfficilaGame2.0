@@ -5,6 +5,7 @@ import { useContainerScale } from '../hooks/useContainerScale';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '../Constants/Theme';
 import { Image } from 'expo-image';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 interface customHeaderProps {
   leftIconPress: (event: GestureResponderEvent) => void;
@@ -27,12 +28,12 @@ const NewAppHeader: React.FC<customHeaderProps> = ({
       <TouchableOpacity
         style={{ marginHorizontal: Scale(10) }}
         onPress={leftIconPress}>
-        <Image
-          source={lefArrow}
-          tintColor={COLORS.headerTextColor}
-          contentFit="contain"
-          style={{ width: Scale(20), height: Scale(20) }}
-        />
+    <Entypo
+                  name="chevron-left"
+                  size={Scale(30)}
+                  color={COLORS.white}
+
+                />
       </TouchableOpacity>
       <View>
         <Text style={styles.centerText}>
@@ -58,11 +59,11 @@ const createStyles = (Scale: any, insets: any) =>
       justifyContent: 'space-between',
       padding: 10,
       alignItems: 'center',
-      backgroundColor: COLORS.headerBackground,
+      backgroundColor: COLORS.primary,
     },
     centerText: {
       fontSize: Scale(20),
-      color: COLORS.headerTextColor,
+      color: COLORS.white,
       fontWeight: 'bold',
     },
     menuContainer: {

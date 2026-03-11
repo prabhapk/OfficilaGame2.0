@@ -40,7 +40,9 @@ const RechargeCard : React.FC<Props> = (
       {/* Header */}
       <View style={styles.headerRow}>
         <View style={styles.iconTextRow}>
-          <Image source={rechargeIconCard} style={styles.betIcon} />
+          <Image 
+          contentFit = "contain"
+          source={rechargeIconCard} style={styles.betIcon} />
           <Text style={styles.betTitle}>RECHARGE</Text>
         </View>
         <Text style={styles.amountText}>+₹{rechargeAmount}</Text>
@@ -115,7 +117,6 @@ const createStyles = (Scale: any) =>
     betIcon: {
       width: Scale(36),
       height: Scale(36),
-      resizeMode: 'contain',
       marginRight: Scale(10),
     },
     betTitle: {

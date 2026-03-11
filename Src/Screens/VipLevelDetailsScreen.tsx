@@ -106,7 +106,9 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
       onPress={() => setSelectedVipIndex(index)}>
       {/* VIP Group */}
       <View style={styles.vipColumn}>
-        <Image source={item.image} style={styles.vipImage} />
+        <Image 
+        contentFit="contain"
+        source={item.image} style={styles.vipImage} />
         <Text style={styles.vipText}>VIP {item.level}</Text>
       </View>
 
@@ -114,7 +116,9 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
       <View style={styles.rewardColumn}>
         <View style={styles.bonusContainer}>
           <View style={styles.bonusRow}>
-            <Image source={bonusCash} style={styles.bonusIcon} />
+            <Image 
+              contentFit="contain"
+            source={bonusCash} style={styles.bonusIcon} />
             <Text style={styles.bonusText}>Bonus</Text>
           </View>
           <Text style={styles.bonusText}>₹{item.levelupBonus}</Text>
@@ -259,7 +263,6 @@ const createStyles = (Scale: any) =>
   vipImage: {
     width: Scale(55),
     height: Scale(55),
-    resizeMode: 'contain',
   },
   vipText: {
     fontSize: Scale(12),
@@ -284,7 +287,6 @@ const createStyles = (Scale: any) =>
   bonusIcon: {
     width: Scale(22),
     height: Scale(22),
-    resizeMode: 'contain',
     marginRight: Scale(4),
   },
   bonusText: {
@@ -303,7 +305,6 @@ const createStyles = (Scale: any) =>
   spinIcon: {
     width: Scale(22),
     height: Scale(22),
-    resizeMode: 'contain',
     marginRight: Scale(4),
   },
   spinText: {

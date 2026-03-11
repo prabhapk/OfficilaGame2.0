@@ -16,7 +16,9 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
     <View style={styles.container}>
       <StatusBar backgroundColor="black" barStyle="dark-content" />
       {/* <Image source={splashScreen} style={styles.logoImg}/> */}
-      <Image source={newSplashScreen} style={styles.logoImg} />
+      <Image 
+      contentFit='fill'
+      source={newSplashScreen} style={styles.logoImg} />
     </View>
   );
 };
@@ -29,10 +31,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   logoImg: {
-    // resizeMode:"contain",
     width: "100%",
     height: "100%",
-    resizeMode: "stretch",
   },
 });
 

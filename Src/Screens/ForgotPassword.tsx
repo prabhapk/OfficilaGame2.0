@@ -12,7 +12,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { LinearGradient } from 'expo-linear-gradient';
-import {lefArrow, loginImageBackground, signInLogo} from '../../assets/assets';
+import {lefArrow, loginImageBackground, signInLogo, signInLogoNew2, signInMain} from '../../assets/assets';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../Redux/store';
 import { Image } from 'expo-image';
@@ -115,7 +115,7 @@ const ForgotPassword = ({navigation}: any) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={{paddingBottom: Scale(30)}}>
-        <ImageBackground source={loginImageBackground} style={styles.topImage}>
+        <ImageBackground source={signInMain} style={styles.topImage}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
               source={lefArrow}
@@ -127,7 +127,7 @@ const ForgotPassword = ({navigation}: any) => {
         <View style={styles.bottomContainer}>
           <View style={styles.logoHeader}>
             <Image
-              source={signInLogo}
+              source={signInLogoNew2}
               style={styles.logo}
               contentFit="contain"
             />
@@ -276,8 +276,9 @@ const createStyles = (Scale: any) =>
     marginTop: Scale(30),
   },
   logo: {
-    width: Scale(40),
-    height: Scale(40),
+    width: Scale(50),
+    height: Scale(50),
+    marginTop: Scale(5),
   },
   headerText: {
     fontSize: Scale(36),
@@ -319,7 +320,7 @@ const createStyles = (Scale: any) =>
   },
   inputWrapper: {
     marginHorizontal: Scale(20),
-    marginTop: Scale(30),
+    marginTop: Scale(50),
   },
   inputSpacing: {
     marginTop: Scale(10),

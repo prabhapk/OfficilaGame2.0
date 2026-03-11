@@ -99,8 +99,8 @@ const createStyles = (Scale: any) =>
     },
     timerBlock: {
       backgroundColor: "#000",
-      paddingVertical: 8,
-      paddingHorizontal: 8,
+      paddingVertical: 6,
+      paddingHorizontal: 6,
       borderRadius: 5,
       alignItems: "center",
       justifyContent: "center",
@@ -109,7 +109,7 @@ const createStyles = (Scale: any) =>
     },
     timerText: {
       color: "#FFF",
-      fontSize: 12,
+      fontSize: 8,
       fontWeight: "bold",
     },
     separator: {

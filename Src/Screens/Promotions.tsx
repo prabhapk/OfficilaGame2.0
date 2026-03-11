@@ -81,7 +81,7 @@ const Promotions = ({ navigation }: { navigation: any }) => {
         <Image
           source={item.images.uri1}
           style={styles.bannerImage}
-          resizeMode="cover"
+         contentFit="cover"
         />
   
         <View style={styles.buttonOverlay}>

@@ -10,7 +10,7 @@ import {
   Modal,
   Alert,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   myBetsFilterList,
   myBetsHeaderList,
@@ -40,10 +40,11 @@ import * as Clipboard from "expo-clipboard";
 import { DatePickerModal } from "react-native-paper-dates";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
-import { getMyOrders } from "../Redux/Slice/threeDigitSlice";
-import { groupByOrder } from "../Utils/Common";
+import { getMyOrders,myOrdersLoader } from "../Redux/Slice/threeDigitSlice";
+import { groupByOrderNew, groupByOrder} from "../Utils/Common";
 import MyOrders from "../Components/MyOrders";
 import { Image } from 'expo-image';
+import CustomLoader from "../Components/CustomLoader";
 const MyBetsScreen = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -59,6 +60,7 @@ const MyBetsScreen = ({ navigation }: any) => {
   const { isLoggedIn, mainWalletBalance, userId, withdrawBalance } =
     useSelector((state: RootState) => state.signInSlice);
   const dispatch = useDispatch();
+
 
   // API call function with groupId
   const fetchMyBetsData = async (groupId: string) => {
@@ -89,24 +91,30 @@ const MyBetsScreen = ({ navigation }: any) => {
     }
     setShowFilter(false);
   };
-  const renderHeader = ({ item }: any) => {
-    const isSelected = item.id === selectedHeaderId;
-    return (
-      <View style={{ alignItems: "center" }}>
-        <TouchableOpacity
-          onPress={() => setSelectedHeaderId(item.id)}
-          style={[styles.container]}
+const renderHeader = ({ item }: any) => {
+  const isSelected = item.id === selectedFilerId;
+
+  return (
+    <View style={{ alignItems: "center" }}>
+      <TouchableOpacity
+        onPress={() => setSelectedFilerId(item.id)}
+        style={[styles.container]}
+      >
+        <Text
+          style={[
+            styles.headerText,
+            isSelected && styles.selectedHeaderText
+          ]}
         >
-          <Text
-            style={[styles.headerText, isSelected && styles.selectedHeaderText]}
-          >
-            {item.name}
-          </Text>
-        </TouchableOpacity>
-        <View style={[isSelected && styles.selectedContainer]} />
-      </View>
-    );
-  };
+          {item.name}
+        </Text>
+      </TouchableOpacity>
+
+      <View style={[isSelected && styles.selectedContainer]} />
+    </View>
+  );
+};
+
   const [copiedId, setCopiedId] = useState(null);
   const gameID = "PK5321";
 
@@ -173,31 +181,82 @@ const MyBetsScreen = ({ navigation }: any) => {
   }, [allResultData, selectedIndex]);
 
   const groupedOrders = groupByOrder(myOrdersData);
+  
 
-  const myOrderRenterItem = ({ item }: { item: any; index: number }) => {
-    let status: string;
+  console.log('groupedOrdersBetScreen===>', groupedOrders);
+  console.log('myOrdersDataBetsScreen===>',myOrdersData );
+// const filteredOrders = useMemo(() => {
+//   return groupedOrders.filter((item: any) => {
+//     if (selectedFilerId === 1) return true;
+//     if (selectedFilerId === 2) return !item.winningNumber;
+//     if (selectedFilerId === 3) return item.winningNumber && !item.isWinning;
+//     if (selectedFilerId === 4) return item.isWinning;
+//     return true;
+//   });
+// }, [groupedOrders, selectedFilerId]);
+const filteredOrders = groupedOrders.filter((item: any) => {
+  const betDate = new Date(item.betTime);
 
-    if (item.isWinning) {
-      status = "Won";
-    } else if (!item.isWinning && item.winningNumber !== null) {
-      status = "No Won";
-    } else {
-      status = "To Be Drawn";
-    }
+  const start = range.startDate ? new Date(range.startDate) : null;
+  const end = range.endDate ? new Date(range.endDate) : null;
 
-    return (
-      <MyBets3DigitsCard
-        headers={["A", "B", "C"]}
-        myBetsTableData={item.bets.map((b) => ({
-          ...b,
-          betCount: b.betCount ?? item.betCount,
-          totalAmount:
-            b.totalAmount ??
-            (item.bets.length === 1 ? item.totalAmount : undefined),
+  // DATE FILTER
+  if (start && betDate < start) return false;
+  if (end && betDate > end) return false;
+
+  // STATUS FILTER
+  if (selectedFilerId === 1) return true;
+
+  if (selectedFilerId === 2) {
+    return !item.winningNumber; // To Be Drawn
+  }
+
+  if (selectedFilerId === 3) {
+    return item.winningNumber && !item.isWinning; // Drawn
+  }
+
+  if (selectedFilerId === 4) {
+    return item.isWinning; // Won
+  }
+
+  return true;
+});
+
+
+
+  
+
+const myOrderRenterItem = ({ item }: { item: any }) => {
+  console.log("ORDER ITEM:", item);
+console.log("BETS:", item.bets);
+const betDate = new Date(item.betTime);
+const formattedBetDate = betDate.toLocaleDateString();
+  return (
+   <MyOrders
+        headers={["A", "B", "C"]}        
+        myBetsTableData={item.bets.map((b) => ({  
+          // ✅ NORMALIZED FIELDS FOR UI
+          type: b.betType,
+          value: b.selectedNumber,
+          payment: b.amount,
+        
+          betCount: b.betCount ?? 1,
+          totalAmount: b.totalAmount,
+        
+          // ✅ result logic (already correct)
+          result:
+            b.isWinning === true
+              ? "Won"
+              : b.isWinning === false && item.winningNumber !== null
+              ? "No Won"
+              : "To Be Drawn",
         }))}
+        
+        
+        
         id={item.betUniqueId}
-        bettingTime={item.betTime.split("T")[0]}
-        paymentAmount={item.totalAmount} // order total (used by MyOrders to show order total)
+        bettingTime={formattedBetDate}
+        paymentAmount={item.totalAmount}
         drawTime={
           item.nextDrawTime !== "0001-01-01T00:00:00" ? item.nextDrawTime : "-"
         }
@@ -229,11 +288,12 @@ const MyBetsScreen = ({ navigation }: any) => {
         }
         imageSource={hot}
         winOrLossId={item.betUniqueId}
-        gameName={item.gameName || "AvisGaming"}
+        gameName={item.gameName || "AnnaiGaming"}
         totalWinningAmount={item.totalAmount}
       />
-    );
-  };
+  );
+};
+
 
   return (
     <ScrollView
@@ -243,6 +303,7 @@ const MyBetsScreen = ({ navigation }: any) => {
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >
+      <CustomLoader visible={myOrdersLoader} />
       <View style={{ backgroundColor: COLORS.primary, elevation: 10 }}>
         <View style={styles.headrrcontainer}>
           <TouchableOpacity
@@ -309,8 +370,8 @@ const MyBetsScreen = ({ navigation }: any) => {
 
       <View style={{ marginHorizontal: 15, paddingBottom: 20 }}>
         <FlatList
-          data={groupedOrders}
-          keyExtractor={(item, index) => index.toString()}
+          data={filteredOrders}
+         keyExtractor={(item) => item.betUniqueId}
           showsVerticalScrollIndicator={false}
           renderItem={myOrderRenterItem}
           scrollEnabled={false}
@@ -320,7 +381,7 @@ const MyBetsScreen = ({ navigation }: any) => {
                 flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
-                paddingVertical: Scale(50),
+               marginTop: Scale(100),
               }}
             >
               <Image

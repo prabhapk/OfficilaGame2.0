@@ -242,3 +242,42 @@ export const formatToDDMMYYYY = (dateString: string): string => {
 
   return `${day}/${month}/${year}`;
 };
+
+export const groupByOrderNew = (data: any[]) => {
+  const grouped: Record<string, any> = {};
+
+  data.forEach((item) => {
+    if (!grouped[item.betUniqueId]) {
+      grouped[item.betUniqueId] = {
+        betUniqueId: item.betUniqueId,
+        betTime: item.betTime,
+        nextDrawTime: item.nextDrawTime,
+        winningNumber: item.winningNumber,
+        gameName: item.gameName,
+        isWinning: item.isWinning,
+        bets: [],
+        totalAmount: 0,
+      };
+    }
+
+    grouped[item.betUniqueId].bets.push({
+      betType: item.betType,
+      selectedNumber: item.selectedNumber,
+      amount: Number(item.amount) || 0,
+      betCount: Number(item.betCount) || 0,
+      totalAmount:
+        Number(item.totalAmount) ||
+        Number(item.amount) * Number(item.betCount) ||
+        0,
+      isWinning: item.isWinning,
+    });
+
+    grouped[item.betUniqueId].totalAmount +=
+      Number(item.totalAmount) ||
+      Number(item.amount) * Number(item.betCount) ||
+      0;
+  });
+
+  return Object.values(grouped);
+};
+

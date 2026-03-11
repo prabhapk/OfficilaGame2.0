@@ -306,6 +306,7 @@ export const signInSlice = createSlice({
       state.isLoading = true;
       
     });
+    
     builder.addCase(getWalletBalance.pending, (state, action) => {
       state.walletBalanceLoader = true;
       

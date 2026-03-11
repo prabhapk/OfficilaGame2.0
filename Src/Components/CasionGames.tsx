@@ -95,7 +95,6 @@ const createStyles = (Scale: any) =>StyleSheet.create({
   refImage: {
     width: Scale(120),
     height: Scale(120),
-    resizeMode: 'contain',
     borderRadius: Scale(15),
     backgroundColor: COLORS.casinoCardBg,
   },

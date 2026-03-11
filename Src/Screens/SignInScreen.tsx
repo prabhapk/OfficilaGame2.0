@@ -16,6 +16,10 @@ import {
   loginImageBackground,
   signInCustomerLogo,
   signInLogo,
+  signInLogoNew,
+  signInLogoNew1,
+  signInLogoNew2,
+  signInMain,
 } from '../../assets/assets';
 import { GetLoginOtp, setIsLoggedIn, SignInOtp, SignInPassword } from '../Redux/Slice/signInSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -127,17 +131,19 @@ const SignInScreen = ({ navigation }: any) => {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={{ paddingBottom: Scale(30) }} showsVerticalScrollIndicator={false}>
         {/* <Image source={loginImageBackground} style={styles.topImage} /> */}
-        <ImageBackground source={loginImageBackground} style={styles.topImage}>
+        <ImageBackground source={signInMain} style={styles.topImage}>
           <TouchableOpacity
             onPress={() => navigation.replace("DrawerNavigation")}
           >
-            <Image source={lefArrow} style={styles.leftArrow} resizeMode="contain" />
+            <Image source={lefArrow} style={styles.leftArrow} contentFit="contain" />
           </TouchableOpacity>
         </ImageBackground>
 
         <View style={styles.bottomContainer}>
           <View style={styles.logoHeader}>
-            <Image source={signInLogo} style={styles.logo} contentFit="contain" />
+            <Image source={signInLogoNew2} style={styles.logo} 
+            // contentFit="contain" 
+            />
             <Text style={styles.headerText}>Log in</Text>
           </View>
 
@@ -294,14 +300,15 @@ const createStyles = (Scale: any) =>
     marginTop: Scale(30),
   },
   logo: {
-    width: Scale(40),
-    height: Scale(40),
+    width: Scale(50),
+    height: Scale(50),
+    marginTop: Scale(5),
   },
   headerText: {
     fontSize: Scale(36),
     fontWeight: 'bold',
     color: 'white',
-    marginLeft: Scale(10),
+    marginLeft: Scale(15),
   },
   tabContainer: {
     flexDirection: 'row',

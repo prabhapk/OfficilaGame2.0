@@ -35,7 +35,9 @@ const CommissionCard: React.FC<Props> = ({
         {/* Header */}
         <View style={styles.headerRow}>
           <View style={styles.iconTextRow}>
-            <Image source={betIconCard} style={styles.betIcon} />
+            <Image
+            contentFit = "contain"
+            source={betIconCard} style={styles.betIcon} />
             <Text style={styles.betTitle}>Commission</Text>
           </View>
           <Text style={styles.amountText}>-₹{betAmount} RS</Text>
@@ -100,7 +102,6 @@ const createStyles = (Scale: any) =>
     betIcon: {
       width: Scale(36),
       height: Scale(36),
-      resizeMode: "contain",
       marginRight: Scale(10),
     },
     betTitle: {

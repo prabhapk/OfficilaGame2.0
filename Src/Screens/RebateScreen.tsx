@@ -178,7 +178,7 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
             <Image
               source={require('../../assets/wallet-icon.webp')}
               style={[styles.icon, { tintColor: '#8B5CF6' }]}
-              resizeMode="contain"
+              contentFit="contain"
             />
             <Text style={styles.infoText}>
               Estimated Rebate: ₹{item?.rechargeAmount?.toFixed(2)}

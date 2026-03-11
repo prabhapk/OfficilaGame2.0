@@ -343,7 +343,6 @@ const createStyles = (Scale: any) =>
     profileImg: {
       width: 80,
       height: 80,
-      resizeMode: "contain",
     },
     headingTxt: {
       fontSize: Scale(22),
@@ -397,7 +396,7 @@ const createStyles = (Scale: any) =>
       marginHorizontal: 10,
       marginTop: 30,
     },
-    refImage: { width: 50, height: 50, resizeMode: "cover" },
+    refImage: { width: 50, height: 50, },
     refText: {
       color: "white",
       fontSize: 12,
@@ -411,7 +410,7 @@ const createStyles = (Scale: any) =>
       fontWeight: "bold",
       marginVertical: 5,
     },
-    menuImage: { width: 40, height: 40, resizeMode: "cover" },
+    menuImage: { width: 40, height: 40,},
     registerGradient: {
       borderRadius: 50,
       paddingVertical: 8,

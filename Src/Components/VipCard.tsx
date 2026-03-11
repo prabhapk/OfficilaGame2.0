@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from '../Constants/Theme';
 import { Image } from 'expo-image';
+import { vipNewLogoOne, vipNewLogoZero } from '../../assets/assets';
 
 type VipCardProps = {
   headerText: string;
@@ -31,7 +32,7 @@ const VipCard = ({headerText, bottomText, badgeImage}: VipCardProps) => {
           </View>
           <Image 
           contentFit='contain'
-          source={badgeImage} style={styles.badgeImage} />
+          source={vipNewLogoZero} style={styles.badgeImage} />
         </View>
 
         {/* Amount Status */}

@@ -165,6 +165,7 @@ const InviteScreen = ({route}: any) => {
         {/* Hero Image and Description Section */}
         <View style={styles.heroSection}>
           <Image
+          contentFit="contain"
             source={inviteHero}
             style={styles.heroBackgroundImage}
           />
@@ -223,8 +224,12 @@ const InviteScreen = ({route}: any) => {
 
         {/* Motivational Section */}
         <View style={styles.motivationalSection}>
-        <Image source={rightTime} style={styles.rightTimeImage} />
-        <Image source={agentLevels} style={styles.agentLevelsImage} />
+        <Image
+        contentFit= 'cover'
+        source={rightTime} style={styles.rightTimeImage} />
+        <Image
+        contentFit= 'cover'
+        source={agentLevels} style={styles.agentLevelsImage} />
         </View>
 
       
@@ -395,7 +400,6 @@ const createStyles = (Scale: any) => StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     right: -100,
-    resizeMode:"contain",
     top: -30,
   },
   heroContentContainer: {
@@ -688,13 +692,11 @@ const createStyles = (Scale: any) => StyleSheet.create({
   rightTimeImage:{
     width:"100%",
     height: Scale(600),
-    resizeMode:"cover",
     marginTop: Scale(20),
   },
   agentLevelsImage:{
     width:"100%",
     height: Scale(800),
-    resizeMode:"cover",
     marginTop: Scale(20),
   },
 });

@@ -333,6 +333,7 @@ const createStyles = (Scale: (n: number) => number) =>
     contentScroll: {
       flex: 1,
       backgroundColor: COLORS.gamesBackground,
+      marginBottom: 100
     },
     casinoResultWrap: {
       flex: 1,

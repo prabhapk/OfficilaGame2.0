@@ -94,7 +94,6 @@ export default function BottomNavigation() {
                     height: iconSize,
                     marginBottom: 2,
                   }}
-                  resizeMode="contain"
                 /> */}
                  <Image
     source={focused ? tab.focusedIcon : tab.unfocusedIcon}

@@ -24,6 +24,9 @@ import {
   profileTwentyFourImage1,
   leftArrowHeader,
   newRebateLogo,
+  vipNewLogoZero,
+  vipNewLogoOne,
+  vipNewLogoTwo,
 } from "../../assets/assets";
 import Modal from "react-native-modal";
 import WalletInfoModal from "../Components/Modal/WalletInfoModal";
@@ -337,7 +340,7 @@ const ProfileScreen = ({ navigation }: any) => {
             }}> 
               <View style={styles.vipTopRow}>
                 <Image
-                  source={vipBadgeZero}
+                  source={vipNewLogoZero}
                   contentFit="contain"
                   style={styles.vipBadgeImage}
                 />
@@ -389,18 +392,100 @@ const ProfileScreen = ({ navigation }: any) => {
           </TouchableOpacity> 
         </View> */}
 
-        <View style={{ paddingHorizontal: Scale(10), marginTop: Scale(10) }}>
+
+<View style={{ paddingHorizontal: Scale(10), marginTop: Scale(10) }}>
   {tabItems.map((item) => (
     <TouchableOpacity
       key={item.label}
       onPress={() => handleActionButtonPress(item.route)}
       disabled={item.label === "Customer Service" && isChatLoading}
       style={{
-        backgroundColor: COLORS.white,
         borderRadius: Scale(10),
         marginVertical: Scale(8),
+        elevation: 3,
+      }}
+    >
+      <LinearGradient
+        colors={[COLORS.linearTwo, COLORS.linearOne]} // change gradient colors here
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{
+          borderRadius: Scale(10),
+          paddingVertical: Scale(12),
+          paddingHorizontal: Scale(15),
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.15,
+          shadowRadius: 3,
+        }}
+      >
+        {/* Left Section */}
+        <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+          <Image
+          contentFit="contain"
+            source={item.image}
+            style={{
+              height: Scale(24),
+              width: Scale(24),
+              marginRight: Scale(12),
+            }}
+          />
+
+          <Text
+            style={[
+              {
+                color: COLORS.white,
+                fontSize: Scale(14),
+                fontWeight: "500",
+              },
+              isChatLoading &&
+                item.label === "Customer Service" && { opacity: 0.6 },
+            ]}
+            numberOfLines={1}
+          >
+            {item.label}
+          </Text>
+        </View>
+
+        {/* Right Chevron */}
+        <Entypo
+          name="chevron-right"
+          size={Scale(20)}
+          color="white"
+          style={{ marginLeft: Scale(8) }}
+        />
+      </LinearGradient>
+    </TouchableOpacity>
+  ))}
+</View>
+
+
+  
+
+<View style={{ paddingHorizontal: Scale(10) }}>
+  <TouchableOpacity
+    onPress={() => {
+      isLoggedIn
+        ? navigation.navigate("ForgotPassword")
+        : navigation.navigate("SignInScreen");
+    }}
+    style={{
+      borderRadius: Scale(10),
+      marginVertical: Scale(8),
+      elevation: 3,
+    }}
+  >
+    <LinearGradient
+      colors={[COLORS.linearTwo, COLORS.linearOne]} // change gradient colors if needed
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={{
+        borderRadius: Scale(10),
         paddingVertical: Scale(12),
-        paddingHorizontal: Scale(15),
+        paddingHorizontal: Scale(10),
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
@@ -408,84 +493,27 @@ const ProfileScreen = ({ navigation }: any) => {
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.15,
         shadowRadius: 3,
-        elevation: 3,
       }}
     >
-      {/* Left Section (Icon + Label) */}
-      <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
-        <Image
-          source={item.image}
-          style={{
-            height: Scale(24),
-            width: Scale(24),
-            resizeMode: "contain",
-            marginRight: Scale(12),
-          }}
-        />
-        <Text
-          style={[
-            {
-              color: "#000",
-              fontSize: Scale(14),
-              fontWeight: "500",
-            },
-            isChatLoading &&
-              item.label === "Customer Service" && { opacity: 0.6 },
-          ]}
-          numberOfLines={1}
-        >
-          {item.label}
-        </Text>
-      </View>
+      <Text
+        style={{
+          color: COLORS.white,
+          fontSize: Scale(14),
+          fontWeight: "500",
+        }}
+      >
+        Password
+      </Text>
 
-      {/* Right Chevron */}
       <Entypo
         name="chevron-right"
+        style={{ marginRight: Scale(8) }}
         size={Scale(20)}
-        color="#000"
-        style={{ marginLeft: Scale(8) }}
+        color="white"
       />
-    </TouchableOpacity>
-  ))}
+    </LinearGradient>
+  </TouchableOpacity>
 </View>
-
-  
-
-<View style={{ paddingHorizontal: Scale(10)}}>
-          <TouchableOpacity
-            onPress={() => {
-              isLoggedIn
-                ? navigation.navigate("ForgotPassword")
-                : navigation.navigate("SignInScreen");
-            }}
-            style={{
-              backgroundColor: COLORS.white,
-              borderRadius: Scale(10),
-              marginVertical: Scale(8),
-              paddingVertical: Scale(12),
-              paddingHorizontal: Scale(10),
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.15,
-              shadowRadius: 3,
-              elevation: 3,
-            }
-          }
-          >
-            
-            <Text style={{
-              color: "#000",
-              fontSize: Scale(14),
-              fontWeight: "500",
-            }}>Password</Text>
-            <Entypo name="chevron-right" 
-            style={{marginRight: Scale(8)}}
-            size={Scale(20)} color="black" />
-          </TouchableOpacity>
-        </View>
 
         {/* Logout */}
         {isLoggedIn ? (
