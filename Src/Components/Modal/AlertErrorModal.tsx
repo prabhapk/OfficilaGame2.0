@@ -4,6 +4,7 @@ import Modal from 'react-native-modal';
 import { close } from '../../../assets/assets';
 import { useContainerScale } from '../../hooks/useContainerScale';
 import { Image } from 'expo-image';
+import { COLORS } from '../../Constants/Theme';
 
 type AlertErrorModalProps = {
   isVisible: boolean;
@@ -50,7 +51,7 @@ const AlertErrorModal: React.FC<AlertErrorModalProps> = ({
 
 const createStyles = (Scale: any) => StyleSheet.create({
   modalContainer: {
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.primary,
     borderRadius: Scale(10),
     padding: Scale(20),
     marginBottom: Scale(16),

@@ -40,10 +40,10 @@ import * as Clipboard from "expo-clipboard";
 import { DatePickerModal } from "react-native-paper-dates";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
-import { getMyOrders,myOrdersLoader } from "../Redux/Slice/threeDigitSlice";
-import { groupByOrderNew, groupByOrder} from "../Utils/Common";
+import { getMyOrders, myOrdersLoader } from "../Redux/Slice/threeDigitSlice";
+import { groupByOrderNew, groupByOrder } from "../Utils/Common";
 import MyOrders from "../Components/MyOrders";
-import { Image } from 'expo-image';
+import { Image } from "expo-image";
 import CustomLoader from "../Components/CustomLoader";
 const MyBetsScreen = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -59,8 +59,12 @@ const MyBetsScreen = ({ navigation }: any) => {
 
   const { isLoggedIn, mainWalletBalance, userId, withdrawBalance } =
     useSelector((state: RootState) => state.signInSlice);
-  const dispatch = useDispatch();
+  const { gamesNameWithGroupId } = useSelector(
+    (state: RootState) => state.homeSlice,
+  );
+  console.log("gamesNameWithGroupId==>", gamesNameWithGroupId);
 
+  const dispatch = useDispatch();
 
   // API call function with groupId
   const fetchMyBetsData = async (groupId: string) => {
@@ -69,7 +73,7 @@ const MyBetsScreen = ({ navigation }: any) => {
         getMyOrders({
           userId: userId,
           groupId: groupId,
-        })
+        }),
       );
       console.log("API call made with groupId:", groupId);
     } catch (error) {
@@ -91,29 +95,26 @@ const MyBetsScreen = ({ navigation }: any) => {
     }
     setShowFilter(false);
   };
-const renderHeader = ({ item }: any) => {
-  const isSelected = item.id === selectedFilerId;
+  const renderHeader = ({ item }: any) => {
+    const isSelected = item.id === selectedFilerId;
 
-  return (
-    <View style={{ alignItems: "center" }}>
-      <TouchableOpacity
-        onPress={() => setSelectedFilerId(item.id)}
-        style={[styles.container]}
-      >
-        <Text
-          style={[
-            styles.headerText,
-            isSelected && styles.selectedHeaderText
-          ]}
+    return (
+      <View style={{ alignItems: "center" }}>
+        <TouchableOpacity
+          onPress={() => setSelectedFilerId(item.id)}
+          style={[styles.container]}
         >
-          {item.name}
-        </Text>
-      </TouchableOpacity>
+          <Text
+            style={[styles.headerText, isSelected && styles.selectedHeaderText]}
+          >
+            {item.name}
+          </Text>
+        </TouchableOpacity>
 
-      <View style={[isSelected && styles.selectedContainer]} />
-    </View>
-  );
-};
+        <View style={[isSelected && styles.selectedContainer]} />
+      </View>
+    );
+  };
 
   const [copiedId, setCopiedId] = useState(null);
   const gameID = "PK5321";
@@ -142,118 +143,138 @@ const renderHeader = ({ item }: any) => {
       setOpen(false);
       setRange({ startDate, endDate });
     },
-    [setOpen, setRange]
+    [setOpen, setRange],
   );
 
   const { allResultData } = useSelector(
-    (state: RootState) => state.resultSlice
+    (state: RootState) => state.resultSlice,
   );
+  console.log("allResultData==>", allResultData);
 
   const { myOrdersData, myOrdersLoader } = useSelector(
-    (state: RootState) => state.threeDigit
+    (state: RootState) => state.threeDigit,
   );
 
-  const resultHeaderList = [
-    ...Object.keys(allResultData).map((key, index) => {
-      let displayName = key;
-      if (key.startsWith("QUICK3D")) {
-        displayName = "Quick 3D";
-      }
-      const groupId = allResultData[key]?.[0]?.groupId ?? null;
-      return {
-        id: index + 2,
-        name: displayName,
-        groupId: groupId,
-      };
-    }),
-  ];
+  // const resultHeaderList = [
+  //   ...Object.keys(allResultData).map((key, index) => {
+  //     let displayName = key;
+  //     if (key.startsWith("QUICK3D")) {
+  //       displayName = "Quick 3D";
+  //     }
+  //     const groupId = allResultData[key]?.[0]?.groupId ?? null;
+  //     return {
+  //       id: index + 2,
+  //       name: displayName,
+  //       groupId: groupId,
+  //     };
+  //   }),
+  // ];
 
   // Call API on component mount with initial groupId
+
+  const resultHeaderList = useMemo(() => {
+    const quick3dTabs = Object.keys(allResultData || {})
+      .filter((key) => key.startsWith("QUICK3D"))
+      .map((key, index) => ({
+        id: 100 + index,
+        name: "Quick 3D",
+        groupId: allResultData[key]?.[0]?.groupId ?? null,
+      }));
+
+    const filteredGames = (gamesNameWithGroupId || []).filter(
+      (g) => !g.name.toLowerCase().includes("quick3d"),
+    );
+
+    return [...quick3dTabs, ...filteredGames];
+  }, [allResultData, gamesNameWithGroupId]);
+
+  // useEffect(() => {
+  //   if (
+  //     resultHeaderList.length > 0 &&
+  //     resultHeaderList[selectedIndex]?.groupId
+  //   ) {
+  //     const initialGroupId = resultHeaderList[selectedIndex].groupId;
+  //     setSelectedGroupId(initialGroupId);
+  //     fetchMyBetsData(initialGroupId);
+  //   }
+  // }, [allResultData, selectedIndex]);
   useEffect(() => {
-    if (
-      resultHeaderList.length > 0 &&
-      resultHeaderList[selectedIndex]?.groupId
-    ) {
-      const initialGroupId = resultHeaderList[selectedIndex].groupId;
-      setSelectedGroupId(initialGroupId);
-      fetchMyBetsData(initialGroupId);
+    if (resultHeaderList.length > 0) {
+      const groupId = resultHeaderList[selectedIndex]?.groupId;
+
+      if (groupId) {
+        setSelectedGroupId(groupId);
+        fetchMyBetsData(groupId);
+      }
     }
-  }, [allResultData, selectedIndex]);
+  }, [selectedIndex, resultHeaderList]);
 
   const groupedOrders = groupByOrder(myOrdersData);
-  
 
-  console.log('groupedOrdersBetScreen===>', groupedOrders);
-  console.log('myOrdersDataBetsScreen===>',myOrdersData );
-// const filteredOrders = useMemo(() => {
-//   return groupedOrders.filter((item: any) => {
-//     if (selectedFilerId === 1) return true;
-//     if (selectedFilerId === 2) return !item.winningNumber;
-//     if (selectedFilerId === 3) return item.winningNumber && !item.isWinning;
-//     if (selectedFilerId === 4) return item.isWinning;
-//     return true;
-//   });
-// }, [groupedOrders, selectedFilerId]);
-const filteredOrders = groupedOrders.filter((item: any) => {
-  const betDate = new Date(item.betTime);
+  console.log("groupedOrdersBetScreen===>", groupedOrders);
+  console.log("myOrdersDataBetsScreen===>", myOrdersData);
+  // const filteredOrders = useMemo(() => {
+  //   return groupedOrders.filter((item: any) => {
+  //     if (selectedFilerId === 1) return true;
+  //     if (selectedFilerId === 2) return !item.winningNumber;
+  //     if (selectedFilerId === 3) return item.winningNumber && !item.isWinning;
+  //     if (selectedFilerId === 4) return item.isWinning;
+  //     return true;
+  //   });
+  // }, [groupedOrders, selectedFilerId]);
+  const filteredOrders = groupedOrders.filter((item: any) => {
+    const betDate = new Date(item.betTime);
 
-  const start = range.startDate ? new Date(range.startDate) : null;
-  const end = range.endDate ? new Date(range.endDate) : null;
+    const start = range.startDate ? new Date(range.startDate) : null;
+    const end = range.endDate ? new Date(range.endDate) : null;
 
-  // DATE FILTER
-  if (start && betDate < start) return false;
-  if (end && betDate > end) return false;
+    // DATE FILTER
+    if (start && betDate < start) return false;
+    if (end && betDate > end) return false;
 
-  // STATUS FILTER
-  if (selectedFilerId === 1) return true;
+    // STATUS FILTER
+    if (selectedFilerId === 1) return true;
 
-  if (selectedFilerId === 2) {
-    return !item.winningNumber; // To Be Drawn
-  }
+    if (selectedFilerId === 2) {
+      return !item.winningNumber; // To Be Drawn
+    }
 
-  if (selectedFilerId === 3) {
-    return item.winningNumber && !item.isWinning; // Drawn
-  }
+    if (selectedFilerId === 3) {
+      return item.winningNumber && !item.isWinning; // Drawn
+    }
 
-  if (selectedFilerId === 4) {
-    return item.isWinning; // Won
-  }
+    if (selectedFilerId === 4) {
+      return item.isWinning; // Won
+    }
 
-  return true;
-});
+    return true;
+  });
 
-
-
-  
-
-const myOrderRenterItem = ({ item }: { item: any }) => {
-  console.log("ORDER ITEM:", item);
-console.log("BETS:", item.bets);
-const betDate = new Date(item.betTime);
-const formattedBetDate = betDate.toLocaleDateString();
-  return (
-   <MyOrders
-        headers={["A", "B", "C"]}        
-        myBetsTableData={item.bets.map((b) => ({  
+  const myOrderRenterItem = ({ item }: { item: any }) => {
+    console.log("ORDER ITEM:", item);
+    console.log("BETS:", item.bets);
+    const betDate = new Date(item.betTime);
+    const formattedBetDate = betDate.toLocaleDateString();
+    return (
+      <MyOrders
+        headers={["A", "B", "C"]}
+        myBetsTableData={item.bets.map((b) => ({
           // ✅ NORMALIZED FIELDS FOR UI
           type: b.betType,
           value: b.selectedNumber,
           payment: b.amount,
-        
+
           betCount: b.betCount ?? 1,
           totalAmount: b.totalAmount,
-        
+
           // ✅ result logic (already correct)
           result:
             b.isWinning === true
               ? "Won"
               : b.isWinning === false && item.winningNumber !== null
-              ? "No Won"
-              : "To Be Drawn",
+                ? "No Won"
+                : "To Be Drawn",
         }))}
-        
-        
-        
         id={item.betUniqueId}
         bettingTime={formattedBetDate}
         paymentAmount={item.totalAmount}
@@ -283,17 +304,16 @@ const formattedBetDate = betDate.toLocaleDateString();
           item.isWinning
             ? "Won"
             : item.winningNumber !== null
-            ? "No Won"
-            : "To Be Drawn"
+              ? "No Won"
+              : "To Be Drawn"
         }
         imageSource={hot}
         winOrLossId={item.betUniqueId}
         gameName={item.gameName || "AnnaiGaming"}
         totalWinningAmount={item.totalAmount}
       />
-  );
-};
-
+    );
+  };
 
   return (
     <ScrollView
@@ -313,12 +333,23 @@ const formattedBetDate = betDate.toLocaleDateString();
             }}
             onPress={() => navigation.pop()}
           >
-            <Image
+            <Entypo
+              name="chevron-left"
+              size={Scale(30)}
+              color={COLORS.white}
+              style={{
+                width: Scale(24),
+                height: Scale(34),
+                marginTop: Scale(10),
+                marginLeft: Scale(10),
+              }}
+            />
+            {/* <Image
               source={lefArrow}
               tintColor={"#fff"}
               contentFit="contain"
               style={{ width: Scale(20), height: Scale(20) }}
-            />
+            /> */}
           </TouchableOpacity>
 
           <Text style={styles.resultText}>My Bets</Text>
@@ -344,7 +375,7 @@ const formattedBetDate = betDate.toLocaleDateString();
             endYear={2028}
           />
         </View>
-        
+
         <View style={{ flex: 1 }}>
           <CustomTabs
             tabs={resultHeaderList}
@@ -352,7 +383,7 @@ const formattedBetDate = betDate.toLocaleDateString();
             onIndexChange={setSelectedIndex}
             onSelectGroupId={handleGroupIdSelect}
           />
-          
+
           <FlatList
             data={myBetsFilterList}
             keyExtractor={(item) => item.id.toString()}
@@ -361,7 +392,7 @@ const formattedBetDate = betDate.toLocaleDateString();
             contentContainerStyle={{
               backgroundColor: COLORS.primary,
               paddingVertical: Scale(10),
-              flex: 1
+              flex: 1,
             }}
             renderItem={renderHeader}
           />
@@ -371,7 +402,7 @@ const formattedBetDate = betDate.toLocaleDateString();
       <View style={{ marginHorizontal: 15, paddingBottom: 20 }}>
         <FlatList
           data={filteredOrders}
-         keyExtractor={(item) => item.betUniqueId}
+          keyExtractor={(item) => item.betUniqueId}
           showsVerticalScrollIndicator={false}
           renderItem={myOrderRenterItem}
           scrollEnabled={false}
@@ -381,7 +412,7 @@ const formattedBetDate = betDate.toLocaleDateString();
                 flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
-               marginTop: Scale(100),
+                marginTop: Scale(100),
               }}
             >
               <Image
@@ -437,7 +468,7 @@ const createStyles = (Scale: any) =>
       borderTopWidth: Scale(3),
       width: Scale(30),
     },
-    headerText: { fontSize: Scale(16), color: 'grey', top: 3 },
+    headerText: { fontSize: Scale(16), color: "grey", top: 3 },
     selectedHeaderText: {
       color: "#fff",
       fontWeight: "bold",

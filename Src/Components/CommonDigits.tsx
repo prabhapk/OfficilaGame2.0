@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, ImageBackground, Platform } from "react-native";
 import CountdownTimer from "./CountdownTimer";
 import {
   setMin1TargetDate,
@@ -71,24 +71,34 @@ const CommonDigits: React.FC<Props> = ({ data, onPress3Digits }) => {
 
 const createStyles = (Scale: any) =>
   StyleSheet.create({
+    // container: {
+    //   margin: 5,
+    //   width: Platform.OS === 'web' ? Scale(300) : '47%',
+    //   height: Platform.OS === 'web' ? Scale(180) : Scale(180),
+    //   overflow: "hidden",
+    //   backgroundColor: 'transparent',
+    //   borderWidth: 1,
+    //   borderColor: 'transparent',
+    // },
     container: {
-      margin: 5,
-      width: '47%',
-      height: 180,
-      borderRadius: 10,
-      overflow: "hidden",
-      backgroundColor: 'transparent',
-      borderWidth: 1,
-      borderColor: 'transparent',
-    },
+  margin: 5,
+  width: Platform.OS === "web" ? Scale(200) : "47%",
+  maxWidth: Scale(300),
+  height: Scale(180),
+  overflow: "hidden",
+},
 
-    imageBackground: {
-      flex: 1,
-    },
+ imageBackground: {
+  flex: 1,
+  width: "100%",
+  height: "100%",
+},
 
-    imageStyle: {
-      borderRadius: 10,
-    },
+ imageStyle: {
+  borderRadius: 10,
+  width: "100%",
+  height: "100%",
+},
 
     timerContainer: {
       position: "absolute",

@@ -28,17 +28,22 @@ const WalletInfoModal: React.FC<WalletInfoModalProps> = ({
     backdropTransitionInTiming={0}
     backdropTransitionOutTiming={0}
     backdropOpacity={0.5}
+    style={{
+      alignItems: 'center',
+    }}
     >
       <View
         style={{
           backgroundColor: COLORS.white,
           borderRadius: 10,
           padding: 20,
-          marginBottom: 16,
-          // width: '90%',
-          // maxWidth: 380,
+          marginBottom: 26,
+          width: '95%',
+          maxWidth: 380,
+          // alignItems: 'center',
+          // justifyContent: 'center',
           // maxHeight: '80%',
-          // marginHorizontal: Scale(10),
+          marginHorizontal: Scale(10),
         }}>
         <View
           style={{
@@ -52,6 +57,7 @@ const WalletInfoModal: React.FC<WalletInfoModalProps> = ({
               color: COLORS.primary,
               fontWeight: 'bold',
               fontSize: Scale(16),
+              textAlign: 'center',
             }}>
             {headerText}
           </Text>

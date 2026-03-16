@@ -83,7 +83,7 @@ const DownloadBanner: React.FC<DownloadBannerProps> = ({ onClose }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#8B5CF6', '#7C3AED']} // Purple gradient similar to reference
+        colors={[COLORS.linearOne, COLORS.linearTwo]} // Purple gradient similar to reference
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.gradientContainer}
@@ -170,7 +170,7 @@ const createStyles = (Scale: any, verticalScale: any) =>
       fontSize: Scale(12),
     },
     downloadButton: {
-      backgroundColor: '#3B82F6', // Blue color
+      backgroundColor: COLORS.primary, 
       paddingVertical: verticalScale(8),
       paddingHorizontal: Scale(16),
       borderRadius: Scale(20),

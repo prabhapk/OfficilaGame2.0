@@ -7,37 +7,71 @@ const formatTime = (timestamp: string) =>
 
 /* -------------------- API → ENUM MAPPER -------------------- */
 
-const mapApiTypeToTransactionType = (type: string): TransactionType | null => {
+// const mapApiTypeToTransactionType = (type: string): TransactionType | null => {
+//   switch (type) {
+//     case 'DEBIT_BET':
+//       return TransactionType.BET;
+
+//     case 'CREDIT_WIN':
+//       return TransactionType.CREDIT_WIN;
+
+//     case 'Deposit':
+//     case 'Recharge Fee':
+//       return TransactionType.RECHARGE;
+
+//     case 'Withdraw':
+//       return TransactionType.WITHDRAW;
+
+//     case 'Transfer':
+//       return TransactionType.TRANSFER;
+
+//     case 'Referral Bonus':
+//       return TransactionType.VIP_BONUS;
+
+//     case 'Rebate':
+//       return TransactionType.REBATE;
+
+//     case 'Commission':
+//       return TransactionType.COMMISSION;
+
+//     default:
+//       return null;
+//   }
+// };
+
+export const mapApiTypeToTransactionType = (type: string) => {
   switch (type) {
-    case 'DEBIT_BET':
-      return TransactionType.BET;
 
-    case 'CREDIT_WIN':
-      return TransactionType.CREDIT_WIN;
-
-    case 'Deposit':
-    case 'Recharge Fee':
+    case "Wallet Recharge":
       return TransactionType.RECHARGE;
 
-    case 'Withdraw':
+    case "Withdraw":
       return TransactionType.WITHDRAW;
 
-    case 'Transfer':
+    case "DEBIT_BET":
+      return TransactionType.BET;
+
+    case "Win":
+      return TransactionType.CREDIT_WIN;
+
+    case "Transfer":
       return TransactionType.TRANSFER;
 
-    case 'Referral Bonus':
+    case "VIP Bonus":
       return TransactionType.VIP_BONUS;
 
-    case 'Rebate':
+    case "Rebate":
       return TransactionType.REBATE;
 
-    case 'Commission':
+    case "Commission":
       return TransactionType.COMMISSION;
 
     default:
       return null;
   }
 };
+
+
 
 /* -------------------- BASE -------------------- */
 

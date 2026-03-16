@@ -40,6 +40,7 @@ import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from "../Constants/Theme";
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Entypo from 'react-native-vector-icons/Entypo';
 const SignUpScreen = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -146,11 +147,17 @@ const SignUpScreen = ({ navigation }: any) => {
       <ScrollView contentContainerStyle={{ paddingBottom: Scale(30) }}>
         <ImageBackground source={signInMain} style={styles.topImage}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
+            {/* <Image
               source={lefArrow}
               style={styles.leftArrow}
               contentFit="contain"
-            />
+            /> */}
+            <Entypo
+                                          name="chevron-left"
+                                          size={Scale(40)}
+                                          color={COLORS.white}
+                                          style={styles.leftArrow}
+                                        />
           </TouchableOpacity>
         </ImageBackground>
 
@@ -511,8 +518,8 @@ const createStyles = (Scale: any) =>
     marginHorizontal: Scale(10),
   },
   leftArrow: {
-    width: Scale(24),
-    height: Scale(24),
+   width: Scale(24),
+    height: Scale(34),
     marginTop: Scale(20),
     marginLeft: Scale(10),
   },

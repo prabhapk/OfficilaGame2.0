@@ -530,6 +530,7 @@ const ProfileScreen = ({ navigation }: any) => {
         )}
 
         {/* Modals */}
+
         <WalletInfoModal
           isVisible={isRechargeModalVisible}
           toggleModal={toggleModalRecharge}

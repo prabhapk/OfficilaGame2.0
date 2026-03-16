@@ -117,11 +117,17 @@ const ForgotPassword = ({navigation}: any) => {
       <ScrollView contentContainerStyle={{paddingBottom: Scale(30)}}>
         <ImageBackground source={signInMain} style={styles.topImage}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
+            {/* <Image
               source={lefArrow}
               style={styles.leftArrow}
               contentFit="contain"
-            />
+            /> */}
+             <Entypo
+                                                      name="chevron-left"
+                                                      size={Scale(40)}
+                                                      color={COLORS.white}
+                                                      style={styles.leftArrow}
+                                                    />
           </TouchableOpacity>
         </ImageBackground>
         <View style={styles.bottomContainer}>
@@ -205,7 +211,7 @@ const ForgotPassword = ({navigation}: any) => {
                 }
               />
                {newPassword && !passwordRegex.test(newPassword) && (
-  <Text style={{ color: 'red', fontSize: Scale(12), marginLeft: Scale(10),marginBottom:Scale(10),}}>
+  <Text style={{ color: COLORS.white, fontSize: Scale(12), marginLeft: Scale(10),marginBottom:Scale(10),}}>
     Mobile number must be exactly 10 digits
   </Text>
             )}
@@ -374,8 +380,8 @@ const createStyles = (Scale: any) =>
     height: Scale(80),
   },
   leftArrow: {
-    width: Scale(24),
-    height: Scale(24),
+   width: Scale(24),
+    height: Scale(34),
     marginTop: Scale(20),
     marginLeft: Scale(10),
   },

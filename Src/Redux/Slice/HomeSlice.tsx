@@ -11,7 +11,8 @@ const initialValues: homeSliceState = {
   howScreenCommonLoader: false,
   allGamesList: [],
   individualGameData: [],
-  individualGameDataLoader: false
+  individualGameDataLoader: false,
+  gamesNameWithGroupId:[]
 }
 
 
@@ -114,19 +115,32 @@ export const homeSlice = createSlice({
 
     });
     // Fulfilled
-    builder.addCase(getAllGamesList.fulfilled, (state, action) => {
-      state.howScreenCommonLoader = false;
-      const seenGroups = new Set<number>();
-      const uniqueGames = action.payload.filter((game: any) => {
-        if (seenGroups.has(game.groupId)) {
-          return false;
-        }
-        seenGroups.add(game.groupId);
-        return true;
-      });
+   builder.addCase(getAllGamesList.fulfilled, (state, action) => {
+  state.howScreenCommonLoader = false;
 
-      state.allGamesList = uniqueGames;
-    });
+  const seenGroups = new Set<number>();
+
+  // ✅ Get unique games by groupId
+  const uniqueGames = action.payload.filter((game: any) => {
+    if (seenGroups.has(game.groupId)) return false;
+    seenGroups.add(game.groupId);
+    return true;
+  });
+
+  // ✅ Store full response
+  state.allGamesList = uniqueGames;
+  console.log("allGamesList =>", state.allGamesList);
+
+  // ✅ Store only name + groupId
+  state.gamesNameWithGroupId = uniqueGames.map((game: any, index: number) => ({
+    id: index + 1,
+    name: game.name,
+    groupId: game.groupId,
+  }));
+
+  console.log("gamesNameWithGroupId =>", state.gamesNameWithGroupId);
+});
+
     builder.addCase(getIndividualGameData.fulfilled, (state, action) => {
       state.individualGameDataLoader = false;
       state.individualGameData = action.payload;

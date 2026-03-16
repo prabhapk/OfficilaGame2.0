@@ -195,7 +195,7 @@ const createStyles = (Scale: (n: number) => number) =>
   StyleSheet.create({
     screen: {
       flex: 1,
-      backgroundColor: 'red',
+      backgroundColor: 'white',
     },
     headerWrapper: {
       backgroundColor: 'yellow',

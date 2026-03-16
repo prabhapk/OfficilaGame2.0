@@ -31,6 +31,7 @@ import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from "../Constants/Theme";
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const SignInScreen = ({ navigation }: any) => {
   const [selectedTab, setSelectedTab] = useState<'password' | 'otp'>('password');
@@ -135,7 +136,13 @@ const SignInScreen = ({ navigation }: any) => {
           <TouchableOpacity
             onPress={() => navigation.replace("DrawerNavigation")}
           >
-            <Image source={lefArrow} style={styles.leftArrow} contentFit="contain" />
+            {/* <Image source={lefArrow} style={styles.leftArrow} contentFit="contain" /> */}
+               <Entypo
+                              name="chevron-left"
+                              size={Scale(40)}
+                              color={COLORS.white}
+                              style={styles.leftArrow}
+                            />
           </TouchableOpacity>
         </ImageBackground>
 
@@ -399,7 +406,7 @@ const createStyles = (Scale: any) =>
   },
   leftArrow: {
     width: Scale(24),
-    height: Scale(24),
+    height: Scale(34),
     marginTop: Scale(20),
     marginLeft: Scale(10),
   },

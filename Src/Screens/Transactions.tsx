@@ -179,7 +179,10 @@ const Transactions = ({ navigation }: any) => {
   };
 
   useEffect(() => {
-    console.log('ALL TRANSACTIONS SAMPLE', allTransactionsData[0]);
+   console.log(
+  'ALL TRANSACTIONS SAMPLE',
+  allTransactionsData?.transactions?.[0]
+);
   }, [allTransactionsData]);
 
   const normalizedData = useMemo(() => {
@@ -192,7 +195,7 @@ const Transactions = ({ navigation }: any) => {
       case 7: return rebateData;
       case 8: return transferData;
       case 9: return vipsData;
-      default: return allTransactionsData;
+     default: return allTransactionsData || [];
     }
   }, [
     selectedButton,
@@ -245,7 +248,6 @@ const Transactions = ({ navigation }: any) => {
     <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
       <NewAppHeader
         leftIconPress={() => navigation.goBack()}
-        leftIcon={leftArrowHeader}
         centerText="Transactions"
       />
 

@@ -79,7 +79,9 @@ export interface CommonSliceState {
     allGamesList: any;
     individualGameData: any;
     individualGameDataLoader: boolean;
-    invidualGameHeaders:any
+    invidualGameHeaders:any;
+    gamesNameWithGroupId:any;
+
   }
   export interface resultSliceState {
     resultScreenCommonLoader: boolean;

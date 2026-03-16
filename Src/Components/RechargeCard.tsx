@@ -63,7 +63,7 @@ const RechargeCard : React.FC<Props> = (
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Type</Text>
-        <Text style={styles.label}>₹{type}</Text>
+        <Text style={styles.label}>{type}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Channel Name</Text>
