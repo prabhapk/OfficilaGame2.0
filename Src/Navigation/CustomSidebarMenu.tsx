@@ -19,6 +19,7 @@ import {
   rebateMenu,
   robMoney,
   superAgent,
+  vipNewLogoZero,
   wallet3dImage1,
 } from "../../assets/assets";
 import { Image } from "expo-image";
@@ -167,11 +168,11 @@ const CustomSidebarMenu = ({ navigation }: any) => {
                 Player {userDetails.id}
               </Text>
               <Image
-                source={drawerLevel}
+                source={vipNewLogoZero}
                 style={{
                   width: Scale(70),
                   height: Scale(30),
-                  marginLeft: Scale(15),
+                  marginLeft: Scale(5),
                 }}
                 contentFit="contain"
               />
@@ -216,6 +217,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
             </View>
 
             <TouchableOpacity
+            onPress={()=> navigation.navigate('WalletScreen')}
               style={{
                 backgroundColor: COLORS.primary,
                 padding: 10,
@@ -239,72 +241,12 @@ const CustomSidebarMenu = ({ navigation }: any) => {
         </LinearGradient>
       )}
 
-      {/* <View style={styles.referalView}>
-        <TouchableOpacity
-          style={styles.refButton}
-          onPress={() => navigation.navigate("RebateScreen")}
-        >
-          <Image
-            source={rebateMenu}
-            style={styles.refImage}
-            contentFit="contain"
-          />
-          <Text style={styles.refText}>Rebate</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.refButton}>
-          <Image
-            source={bigSpin}
-            style={styles.refImage}
-            contentFit="contain"
-          />
-          <Text style={styles.refText}>Big Spin</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.refButton}>
-          <Image
-            source={robMoney}
-            style={styles.refImage}
-            contentFit="contain"
-          />
-          <Text style={styles.refText}>Rob money</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.refButton}>
-          <Image
-            source={freeLottery}
-            style={styles.refImage}
-            contentFit="contain"
-          />
-          <Text style={styles.refText}>Free Lottery</Text>
-        </TouchableOpacity>
-      </View> */}
-
       <FlatList
         data={MenuBarList}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ marginTop: Scale(20) }}
         renderItem={renderMenuItem}
       />
-
-      {/* <TouchableOpacity
-        style={{ alignItems: "center" }}
-        onPress={() => navigation.navigate("AgencyScreen")}
-      >
-        <Image
-          source={superAgent}
-          style={{ width: "93%", height: Scale(110) }}
-          contentFit="fill"
-        />
-      </TouchableOpacity> */}
-{/* 
-      <TouchableOpacity 
-        style={{ alignItems: "center" }}
-        onPress={() => navigation.navigate("Promotions")}
-      >
-        <Image
-          source={promotions}
-          style={{ width: "93%", height: Scale(110) }}
-          contentFit="fill"
-        />
-      </TouchableOpacity> */}
       <Modal
           isVisible={showModal}
           animationIn="flipInX"
@@ -409,6 +351,7 @@ const createStyles = (Scale: any) =>
       fontSize: 12,
       fontWeight: "bold",
       marginVertical: 5,
+      marginHorizontal: 10,
     },
     menuImage: { width: 40, height: 40,},
     registerGradient: {

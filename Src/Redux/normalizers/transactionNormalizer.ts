@@ -7,69 +7,43 @@ const formatTime = (timestamp: string) =>
 
 /* -------------------- API → ENUM MAPPER -------------------- */
 
-// const mapApiTypeToTransactionType = (type: string): TransactionType | null => {
-//   switch (type) {
-//     case 'DEBIT_BET':
-//       return TransactionType.BET;
-
-//     case 'CREDIT_WIN':
-//       return TransactionType.CREDIT_WIN;
-
-//     case 'Deposit':
-//     case 'Recharge Fee':
-//       return TransactionType.RECHARGE;
-
-//     case 'Withdraw':
-//       return TransactionType.WITHDRAW;
-
-//     case 'Transfer':
-//       return TransactionType.TRANSFER;
-
-//     case 'Referral Bonus':
-//       return TransactionType.VIP_BONUS;
-
-//     case 'Rebate':
-//       return TransactionType.REBATE;
-
-//     case 'Commission':
-//       return TransactionType.COMMISSION;
-
-//     default:
-//       return null;
-//   }
-// };
-
 export const mapApiTypeToTransactionType = (type: string) => {
-  switch (type) {
+  if (!type) return null;
 
-    case "Wallet Recharge":
+  const normalizedType = type.trim().toUpperCase(); // ✅ IMPORTANT
+
+  switch (normalizedType) {
+    case "WALLET RECHARGE":
       return TransactionType.RECHARGE;
 
-    case "Withdraw":
+    case "WITHDRAW":
       return TransactionType.WITHDRAW;
 
     case "DEBIT_BET":
       return TransactionType.BET;
 
-    case "Win":
-      return TransactionType.CREDIT_WIN;
+    case "CREDIT_WIN":
+      return TransactionType.WIN;
 
-    case "Transfer":
+    case "TRANSFER":
       return TransactionType.TRANSFER;
 
-    case "VIP Bonus":
+    case "VIP_BONUS":
       return TransactionType.VIP_BONUS;
 
-    case "Rebate":
+    case "REBATE":
       return TransactionType.REBATE;
 
-    case "Commission":
+    case "COMMISSION":
       return TransactionType.COMMISSION;
 
     default:
+      console.log("❌ UNKNOWN API TYPE:", type);
       return null;
   }
 };
+
+
 
 
 
@@ -84,80 +58,37 @@ const base = (t: any) => ({
 
 /* -------------------- MAIN NORMALIZER -------------------- */
 
-export const normalizeTransactionForCard = (t: any) => {
-  const transactionType = mapApiTypeToTransactionType(t.type);
-  if (!transactionType) return null;
+export const normalizeTransactionForCard = (item: any) => {
+  if (!item) return null;
 
-  switch (transactionType) {
-    case TransactionType.BET:
-      return {
-        transactionType,
-        ...base(t),
-        betAmount: Math.abs(t.amount),
-        game: t.gameType ?? '-',
-      };
+  console.log('🔍 RAW TYPE:', item.type); // DEBUG
 
-    case TransactionType.CREDIT_WIN:
-      return {
-        transactionType,
-        ...base(t),
-        betAmount: t.amount,
-        game: t.gameType ?? '-',
-      };
+  const transactionType = mapApiTypeToTransactionType(item.type);
 
-    case TransactionType.RECHARGE:
-      return {
-        transactionType,
-        ...base(t),
-        rechargeAmount: t.amount,
-        channelName: t.channelName ?? '-',
-        paymentType: t.paymentType ?? '-',
-        description: t.description ?? '-',
-      };
-
-    case TransactionType.WITHDRAW:
-      return {
-        transactionType,
-        ...base(t),
-        betAmount: Math.abs(t.amount),
-        description: t.description ?? '-',
-      };
-
-    case TransactionType.TRANSFER:
-      return {
-        transactionType,
-        ...base(t),
-        betAmount: t.amount,
-        description: t.description ?? '-',
-      };
-
-    case TransactionType.VIP_BONUS:
-      return {
-        transactionType,
-        ...base(t),
-        betAmount: t.amount,
-        description: t.description ?? '-',
-      };
-
-    case TransactionType.REBATE:
-      return {
-        transactionType,
-        ...base(t),
-        betAmount: t.amount,
-        description: t.description ?? '-',
-      };
-
-    case TransactionType.COMMISSION:
-      return {
-        transactionType,
-        ...base(t),
-        betAmount: t.amount,
-        channelName: t.channelName ?? '-',
-        paymentType: t.paymentType ?? '-',
-        description: t.description ?? '-',
-      };
-
-    default:
-      return null;
+  if (!transactionType) {
+    console.log('❌ DROPPED ITEM:', item);
+    return null;
   }
+
+  return {
+    transactionType,
+    type: item.type,
+
+    betAmount: Math.abs(item.amount || 0),
+afterBalance: Number(item.balanceAfter),
+beforeBalance: Number(item.balanceBefore),
+    amount: item.amount || 0,
+balanceBefore: item.balanceBefore || 0,
+    orderTime: new Date(item.timestamp).toLocaleString(),
+    orderNumber: item.transactionId,
+
+    description: item.description || '-',
+    channelName: item.channelName || '-',
+    // paymentType: item.paymentType || '-',
+    game: item.gameType || '-',
+    rechargeNumber: item.transactionId,
+    rechargeTime: new Date(item.timestamp).toLocaleString(),
+    paymentType: item.status || "-"
+  };
 };
+

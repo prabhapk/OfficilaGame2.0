@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, } from 'react';
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
-  StyleSheet,
+  StyleSheet
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -24,7 +24,6 @@ import RebateCard from '../Components/RebateCard';
 import TransferCard from '../Components/TransferCard';
 import VipTransactionCard from '../Components/VipTransactionCard';
 
-import { leftArrowHeader } from '../../assets/assets';
 import { COLORS } from '../Constants/Theme';
 
 import {
@@ -38,18 +37,6 @@ import {
   getRebateData,
   getCommissionData,
 } from '../Redux/Slice/TransactionSlice';
-
-console.log('getAllTransactionsData==>', getAllTransactionsData);
-console.log('getTransferData==>', getTransferData);
-console.log('getWinsData==>', getWinsData);
-console.log('getBetsData==>', getBetsData);
-console.log('getWalletData==>', getWalletData);
-console.log('getWithdrawalsData==>', getWithdrawalsData);
-console.log('getVipsData==>', getVipsData);
-console.log('getRebateData==>', getRebateData);  
-console.log('getCommissionData==>', getCommissionData);
-
-
 
 import { RootState } from '../Redux/store';
 import { TransactionType } from '../types/transaction.types';
@@ -83,8 +70,6 @@ const Transactions = ({ navigation }: any) => {
     { id: 9, name: 'VIP' },
   ];
 
-
-
   const [selectedButton, setSelectedButton] = useState(buttons[0]);
   const [open, setOpen] = useState(false);
   const [range, setRange] = useState<{ startDate?: Date; endDate?: Date }>({});
@@ -104,143 +89,125 @@ const Transactions = ({ navigation }: any) => {
     }),
     [range.startDate, range.endDate, userId]
   );
-  // ======> 
-    const fetchBySelectedTab = (params: any) => {
-      switch (selectedButton.id) {
-        case 1:
-          dispatch(getAllTransactionsData(params));
-          break;
-        case 2:
-          dispatch(getWinsData(params));
-          break;
-        case 3:
-          dispatch(getWalletData(params));
-          break;
-        case 4:
-          dispatch(getBetsData(params));
-          break;
-        case 5:
-          dispatch(getWithdrawalsData(params));
-          break;
-        case 6:
-          dispatch(getCommissionData(params));
-          break;
-        case 7:
-          dispatch(getRebateData(params));
-          break;
-        case 8:
-          dispatch(getTransferData(params));
-          break;
-        case 9:
-          dispatch(getVipsData(params));
-          break;
-      }
-    };
-    useEffect(() => {
-      fetchBySelectedTab({
-        ...dateParams,
-        Page: 1,
-      });
-    }, [dateParams]);
-    
-  /* -------------------- Button Handler -------------------- */
-  const handleButtonPress = (button: any) => {
-    setSelectedButton(button);
 
-    switch (button.id) {
+  /* -------------------- API CALL -------------------- */
+  const fetchBySelectedTab = (params: any) => {
+    switch (selectedButton.id) {
       case 1:
-        dispatch(getAllTransactionsData(dateParams));
+        dispatch(getAllTransactionsData(params));
         break;
       case 2:
-        dispatch(getWinsData(dateParams));
+        dispatch(getWinsData(params));
         break;
       case 3:
-        dispatch(getWalletData(dateParams));
+        dispatch(getWalletData(params));
         break;
       case 4:
-        dispatch(getBetsData(dateParams));
+        dispatch(getBetsData(params));
         break;
       case 5:
-        dispatch(getWithdrawalsData(dateParams));
+        dispatch(getWithdrawalsData(params));
         break;
-        case 6:
-        dispatch(getCommissionData(dateParams));
+      case 6:
+        dispatch(getCommissionData(params));
         break;
-        case 7:
-        dispatch(getRebateData(dateParams));
+      case 7:
+        dispatch(getRebateData(params));
         break;
       case 8:
-        dispatch(getTransferData(dateParams));
+        dispatch(getTransferData(params));
         break;
       case 9:
-        dispatch(getVipsData(dateParams));
+        dispatch(getVipsData(params));
         break;
     }
   };
 
   useEffect(() => {
-   console.log(
-  'ALL TRANSACTIONS SAMPLE',
-  allTransactionsData?.transactions?.[0]
-);
-  }, [allTransactionsData]);
+    fetchBySelectedTab(dateParams);
+  }, [dateParams, selectedButton]);
 
-  const normalizedData = useMemo(() => {
-    switch (selectedButton.id) {
-      case 2: return winsData;
-      case 3: return walletData;
-      case 4: return betsData;
-      case 5: return withdrawalsData;
-      case 6: return commissionData;
-      case 7: return rebateData;
-      case 8: return transferData;
-      case 9: return vipsData;
-     default: return allTransactionsData || [];
-    }
-  }, [
-    selectedButton,
-    winsData,
-    walletData,
-    betsData, 
-    withdrawalsData,
-    transferData,
-    vipsData,
-    allTransactionsData,
-    commissionData,
-    rebateData,
-  ]);
-  
- 
-
-  /* -------------------- Card Renderer -------------------- */
-  const renderItem = ({ item }: any) => {
-    switch (item?.transactionType) {
-      case TransactionType?.BET:
-        return <BetsCard {...item} />;
-      case TransactionType?.CREDIT_WIN:
-        return <WinningCard {...item} />;
-      case TransactionType?.RECHARGE:
-        return <RechargeCard {...item} />;
-      case TransactionType?.WITHDRAW:
-        return <WithdrawCard {...item} />;
-      case TransactionType?.TRANSFER:
-        return <TransferCard {...item} />;
-      case TransactionType?.VIP_BONUS:
-        return <VipTransactionCard {...item} />;
-      case TransactionType?.REBATE:
-        return <RebateCard {...item} />;
-      case TransactionType?.COMMISSION:
-        return <CommissionCard {...item} />;
-      default:
-        return null;
-    }
+  /* -------------------- BUTTON HANDLER -------------------- */
+  const handleButtonPress = (button: any) => {
+    setSelectedButton(button);
   };
 
-  /* -------------------- Initial Load -------------------- */
+  /* -------------------- NORMALIZE DATA -------------------- */
+const normalizedData = useMemo(() => {
+  switch (selectedButton.id) {
+    case 2: return winsData || [];
+    case 3: return walletData || [];
+    case 4: return betsData || [];
+    case 5: return withdrawalsData || [];
+    case 6: return commissionData || [];
+    case 7: return rebateData || [];
+    case 8: return transferData || [];
+    case 9: return vipsData || [];
+    default: return allTransactionsData || [];
+  }
+}, [
+  selectedButton,
+  winsData,
+  walletData,
+  betsData,
+  withdrawalsData,
+  transferData,
+  vipsData,
+  allTransactionsData,
+  commissionData,
+  rebateData,
+]);
+
+
+  /* -------------------- MAP API → UI -------------------- */
+
+
+  /* -------------------- DEBUG LOGS -------------------- */
   useEffect(() => {
-    handleButtonPress(buttons[0]);
+    console.log('RAW DATA', allTransactionsData);
+    console.log('normalizedData length', normalizedData.length);
+    // console.log('mappedData length', mappedData.length);
+    // console.log('first mapped item', mappedData[0]);
   }, []);
 
+  /* -------------------- RENDER -------------------- */
+const renderItem = ({ item }: any) => {
+  switch (item?.transactionType) {
+    case 'BET':
+      return <BetsCard {...item} />;
+
+    case 'CREDIT_WIN':
+    case 'WIN':
+      return <WinningCard {...item} />;
+
+    case 'RECHARGE':
+      return <RechargeCard {...item} />;
+
+    case 'WITHDRAW':
+      return <WithdrawCard {...item} />;
+
+    case 'TRANSFER':
+      return <TransferCard {...item} />;
+
+    case 'VIP_BONUS':
+      return <VipTransactionCard {...item} />;
+
+    case 'REBATE':
+      return <RebateCard {...item} />;
+
+    case 'COMMISSION':
+      return <CommissionCard {...item} />;
+
+    default:
+      return (
+        <View style={{ padding: 20 }}>
+          <Text style={{ color: 'white' }}>
+            Unknown Type: {item.transactionType}
+          </Text>
+        </View>
+      );
+  }
+};
 
 
   /* -------------------- UI -------------------- */
@@ -300,6 +267,7 @@ const Transactions = ({ navigation }: any) => {
 };
 
 export default Transactions;
+
 
 
 const styles = StyleSheet.create({

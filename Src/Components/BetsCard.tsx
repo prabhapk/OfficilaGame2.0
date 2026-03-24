@@ -11,7 +11,7 @@ interface Props {
     orderTime: string;
     game: string;
     orderNumber: string;
-    Type: string;
+    type: string;
 }
 
 const BetsCard : React.FC<Props> = (
@@ -21,7 +21,7 @@ const BetsCard : React.FC<Props> = (
         orderTime,
          game,
           orderNumber,
-        Type
+        type
         }
     : Props
 ) => {
@@ -60,7 +60,7 @@ const BetsCard : React.FC<Props> = (
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Type</Text>
-        <Text style={styles.label}>{Type}</Text>
+        <Text style={styles.label}>{type}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Game Name</Text>

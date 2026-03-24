@@ -1,4 +1,4 @@
-import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, fiveMin3DImage, homeActiveTab, homeTab, hot, inviteActiveTab, inviteTab, jdb, Jili, lottery1, meActiveTab, meTab, multiUserIcon, oneMin3DImage, pg, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
+import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, DrawerPromotion, DrawerRebate, DrawerSuperAgent, fiveMin3DImage, homeActiveTab, homeTab, hot, inviteActiveTab, inviteTab, jdb, Jili, lottery1, meActiveTab, meTab, multiUserIcon, oneMin3DImage, pg, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
 import CasinoScreen from "../Screens/CasinoScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import InviteScreen from "../Screens/InviteScreen";
@@ -129,9 +129,9 @@ export const ThreeDigitsLottery = [
   ];
 
   export const MenuBarList = [
-    {id:1, name:"Rebate", image:scratchMenu, component:RebateScreen},
-    {id: 2, name:"Promotions", image:quick3dMenu, component:Promotions},
-    {id: 3, name:"Super Agent", image:quick3dMenu, component:AgencyScreen},
+    {id:1, name:"Rebate", image:DrawerRebate, component:RebateScreen},
+    {id: 2, name:"Promotions", image:DrawerPromotion, component:Promotions},
+    {id: 3, name:"Super Agent", image:DrawerSuperAgent, component:AgencyScreen},
     // {id: 2, name:"Quick 3D", image:quick3dMenu, component:Quick3DScreen},
     // {id: 3, name:"Official 3 Digits", image:digitMenu, component:ThreeDigitMain},
     // {id:4, name:"Casino", image:casinMenu, component:HomeScreen},

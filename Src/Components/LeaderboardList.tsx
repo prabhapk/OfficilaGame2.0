@@ -7,21 +7,33 @@ import {
   leaderboardFirst,
   leaderboardSecond,
   leaderboardThird,
+  avatar1,
+  avatar10,
+  avatar11,
+  avatar12,
+  avatar2,
+  avatar3,
+  avatar4,
+  avatar5,
+  avatar6,
+  avatar7,
+  avatar8,
+  avatar9,
 } from "../../assets/assets";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { COLORS } from "../Constants/Theme";
 
 const LEADERBOARD_DATA = [
-  { rank: 1, name: "Player90*****78", amount: "₹1,25,386.20" },
-  { rank: 2, name: "Player98*****97", amount: "₹32,380.00" },
-  { rank: 3, name: "Player93*****50", amount: "₹11,580.00" },
-  { rank: 4, name: "Player95*****90", amount: "₹10,041.60" },
-  { rank: 5, name: "Ramkumar", amount: "₹9,226.49" },
-  { rank: 6, name: "Player92*****11", amount: "₹5,885.29" },
-  { rank: 7, name: "Player91*****22", amount: "₹5,562.00" },
-  { rank: 8, name: "Player94*****33", amount: "₹5,189.70" },
-  { rank: 9, name: "Player96*****44", amount: "₹4,900.00" },
-  { rank: 10, name: "Player97*****55", amount: "₹4,626.45" },
+  { rank: 1, name: "Player90*****78", amount: "₹1,25,386.20", image: avatar1 },
+  { rank: 2, name: "Player98*****97", amount: "₹32,380.00", image: avatar2 },
+  { rank: 3, name: "Player93*****50", amount: "₹11,580.00", image: avatar3 },
+  { rank: 4, name: "Player95*****90", amount: "₹10,041.60", image: avatar7 },
+  { rank: 5, name: "Ramkumar", amount: "₹9,226.49", image: avatar8 },
+  { rank: 6, name: "Player92*****11", amount: "₹5,885.29", image: avatar10 },
+  { rank: 7, name: "Player91*****22", amount: "₹5,562.00", image: avatar7 },
+  { rank: 8, name: "Player94*****33", amount: "₹5,189.70", image: avatar8 },
+  { rank: 9, name: "Player96*****44", amount: "₹4,900.00", image: avatar1 },
+  { rank: 10, name: "Player97*****55", amount: "₹4,626.45" , image: avatar10 },
 ];
 
 const LeaderboardList = () => {
@@ -103,7 +115,20 @@ const LeaderboardList = () => {
             <View style={styles.rankBadge}>
               <Text style={styles.rankBadgeText}>#{item.rank}</Text>
             </View>
-            <View style={styles.avatarPlaceholder} />
+            <View style={styles.avatarPlaceholder}>
+              <Image
+                source={item.image}
+                style={{
+                  width: Scale(32),
+                  height: Scale(32),
+                  borderRadius: Scale(16),
+                  alignItems: "center",
+                  justifyContent: "center",
+                  alignSelf: "center",
+                }}
+                contentFit="contain"
+              />
+            </View>
             <Text style={styles.listName} numberOfLines={1}>
               {item.name}
             </Text>
@@ -208,12 +233,12 @@ const createStyles = (Scale: (n: number) => number) =>
       borderWidth: 1,
     },
     winningsPillGold: {
-      backgroundColor: COLORS.winningsPillGoldBg,
+      backgroundColor: COLORS.white,
       borderColor: COLORS.white,
     },
     winningsPillSilver: {
-      backgroundColor: COLORS.winningsPillSilverBg,
-      borderColor: "#E91E63",
+      backgroundColor: COLORS.white,
+      borderColor: COLORS.white,
     },
     winningsText: {
       fontSize: Scale(10),

@@ -6,10 +6,11 @@ import { COLORS } from '../Constants/Theme';
 import { Image } from 'expo-image';
 interface Props {
     rechargeAmount: number;
-    beforeBalance: number;
+    amount: number;
     afterBalance: number;
     rechargeTime: string;
     rechargeNumber: string;
+    balanceBefore: number;
     // ssr: string;
     type: string;
     channelName: string;
@@ -20,8 +21,9 @@ interface Props {
 
 const RechargeCard : React.FC<Props> = (
     {rechargeAmount, 
-        beforeBalance, 
+        amount, 
         afterBalance, 
+        balanceBefore,
         rechargeTime,
         rechargeNumber,
         // ssr,
@@ -45,7 +47,7 @@ const RechargeCard : React.FC<Props> = (
           source={rechargeIconCard} style={styles.betIcon} />
           <Text style={styles.betTitle}>RECHARGE</Text>
         </View>
-        <Text style={styles.amountText}>+₹{rechargeAmount}</Text>
+        <Text style={styles.amountText}>+₹{amount}</Text>
       </View>
 
       {/* Info Rows */}
@@ -55,7 +57,7 @@ const RechargeCard : React.FC<Props> = (
       </View> */}
       <View style={styles.infoRow}>
         <Text style={styles.label}>Balance</Text>
-        <Text style={styles.label}> ₹{rechargeAmount}</Text>
+        <Text style={styles.label}> ₹{balanceBefore}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>After Balance</Text>

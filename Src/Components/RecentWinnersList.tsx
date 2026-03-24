@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Image } from "expo-image";
-import { recentWinnersHeading } from "../../assets/assets";
+import { recentWinnersHeading, rw1, rw2, rw3, rw4, rw5, rw6 } from "../../assets/assets";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { COLORS } from "../Constants/Theme";
 
@@ -9,32 +9,44 @@ const RECENT_WINNERS_DATA = [
   {
     id: "1",
     playerName: "Player93******76",
-    gameName: "Fortune Gems 2",
-    amount: "₹8.00",
+    gameName: "Crazy Time",
+    amount: "₹11.00",
+    image: rw1,
   },
   {
     id: "2",
     playerName: "Player90******78",
-    gameName: "PokerKing",
-    amount: "₹19.50",
+    gameName: "Roulette",
+    amount: "₹15.50",
+    image: rw2,
   },
   {
     id: "3",
     playerName: "Player95******90",
-    gameName: "Moneycoming",
-    amount: "₹15.00",
+    gameName: "Black",
+    amount: "₹9.00",
+    image: rw3,
   },
   {
     id: "4",
     playerName: "Player92******11",
-    gameName: "StockMarket",
-    amount: "₹6.63",
+    gameName: "Baccarat",
+    amount: "₹22.10",
+    image: rw4,
   },
   {
     id: "5",
     playerName: "Player91******22",
-    gameName: "Fortune Gems 2",
-    amount: "₹10.00",
+    gameName: "Money Time",
+    amount: "₹17.00",
+    image: rw5,
+  },
+  {
+    id: "6",
+    playerName: "Player94******33",
+    gameName: "Aviator",
+    amount: "₹36.00",
+    image: rw6,
   },
 ];
 
@@ -57,7 +69,20 @@ const RecentWinnersList = () => {
         <View style={styles.listSection}>
           {RECENT_WINNERS_DATA.map((item) => (
             <View key={item.id} style={styles.listRow}>
-              <View style={styles.gameIconPlaceholder} />
+              <View style={styles.gameIconPlaceholder}>
+                <Image
+                  source={item.image}
+                  style={{
+                    width: Scale(44),
+                    height: Scale(44),
+                    borderRadius: Scale(8),
+                    alignItems: "center",
+                    justifyContent: "center",
+                    alignSelf: "center",
+                  }}
+                  contentFit="contain"
+                />
+                </View>
               <View style={styles.details}>
                 <Text style={styles.playerName} numberOfLines={1}>
                   {item.playerName}
@@ -89,7 +114,7 @@ const createStyles = (Scale: (n: number) => number) =>
       backgroundColor: COLORS.leaderboardCardBg,
       borderRadius: Scale(16),
       borderWidth: 2,
-      borderColor: COLORS.cardBorderAccent,
+      borderColor: COLORS.primary,
       overflow: "hidden",
     },
     titleWrap: {

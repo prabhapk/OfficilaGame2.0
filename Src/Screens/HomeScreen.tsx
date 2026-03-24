@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, SafeAreaView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 
-import { annaiBanner, annaiBanner1, bannerColorGames, bannerliveCasionoGames, bannerTelegram, bannerWhatsapp, offerImage1, offerImage2, promotionBanner1 } from "../../assets/assets";
+import { bannerColorGames, bannerliveCasionoGames, bannerTelegram, bannerWhatsapp, offerImage1, offerImage2, promotionBanner1 } from "../../assets/assets";
 import { HomeScreenFlatlist } from "../Constants/CommonFlatlist";
 import { COLORS } from "../Constants/Theme";
 import { AppDispatch, RootState } from "../Redux/store";
@@ -51,6 +51,7 @@ const BANNERS = [
     url: "https://t.me/+WyhSvyD9IOYxNWZl",
   },
 ];
+
 
 
 

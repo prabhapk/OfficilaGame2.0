@@ -362,10 +362,12 @@ export const TransactionSlice = createSlice({
     
     builder.addCase(getAllTransactionsData.fulfilled, (state, action) => {
       state.transactionLoader = false;
+      console.log('RAW API TRANSACTIONS', action.payload?.transactions);
       state.allTransactionsData = (action.payload?.transactions ?? [])
         .map(normalizeTransactionForCard)
         .filter(Boolean);
     });
+    
     
 
     // Rejected

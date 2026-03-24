@@ -81,7 +81,7 @@ const InvitationRulesScreen = ({ navigation }: { navigation: any }) => {
 
   const renderRule = (rule: string, index: number) => (
     <View key={index} style={styles.ruleItem}>
-      <Text style={styles.bulletPoint}>•</Text>
+      <Text style={styles.bulletPoint}>*</Text>
       <Text style={styles.ruleText}>{rule}</Text>
     </View>
   );
