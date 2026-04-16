@@ -10,9 +10,12 @@ type VipCardProps = {
   headerText: string;
   bottomText: string;
   badgeImage: any;
+  rechargedAmount: number;
+  levelMaxAmount: number;
+  level: number;
 };
 
-const VipCard = ({headerText, bottomText, badgeImage}: VipCardProps) => {
+const VipCard = ({headerText, bottomText, badgeImage, rechargedAmount, levelMaxAmount, level}: VipCardProps) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
   return (
@@ -32,16 +35,16 @@ const VipCard = ({headerText, bottomText, badgeImage}: VipCardProps) => {
           </View>
           <Image 
           contentFit='contain'
-          source={vipNewLogoZero} style={styles.badgeImage} />
+          source={badgeImage} style={styles.badgeImage} />
         </View>
 
         {/* Amount Status */}
         <LinearGradient
-          colors={['#edf0f2', '#bdbebf']}
+          colors={['#edf0f2', '#f4f7fa']}
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0.5}}
           style={styles.walletRow}>
-          <Text style={styles.walletSub}>₹0/₹300(V1)</Text>
+          <Text style={styles.walletSub}>₹{rechargedAmount}/₹{levelMaxAmount}(V{level})</Text>
         </LinearGradient>
 
         {/* Level Dots */}
@@ -87,7 +90,7 @@ const createStyles = (Scale: any) =>
     },
     walletTitle: {
       color: '#fff',
-      fontSize: Scale(18),
+      fontSize: Scale(20),
       fontWeight: 'bold',
     },
     toBeFinishedContainer: {
@@ -130,7 +133,7 @@ const createStyles = (Scale: any) =>
       marginTop: Scale(10),
     },
     vipDot: {
-      backgroundColor: '#851701',
+      backgroundColor: COLORS.primary,
       width: Scale(20),
       height: Scale(20),
       borderRadius: Scale(10),

@@ -375,7 +375,7 @@ const createStyles = (Scale: any) =>
     paddingVertical: Scale(14),
     borderRadius: Scale(25),
     alignItems: 'center',
-    borderColor: '#FFAD45',
+    borderColor: '#fff',
     borderWidth: 1,
   },
 

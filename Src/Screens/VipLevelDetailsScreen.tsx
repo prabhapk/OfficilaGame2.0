@@ -22,6 +22,9 @@ import {
   levelZeroBadge,
   spin,
   vipBadgeZero,
+  vipNewLogoOne,
+  vipNewLogoTwo,
+  vipNewLogoZero,
 } from '../../assets/assets';
 import VipCard from '../Components/VipCard';
 import NewAppHeader from '../Components/NewAppHeader';
@@ -61,38 +64,50 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
   const vipCardDatas = [
     {
       target: 300,
-      image: vipBadgeZero,
+      image: vipNewLogoZero,
+      rechargedAmount: 500,
     },
     {
       target: 1000,
-      image: vipBadgeZero,
+      image: vipNewLogoOne,
+       rechargedAmount: 1000,
     },
     {
       target: 10000,
-      image: vipBadgeZero,
+      image: vipNewLogoTwo,
+       rechargedAmount: 1000,
     },
     {
       target: 50000,
       image: vipBadgeZero,
+         rechargedAmount: 1000,
     },
     {
       target: 100000,
       image: vipBadgeZero,
+         rechargedAmount: 1000,
     },
     {
       target: 500000,
       image: vipBadgeZero,
+         rechargedAmount: 1000,
     },
     {
       target: 1000000,
       image: vipBadgeZero,
+         rechargedAmount: 1000,
     },
     {
       target: 2000000,
       image: vipBadgeZero,
+         rechargedAmount: 1000,
     },
-    {target: 5000000, image: vipBadgeZero},
-    {target: 10000000, image: vipBadgeZero},
+    {target: 5000000, image: vipBadgeZero,
+         rechargedAmount: 1000,
+    },
+    {target: 10000000, image: vipBadgeZero,
+         rechargedAmount: 1000,
+    },
   ];
 
 
@@ -140,6 +155,10 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
           vipCardTargets[selectedVipIndex]
         } more to reach level VIP${selectedVipIndex + 1}`}
         badgeImage={vipCardDatas[selectedVipIndex].image}
+        rechargedAmount={vipCardDatas[selectedVipIndex]?.rechargedAmount}
+        levelMaxAmount={vipCardDatas[selectedVipIndex]?.target}
+        level={selectedVipIndex}
+
       />
       <ScrollView  showsVerticalScrollIndicator={false}>
         <View style={{marginTop: Scale(10), marginHorizontal: Scale(10)}}>

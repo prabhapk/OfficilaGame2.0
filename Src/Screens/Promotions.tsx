@@ -30,7 +30,7 @@ const Promotions = ({ navigation }: { navigation: any }) => {
     {
       id: 2,
       images: {
-        uri1: promotionBanner1,
+        uri1: promotionBanner2,
         uri2: promotionBanner2,
       },
     },
@@ -81,7 +81,7 @@ const Promotions = ({ navigation }: { navigation: any }) => {
         <Image
           source={item.images.uri1}
           style={styles.bannerImage}
-         contentFit="cover"
+         contentFit='fill'
         />
   
         <View style={styles.buttonOverlay}>
