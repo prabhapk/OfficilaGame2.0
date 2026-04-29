@@ -8,7 +8,7 @@ import {Image} from 'expo-image';
 
 const PromotionsMain = ({navigation}: any) => {
   const route = useRoute<any>();
-  const { bannerImage } = route.params;
+  const { bannerImage, bannerType } = route.params;  
   const handleBackPress = () => {
     navigation.goBack();
   };
@@ -21,12 +21,12 @@ const PromotionsMain = ({navigation}: any) => {
         {/* <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" /> */}
         <NewAppHeader
         leftIconPress={handleBackPress}
-        centerText="Agency Center"
+        centerText={bannerType}
         // rightIcon={require('../../assets/wallet-icon.webp')}
       />
         <Image
           source={bannerImage}
-          style={{ width: "90%", height: 250, marginHorizontal: 20 }}
+          style={{ width: "90%", height: '90%', marginHorizontal: 20 }}
           contentFit= "cover"
         />
 

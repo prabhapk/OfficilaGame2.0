@@ -10,7 +10,7 @@ import { API_BASE_URL } from '../Config/env';
 const axiosInstance = axios.create({
   // baseURL: process.env.API_BASE_URL,
   // baseURL: process.env.urlOne,
-   baseURL: 'http://136.115.20.223',
+   baseURL: 'http://104.154.26.20',
 });
 
 const resetAction = CommonActions.reset({

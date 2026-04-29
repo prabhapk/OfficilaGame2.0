@@ -462,12 +462,12 @@ const createStyles = (Scale: any) =>
     },
     winMessageContainer: {
       width: "100%",
-      height: 60,
+      height: 70,
       justifyContent: "center",
       alignItems: "center",
     },
     winMessageText: {
-      color: "white",
+      color: COLORS.black,
       fontSize: Scale(14),
       fontWeight: "bold",
       textAlign: "center",

@@ -1,4 +1,4 @@
-import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, DrawerPromotion, DrawerRebate, DrawerSuperAgent, fiveMin3DImage, homeActiveTab, homeTab, hot, inviteActiveTab, inviteTab, jdb, Jili, lottery1, meActiveTab, meTab, multiUserIcon, oneMin3DImage, pg, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
+import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, DrawerPromotion, DrawerRebate, DrawerSuperAgent, fiveMin3DImage, homeActiveTab, homeNewIcon, homeNewIconSilver, homeTab, hot, inviteActiveTab, inviteNewIcon, inviteTab, jdb, Jili, lottery1, meActiveTab, meNewIcon, meTab, multiUserIcon, oneMin3DImage, pg, promotionNewIcon, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultNewIcon, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
 import CasinoScreen from "../Screens/CasinoScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import InviteScreen from "../Screens/InviteScreen";
@@ -144,37 +144,37 @@ export const ThreeDigitsLottery = [
     name: 'Home',
     component: HomeScreen,
     label: 'Home',
-    focusedIcon: homeActiveTab,
-    unfocusedIcon: homeTab,
+    focusedIcon: homeNewIconSilver,
+    unfocusedIcon: homeNewIconSilver,
   },
   {
     name: 'Promotions',
     component: Promotions,
     label: 'Promotions',
-    focusedIcon:casinoActiveTab,
-    unfocusedIcon: casinoTab,
+    focusedIcon:promotionNewIcon,
+    unfocusedIcon: promotionNewIcon,
   },
   {
     name: 'Invite',
     component: InviteScreen,
     label: 'Invite',
-    focusedIcon: multiUserIcon,
-    unfocusedIcon: multiUserIcon,
+    focusedIcon: inviteNewIcon,
+    unfocusedIcon: inviteNewIcon,
   },
    {
     name: 'Result',
     component: ResultScreen,
     label: 'Result',
-    focusedIcon: resultActiveTab,
-    unfocusedIcon: resultTab,
+    focusedIcon: resultNewIcon,
+    unfocusedIcon: resultNewIcon,
   },
  
    {
     name: 'Me',
     component: Profile,
     label: 'Me',
-    focusedIcon: meActiveTab,
-    unfocusedIcon: meTab,
+    focusedIcon: meNewIcon,
+    unfocusedIcon: meNewIcon,
   },
 ];
 

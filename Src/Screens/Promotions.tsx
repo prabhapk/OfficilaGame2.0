@@ -10,7 +10,7 @@ import {
 import CustomHeader from "../Components/CustomHeader";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { COLORS } from "../Constants/Theme";
-import { promotionBanner1, promotionBanner2, promotionBanner3, promotionBanner4 } from "../../assets/assets";
+import { agentBonus, attendanceBonus, comeBackBanner, insideAttendanceBonus, insideBannerAgent, insideBannerComeBack, insideBannerMegaRecharge, insideBannerVip, megaRechargeBonus, promotionBanner4, vipWeeklySalary } from "../../assets/assets";
 import { Image } from "expo-image";
 
 const { width } = Dimensions.get("window");
@@ -22,30 +22,42 @@ const Promotions = ({ navigation }: { navigation: any }) => {
   const promotionCards = [
     {
       id: 1,
+      type: "ComeBack Bonus",
       images: {
-        uri1: promotionBanner1,
-        uri2: promotionBanner2,
+        uri1: comeBackBanner,
+        uri2: insideBannerComeBack,
       },
     },
     {
       id: 2,
+      type: "Mega Recharge",
       images: {
-        uri1: promotionBanner2,
-        uri2: promotionBanner2,
+        uri1: megaRechargeBonus,
+        uri2: insideBannerMegaRecharge,
       },
     },
     {
       id: 3,
+      type: "VIP Weekly Salary",
       images: {
-        uri1: promotionBanner3,
-        uri2: promotionBanner3,
+        uri1: vipWeeklySalary,
+        uri2: insideBannerVip,
       },
     },
     {
       id: 4,
+      type: "Agent Bonus",
       images: {
-        uri1: promotionBanner4,
-        uri2: promotionBanner4,
+        uri1: agentBonus,
+        uri2: insideBannerAgent,
+      },
+    },
+    {
+      id: 5,
+      type: "Attendance Bonus",
+      images: {
+        uri1: attendanceBonus,
+        uri2: insideAttendanceBonus,
       },
     },
   ];
@@ -74,6 +86,7 @@ const Promotions = ({ navigation }: { navigation: any }) => {
       onPress={() =>
         navigation.navigate("PromotionsMain", {
           bannerImage: item.images.uri2,
+           bannerType:item.type
         })
       }
     >
@@ -91,6 +104,7 @@ const Promotions = ({ navigation }: { navigation: any }) => {
             onPress={() =>
               navigation.navigate("PromotionsMain", {
                 bannerImage: item.images.uri2,
+                bannerType:item.type
               })
             }
           >

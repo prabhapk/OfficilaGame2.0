@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 
-import { bannerColorGames, bannerliveCasionoGames, bannerTelegram, bannerWhatsapp, offerImage1, offerImage2, promotionBanner1 } from "../../assets/assets";
+import { bannerColorGames, bannerliveCasionoGames, bannerTelegram, bannerWhatsapp, offerImage1, offerImage2, } from "../../assets/assets";
 import { HomeScreenFlatlist } from "../Constants/CommonFlatlist";
 import { COLORS } from "../Constants/Theme";
 import { AppDispatch, RootState } from "../Redux/store";

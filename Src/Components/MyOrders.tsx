@@ -323,7 +323,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
         source={winLabel}
         style={{
           width: "100%",
-          height: 60,
+          height: 80,
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -331,14 +331,14 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
       >
         <Text
           style={{
-            color: "white",
+            color: COLORS.black,
             fontSize: Scale(14),
             fontWeight: "bold",
             textAlign: "center",
-            paddingHorizontal: Scale(30),
+            paddingHorizontal: Scale(50),
           }}
         >
-          Congratulations! You won the game lottery and claim your winning
+          Congratulations! {"\n"}You won the game lottery and claim your winning
           amount ₹{totalWinningAmount}
         </Text>
       </ImageBackground>

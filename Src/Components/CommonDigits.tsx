@@ -21,7 +21,17 @@ const CommonDigits: React.FC<Props> = ({ data, onPress3Digits }) => {
   const { min1TargetDate, min3TargetDate, min5TargetDate } = useSelector(
     (state: RootState) => state.threeDigit
   );
+// console.log('data====>', data);
+const BASE_URL = "http://104.154.26.20";
+const imageSource =
+  data?.cardImageUrl
+    ? {
+        uri: `${BASE_URL}${data.cardImageUrl}`,
+        cache: "force-cache", // improves loading
+      }
+    : Durga;
 
+// console.log("IMAGE URL =>", `${BASE_URL}${data?.cardImageUrl}`);
   const dispatch = useDispatch();
 
   const handleTimerComplete = () => {
@@ -53,16 +63,18 @@ const CommonDigits: React.FC<Props> = ({ data, onPress3Digits }) => {
   return (
     <TouchableOpacity onPress={onPress3Digits} style={styles.container}>
       <ImageBackground
-        source={Durga}
+        source={imageSource}
         style={styles.imageBackground}
         imageStyle={styles.imageStyle}
         resizeMode='stretch'
       >
         <View style={styles.timerContainer}>
-          <CountdownTimer
-            targetDate={data.nextResultTime}
-            onComplete={handleTimerComplete}
-          />
+        {data?.nextResultTime && (
+  <CountdownTimer
+    targetDate={data.nextResultTime}
+    onComplete={handleTimerComplete}
+  />
+)}
         </View>
       </ImageBackground>
     </TouchableOpacity>
