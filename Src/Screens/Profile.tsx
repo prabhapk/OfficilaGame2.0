@@ -346,7 +346,11 @@ const ProfileScreen = ({ navigation }: any) => {
                 />
                 <View style={styles.vipTopRight}>
                   <Text style={styles.vipText}>VIP {vipLevel}</Text>
-                  <Text style={styles.vipText}>₹{totalDeposit ?totalDeposit : 0 } / ₹{vipLevelRecharge?vipLevelRecharge:0}</Text>
+                  {/* <Text style={styles.vipText}>₹{totalDeposit ? totalDeposit : 0 } / ₹{vipLevelRecharge?vipLevelRecharge:0}</Text> */}
+                  <Text style={styles.vipText}>
+  ₹{Math.round(totalDeposit || 0)} / ₹{Math.round(vipLevelRecharge || 0)}
+</Text>
+
                 </View>
               </View>
               <View style={styles.vipProgressBackground}>

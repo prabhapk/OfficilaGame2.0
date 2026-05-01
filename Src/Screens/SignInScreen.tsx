@@ -260,7 +260,7 @@ const SignInScreen = ({ navigation }: any) => {
       <LoadingSpinnerButton color="#fff" durationMs={1000} />
     ) : (
       <Text style={styles.signInButtonText}>LOGIN</Text>
-    )}
+     )} 
   </LinearGradient>
 </TouchableOpacity>
 

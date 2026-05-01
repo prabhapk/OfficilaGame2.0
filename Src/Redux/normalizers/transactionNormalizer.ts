@@ -7,40 +7,92 @@ const formatTime = (timestamp: string) =>
 
 /* -------------------- API → ENUM MAPPER -------------------- */
 
+// export const mapApiTypeToTransactionType = (type: string) => {
+//   if (!type) return null;
+
+//   const normalizedType = type.trim().toUpperCase(); // ✅ IMPORTANT
+
+//   switch (normalizedType) {
+//     case "WALLET RECHARGE":
+//       return TransactionType.RECHARGE;
+
+//     case "WITHDRAW":
+//       return TransactionType.WITHDRAW;
+
+//     case "DEBIT_BET":
+//       return TransactionType.BET;
+
+//     case "CREDIT_WIN":
+//       return TransactionType.WIN;
+
+//     case "TRANSFER":
+//       return TransactionType.TRANSFER;
+
+//     case "VIP_BONUS":
+//       return TransactionType.VIP_BONUS;
+
+//     case "REBATE":
+//       return TransactionType.REBATE;
+
+//     case "COMMISSION":
+//       return TransactionType.COMMISSION;
+
+//     default:
+//       console.log("❌ UNKNOWN API TYPE:", type);
+//       return null;
+//   }
+// };
+
 export const mapApiTypeToTransactionType = (type: string) => {
   if (!type) return null;
 
-  const normalizedType = type.trim().toUpperCase(); // ✅ IMPORTANT
+  const normalizedType = type.trim().toUpperCase();
 
-  switch (normalizedType) {
-    case "WALLET RECHARGE":
-      return TransactionType.RECHARGE;
-
-    case "WITHDRAW":
-      return TransactionType.WITHDRAW;
-
-    case "DEBIT_BET":
-      return TransactionType.BET;
-
-    case "CREDIT_WIN":
-      return TransactionType.WIN;
-
-    case "TRANSFER":
-      return TransactionType.TRANSFER;
-
-    case "VIP_BONUS":
-      return TransactionType.VIP_BONUS;
-
-    case "REBATE":
-      return TransactionType.REBATE;
-
-    case "COMMISSION":
-      return TransactionType.COMMISSION;
-
-    default:
-      console.log("❌ UNKNOWN API TYPE:", type);
-      return null;
+  // ✅ BET
+  if (normalizedType.includes("DEBIT_BET")) {
+    return TransactionType.BET;
   }
+
+  // ✅ WIN
+  if (normalizedType.includes("CREDIT_WIN")) {
+    return TransactionType.WIN;
+  }
+
+  // ✅ RECHARGE / DEPOSIT
+  if (
+    normalizedType.includes("RECHARGE") ||
+    normalizedType.includes("DEPOSIT")
+  ) {
+    return TransactionType.RECHARGE;
+  }
+
+  // ✅ WITHDRAW
+  if (normalizedType.includes("WITHDRAW")) {
+    return TransactionType.WITHDRAW;
+  }
+
+  // ✅ TRANSFER (IMPORTANT FIX)
+  if (normalizedType.includes("TRANSFER")) {
+    return TransactionType.TRANSFER;
+  }
+
+  // ✅ VIP
+  if (normalizedType.includes("VIP")) {
+    return TransactionType.VIP_BONUS;
+  }
+
+  // ✅ REBATE
+  if (normalizedType.includes("REBATE")) {
+    return TransactionType.REBATE;
+  }
+
+  // ✅ COMMISSION
+  if (normalizedType.includes("COMMISSION")) {
+    return TransactionType.COMMISSION;
+  }
+
+  console.log("❌ UNKNOWN API TYPE:", type);
+  return null;
 };
 
 

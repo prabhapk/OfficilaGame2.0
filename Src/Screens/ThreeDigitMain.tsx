@@ -258,7 +258,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
 
   const groupId = route.params.gameData?.groupId;
   const gameTypeId = route.params.gameData?.gameTypeId;
-  console.log("groupId==>", groupId, gameTypeId);
+  console.log("groupId==>", groupId);
+  console.log("gameTypeId==>", gameTypeId);
 
   const renderContent = () => {
     // Add safety check for individualGameData
@@ -380,6 +381,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     }
 
     console.log("nextResultTime==>", nextResultTime);
+    console.log("checkkkkk==>", doubleGame?.prizeamount);
     return (
       <>
         <DigitComponent
@@ -425,7 +427,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     );
   };
   console.log("userId==>", userId);
-  console.log("groupId==>", groupId);
+  console.log("groupIdTwo==>", groupId);
 
   const handleTimerComplete = () => {
     dispatch(
@@ -555,6 +557,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       },
     ]);
     console.log("Label==>", label);
+    console.log("groupId3==>", groupId,);
 
     // Clear input after adding data
     clearInputs(label);
@@ -582,6 +585,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     }
   };
   const handleHeader = (value: any) => {
+    console.log('handleHeaderValue==>', value);
     const hasItemsForOtherSlot = numbers.some(
       (item: any) => item.type !== value.id
     );
@@ -593,6 +597,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     }
       
     setSelectedOption(value.id);
+    console.log('selectedOption==>', selectedOption);
+    
     setSelectedTime(value.name);
   };
 

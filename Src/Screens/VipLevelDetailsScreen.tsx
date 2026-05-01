@@ -121,9 +121,9 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
       onPress={() => setSelectedVipIndex(index)}>
       {/* VIP Group */}
       <View style={styles.vipColumn}>
-        <Image 
+        {/* <Image 
         contentFit="contain"
-        source={item.image} style={styles.vipImage} />
+        source={item.image} style={styles.vipImage} /> */}
         <Text style={styles.vipText}>VIP {item.level}</Text>
       </View>
 
@@ -139,6 +139,10 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
           <Text style={styles.bonusText}>₹{item.levelupBonus}</Text>
         </View>
       </View>
+      <View style={{ flex: 2, alignItems: 'center' }}>
+        <Text style={styles.vipText}>{item.dailyWithdrawalLimit}</Text>
+      </View>
+
     </TouchableOpacity>
   );
 
@@ -163,8 +167,9 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
       <ScrollView  showsVerticalScrollIndicator={false}>
         <View style={{marginTop: Scale(10), marginHorizontal: Scale(10)}}>
           <View style={styles.vipHeaderContainer}>
-            <Text style={[styles.vipHeaderText, {flex: 1}]}>VIP LEVEL</Text>
+            <Text style={[styles.vipHeaderText, {flex: 1,}]}>VIP LEVEL</Text>
             <Text style={[styles.vipHeaderText, {flex: 2}]}>REWARD</Text>
+            <Text style={[styles.vipHeaderText, {flex: 2}]}>Daily Withdrawal Limit</Text>
           </View>
 
           <FlatList
@@ -270,7 +275,7 @@ const createStyles = (Scale: any) =>
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: COLORS.primary,
-    paddingVertical: Scale(8),
+    paddingVertical: Scale(15),
     paddingHorizontal: Scale(10),
     borderBottomWidth: Scale(0.2),
     borderColor: COLORS.white,
