@@ -896,7 +896,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
         const apiData = {
           bets: numbers.map((item) => ({
             gameId: item.gameId,
-            groupId: item.groupId,
+            groupId: selectedOption,
             betType: item.label,
             selectedNumber: String(item.value),
             betCount: item.count,
