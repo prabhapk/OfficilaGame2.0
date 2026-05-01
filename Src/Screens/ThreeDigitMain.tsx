@@ -153,6 +153,24 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     return h * 60 + m + (s > 0 ? 1 : 0);
   }
 
+  // Keep existing flow, but sort games by next result time when available.
+  function sortGamesByNextResultTime(games: any[]) {
+    return [...games].sort((a, b) => {
+      const aTime = new Date(a?.nextresulttime ?? "").getTime();
+      const bTime = new Date(b?.nextresulttime ?? "").getTime();
+      const aHasValidNext = Number.isFinite(aTime);
+      const bHasValidNext = Number.isFinite(bTime);
+
+      if (aHasValidNext && bHasValidNext) return aTime - bTime;
+      if (aHasValidNext) return -1;
+      if (bHasValidNext) return 1;
+
+      // Fallback to current behavior when nextresulttime is absent/invalid.
+      return timeToMinutes(a?.starttime ?? "00:00:00") -
+        timeToMinutes(b?.starttime ?? "00:00:00");
+    });
+  }
+
   // helper: convert minutes → "hh:mm AM/PM"
   function minutesTo12Hr(mins: number) {
     const h = Math.floor(mins / 60) % 24;
@@ -164,15 +182,31 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       .padStart(2, "0")} ${period}`;
   }
 
+  function getCurrentMinutes() {
+    const now = new Date();
+    return now.getHours() * 60 + now.getMinutes();
+  }
+
   function buildOptions(individualGameData: any[]) {
     if (!individualGameData?.length) return [];
 
-    const first = individualGameData[0];
+    const sortedGameData = sortGamesByNextResultTime(individualGameData);
+    const first = sortedGameData[0];
+
+    console.log("first==>checking", first);
 
     // ✅ CASE 1: no interval — one option per groupId (time slot), id = groupId for header selection
     if (first.intervaltime === "00:00:00") {
-      return Object.values(
-        individualGameData.reduce((acc, item) => {
+      type SlotOption = {
+        id: number;
+        groupedId: number;
+        name: string;
+        isSelected: boolean;
+      };
+
+      const slotOptions: SlotOption[] = Object.values(
+        sortedGameData.reduce((acc, item) => {
+          console.log("item==>checking", item);
           if (!acc[item.groupId]) {
             acc[item.groupId] = {
               id: item.groupId,
@@ -182,35 +216,58 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
             };
           }
           return acc;
-        }, {} as Record<number, { id: number; groupedId: number; name: string; isSelected: boolean }>)
+        }, {} as Record<number, SlotOption>)
       );
+
+      const nowMinutes = getCurrentMinutes();
+      const upcoming = slotOptions.filter(
+        (slot) => timeToMinutes(sortedGameData.find((g) => g.groupId === slot.groupedId)?.endtime ?? "00:00:00") >= nowMinutes
+      );
+      const past = slotOptions.filter(
+        (slot) => timeToMinutes(sortedGameData.find((g) => g.groupId === slot.groupedId)?.endtime ?? "00:00:00") < nowMinutes
+      );
+
+      return [...upcoming, ...past].map((slot, idx) => ({
+        ...slot,
+        isSelected: idx === 0,
+      }));
     }
 
     // ✅ CASE 2: interval available
+    const start = timeToMinutes(first.starttime);
     const end = timeToMinutes(first.endtime);
     const step = timeToMinutes(first.intervaltime);
-
-    // ⏰ Use nextresulttime instead of starttime
-    const nextResult = new Date(first.nextresulttime);
-    const nowMinutes = nextResult.getHours() * 60 + nextResult.getMinutes(); // convert to minutes
+    const nowMinutes = getCurrentMinutes();
 
     const slots: {
       id: number;
       groupedId: number;
       name: string;
       isSelected: boolean;
+      minutes: number;
     }[] = [];
 
-    for (let t = nowMinutes, i = 0; t <= end; t += step, i++) {
+    if (step <= 0) return [];
+
+    for (let t = start, i = 0; t <= end; t += step, i++) {
       slots.push({
         id: i + 1,
         groupedId: first.groupId,
         name: minutesTo12Hr(t),
-        isSelected: i === 0, // first slot = upcoming game
+        isSelected: false,
+        minutes: t,
       });
     }
 
-    return slots;
+    const upcoming = slots.filter((slot) => slot.minutes >= nowMinutes);
+    const past = slots.filter((slot) => slot.minutes < nowMinutes);
+
+    return [...upcoming, ...past].map((slot, idx) => ({
+      id: idx + 1,
+      groupedId: slot.groupedId,
+      name: slot.name,
+      isSelected: idx === 0,
+    }));
   }
 
   const OPTIONS: any = useMemo(
@@ -267,7 +324,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       return null;
     }
 
-    const first = individualGameData[0];
+    const sortedGameData = sortGamesByNextResultTime(individualGameData);
+    const first = sortedGameData[0];
 
     // Add safety check for first item
     if (!first) {
@@ -281,18 +339,18 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     // Handle different cases based on interval time
     if (first?.intervaltime === "00:00:00") {
       // Case 1: No interval - selectedOption is groupId; each slot has its own group
-      matchedGame = individualGameData?.find(
+      matchedGame = sortedGameData?.find(
         (game) => game.groupId === selectedOption
       );
-      gamesForSelectedSlot = individualGameData?.filter(
+      gamesForSelectedSlot = sortedGameData?.filter(
         (game) => game.groupId === selectedOption
       ) || [];
     } else {
       // Case 2: With interval - selectedOption is sequential (1, 2, 3...); all slots share first.groupId
-      matchedGame = individualGameData?.find(
+      matchedGame = sortedGameData?.find(
         (game) => game.groupId === first.groupId
       );
-      gamesForSelectedSlot = individualGameData?.filter(
+      gamesForSelectedSlot = sortedGameData?.filter(
         (game) => game.groupId === first.groupId
       ) || [];
     }
@@ -303,7 +361,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     const tripleGame = gamesForSelectedSlot.find((g: any) => g.sectiontype === "Triple");
 
     const WinningBalls = matchedGame?.lastResult?.winningNumber?.split("") ||
-      individualGameData[0]?.lastResult?.winningNumber?.split("") ||
+      sortedGameData[0]?.lastResult?.winningNumber?.split("") ||
       ["1", "2", "3"];
 
     console.log(
@@ -403,7 +461,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           onStateChange={handleChildStateChange}
           targetDateProp={nextResultTime}
           // onTimerComplete={handleTimerComplete}
-          gameName={singleGame?.name ?? individualGameData[0]?.name}
+          gameName={singleGame?.name ?? sortedGameData[0]?.name}
           singleDigitGameId={singleGame?.id ?? 0}
           doubleDigitGameId={doubleGame?.id ?? 0}
           threeDigitGameId={tripleGame?.id ?? 0}
@@ -843,7 +901,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     dispatch(
       getIndividualGameResult({
         // groupId: groupId,
-        GametypeId: groupId,
+        GametypeId: gameTypeId,
         page: tableCurrentPage,
         pageSize: 10,
       })
