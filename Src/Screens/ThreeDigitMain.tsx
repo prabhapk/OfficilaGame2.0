@@ -843,7 +843,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     dispatch(
       getIndividualGameResult({
         // groupId: groupId,
-        GametypeId: groupId,
+        GametypeId: gameTypeId,
         page: tableCurrentPage,
         pageSize: 10,
       })
