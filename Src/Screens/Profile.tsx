@@ -27,6 +27,11 @@ import {
   vipNewLogoZero,
   vipNewLogoOne,
   vipNewLogoTwo,
+  vipNewLogoFive,
+  vipNewLogoFour,
+  vipNewLogoSeven,
+  vipNewLogoSix,
+  vipNewLogoThree,
 } from "../../assets/assets";
 import Modal from "react-native-modal";
 import WalletInfoModal from "../Components/Modal/WalletInfoModal";
@@ -52,9 +57,26 @@ const ProfileScreen = ({ navigation }: any) => {
 
   const totalBalance = mainWalletBalance + withdrawBalance;
 
-  const vipLevel = vipLevelDetails[0]?.level;
   const vipLevelBonus = vipLevelDetails[0]?.bonus;
-  const vipLevelRecharge = vipLevelDetails[0]?.rechargeAmount;
+  const vipLevelRecharge = vipLevelDetails[0]?.nextlevelrechargetarget;
+
+
+
+const vipImages = {
+  0: vipNewLogoZero,
+  1: vipNewLogoOne,
+  2: vipNewLogoTwo,
+  3: vipNewLogoThree,
+  4: vipNewLogoFour,
+  5: vipNewLogoFive,
+  6: vipNewLogoSix,
+  7: vipNewLogoSeven,
+};
+
+const vipLevel = vipLevelDetails?.[0]?.level ?? 0;
+const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
+
+
   
   const dispatch = useDispatch();
   const [showLogoutButton, setShowLogoutButton] = useState(true);
@@ -340,7 +362,7 @@ const ProfileScreen = ({ navigation }: any) => {
             }}> 
               <View style={styles.vipTopRow}>
                 <Image
-                  source={vipNewLogoZero}
+                  source={vipLevelImage}
                   contentFit="contain"
                   style={styles.vipBadgeImage}
                 />

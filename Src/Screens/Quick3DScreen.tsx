@@ -91,7 +91,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
   const { allResultData, individualGameResults } = useSelector(
     (state: RootState) => state.resultSlice
   );
-  const { quick3dGamesList, quick3dGamesGroupId } = useSelector(
+  const { quick3dGamesList, quick3dGamesGroupId, quick3dGameTypeId } = useSelector(
     (state: RootState) => state.quick3DSlice
   );
   const { isLoggedIn, mainWalletBalance, userId, withdrawBalance } =
@@ -150,7 +150,7 @@ const Quick3DScreen = ({ navigation, route }: any) => {
     dispatch(
       getMyOrders({
         userId: userId,
-        groupId: quick3dGamesGroupId,
+        gametypeid: quick3dGameTypeId,
       })
     );
     dispatch(
@@ -414,9 +414,9 @@ const Quick3DScreen = ({ navigation, route }: any) => {
       );
     }
     dispatch(
-      getMyOrders({
+getMyOrders({
         userId: userId,
-        groupId: quick3dGamesGroupId,
+        gametypeid: quick3dGameTypeId,
       })
     );
     dispatch(
@@ -589,10 +589,10 @@ const Quick3DScreen = ({ navigation, route }: any) => {
           resetState();
           dispatch(getWalletBalance());
           dispatch(
-            getMyOrders({
-              userId: userId,
-              groupId: quick3dGamesGroupId,
-            })
+           getMyOrders({
+        userId: userId,
+        gametypeid: quick3dGameTypeId,
+      })
           );
         }
       } catch (error: any) {

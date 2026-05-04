@@ -19,6 +19,13 @@ import {
   rebateMenu,
   robMoney,
   superAgent,
+  vipNewLogoFive,
+  vipNewLogoFour,
+  vipNewLogoOne,
+  vipNewLogoSeven,
+  vipNewLogoSix,
+  vipNewLogoThree,
+  vipNewLogoTwo,
   vipNewLogoZero,
   wallet3dImage1,
 } from "../../assets/assets";
@@ -36,6 +43,22 @@ const CustomSidebarMenu = ({ navigation }: any) => {
   const styles = createStyles(Scale);
   const { isLoggedIn, userDetails, mainWalletBalance, withdrawBalance } =
     useSelector((state: RootState) => state.signInSlice);
+    console.log('userDetails==>', userDetails);
+    
+    const vipImages = {
+      0: vipNewLogoZero,
+      1: vipNewLogoOne,
+      2: vipNewLogoTwo,
+      3: vipNewLogoThree,
+      4: vipNewLogoFour,
+      5: vipNewLogoFive,
+      6: vipNewLogoSix,
+      7: vipNewLogoSeven,
+    };
+    
+        const vipLevel = userDetails?.vipLevels?.[0]?.level;
+    const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
+    
     const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
 
@@ -168,7 +191,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
                 Player {userDetails.id}
               </Text>
               <Image
-                source={vipNewLogoZero}
+                source={vipLevelImage}
                 style={{
                   width: Scale(70),
                   height: Scale(30),

@@ -139,6 +139,8 @@ export interface CommonSliceState {
     agentCreatedDate: any;
     rechargeBonusData: any;
     commissionBonusData: any;
+    totalRecharge: number;
+    totalCommissions: number;
   }
   export interface rebateSliceState {
     rebateData: any;

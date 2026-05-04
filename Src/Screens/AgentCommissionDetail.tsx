@@ -87,6 +87,15 @@ const AgentCommissionDetail = ({ navigation }: any) => {
             >
               Commission Details
             </Text>
+            <Text
+              style={{
+                fontSize: Scale(14),
+                fontWeight: "bold",
+                color: "#000",
+              }}
+            >
+             ({item?.gameType})
+            </Text>
           </View>
 
           <View

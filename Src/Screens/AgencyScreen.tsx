@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   StatusBar,
   Alert,
+  Modal,
+  Linking,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useContainerScale } from "../hooks/useContainerScale";
@@ -56,7 +58,14 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
     dashBoardDailyDataCommission,
     inviteCode,
     agentCreatedDate,
+    totalRecharge,
+    totalCommissions,
+    userData
   } = useSelector((state: RootState) => state.agentSlice);
+  console.log('totalCommissions===>', totalCommissions);
+  console.log('userDataScreen==>', userData);
+  
+  
   const { mobileNumber } = useSelector((state: RootState) => state.signInSlice);
 
   const handleBackPress = () => {
@@ -117,24 +126,89 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
     Alert.alert("Customer Service", "Opening customer service...");
   };
 
-  //   useEffect(() => {
-  // // dispatch(getAgentDailyStats({agentId: Number(11111), date: '2022-08-01'}))
+    useEffect(() => {
+  dispatch(getAgentDailyStats({agentId: Number(1), date: '2022-08-01'}))
   // dispatch(getAgentDashboardData({agentId: Number(1)}))
-  //   },[])
+    },[])
   useEffect(() => {
     dispatch(getAgentDashboardData({ agentId: 1 }));
   }, []);
 
-  const handleCopyLink = async () => {
-    try {
-      await Clipboard.setStringAsync(shareUrl);
-      Alert.alert("Copied!", "Link copied to clipboard");
-      setShowShareModal(false);
-    } catch (error) {
-      console.log("Error copying link:", error);
-      Alert.alert("Error", "Unable to copy link");
-    }
+  // const handleCopyLink = async () => {
+  //   try {
+  //     await Clipboard.setStringAsync(shareUrl);
+  //     Alert.alert("Copied!", "Link copied to clipboard");
+  //     setShowShareModal(false);
+  //   } catch (error) {
+  //     console.log("Error copying link:", error);
+  //     Alert.alert("Error", "Unable to copy link");
+  //   }
+  // };
+    const handleInvite = async () => {
+      setShowShareModal(true);
   };
+    const { userDetails } = useSelector(
+      (state: RootState) => state.signInSlice,
+    );
+  const shareUrl = 'https://yourapp.com/invite?code=' + (userDetails.referralCode || '');
+    const shareMessage = `Join me on this amazing app! Use my referral code: ${userDetails.referralCode || ''}\n\nDownload the app: ${shareUrl}`;
+  
+    const handleFacebookShare = async () => {
+      try {
+        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+        await Linking.openURL(facebookUrl);
+        setShowShareModal(false);
+      } catch (error) {
+        console.log('Error sharing to Facebook:', error);
+        Alert.alert('Error', 'Unable to share to Facebook');
+      }
+    };
+  
+    const handleTelegramShare = async () => {
+      try {
+        const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareMessage)}`;
+        await Linking.openURL(telegramUrl);
+        setShowShareModal(false);
+      } catch (error) {
+        console.log('Error sharing to Telegram:', error);
+        Alert.alert('Error', 'Unable to share to Telegram');
+      }
+    };
+  
+    const handleWhatsAppShare = async () => {
+      try {
+        const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(shareMessage)}`;
+        await Linking.openURL(whatsappUrl);
+        setShowShareModal(false);
+      } catch (error) {
+        console.log('Error sharing to WhatsApp:', error);
+        Alert.alert('Error', 'Unable to share to WhatsApp');
+      }
+    };
+  
+    const handleInstagramShare = async () => {
+      try {
+        // Instagram doesn't support direct URL sharing, so we'll copy the link
+        await Linking.openURL('instagram://');
+        Alert.alert('Instagram', 'Please paste the link in your Instagram story or post');
+        setShowShareModal(false);
+      } catch (error) {
+        console.log('Error opening Instagram:', error);
+        Alert.alert('Error', 'Instagram app not found');
+      }
+    };
+  
+    const handleCopyLink = async () => {
+      try {
+        await Clipboard.setStringAsync(shareUrl);
+        Alert.alert('Copied!', 'Link copied to clipboard');
+        setShowShareModal(false);
+      } catch (error) {
+        console.log('Error copying link:', error);
+        Alert.alert('Error', 'Unable to copy link');
+      }
+    };
+  
 
   return (
     <View style={styles.container}>
@@ -204,7 +278,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
                 />
               </View>
               <Text style={styles.statNumber}>
-                {dashBoardUserDataRechargeUser}
+                {userData?.totalRechargeAmount}
               </Text>
               <Text style={styles.statLabel}>RECHARGE</Text>
             </View>
@@ -226,7 +300,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
 
         {/* Total Month Data Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Total Month Data</Text>
+          <Text style={styles.sectionTitle}>Total Data</Text>
           <View style={styles.monthStatsContainer}>
             <View style={styles.monthStatItem}>
               <View style={styles.monthStatHeader}>
@@ -242,7 +316,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
                 <Text style={styles.monthStatLabel}>RECHARGE</Text>
               </View>
               <Text style={styles.monthStatAmount}>
-                ₹{dashBoardDailyDataRecharge.toFixed(2)}
+                ₹{totalRecharge.toFixed(2)}
               </Text>
               <View style={styles.monthStatChange}>
                 <Text style={styles.monthStatChangeText}>
@@ -265,7 +339,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
                 <Text style={styles.monthStatLabel}>COMMISSION</Text>
               </View>
               <Text style={styles.monthStatAmount}>
-                ₹{dashBoardDailyDataCommission.toFixed(2)}
+                ₹{totalCommissions?.toFixed(2) || 0}
               </Text>
               <View style={styles.monthStatChange}>
                 <Text style={styles.monthStatChangeText}>
@@ -284,7 +358,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
               <View style={styles.redBar} />
               <Text style={styles.invitationTitle}>My invitation code</Text>
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.resetButton}
               onPress={handleResetLink}
             >
@@ -297,7 +371,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
                 }}
               />
               <Text style={styles.resetButtonText}>Reset Link</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           <View style={styles.invitationCodeContainer}>
@@ -307,7 +381,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
             </View>
             <TouchableOpacity
               style={styles.copyButton}
-              onPress={handleCopyCode}
+              onPress={handleInvite}
             >
               <Text style={styles.copyButtonText}>Copy</Text>
             </TouchableOpacity>
@@ -384,7 +458,64 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
             </View>
             <Text style={styles.navigationArrow}>›</Text>
           </TouchableOpacity> */}
+
         </View>
+           <Modal
+                visible={showShareModal}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setShowShareModal(false)}
+              >
+                <View style={styles.modalOverlay}>
+                  <View style={styles.shareModal}>
+                    <TouchableOpacity
+                      style={styles.closeButton}
+                      onPress={() => setShowShareModal(false)}
+                    >
+                      <Text style={styles.closeButtonText}>×</Text>
+                    </TouchableOpacity>
+                    
+                    <Text style={styles.shareTitle}>Share</Text>
+                    
+                    <View style={styles.shareOptions}>
+                      <TouchableOpacity style={styles.shareOption} onPress={handleFacebookShare}>
+                        <View style={[styles.shareIcon, { backgroundColor: '#1877F2' }]}>
+                          <Text style={styles.shareIconText}>f</Text>
+                        </View>
+                        <Text style={styles.shareOptionText}>Facebook</Text>
+                      </TouchableOpacity>
+        
+                      <TouchableOpacity style={styles.shareOption} onPress={handleTelegramShare}>
+                        <View style={[styles.shareIcon, { backgroundColor: '#0088CC' }]}>
+                          <Text style={styles.shareIconText}>✈</Text>
+                        </View>
+                        <Text style={styles.shareOptionText}>Telegram</Text>
+                      </TouchableOpacity>
+        
+                      <TouchableOpacity style={styles.shareOption} onPress={handleWhatsAppShare}>
+                        <View style={[styles.shareIcon, { backgroundColor: '#25D366' }]}>
+                          <Text style={styles.shareIconText}>💬</Text>
+                        </View>
+                        <Text style={styles.shareOptionText}>WhatsApp</Text>
+                      </TouchableOpacity>
+        
+                      <TouchableOpacity style={styles.shareOption} onPress={handleInstagramShare}>
+                        <View style={[styles.shareIcon, { backgroundColor: '#E4405F' }]}>
+                          <Text style={styles.shareIconText}>📷</Text>
+                        </View>
+                        <Text style={styles.shareOptionText}>Instagram</Text>
+                      </TouchableOpacity>
+        
+                      <TouchableOpacity style={styles.shareOption} onPress={handleCopyLink}>
+                        <View style={[styles.shareIcon, { backgroundColor: '#007AFF' }]}>
+                          <Text style={styles.shareIconText}>🔗</Text>
+                        </View>
+                        <Text style={styles.shareOptionText}>Copy Link</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </Modal>
       </ScrollView>
     </View>
   );
@@ -695,6 +826,70 @@ const createStyles = (Scale: any) =>
       color: "#fff",
       fontWeight: "bold",
     },
+     modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  shareModal: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 20,
+    width: '100%',
+    maxWidth: 350,
+    alignItems: 'center',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 15,
+    left: 15,
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    fontSize: 24,
+    color: '#666',
+    fontWeight: 'bold',
+  },
+  shareTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  shareOptions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    width: '100%',
+  },
+  shareOption: {
+    alignItems: 'center',
+    marginVertical: 10,
+    width: '20%',
+  },
+  shareIcon: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  shareIconText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  shareOptionText: {
+    fontSize: 12,
+    color: '#333',
+    textAlign: 'center',
+  },
   });
 
 export default AgencyScreen;

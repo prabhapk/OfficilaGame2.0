@@ -191,31 +191,34 @@ export const groupByOrder = (data: any[]) => {
         betUniqueId: item.betUniqueId,
         betTime: item.betTime,
         nextDrawTime: item.nextDrawTime,
-        winningNumber: item.winningNumber, // ✅ keep at order level
+        winningNumber: item.winningNumber,
         gameName: item.gameName,
-        isWinning: item.isWinning, // optional summary
+        isWinning: item.isWinning,
         bets: [],
         totalAmount: 0,
+        winningAmount: 0, // ✅ initialized
       };
     }
 
     grouped[item.betUniqueId].bets.push({
-      // ✅ NORMALIZED BET DATA
       betType: item.betType,
       selectedNumber: item.selectedNumber,
       amount: item.amount,
       betCount: item.betCount,
       totalAmount: item.totalAmount,
-
-      // ✅ THIS IS THE KEY FIX
       isWinning: item.isWinning,
     });
 
-    grouped[item.betUniqueId].totalAmount += item.amount;
+    // ✅ FIX 1: totalAmount (better to use totalAmount instead of amount)
+    grouped[item.betUniqueId].totalAmount += item.totalAmount;
+
+    // ✅ FIX 2: ADD THIS LINE (missing piece)
+    grouped[item.betUniqueId].winningAmount += item.winningAmount ?? 0;
   });
 
   return Object.values(grouped);
 };
+
 
 
 export type OrderStatus = "pending" | "win" | "loss";

@@ -22,6 +22,8 @@ const initialValues: agentSliceState = {
     agentCreatedDate: '',
     rechargeBonusData: [],
     commissionBonusData: [],
+    totalRecharge:0,
+    totalCommissions: 0,
 }
 
 export const getAgentDailyStats = createAsyncThunk<
@@ -139,6 +141,8 @@ export const agentSlice = createSlice({
         // commissionData 
         state.commissionBonusData = action.payload.commissionConfigs
         console.log('commissionBonusDataState==>', state.commissionBonusData)
+        state.totalRecharge = action.payload.agent.totalRecharge
+        state.totalCommissions = action.payload.agent.totalCommissions
 
     });
  

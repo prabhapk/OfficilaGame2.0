@@ -36,17 +36,17 @@ export const getMyOrders = createAsyncThunk<
   any,
   {
 userId:number;
-groupId:number;
+gametypeid:number;
   },
   { rejectValue: string }
->('games/getMyOrders', async ({userId,groupId}, thunkAPI) => {
+>('games/getMyOrders', async ({userId,gametypeid}, thunkAPI) => {
   try {
     console.log('userIdSlice==>',userId);
-    console.log('groupIdSlice==>',groupId);
-    console.log('Check===>', serviceUrls.results.getMyOrders + '/' + userId + '/' + groupId,);
+    console.log('gametypeidSlice==>',gametypeid);
+    console.log('Check===>', serviceUrls.results.getMyOrders + '/' + userId + '/' + gametypeid,);
     
     const response = await axiosInstance.get(
-      serviceUrls.results.getMyOrders + '/' + userId + '/' + groupId,
+      serviceUrls.results.getMyOrders + '/' + userId + '/' + gametypeid,
       // {
       //   params: {
       //     userId,

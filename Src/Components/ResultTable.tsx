@@ -141,7 +141,8 @@ const ResultTable: React.FC<ResultTableProps> = ({
 
   const myOrderRenterItem = ({ item }: { item: any; index: number }) => {
     let status: string;
-
+    console.log('itemmmm====>', item);
+    
     if (item.isWinning) {
       status = "Won";
     } else if (!item.isWinning && item.winningNumber !== null) {
@@ -208,7 +209,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
         imageSource={hot}
         winOrLossId={item.betUniqueId}
         gameName={item.gameName || "AnnaiGaming"}
-        totalWinningAmount={item.totalAmount}
+        totalWinningAmount={item.winningAmount}
       />
     );
   };

@@ -51,6 +51,7 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
   winOrLossId,
   gameName,
   totalWinningAmount,
+  
 }) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);

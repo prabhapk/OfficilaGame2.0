@@ -68,6 +68,8 @@ export const Quick3DSlice = createSlice({
         // Extract the first key dynamically
         const firstKey = Object.keys(action.payload)[0];
         const firstGame = action.payload[firstKey]?.[0];
+        console.log("typeIdCheck====>", firstGame?.gameTypeId);
+        state.quick3dGameTypeId = firstGame?.gameTypeId;
       
         if (firstGame) {
           state.quick3dGamesGroupId = firstGame.groupId;

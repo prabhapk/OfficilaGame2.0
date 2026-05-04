@@ -438,7 +438,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     dispatch(
       getMyOrders({
         userId: userId,
-        groupId: groupId,
+        gametypeid: gameTypeId,
       })
     );
 
@@ -854,9 +854,9 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       })
     );
     dispatch(
-      getMyOrders({
+     getMyOrders({
         userId: userId,
-        groupId: groupId,
+        gametypeid: gameTypeId,
       })
     );
   }, [gameTypeId, groupId, tableCurrentPage]);
@@ -912,10 +912,10 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           resetState();
           dispatch(getWalletBalance());
           dispatch(
-            getMyOrders({
-              userId: userId,
-              groupId: groupId,
-            })
+           getMyOrders({
+        userId: userId,
+        gametypeid: gameTypeId,
+      })
           );
         }
       } catch (error: any) {
