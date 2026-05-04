@@ -24,6 +24,7 @@ const initialValues: agentSliceState = {
     commissionBonusData: [],
     totalRecharge:0,
     totalCommissions: 0,
+    rechargeBonusFUllData:[],
 }
 
 export const getAgentDailyStats = createAsyncThunk<
@@ -76,6 +77,29 @@ export const getAgentDashboardData = createAsyncThunk<
 
     } catch (error: any) {
       console.log('getAgentDashboardDataApiError', error);
+
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || error.message || String(error)
+      );
+    }
+  }
+);
+export const getRechargeBonusData = createAsyncThunk<
+  any,
+  { userId: number }
+>(
+  'games/getRechargeBonusData',
+  async ({ userId }, thunkAPI) => {
+    try {
+      const url = `${serviceUrls.Agent.rechargeBonusData}?userId=${userId}`;
+
+      const response = await axiosInstance.get(url);
+
+      console.log('getRechargeBonusDataResponse', response.data);
+      return response.data;
+
+    } catch (error: any) {
+      console.log('getRechargeBonusDataApiError', error);
 
       return thunkAPI.rejectWithValue(
         error?.response?.data || error.message || String(error)
@@ -136,14 +160,21 @@ export const agentSlice = createSlice({
         console.log('agentCreatedDateState==>', state.agentCreatedDate)
         state.agentLoader = false;
         // rechargeBonusData 
-        state.rechargeBonusData = action.payload.rechargeBonusConfigs
-        console.log('rechargeBonusDataState==>', state.rechargeBonusData)
+        // state.rechargeBonusData = action.payload.rechargeBonusConfigs
+        // console.log('rechargeBonusDataState==>', state.rechargeBonusData)
         // commissionData 
         state.commissionBonusData = action.payload.commissionConfigs
         console.log('commissionBonusDataState==>', state.commissionBonusData)
         state.totalRecharge = action.payload.agent.totalRecharge
         state.totalCommissions = action.payload.agent.totalCommissions
 
+    });
+      builder.addCase(getRechargeBonusData.fulfilled, (state, action) => {
+          state.rechargeBonusFUllData = action.payload
+        state.rechargeBonusData= action.payload.configs
+        console.log('rechargeBonusDataNew==>', state.rechargeBonusData)
+        console.log('rechargeBonusFullDataNew==>', state.rechargeBonusFUllData)
+        state.agentLoader = false;
     });
  
 

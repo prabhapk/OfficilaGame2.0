@@ -32,6 +32,7 @@ import * as Sharing from 'expo-sharing';
 import * as Clipboard from 'expo-clipboard';
 import { COLORS } from '../Constants/Theme';
 import { LinearGradient } from 'expo-linear-gradient';
+import AgencyScreen from './AgencyScreen';
 const InviteScreen = ({route}: any) => {
   const [dateRange, setDateRange] = useState({
     start: new Date(),
@@ -55,7 +56,7 @@ const InviteScreen = ({route}: any) => {
   const styles = createStyles(Scale);
 
   const dateOptions = ['Today', 'Yesterday', '3days', '7days', '14days'];
-  const { isLoggedIn, userDetails } = useSelector(
+  const { isLoggedIn, userDetails, isAgent } = useSelector(
     (state: RootState) => state.signInSlice,
   );
 
@@ -128,7 +129,15 @@ const InviteScreen = ({route}: any) => {
 
   const isProfile = route?.params?.isProfile;
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: COLORS.linearTwo}} showsVerticalScrollIndicator={false}>
+    <View style={{ flex: 1, backgroundColor: COLORS.linearTwo}} 
+    >
+ 
+      {!isAgent ? (
+    <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 60 }}
+      >
+   
       {isProfile && <NewAppHeader
         leftIconPress={() => navigation.goBack()}
         centerText={'Invite'}
@@ -308,7 +317,15 @@ const InviteScreen = ({route}: any) => {
           </View>
         </View>
       </Modal>
-    </ScrollView>
+        </ScrollView>
+        ) : (
+         
+          <AgencyScreen navigation={navigation} />
+       
+       
+      
+      )}
+    </View>
   );
 };
 
@@ -576,7 +593,6 @@ const createStyles = (Scale: any) => StyleSheet.create({
   // Motivational Section
   motivationalSection: {
     marginBottom: Scale(30),
-    flex:1,
   },
   motivationalTitle: {
     fontSize: Scale(20),

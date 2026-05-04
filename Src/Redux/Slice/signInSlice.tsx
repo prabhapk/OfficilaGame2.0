@@ -24,7 +24,9 @@ const initialValues: signInSliceState = {
   resetPasswordLoader: false,
   userId:0,
   vipLevelDetails:[],
-  totalDeposit:0
+  totalDeposit:0,
+  agentId:0,
+  isAgent: false,
 }
 
 
@@ -89,6 +91,14 @@ export const SignInPassword = createAsyncThunk<
       console.log("🔑 RESPONSE DATA TYPE:", typeof response.data);
       console.log("🔑 TOKEN FROM DATA:", response.data?.token);
       console.log("🔑 REFRESH TOKEN FROM DATA:", response.data?.refreshToken);
+     const agentId = response.data?.user?.agentId;
+
+const isAgent = agentId !== null && agentId !== undefined;
+
+console.log("Agent ID =>", agentId);
+console.log("Is Agent =>", isAgent);
+
+thunkAPI.dispatch(setIsAgent(isAgent));
       
       return response.data;
     } catch (error: any) {
@@ -106,32 +116,36 @@ export const SignInOtp = createAsyncThunk<
   { rejectValue: string }
 >(
   'auth/SignInPassword',
-  async ({
-    mobileNumber,
-    otp,
-    navigation,
-  }, thunkAPI) => {
+  async ({ mobileNumber, otp, navigation }, thunkAPI) => {
     const data = {
       mobileNumber: Number(mobileNumber),
       otp,
-    }
-    console.log("datadatadata", data)
-    try {
+    };
 
-      const response = await axiosInstance.post(serviceUrls.Auth.signInOtp,
-        data,
+    try {
+      const response = await axiosInstance.post(
+        serviceUrls.Auth.signInOtp,
+        data
       );
+
+      const agentIdFromApi = response.data?.user?.agentId;
+
+      console.log('agentId from API =>', agentIdFromApi);
+
       thunkAPI.dispatch(setIsLoggedIn(true));
+      thunkAPI.dispatch(setAgentId(agentIdFromApi));
+
       navigation.navigate('DrawerNavigation');
+
       return response.data;
     } catch (error: any) {
-      console.log('signInOtpApiError', error);
       return thunkAPI.rejectWithValue(
         error?.response?.data || error.message || error.toString()
       );
     }
   }
 );
+
 
 export const GetLoginOtp = createAsyncThunk<
   any,
@@ -277,6 +291,12 @@ export const signInSlice = createSlice({
     setMainWalletBalance: (state, action: PayloadAction<number>) => {
       state.mainWalletBalance = action.payload;
     },
+    setAgentId: (state, action: PayloadAction<number>) => {
+      state.agentId = action.payload;
+    },
+    setIsAgent: (state, action: PayloadAction<boolean>) => {
+      state.isAgent = action.payload;
+    },
     logoutUser: (state) => {
       // Clear all token-related fields
       state.token = undefined;
@@ -333,6 +353,9 @@ export const signInSlice = createSlice({
       state.withdrawBalance = action.payload.user?.walletBalance?.withdrawBalance;
       state.vipLevelDetails = action.payload.user?.vipLevels;
       state.totalDeposit= action.payload.user?.totalDeposit;
+      state.agentId= action.payload.user?.agentId;
+      console.log('agentId==>',state.agentId );
+      
   
       
       
@@ -389,7 +412,9 @@ export const {
   setRefreshToken,
   setIsLoggedIn,
   setMainWalletBalance,
-  logoutUser
+  logoutUser,
+  setAgentId,
+  setIsAgent
 } = signInSlice.actions
 
 export default signInSlice.reducer

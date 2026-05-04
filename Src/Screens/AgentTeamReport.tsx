@@ -1,10 +1,10 @@
 import { View, Text, StatusBar, StyleSheet, TouchableOpacity, FlatList, ScrollView, Linking, Alert, Modal } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { COLORS } from '../Constants/Theme'
 import { useContainerScale } from '../hooks/useContainerScale';
 import NewAppHeader from '../Components/NewAppHeader';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAgentDashboardData } from '../Redux/Slice/agentSlice';
+import { getAgentDashboardData, getRechargeBonusData } from '../Redux/Slice/agentSlice';
 import { RootState } from '../Redux/store';
 import * as Sharing from 'expo-sharing';
 import * as Clipboard from 'expo-clipboard';
@@ -15,10 +15,18 @@ const AgentTeamReport = ({navigation}: any) => {
     const [showShareModal, setShowShareModal] = useState(false);
     const { Scale, verticalScale } = useContainerScale();
     const styles = createStyles(Scale);
-    const {rechargeBonusData, dashboardData } = useSelector(
+    const {rechargeBonusData, dashboardData, rechargeBonusFUllData } = useSelector(
         (state: RootState) => state.agentSlice
       );
+    const {userId } = useSelector(
+        (state: RootState) => state.signInSlice
+      );
+      console.log("userId==>",userId);
       console.log("dashboardData==>",dashboardData);
+
+      useEffect(() => {
+        dispatch(getRechargeBonusData({ userId: userId }))
+      }, [dispatch, userId]);
       
     const handleBackPress = () => {
         navigation.goBack();
@@ -26,9 +34,13 @@ const AgentTeamReport = ({navigation}: any) => {
       const { isLoggedIn, userDetails } = useSelector(
         (state: RootState) => state.signInSlice,
       );
+      const invitedlist = rechargeBonusFUllData?.userStats?.invitedlist || {};
+const qualifiedUsers = rechargeBonusFUllData?.userStats?.qualifiedUsersPerLevel || {};
       
 
     const renderTeamReportItem = ({ item }) => {
+      const invitedCount = invitedlist[item.level] || 0;
+  const qualifiedCount = qualifiedUsers[item.level] || 0;
         return (
             <View style ={{
                 backgroundColor: COLORS.white,
@@ -139,14 +151,14 @@ const AgentTeamReport = ({navigation}: any) => {
                         fontWeight: 'bold',
                         color: 'red',
                     }}>
-                        0/
+                        {invitedCount}/
                     </Text>
                     <Text style ={{
                         fontSize: Scale(16),
                         fontWeight: 'bold',
                         color: COLORS.black
                     }}>
-                        1
+                        {item.totalPeopleRequired}
                     </Text>
                     </View> 
                     <Text style ={{
@@ -172,14 +184,14 @@ const AgentTeamReport = ({navigation}: any) => {
                         fontWeight: 'bold',
                         color: 'red'
                     }}>
-                        0/
+                       {qualifiedCount}/ 
                     </Text>
                     <Text style ={{
                         fontSize: Scale(16),
                         fontWeight: 'bold',
                         color: COLORS.black
                     }}>
-                        1
+                        {item.totalPeopleRequired}
                     </Text>
                     </View>
                     <Text style ={{
@@ -314,7 +326,7 @@ const AgentTeamReport = ({navigation}: any) => {
 
     <FlatList
       data={rechargeBonusData}
-      keyExtractor={(item) => item.id.toString()}
+     keyExtractor={(item) => item.level.toString()}
       renderItem={renderTeamReportItem}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: Scale(40) }}

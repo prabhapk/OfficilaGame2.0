@@ -32,6 +32,14 @@ import {
   vipNewLogoSeven,
   vipNewLogoSix,
   vipNewLogoThree,
+  vipNewLogoEight,
+  vipNewLogoEleven,
+  vipNewLogoFifteen,
+  vipNewLogoFourteen,
+  vipNewLogoNine,
+  vipNewLogoTen,
+  vipNewLogoThirteen,
+  vipNewLogoTwelve,
 } from "../../assets/assets";
 import Modal from "react-native-modal";
 import WalletInfoModal from "../Components/Modal/WalletInfoModal";
@@ -71,6 +79,14 @@ const vipImages = {
   5: vipNewLogoFive,
   6: vipNewLogoSix,
   7: vipNewLogoSeven,
+  8: vipNewLogoEight,
+  9: vipNewLogoNine,
+  10: vipNewLogoTen,
+  11: vipNewLogoEleven,
+  12: vipNewLogoTwelve,
+  13: vipNewLogoThirteen,
+  14: vipNewLogoFourteen,
+    15: vipNewLogoFifteen,
 };
 
 const vipLevel = vipLevelDetails?.[0]?.level ?? 0;

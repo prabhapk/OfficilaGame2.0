@@ -56,6 +56,8 @@ export interface CommonSliceState {
     userId: number,
     vipLevelDetails: any,
     totalDeposit: number,
+    agentId: number,
+    isAgent: boolean,
   }
   export interface signUpSliceState {
     mobileNumber?: string;
@@ -141,6 +143,7 @@ export interface CommonSliceState {
     commissionBonusData: any;
     totalRecharge: number;
     totalCommissions: number;
+    rechargeBonusFUllData:any
   }
   export interface rebateSliceState {
     rebateData: any;

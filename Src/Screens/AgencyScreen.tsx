@@ -66,7 +66,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
   console.log('userDataScreen==>', userData);
   
   
-  const { mobileNumber } = useSelector((state: RootState) => state.signInSlice);
+  const { mobileNumber, agentId } = useSelector((state: RootState) => state.signInSlice);
 
   const handleBackPress = () => {
     navigation.goBack();
@@ -127,11 +127,11 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
   };
 
     useEffect(() => {
-  dispatch(getAgentDailyStats({agentId: Number(1), date: '2022-08-01'}))
+  dispatch(getAgentDailyStats({agentId: Number(agentId), date: '2022-08-01'}))
   // dispatch(getAgentDashboardData({agentId: Number(1)}))
     },[])
   useEffect(() => {
-    dispatch(getAgentDashboardData({ agentId: 1 }));
+    dispatch(getAgentDashboardData({ agentId: agentId }));
   }, []);
 
   // const handleCopyLink = async () => {
@@ -225,6 +225,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 60 }}
       >
         {/* User Profile Card */}
         <View style={styles.profileCard}>
