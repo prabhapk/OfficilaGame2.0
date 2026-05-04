@@ -136,6 +136,7 @@ export const homeSlice = createSlice({
     id: index + 1,
     name: game.name,
     groupId: game.groupId,
+     gameTypeId: game.gameTypeId,
   }));
 
   console.log("gamesNameWithGroupId =>", state.gamesNameWithGroupId);

@@ -13,7 +13,7 @@ interface CustomTabsProps {
   index: number;
   onIndexChange: (idx: number) => void;
   style?: any;
-  onSelectGroupId?: (groupId: string) => void;
+  onSelectGameTypeId?: (gameTypeId: any) => void;
   /** When true, use dark text and purple accent (for light backgrounds) */
   lightTheme?: boolean;
 }
@@ -23,7 +23,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
   index,
   onIndexChange,
   style,
-  onSelectGroupId,
+  onSelectGameTypeId,
   lightTheme = false,
 }) => {
   const scrollRef = useRef<ScrollView>(null);
@@ -63,7 +63,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
             }}
             onPress={() => {
               onIndexChange(idx);
-              onSelectGroupId?.(tab?.groupId);
+              onSelectGameTypeId?.(tab?.gameTypeId);
             }}
             onLayout={(e) => {
               const { x, width } = e.nativeEvent.layout;

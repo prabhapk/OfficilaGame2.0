@@ -52,7 +52,6 @@ const MyBetsScreen = ({ navigation }: any) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedFilerId, setSelectedFilerId] = useState(1);
   const [showFilter, setShowFilter] = useState(false);
-  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const onClose = () => setShowFilter(false);
   const [selectedDate, setSelected] = useState<any>("");
   const headers = ["A", "B", "C"];
@@ -67,27 +66,26 @@ const MyBetsScreen = ({ navigation }: any) => {
   const dispatch = useDispatch();
 
   // API call function with groupId
-  const fetchMyBetsData = async (groupId: string) => {
-    try {
-      dispatch(
-        getMyOrders({
-          userId: userId,
-          groupId: groupId,
-        }),
-      );
-      console.log("API call made with groupId:", groupId);
-    } catch (error) {
-      console.error("Error fetching my bets data:", error);
-    }
-  };
+const fetchMyBetsData = (gameTypeId: number) => {
+  dispatch(
+    getMyOrders({
+      userId: userId,
+      gametypeid: gameTypeId,
+    })
+  );
+};
+
 
   // Handle groupId selection
-  const handleGroupIdSelect = (groupId: string) => {
-    setSelectedGroupId(groupId);
-    if (groupId) {
-      fetchMyBetsData(groupId);
-    }
-  };
+  // const handleGroupIdSelect = (groupId: string) => {
+  //   setSelectedGroupId(groupId);
+  //   if (groupId) {
+  //     fetchMyBetsData(groupId);
+  //   }
+  // };
+const handleGameTypeSelect = (gameTypeId: number) => {
+  fetchMyBetsData(gameTypeId);
+};
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
     if (selectedDate) {
@@ -172,21 +170,46 @@ const MyBetsScreen = ({ navigation }: any) => {
 
   // Call API on component mount with initial groupId
 
-  const resultHeaderList = useMemo(() => {
-    const quick3dTabs = Object.keys(allResultData || {})
-      .filter((key) => key.startsWith("QUICK3D"))
-      .map((key, index) => ({
-        id: 100 + index,
-        name: "Quick 3D",
-        groupId: allResultData[key]?.[0]?.groupId ?? null,
-      }));
+  // const resultHeaderList = useMemo(() => {
+  //   const quick3dTabs = Object.keys(allResultData || {})
+  //     .filter((key) => key.startsWith("QUICK3D"))
+  //     .map((key, index) => ({
+  //       id: 100 + index,
+  //       name: "Quick 3D",
+  //       groupId: allResultData[key]?.[0]?.groupId ?? null,
+  //     }));
 
-    const filteredGames = (gamesNameWithGroupId || []).filter(
-      (g) => !g.name.toLowerCase().includes("quick3d"),
-    );
+  //   const filteredGames = (gamesNameWithGroupId || []).filter(
+  //     (g) => !g.name.toLowerCase().includes("quick3d"),
+  //   );
 
-    return [...quick3dTabs, ...filteredGames];
-  }, [allResultData, gamesNameWithGroupId]);
+  //   return [...quick3dTabs, ...filteredGames];
+  // }, [allResultData, gamesNameWithGroupId]);
+
+//   const resultHeaderList = useMemo(() => {
+//   const quick3dTabs = Object.keys(allResultData || {})
+//     .filter((key) => key.startsWith("QUICK3D"))
+//     .map((key, index) => ({
+//       id: 100 + index,
+//       name: "Quick 3D",
+//       groupId: allResultData[key]?.[0]?.groupId ?? null,
+//       gameTypeId: allResultData[key]?.[0]?.gameTypeId ?? null, // ✅ ADD THIS
+//     }));
+
+//   const filteredGames = (gamesNameWithGroupId || []).map((g) => ({
+//     ...g,
+//     gameTypeId: g.gameTypeId, // ✅ make sure backend provides this
+//   }));
+
+//   return [...quick3dTabs, ...filteredGames];
+// }, [allResultData, gamesNameWithGroupId]);
+const resultHeaderList = useMemo(() => {
+  return (gamesNameWithGroupId || []).map((g) => ({
+    id: g.id,
+    name: g.name,
+    gameTypeId: g.gameTypeId, // ✅ correct source
+  }));
+}, [gamesNameWithGroupId]);
 
   // useEffect(() => {
   //   if (
@@ -198,16 +221,18 @@ const MyBetsScreen = ({ navigation }: any) => {
   //     fetchMyBetsData(initialGroupId);
   //   }
   // }, [allResultData, selectedIndex]);
-  useEffect(() => {
-    if (resultHeaderList.length > 0) {
-      const groupId = resultHeaderList[selectedIndex]?.groupId;
+useEffect(() => {
+  if (resultHeaderList.length > 0) {
+    const gameTypeId = resultHeaderList[selectedIndex]?.gameTypeId;
 
-      if (groupId) {
-        setSelectedGroupId(groupId);
-        fetchMyBetsData(groupId);
-      }
+    console.log("SELECTED gameTypeId =>", gameTypeId);
+
+    if (gameTypeId) {
+      fetchMyBetsData(gameTypeId);
     }
-  }, [selectedIndex, resultHeaderList]);
+  }
+}, [selectedIndex, resultHeaderList]);
+
 
   const groupedOrders = groupByOrder(myOrdersData);
 
@@ -381,7 +406,7 @@ const MyBetsScreen = ({ navigation }: any) => {
             tabs={resultHeaderList}
             index={selectedIndex}
             onIndexChange={setSelectedIndex}
-            onSelectGroupId={handleGroupIdSelect}
+            onSelectGameTypeId={handleGameTypeSelect}
           />
 
           <FlatList
