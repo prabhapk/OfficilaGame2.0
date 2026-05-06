@@ -243,6 +243,11 @@ const DigitComponent: React.FC<IDigitProps> = ({
     }
   }, [targetDateProp]);
 
+    
+    
+
+
+
   return (
     <>
       <View style={styles.container}>
@@ -261,7 +266,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               <Text style={styles.gameNameText}>{gameName}</Text>
               <TouchableOpacity
                 onPress={() => {
-                  dispatch(showHowToPlay());
+                  dispatch(showHowToPlay())
                 }}
                 style={styles.howtoplayBtn}
               >

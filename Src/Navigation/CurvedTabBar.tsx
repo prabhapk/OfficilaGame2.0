@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     width: CENTER_BUTTON_SIZE,
     height: CENTER_BUTTON_SIZE,
     borderRadius: CENTER_BUTTON_SIZE / 2,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
     justifyContent: "center",
     alignItems: "center",
     elevation: 10,
@@ -169,5 +169,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 6,
+    borderColor: COLORS.cardBorderAccent,
+    borderWidth: 3,
   },
 });

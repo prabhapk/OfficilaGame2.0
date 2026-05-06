@@ -162,9 +162,9 @@ const Quick3DScreen = ({ navigation, route }: any) => {
       })
     );
   }, [userId, quick3dGamesGroupId, tableCurrentPage]);
-  useEffect(() => {
-    dispatch(gameRules({ gameTypeId: quick3dGamesGroupId }));
-  }, [dispatch, quick3dGamesGroupId]);
+  // useEffect(() => {
+  //   dispatch(gameRules({ gameTypeId: quick3dGamesGroupId }));
+  // }, [dispatch, quick3dGamesGroupId]);
 
   // Handle scroll to show/hide sticky header
   const handleScroll = (event: any) => {

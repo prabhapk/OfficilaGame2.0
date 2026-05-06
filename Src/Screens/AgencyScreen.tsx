@@ -263,7 +263,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
                 />
               </View>
               <Text style={styles.statNumber}>
-                {dashBoardUserDataActiveUser}
+                {dashBoardUserDataActiveUser || 0}
               </Text>
               <Text style={styles.statLabel}>ACTIVE</Text>
             </View>
@@ -293,7 +293,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
                   }}
                 />
               </View>
-              <Text style={styles.statNumber}>{dashBoardUserDataNewUser}</Text>
+              <Text style={styles.statNumber}>{dashBoardUserDataNewUser || 0}</Text>
               <Text style={styles.statLabel}>NEW USER</Text>
             </View>
           </View>
@@ -317,11 +317,11 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
                 <Text style={styles.monthStatLabel}>RECHARGE</Text>
               </View>
               <Text style={styles.monthStatAmount}>
-                ₹{totalRecharge.toFixed(2)}
+                ₹{totalRecharge?.toFixed(2)}
               </Text>
               <View style={styles.monthStatChange}>
                 <Text style={styles.monthStatChangeText}>
-                  ₹{monthData.recharge.toFixed(2)}
+                  ₹{monthData?.recharge.toFixed(2)}
                 </Text>
                 <Text style={styles.monthStatArrow}>↗</Text>
               </View>
@@ -344,7 +344,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
               </Text>
               <View style={styles.monthStatChange}>
                 <Text style={styles.monthStatChangeText}>
-                  ₹{dashBoardDailyDataCommission.toFixed(2)}
+                  ₹{dashBoardDailyDataCommission?.toFixed(2)}
                 </Text>
                 <Text style={styles.monthStatArrow}>↗</Text>
               </View>
