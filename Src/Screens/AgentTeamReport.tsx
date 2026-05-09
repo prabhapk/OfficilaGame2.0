@@ -318,7 +318,7 @@ const AgentTeamReport = ({ navigation }: any) => {
           <View style={styles.topInfoRow}>
             {/* Recharge */}
             <View style={styles.smallInfoCard}>
-              <Ionicons name="wallet-outline" size={18} color="#7B2FF7" />
+              <Ionicons name="wallet-outline" size={18} color="black" />
 
               <Text style={styles.smallInfoTitle}>Recharge</Text>
 
@@ -329,7 +329,7 @@ const AgentTeamReport = ({ navigation }: any) => {
 
             {/* Required */}
             <View style={styles.smallInfoCard}>
-              <Ionicons name="people-outline" size={18} color="#00A86B" />
+              <Ionicons name="people-outline" size={18} color="black" />
 
               <Text style={styles.smallInfoTitle}>Required</Text>
 
@@ -999,7 +999,7 @@ const createStyles = (Scale: any) =>
     progressCount: {
       fontSize: Scale(13),
       fontWeight: "700",
-      color: "#7B2FF7",
+      color: "#00C853",
     },
 
     depositCount: {
@@ -1017,7 +1017,7 @@ const createStyles = (Scale: any) =>
 
     progressBar: {
       height: "100%",
-      backgroundColor: "#7B2FF7",
+      backgroundColor: "#00C853",
       borderRadius: Scale(20),
     },
 

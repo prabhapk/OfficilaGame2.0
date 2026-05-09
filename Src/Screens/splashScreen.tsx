@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
-import { newSplashScreen } from "../../assets/assets";
+import { newSplashScreen, updatedSplashscreen } from "../../assets/assets";
 import { Image } from "expo-image";
 
 const SplashScreen = ({ navigation }: { navigation: any }) => {
@@ -18,7 +18,8 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
       {/* <Image source={splashScreen} style={styles.logoImg}/> */}
       <Image 
       contentFit='fill'
-      source={newSplashScreen} style={styles.logoImg} />
+      // source={newSplashScreen} style={styles.logoImg} />
+      source={updatedSplashscreen} style={styles.logoImg} />
     </View>
   );
 };

@@ -7,6 +7,7 @@ export const lefArrow = require('./leftArrow.png');
 export const headerWallet = require('./wallet.png');
 // export const splashScreen = require('./newSplash.png');
 export const splashScreen = require('./splashNew.png');
+export const updatedSplashscreen = require('./updatedSplashscreenImage.jpg');
 export const refer = require('./refer.jpg');
 export const banner1 = require('./Banner/banner1.jpg');
 export const banner2 = require('./Banner/banner2.jpg');

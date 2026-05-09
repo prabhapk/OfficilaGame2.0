@@ -137,10 +137,13 @@ const InviteScreen = ({route}: any) => {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.linearTwo}} 
     >
+       {!isAgent && isProfile(
        <NewAppHeader
         leftIconPress={() => navigation.goBack()}
         centerText={'Invite'}
       />
+      )}
+  
       {!isAgent ? (
     <ScrollView
         showsVerticalScrollIndicator={false}
