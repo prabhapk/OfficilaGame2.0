@@ -1,4 +1,4 @@
-import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, color, dice, digit, digitMenu, dragonvsTiger, DrawerPromotion, DrawerRebate, DrawerSuperAgent, fiveMin3DImage, homeActiveTab, homeNewIcon, homeNewIconSilver, homeTab, hot, inviteActiveTab, inviteNewIcon, inviteTab, jdb, Jili, lottery1, meActiveTab, meNewIcon, meTab, multiUserIcon, oneMin3DImage, pg, promotionNewIcon, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultNewIcon, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
+import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, CasionoGamesIcon, color, dice, digit, digitMenu, dragonvsTiger, DrawerPromotion, DrawerRebate, DrawerSuperAgent, fiveMin3DImage, homeActiveTab, homeNewIcon, homeNewIconSilver, homeTab, hot, hotGamesIcon, inviteActiveTab, inviteNewIcon, inviteTab, jdb, Jili, lottery1, LotteryGamesIcon, meActiveTab, meNewIcon, meTab, multiUserIcon, oneMin3DImage, pg, promotionNewIcon, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultNewIcon, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
 import CasinoScreen from "../Screens/CasinoScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import InviteScreen from "../Screens/InviteScreen";
@@ -11,9 +11,9 @@ import Quick3DScreen from "../Screens/Quick3DScreen";
 import AgencyScreen from "../Screens/AgencyScreen";
 
 export const HomeScreenFlatlist = [
-    { id: 1, name: 'Hot', image: hot },
-    { id: 2, name: 'Lottery', image: lottery1 },
-    { id: 4, name: 'Casino', image: casino },
+    { id: 1, name: 'Hot', image: hotGamesIcon },
+    { id: 2, name: 'Lottery', image: LotteryGamesIcon },
+    { id: 4, name: 'Casino', image: CasionoGamesIcon },
     // { id: 5, name: 'Live', image: casino },
 ]
 

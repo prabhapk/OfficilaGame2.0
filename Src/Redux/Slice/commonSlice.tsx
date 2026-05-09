@@ -48,6 +48,7 @@ export const CommonSlice = createSlice({
     hideHowToPlay: state => {
       state.howToPlayVisible = false;
     },
+
     handleShowAlert:state=>{
       state.show30SecondsLeftAlert = !state.show30SecondsLeftAlert;
     },
@@ -90,7 +91,7 @@ export const CommonSlice = createSlice({
 })
 
 export const { showHowToPlay, hideHowToPlay, handleShowAlert, setPaymentSuccessModalVisible, 
-  setInsufficientBalanceModalVisible, setSessionExpiredVisible, setShouldNavigateToLogin, setTableCurrentPage
+  setInsufficientBalanceModalVisible, setSessionExpiredVisible, setShouldNavigateToLogin, setTableCurrentPage,
  } = CommonSlice.actions
 
 export default CommonSlice.reducer

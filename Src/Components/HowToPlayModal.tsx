@@ -26,7 +26,11 @@ import { RootState } from '../Redux/store';
     };
     const { Scale, verticalScale } = useContainerScale();
     const styles = createStyles(Scale);
-
+     const { individualGameData, individualGameDataLoader } = useSelector(
+        (state: RootState) => state.homeSlice
+      );
+      console.log("individualGameDataHowToPlayScreen===>", individualGameData);
+      console.log("individualGameDataGameName", individualGameData[0]?.name);
     const { quick3dGamesGroupId} = useSelector(
           (state: RootState) => state.quick3DSlice
         );
@@ -110,7 +114,7 @@ useEffect(() => {
           <View style={styles.row}>
             <Text style={styles.priceLabel}>Ticket Price</Text>
             <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>₹</Text>
+              <Text style={styles.priceLabel1}>₹</Text>
               <Text style={styles.priceValue}>11</Text>
             </View>
           </View>
@@ -118,7 +122,7 @@ useEffect(() => {
           <View style={styles.row}>
             <Text style={styles.priceLabel}>Winning Amount</Text>
             <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>₹</Text>
+              <Text style={styles.priceLabel1}>₹</Text>
               <Text style={styles.priceValue}>100</Text>
             </View>
           </View>
@@ -135,7 +139,7 @@ useEffect(() => {
           <View style={styles.row}>
             <Text style={styles.priceLabel}>Ticket Price</Text>
             <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>₹</Text>
+              <Text style={styles.priceLabel1}>₹</Text>
               <Text style={styles.priceValue}>11</Text>
             </View>
           </View>
@@ -143,7 +147,7 @@ useEffect(() => {
           <View style={styles.row}>
             <Text style={styles.priceLabel}>Winning Amount</Text>
             <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>₹</Text>
+              <Text style={styles.priceLabel1}>₹</Text>
               <Text style={styles.priceValue}>100</Text>
             </View>
           </View>
@@ -160,7 +164,7 @@ useEffect(() => {
           <View style={styles.row}>
             <Text style={styles.priceLabel}>Ticket Price</Text>
             <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>₹</Text>
+              <Text style={styles.priceLabel1}>₹</Text>
               <Text style={styles.priceValue}>21</Text>
             </View>
           </View>
@@ -168,7 +172,7 @@ useEffect(() => {
           <View style={styles.row}>
             <Text style={styles.priceLabel}>Winning Amount</Text>
             <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>₹</Text>
+              <Text style={styles.priceLabel1}>₹</Text>
               <Text style={styles.priceValue}>10000, 500, 50</Text>
             </View>
           </View>
@@ -258,7 +262,7 @@ useEffect(() => {
 
       row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: Scale(6),
         marginTop: Scale(10),
@@ -272,6 +276,11 @@ useEffect(() => {
       priceLabel: {
         fontWeight: 'bold',
         color: '#0D0C22',
+      },
+      priceLabel1: {
+        fontWeight: 'bold',
+        color: '#0D0C22',
+        marginLeft: Scale(10),
       },
 
       priceValue: {

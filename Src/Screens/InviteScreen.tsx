@@ -19,7 +19,13 @@ import {
   invitetop,
   inviteHero,
   rightTime,
-  agentLevels
+  agentLevels,
+  inviteScreenTopImage,
+  inviteFriends,
+  earnCommissions,
+  commissionRules,
+  referalLevel,
+  referAndEarn
 } from '../../assets/assets';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -131,25 +137,23 @@ const InviteScreen = ({route}: any) => {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.linearTwo}} 
     >
- 
+       <NewAppHeader
+        leftIconPress={() => navigation.goBack()}
+        centerText={'Invite'}
+      />
       {!isAgent ? (
     <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 60 }}
       >
    
-      {isProfile && <NewAppHeader
+      {/* {isProfile && <NewAppHeader
         leftIconPress={() => navigation.goBack()}
         centerText={'Invite'}
-      />}
-      
-      {/* Gradient Background */}
-      <LinearGradient
-        colors={['#1a0033', '#00aaff', '#ffd700']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.gradientBackground}
-      >
+      />
+      } */}
+     
+ 
         
         {/* Logo and Title Section */}
         {/* <View style={styles.logoSection}>
@@ -166,26 +170,26 @@ const InviteScreen = ({route}: any) => {
         </View> */}
 
         {/* Welcome Section */}
-        <View style={styles.welcomeSection}>
+        {/* <View style={styles.welcomeSection}>
           <Text style={styles.welcomeText}>Welcome to join</Text>
           <Text style={styles.welcomeSubText}>ANNAI LOTTERY AGENT!</Text>
-        </View>
+        </View> */}
 
         {/* Hero Image and Description Section */}
+        <View style ={{
+             backgroundColor: COLORS.primary,
+    paddingHorizontal: Scale(20),
+    paddingTop: Scale(20),
+    paddingBottom: Scale(40),
+        }}>
+
         <View style={styles.heroSection}>
           <Image
-          contentFit="contain"
-            source={inviteHero}
+          contentFit="cover"
+            source={inviteScreenTopImage}
             style={styles.heroBackgroundImage}
           />
-    
-              <View style={styles.descriptionContainer}>
-                <Text style={styles.descriptionText}>
-                  This is not just a referral program. This is your opportunity to create future of financial freedom and growth. We sincerely welcome you to be part of our journey.
-                </Text>
-                <Text style={styles.growTogetherText}>Let's grow Together!</Text>
-              </View>
-        
+  
         </View>
 
         {/* Contact Email and Rules Section */}
@@ -196,7 +200,7 @@ const InviteScreen = ({route}: any) => {
           </View>
           <TouchableOpacity style={styles.rulesButton} onPress={() => navigation.navigate('InvitationRulesScreen')}>
           <LinearGradient
-          colors={['#FF4140', '#FFAD45']}
+          colors={[COLORS.white, COLORS.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.registerGradient}
@@ -223,9 +227,6 @@ const InviteScreen = ({route}: any) => {
               <TouchableOpacity style={styles.copyButton} onPress={handleInvite}>
                 <Text style={styles.copyButtonText}>COPY</Text>
               </TouchableOpacity>
-              {/* <TouchableOpacity style={styles.refreshButton}>
-                <Text style={styles.refreshIcon}>🔄</Text>
-              </TouchableOpacity> */}
             </View>
           </View>
         </View>
@@ -234,15 +235,25 @@ const InviteScreen = ({route}: any) => {
         {/* Motivational Section */}
         <View style={styles.motivationalSection}>
         <Image
-        contentFit= 'cover'
-        source={rightTime} style={styles.rightTimeImage} />
+         contentFit= "fill"
+        source={referAndEarn} style={styles.agentLevelsImage} />
         <Image
-        contentFit= 'cover'
-        source={agentLevels} style={styles.agentLevelsImage} />
+      contentFit= "contain"
+        source={referalLevel} style={styles.agentLevelsImage} />
+        <Image
+    contentFit= "contain"
+        source={inviteFriends} style={styles.agentLevelsImage} />
+        <Image
+         contentFit= "contain"
+        source={earnCommissions} style={[styles.agentLevelsImage, {bottom: 20}]} />
+        <Image
+         contentFit= "contain"
+        source={commissionRules} style={[styles.agentLevelsImage, {bottom: 20}]} />
         </View>
 
       
-      </LinearGradient>
+      {/* </LinearGradient> */}
+      </View>
       {showStartPicker && (
         <DateTimePicker
           value={dateRange.start}
@@ -413,11 +424,11 @@ const createStyles = (Scale: any) => StyleSheet.create({
   },
   heroBackgroundImage: {
     width: '100%',
-    height:'160%',
+    height:500,
     justifyContent: 'center',
-    position: 'absolute',
-    right: -100,
-    top: -30,
+    // position: 'absolute',
+    // right: -100,
+    // top: -30,
   },
   heroContentContainer: {
     flexDirection: 'row',
@@ -449,6 +460,7 @@ const createStyles = (Scale: any) => StyleSheet.create({
     flexDirection: 'row',
     marginBottom: Scale(25),
     alignItems: 'center',
+    marginTop: Scale(20),
   },
   contactEmailBar: {
    
@@ -516,7 +528,7 @@ const createStyles = (Scale: any) => StyleSheet.create({
     fontWeight: 'bold',
   },
   codeContainer: {
-    backgroundColor: COLORS.tableTopColor,
+    backgroundColor: COLORS.primary,
     borderRadius: Scale(15),
     paddingVertical: Scale(20),
     paddingHorizontal: Scale(20),
@@ -538,7 +550,7 @@ const createStyles = (Scale: any) => StyleSheet.create({
     alignItems: 'center',
   },
   copyButton: {
-    backgroundColor: COLORS.tableTopColor,
+    backgroundColor: COLORS.primary,
     borderRadius: Scale(20),
     paddingVertical: Scale(8),
     paddingHorizontal: Scale(20),
@@ -707,12 +719,10 @@ const createStyles = (Scale: any) => StyleSheet.create({
   },
   rightTimeImage:{
     width:"100%",
-    height: Scale(600),
-    marginTop: Scale(20),
+    height: Scale(200),
   },
   agentLevelsImage:{
-    width:"100%",
-    height: Scale(800),
-    marginTop: Scale(20),
+    // width:"100%",
+    height: Scale(200),
   },
 });

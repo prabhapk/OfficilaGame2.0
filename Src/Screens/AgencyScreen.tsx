@@ -125,31 +125,31 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
   const handleCustomerService = () => {
     Alert.alert("Customer Service", "Opening customer service...");
   };
+    const { userDetails , isAgent} = useSelector(
+      (state: RootState) => state.signInSlice,
+    );
+
+  useEffect(() => {
+  if (isAgent) {
+    dispatch(
+      getAgentDailyStats({
+        agentId: Number(agentId),
+        date: '2022-08-01',
+      })
+    );
+  }
+}, [isAgent, agentId]);
 
     useEffect(() => {
-  dispatch(getAgentDailyStats({agentId: Number(agentId), date: '2022-08-01'}))
-  // dispatch(getAgentDashboardData({agentId: Number(1)}))
-    },[])
-  useEffect(() => {
-    dispatch(getAgentDashboardData({ agentId: agentId }));
-  }, []);
+    if (isAgent) {
+      dispatch(getAgentDashboardData({ agentId: agentId }));
+    }
+  }, [isAgent, agentId]);
 
-  // const handleCopyLink = async () => {
-  //   try {
-  //     await Clipboard.setStringAsync(shareUrl);
-  //     Alert.alert("Copied!", "Link copied to clipboard");
-  //     setShowShareModal(false);
-  //   } catch (error) {
-  //     console.log("Error copying link:", error);
-  //     Alert.alert("Error", "Unable to copy link");
-  //   }
-  // };
     const handleInvite = async () => {
       setShowShareModal(true);
   };
-    const { userDetails } = useSelector(
-      (state: RootState) => state.signInSlice,
-    );
+  
   const shareUrl = 'https://yourapp.com/invite?code=' + (userDetails.referralCode || '');
     const shareMessage = `Join me on this amazing app! Use my referral code: ${userDetails.referralCode || ''}\n\nDownload the app: ${shareUrl}`;
   
@@ -221,12 +221,14 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
         rightIcon={require("../../assets/wallet-icon.webp")}
         rightIconPress={handleWalletPress}
       />
+        {isAgent ? (
 
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 60 }}
       >
+
         {/* User Profile Card */}
         <View style={styles.profileCard}>
           <View style={styles.avatarContainer}>
@@ -518,6 +520,33 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
                 </View>
               </Modal>
       </ScrollView>
+      ):(
+        <View style ={{
+          marginHorizontal: Scale(20),
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+          bottom: Scale(50),
+        }}>
+          <Text style={{
+            textAlign: 'left',
+            fontSize: Scale(22),
+            color: '#fff',
+            fontWeight: 'bold',
+          }}>
+            Hello User!
+          </Text>
+          <Text style={{
+            textAlign: 'left',
+            fontSize: Scale(14),
+            color: '#fff',
+            fontWeight: 'bold',
+            marginTop: Scale(10),
+          }}>
+          You are not a agent, You can only see your profile and transactions once you become a super agent.
+          </Text>
+          </View>
+      )}
     </View>
   );
 };

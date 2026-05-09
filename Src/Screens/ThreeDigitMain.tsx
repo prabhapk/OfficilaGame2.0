@@ -301,6 +301,9 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
     const singleGame = gamesForSelectedSlot.find((g: any) => g.sectiontype === "Single");
     const doubleGame = gamesForSelectedSlot.find((g: any) => g.sectiontype === "Double");
     const tripleGame = gamesForSelectedSlot.find((g: any) => g.sectiontype === "Triple");
+    console.log("tripleGame==>", tripleGame);
+    console.log("doubleGame==>", doubleGame);
+    console.log("singleGame==>", singleGame);
 
     const WinningBalls = matchedGame?.lastResult?.winningNumber?.split("") ||
       individualGameData[0]?.lastResult?.winningNumber?.split("") ||
@@ -766,35 +769,12 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
       clearInputs("ABC");
     }
   };
-  //   const handleGenerate = (
-  //   threeDigitPrice: number,
-  //   groupId: number,
-  //   threeDigitGameId: number,
-  //   targetDateProp: string
-  // ) => {
-  //   console.log("📌 From child BOX button:", {
-  //     threeDigitPrice,
-  //     groupId,
-  //     threeDigitGameId,
-  //     targetDateProp,
-  //   });
 
-  //   // 👉 Here you can call API, set state, etc.
-  // };
 
   const renderHeader = ({ item }: any) => {
     console.log("item==>asasa", item);
     const isSelected = selectedOption === item.id;
     return (
-      // <LinearGradient
-      //   colors={[
-      //     isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
-      //     isSelected ? COLORS.tabActiveBg : COLORS.tabInactiveBg,
-      //   ]}
-      //   start={{ x: 0, y: 0 }}
-      //   end={{ x: 1, y: 0 }}
-      //   style={[styles.headerBtn, !isSelected && { borderColor: COLORS.tabInactiveBorder }]}
-      // >
       <LinearGradient
       colors={[
         selectedOption === item.id
@@ -1096,7 +1076,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
         </View>
       )}
       <SafeAreaView
-        style={{ position: "absolute", bottom: Scale(-28), left: 0, right: 0, }}
+        style={{ position: "absolute", bottom: Scale(-30), left: 0, right: 0, }}
       >
         <View style={styles.footerWrapper}>
           <GameFooter
