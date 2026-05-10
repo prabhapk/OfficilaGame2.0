@@ -15,6 +15,7 @@ import {
     onBlur?: () => void;
     keyboardType: any;
     maxChar?: number;
+    inputRef?: React.Ref<TextInput>;
   }
   
   const SingleIntegerTextInput: React.FC<Props> = ({
@@ -25,6 +26,7 @@ import {
     onBlur,
     keyboardType,
     maxChar,
+    inputRef,
   }) => {
     const [isOnFocus, setIsOnFocus] = useState(false);
     const { Scale, verticalScale } = useContainerScale();
@@ -42,6 +44,7 @@ import {
             isDisabled && styles.disabledContainer,
           ]}>
           <TextInput
+            ref={inputRef}
             style={[styles.textInput, isDisabled && styles.disabledTextInput]}
             placeholderTextColor="#fff"
             value={value}

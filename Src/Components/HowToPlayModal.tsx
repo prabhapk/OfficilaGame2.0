@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
   import {useSelector, useDispatch} from 'react-redux';
   import {
     Modal,
@@ -8,52 +8,35 @@ import React, { useState, useEffect } from 'react';
     StyleSheet,
     ScrollView,
   } from 'react-native';
-  import { useContainerScale } from '../hooks/useContainerScale';
+import { useContainerScale } from '../hooks/useContainerScale';
   import { hideHowToPlay } from '../Redux/Slice/commonSlice';
   import { cancel } from '../../assets/assets';
   import { Image } from 'expo-image';
-import { RootState } from '../Redux/store';
-  const HowToPlayModal = () => {
+type HowToPlayModalProps = {
+  gameTitle: string;
+  introText: string;
+  timeText: string;
+  exampleTicketText?: string;
+  exampleCombinationText?: string;
+};
+
+  const HowToPlayModal = ({
+    gameTitle,
+    introText,
+    timeText,
+    exampleTicketText = 'An example of a first prize ticket is 834',
+    exampleCombinationText = 'A=8 B=3 C=4, AB=83 BC=34 AC=84, ABC=834',
+  }: HowToPlayModalProps) => {
     const modalVisible = useSelector(
       (state: any) => state.commonSlice.howToPlayVisible,
     );
-  const {gameRulesData} = useSelector((state: any) => state.commonSlice);
-    console.log("gameRulesDataHowToPlay===>", gameRulesData);
-    
+ 
     const dispatch = useDispatch();
     const closeModal = () => {
       dispatch(hideHowToPlay());
     };
-    const { Scale, verticalScale } = useContainerScale();
+    const { Scale } = useContainerScale();
     const styles = createStyles(Scale);
-     const { individualGameData, individualGameDataLoader } = useSelector(
-        (state: RootState) => state.homeSlice
-      );
-      console.log("individualGameDataHowToPlayScreen===>", individualGameData);
-      console.log("individualGameDataGameName", individualGameData[0]?.name);
-    const { quick3dGamesGroupId} = useSelector(
-          (state: RootState) => state.quick3DSlice
-        );
-    
-        console.log('quick3dGamesGroupIdHowToPlay==>', quick3dGamesGroupId);
-    
-    const [selectedOption, setSelectedOption] = useState("1 Mins");
-
-useEffect(() => {
-  switch (quick3dGamesGroupId) {
-    case 2:
-      setSelectedOption("1 Mins");
-      break;
-    case 3:
-      setSelectedOption("3 Mins");
-      break;
-    case 4:
-      setSelectedOption("5 Mins");
-      break;
-    default:
-      setSelectedOption("1 Mins");
-  }
-}, [quick3dGamesGroupId]);
 
   return (
   <Modal
@@ -83,23 +66,23 @@ useEffect(() => {
           contentContainerStyle={styles.scrollContent}
         >
 
-          <Text style={styles.boldText}>Quick3D {selectedOption}</Text>
+          <Text style={styles.boldText}>{gameTitle}</Text>
 
           <Text style={styles.text}>
-            Quick3D {selectedOption} is an exhilarating lottery game. The lottery game mode that opens every {selectedOption} minutes has increased fun and excitement, and more frequent bonus opportunities.
+            {introText}
             {/* {'\n'}& Dear Lottery first prize result last three digit. */}
           </Text>
 
           <Text style={styles.text}>
-            Time: 24-hour drawing, once every {selectedOption} minutes
+            {timeText}
           </Text>
 
           <Text style={styles.text}>
-            An example of a first prize ticket is 834
+            {exampleTicketText}
           </Text>
 
           <Text style={styles.text}>
-            A=8 B=3 C=4, AB=83 BC=34 AC=84, ABC=834
+            {exampleCombinationText}
           </Text>
 
           {/* Single Digit */}

@@ -70,6 +70,29 @@ export const getIndividualGameResult = createAsyncThunk<
   }
 });
 
+export const getQuick3DResultByGroupId = createAsyncThunk<
+  any,
+  {
+    GroupId: number;
+    page: number;
+    pageSize: number;
+  },
+  { rejectValue: string }
+>('result/getQuick3DResultByGroupId', async ({ GroupId, page, pageSize }, thunkAPI) => {
+  try {
+    const response = await axiosInstance.get(
+      `${serviceUrls.results.getQuick3DResultByGroupId}?GroupId=${GroupId}&page=${page}&pageSize=${pageSize}`,
+    );
+    console.log('getQuick3DResultByGroupIdResponse', response.data);
+    return response.data;
+  } catch (error: any) {
+    console.log('getQuick3DResultByGroupIdApiError', error);
+    return thunkAPI.rejectWithValue(
+      error?.response?.data || error.message || error.toString(),
+    );
+  }
+});
+
 
 export const resultSlice = createSlice({
   name: 'resultSlice',
@@ -86,6 +109,7 @@ export const resultSlice = createSlice({
       state.resultLoader = true;
     });
     builder.addCase(getIndividualGameResult.pending, (state, action) => {});
+    builder.addCase(getQuick3DResultByGroupId.pending, (state, action) => {});
     // Fulfilled
     builder.addCase(getAllResults.fulfilled, (state, action) => {
       state.resultScreenCommonLoader = false;
@@ -95,12 +119,16 @@ export const resultSlice = createSlice({
     builder.addCase(getIndividualGameResult.fulfilled, (state, action) => {
       state.individualGameResults = action.payload;
     });
+    builder.addCase(getQuick3DResultByGroupId.fulfilled, (state, action) => {
+      state.individualGameResults = action.payload;
+    });
     // Rejected
     builder.addCase(getAllResults.rejected, (state, action) => {
       state.resultScreenCommonLoader = true;
       state.resultLoader = true;
     });
     builder.addCase(getIndividualGameResult.rejected, (state, action) => {});
+    builder.addCase(getQuick3DResultByGroupId.rejected, (state, action) => {});
   },
 });
 

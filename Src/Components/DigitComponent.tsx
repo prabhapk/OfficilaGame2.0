@@ -1,5 +1,5 @@
-import React, { use, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import React, { use, useEffect, useRef, useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Alert, TextInput } from "react-native";
 import CommonBall from "./CommonBall";
 import SingleIntegerTextInput from "./SingleIntegerTextInput";
 import CountButtons from "./CountButtons";
@@ -144,6 +144,12 @@ const DigitComponent: React.FC<IDigitProps> = ({
   } = useSelector((state: RootState) => state.threeDigit);
 
   const dispatch = useDispatch();
+  const inputRefs = useRef<Array<TextInput | null>>([]);
+
+  const handleAutoFocus = (value: string, nextIndex?: number) => {
+    if (value.length !== 1 || nextIndex === undefined) return;
+    inputRefs.current[nextIndex]?.focus();
+  };
 
   const getRandomNumber = () => Math.floor(Math.random() * 10);
 
@@ -183,48 +189,59 @@ const DigitComponent: React.FC<IDigitProps> = ({
   const doubleDigitA1OnChange = (value: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setDoubleDigitA1(filteredValue));
+    handleAutoFocus(filteredValue, 4);
   };
   const doubleDigitA2OnChange = (value: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setDoubleDigitA2(filteredValue));
+    handleAutoFocus(filteredValue, 6);
   };
   const doubleDigitB1OnChange = (value: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setDoubleDigitB1(filteredValue));
+    handleAutoFocus(filteredValue, 5);
   };
   const doubleDigitB2OnChange = (value: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setDoubleDigitB2(filteredValue));
+    handleAutoFocus(filteredValue, 8);
   };
   const doubleDigitC1OnChange = (value: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setDoubleDigitC1(filteredValue));
+    handleAutoFocus(filteredValue, 7);
   };
   const doubleDigitC2OnChange = (value: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setDoubleDigitC2(filteredValue));
+    handleAutoFocus(filteredValue, 9);
   };
 
   const onChangeSingleDigitA = (value: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setSingleDigitA(filteredValue));
+    handleAutoFocus(filteredValue, 1);
   };
   const onChangeSingleDigitB = (value: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setSingleDigitB(filteredValue));
+    handleAutoFocus(filteredValue, 2);
   };
   const onChangeSingleDigitC = (value: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setSingleDigitC(filteredValue));
+    handleAutoFocus(filteredValue, 3);
   };
 
   const onChangeThreeDigitA = (value: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setThreeDigitA(filteredValue));
+    handleAutoFocus(filteredValue, 10);
   };
   const onChangeThreeDigitB = (value: any) => {
     const filteredValue = filterNumericInput(value);
     dispatch(setThreeDigitB(filteredValue));
+    handleAutoFocus(filteredValue, 11);
   };
   const onChangeThreeDigitC = (value: any) => {
     const filteredValue = filterNumericInput(value);
@@ -361,6 +378,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 borderColor={"#DE3C3F"}
               />
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[0] = el;
+                }}
                 isDisabled={false}
                 value={singleDigitA?.toString()}
                 placeholderText={"-"}
@@ -404,6 +424,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 borderColor={"#EC8204"}
               />
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[1] = el;
+                }}
                 isDisabled={false}
                 value={singleDigitB?.toString()}
                 placeholderText={"-"}
@@ -448,6 +471,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 borderColor={"#066FEA"}
               />
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[2] = el;
+                }}
                 isDisabled={false}
                 value={singleDigitC?.toString()}
                 placeholderText={"-"}
@@ -542,6 +568,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 borderColor={"#EC8204"}
               />
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[3] = el;
+                }}
                 isDisabled={false}
                 value={doubleDigitA1?.toString()}
                 placeholderText={"-"}
@@ -551,6 +580,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 maxChar={1}
               />
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[4] = el;
+                }}
                 isDisabled={false}
                 value={doubleDigitB1?.toString()}
                 placeholderText={"-"}
@@ -617,6 +649,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 borderColor={"#066FEA"}
               />
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[5] = el;
+                }}
                 isDisabled={false}
                 value={doubleDigitA2?.toString()}
                 placeholderText={"-"}
@@ -626,6 +661,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 maxChar={1}
               />
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[6] = el;
+                }}
                 isDisabled={false}
                 value={doubleDigitC1?.toString()}
                 placeholderText={"-"}
@@ -692,6 +730,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 borderColor={"#066FEA"}
               />
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[7] = el;
+                }}
                 isDisabled={false}
                 value={doubleDigitB2?.toString()}
                 placeholderText={"-"}
@@ -701,6 +742,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 maxChar={1}
               />
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[8] = el;
+                }}
                 isDisabled={false}
                 value={doubleDigitC2?.toString()}
                 placeholderText={"-"}
@@ -820,6 +864,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
             </View>
             <View style={{ flexDirection: "row" }}>
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[9] = el;
+                }}
                 isDisabled={false}
                 value={threeDigitA?.toString()}
                 placeholderText={"-"}
@@ -829,6 +876,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 maxChar={1}
               />
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[10] = el;
+                }}
                 isDisabled={false}
                 value={threeDigitB?.toString()}
                 placeholderText={"-"}
@@ -838,6 +888,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
                 maxChar={1}
               />
               <SingleIntegerTextInput
+                inputRef={(el) => {
+                  inputRefs.current[11] = el;
+                }}
                 isDisabled={false}
                 value={threeDigitC?.toString()}
                 placeholderText={"-"}

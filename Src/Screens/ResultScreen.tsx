@@ -14,7 +14,7 @@ import ResultTable from "../Components/ResultTable";
 import CustomTabs from "../Components/CustomTabsHeader";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllResults } from "../Redux/Slice/resultSlice";
+import { getAllResults, getQuick3DResultByGroupId } from "../Redux/Slice/resultSlice";
 import { AppDispatch, RootState } from "../Redux/store";
 import { checked, unchecked } from "../../assets/assets";
 import CasinoResult from "./CasinoResult";
@@ -26,16 +26,19 @@ const MAIN_TABS = [
 ];
 
 const QUICK3D_SUB_TABS = [
-  { id: "1min", name: "1 min" },
-  { id: "3min", name: "3 min" },
-  { id: "5min", name: "5 min" },
+  { id: "1min", name: "1 min", groupId:2 },
+  { id: "3min", name: "3 min", groupId:3 },
+  { id: "5min", name: "5 min", groupId:4 },
 ];
 
 import { scale } from "react-native-size-matters";
 import CustomLoader from "../Components/CustomLoader";
 const ResultScreen = ({ navigation }: any) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { allResultData, resultLoader } = useSelector(
+    (state: RootState) => state.resultSlice
+  );
+  const { individualGameResults } = useSelector(
     (state: RootState) => state.resultSlice
   );
   const { Scale } = useContainerScale();
@@ -61,11 +64,21 @@ const ResultScreen = ({ navigation }: any) => {
 
   const selectedTabName = resultHeaderList[selectedIndex]?.name ?? "All";
   const isQuick3DSelected = selectedTabName === "Quick 3D";
+  const activeQuick3DSubTab = QUICK3D_SUB_TABS[quick3dSubIndex];
 
   const filteredData = useMemo(() => {
     const allCategories: any = allResultData || {};
     const formatCategoryName = (key: string) =>
       key.startsWith("QUICK3D") ? "Quick 3D" : key;
+
+    if (isQuick3DSelected) {
+      return [
+        {
+          category: `Quick 3D ${activeQuick3DSubTab?.name ?? ""}`,
+          data: individualGameResults?.results ?? [],
+        },
+      ];
+    }
 
     if (selectedTabName === "All") {
       return Object.keys(allCategories).map((key) => ({
@@ -83,11 +96,23 @@ const ResultScreen = ({ navigation }: any) => {
       return [{ category: formatCategoryName(categoryKey), data }];
     }
     return [];
-  }, [selectedTabName, allResultData]);
+  }, [selectedTabName, allResultData, isQuick3DSelected, activeQuick3DSubTab, individualGameResults]);
 
   useEffect(() => {
     dispatch(getAllResults());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!isQuick3DSelected || !activeQuick3DSubTab?.groupId) return;
+
+    dispatch(
+      getQuick3DResultByGroupId({
+        GroupId: activeQuick3DSubTab.groupId,
+        page: 1,
+        pageSize: 10,
+      })
+    );
+  }, [dispatch, isQuick3DSelected, activeQuick3DSubTab]);
 
   return (
     <View style={styles.screen}>

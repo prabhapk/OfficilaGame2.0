@@ -11,7 +11,10 @@ import ResultTable from "../Components/ResultTable";
 import CountdownTimer from "../Components/CountdownTimer";
 import { useContainerScale } from "../hooks/useContainerScale";
 import NewAppHeader from "../Components/NewAppHeader";
-import { getIndividualGameResult } from "../Redux/Slice/resultSlice";
+import {
+  getIndividualGameResult,
+  getQuick3DResultByGroupId,
+} from "../Redux/Slice/resultSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../Redux/store";
 import { setTableCurrentPage } from "../Redux/Slice/commonSlice";
@@ -20,9 +23,9 @@ import { formatToTimeIST } from "../Utils/Common";
 import { Image } from 'expo-image';
 
 const QUICK3D_SUB_TABS = [
-  { id: "1min", name: "1 min" },
-  { id: "3min", name: "3 min" },
-  { id: "5min", name: "5 min" },
+  { id: "1min", name: "1 min", groupId: 2 },
+  { id: "3min", name: "3 min", groupId: 3 },
+  { id: "5min", name: "5 min", groupId: 4 },
 ];
 
 const ParticularGameResult = ({ route, navigation }: any) => {
@@ -45,8 +48,21 @@ const ParticularGameResult = ({ route, navigation }: any) => {
 
   const BaseURL = "http://8.148.148.185";
   const GametypeId = data?.[0]?.gametypeId;
+  const isQuick3D = category === "Quick 3D";
+  const activeQuick3DSubTab = QUICK3D_SUB_TABS[quick3dSubIndex];
 
   useEffect(() => {
+    if (isQuick3D) {
+      dispatch(
+        getQuick3DResultByGroupId({
+          GroupId: activeQuick3DSubTab.groupId,
+          page: tableCurrentPage,
+          pageSize: 10,
+        })
+      );
+      return;
+    }
+
     if (GametypeId) {
       dispatch(
         getIndividualGameResult({
@@ -57,7 +73,7 @@ const ParticularGameResult = ({ route, navigation }: any) => {
       );
       dispatch(getIndividualGameData({ typeId: GametypeId }));
     }
-  }, [GametypeId, tableCurrentPage, dispatch]);
+  }, [GametypeId, tableCurrentPage, dispatch, isQuick3D, activeQuick3DSubTab]);
 
   useEffect(() => {
     dispatch(setTableCurrentPage(1));
@@ -69,8 +85,6 @@ const ParticularGameResult = ({ route, navigation }: any) => {
       balls: item.winningNumber?.split("") ?? [],
     })) ?? [];
   const totalPages = individualGameResults?.totalPages ?? 1;
-
-  const isQuick3D = category === "Quick 3D";
 
   return (
     <View style={styles.screen}>

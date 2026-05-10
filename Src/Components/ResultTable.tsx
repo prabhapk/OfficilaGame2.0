@@ -6,7 +6,7 @@ import { COLORS } from "../Constants/Theme";
 import MyBets3DigitsCard from "./MyBets3DigitsCard";
 import { hot, noDataImage } from "../../assets/assets";
 import { useContainerScale } from "../hooks/useContainerScale";
-import { formatDateTime, groupByOrder } from "../Utils/Common";
+import { formatDateTime, formatTime, groupByOrder } from "../Utils/Common";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
 import MyOrders from "./MyOrders";
@@ -77,7 +77,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
       : (index % 2 === 1 ? COLORS.primaryTextColor : COLORS.primaryTextColor);
     // const textColor = useLightTheme ? COLORS.primaryTextColor : COLORS.white;
     const borderColor = useLightTheme ? COLORS.resultTableBorder : COLORS.gameCardBorder;
-
+    const gameTime = formatTime(item.gameTime);
     return (
       <View
         style={{
@@ -90,14 +90,14 @@ const ResultTable: React.FC<ResultTableProps> = ({
           paddingHorizontal: Scale(10),
         }}
       >
-        <View style={{ flex: 1.5 }}>
-          <Text style={{ color: textColor }}>
-            {item.uid} {item?.gamename.startsWith("QUICK3D") && item.gamename}
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <Text style={{ color: textColor, textAlignVertical: "center" }}>
+            {item.uid}
           </Text>
         </View>
-        <View style={{ flex: 1.2, alignItems: "center" }}>
-          <Text style={{ color: textColor }}>
-            {formatDateTime(item.gameTime)}
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <Text style={{ color: textColor, textAlignVertical: "center" }}>
+            {gameTime}
           </Text>
         </View>
         <View

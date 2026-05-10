@@ -908,9 +908,9 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
 
   console.log("islast30sec==>", islast30sec);
 
-  useEffect(() => {
-    dispatch(gameRules({ gameTypeId: groupId }));
-  }, [groupId]);
+  // useEffect(() => {
+  //   dispatch(gameRules({ gameTypeId: groupId }));
+  // }, [groupId]);
 
   const renderMyNumbersSheetContent = () => (
     <View style={styles.myNumbersSheetContent}>
@@ -1027,7 +1027,11 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           {/* Conditionally Render UI Based on Selection */}
           <View style={styles.renderDataView}>{renderContent()}</View>
           <View>
-            <HowToPlayModal />
+            <HowToPlayModal
+              gameTitle={individualGameData[0]?.name ?? "Three Digit Game"}
+              introText={`${individualGameData[0]?.name ?? "This game"} is an exhilarating lottery game with fun and excitement and more frequent bonus opportunities.`}
+              timeText={`Time: 24-hour drawing${selectedTime ? `, draw at ${selectedTime}` : ""}`}
+            />
           </View>
         </View>
       </ScrollView>

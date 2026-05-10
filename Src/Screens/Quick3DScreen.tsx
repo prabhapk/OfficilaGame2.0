@@ -63,7 +63,7 @@ import { payNow } from "../Redux/Slice/HomeSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import PaymentSuccessModal from "../Components/Modal/PaymentSuccessModal";
 import InsufficientBalanceModal from "../Components/Modal/InsufficientBalanceModal";
-import { getIndividualGameResult } from "../Redux/Slice/resultSlice";
+import { getQuick3DResultByGroupId } from "../Redux/Slice/resultSlice";
 import NewAppHeader from "../Components/NewAppHeader";
 import ResultTable from "../Components/ResultTable";
 import { Image } from 'expo-image';
@@ -154,9 +154,8 @@ const Quick3DScreen = ({ navigation, route }: any) => {
       })
     );
     dispatch(
-      getIndividualGameResult({
-        // groupId: quick3dGamesGroupId,
-        GametypeId: quick3dGamesGroupId,
+      getQuick3DResultByGroupId({
+        GroupId: quick3dGamesGroupId,
         page: tableCurrentPage,
         pageSize: 10,
       })
@@ -420,9 +419,8 @@ getMyOrders({
       })
     );
     dispatch(
-      getIndividualGameResult({
-        // groupId: quick3dGamesGroupId,
-        GametypeId: quick3dGamesGroupId,
+      getQuick3DResultByGroupId({
+        GroupId: quick3dGamesGroupId,
         page: tableCurrentPage,
         pageSize: 10,
       })
@@ -780,7 +778,11 @@ getMyOrders({
           {/* Conditionally Render UI Based on Selection */}
           <View style={styles.renderDataView}>{renderContent()}</View>
           <View>
-            <HowToPlayModal />
+            <HowToPlayModal
+              gameTitle={`Quick 3D ${selectedOption}`}
+              introText={`Quick 3D ${selectedOption} is an exhilarating lottery game. The lottery game mode that opens every ${selectedOption} has increased fun and excitement, and more frequent bonus opportunities.`}
+              timeText={`Time: 24-hour drawing, once every ${selectedOption}`}
+            />
           </View>
         </View>
       </ScrollView>
