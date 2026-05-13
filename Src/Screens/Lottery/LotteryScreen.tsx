@@ -1,7 +1,7 @@
 import { View, Text, FlatList, ScrollView, StyleSheet } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
-import { chipIcon, multiUserIcon, quick3dMenu } from "../../../assets/assets";
+import { chipIcon, lotteryMenu, multiUserIcon, quick3dMenu } from "../../../assets/assets";
 import CommonDigits from "../../Components/CommonDigits";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
@@ -18,7 +18,7 @@ const LotteryScreen = () => {
       {/* 3Digit Game header - same style as Quick3DigitsMenu */}
       <View style={styles.headerBar}>
         <Image
-          source={quick3dMenu}
+          source={lotteryMenu}
           style={styles.headerLogo}
           contentFit="contain"
         />
@@ -66,8 +66,8 @@ const createStyles = (Scale: (n: number) => number) =>
       borderRadius: Scale(10),
     },
     headerLogo: {
-      width: Scale(36),
-      height: Scale(36),
+      width: Scale(46),
+      height: Scale(40),
       marginRight: Scale(8),
     },
     headerTitle: {
