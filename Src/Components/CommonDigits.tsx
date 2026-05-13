@@ -67,7 +67,7 @@ console.log('imageUrl', imageSource
   return (
     <TouchableOpacity onPress={onPress3Digits} style={styles.container}>
       <ImageBackground
-        source={agencyCenterLogo}
+        source={imageSource}
         style={styles.imageBackground}
         imageStyle={styles.imageStyle}
         resizeMode='stretch'
