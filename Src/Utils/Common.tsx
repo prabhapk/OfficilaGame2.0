@@ -202,7 +202,17 @@ export const convertToISO =(dateStr: string, timeStr: string): string =>{
   return localDate.toISOString();
 }
 
+export const formatFullDate = (dateString: string) => {
+  const date = new Date(dateString);
 
+  const options: Intl.DateTimeFormatOptions = {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  };
+
+  return date.toLocaleDateString("en-US", options);
+};
 export const groupByOrder = (data: any[]) => {
   const grouped: Record<string, any> = {};
 

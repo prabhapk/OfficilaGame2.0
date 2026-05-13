@@ -196,21 +196,21 @@ const createStyles = (Scale: (n: number) => number) =>
   StyleSheet.create({
     screen: {
       flex: 1,
-      backgroundColor: 'white',
+      backgroundColor: COLORS.backGroundCheck,
     },
     headerWrapper: {
       backgroundColor: 'yellow',
     },
     scrollView: {
       flex: 1,
-      backgroundColor: COLORS.white,
+      backgroundColor: COLORS.backGroundCheck,
     },
     scrollContent: {
       flexGrow: 1,
     },
     gameContent: {
       paddingBottom: Scale(100),
-      backgroundColor: COLORS.white,
+      backgroundColor: COLORS.backGroundCheck,
     },
     placeholderText: {
       fontSize: Scale(14),

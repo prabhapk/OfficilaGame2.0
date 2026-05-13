@@ -28,7 +28,11 @@ import {
   agentNewUsers,
   agentRecharge,
   agentRechargeMonth,
+  fbIcon,
+  instagram,
   resetIcon,
+  telegramIcon,
+  whatsappIcon,
 } from "../../assets/assets";
 import { CommonActions } from "@react-navigation/native";
 import { Image } from 'expo-image';
@@ -398,7 +402,7 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
           >
             <TouchableOpacity
               style={styles.invitationLinkTouchable}
-              onPress={handleInvitationLink}
+              onPress={handleCopyLink}
             >
               <Text style={styles.invitationLinkText}>INVITATION LINK</Text>
             </TouchableOpacity>
@@ -480,42 +484,66 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
                     
                     <Text style={styles.shareTitle}>Share</Text>
                     
-                    <View style={styles.shareOptions}>
-                      <TouchableOpacity style={styles.shareOption} onPress={handleFacebookShare}>
-                        <View style={[styles.shareIcon, { backgroundColor: '#1877F2' }]}>
-                          <Text style={styles.shareIconText}>f</Text>
-                        </View>
-                        <Text style={styles.shareOptionText}>Facebook</Text>
-                      </TouchableOpacity>
-        
-                      <TouchableOpacity style={styles.shareOption} onPress={handleTelegramShare}>
-                        <View style={[styles.shareIcon, { backgroundColor: '#0088CC' }]}>
-                          <Text style={styles.shareIconText}>✈</Text>
-                        </View>
-                        <Text style={styles.shareOptionText}>Telegram</Text>
-                      </TouchableOpacity>
-        
-                      <TouchableOpacity style={styles.shareOption} onPress={handleWhatsAppShare}>
-                        <View style={[styles.shareIcon, { backgroundColor: '#25D366' }]}>
-                          <Text style={styles.shareIconText}>💬</Text>
-                        </View>
-                        <Text style={styles.shareOptionText}>WhatsApp</Text>
-                      </TouchableOpacity>
-        
-                      <TouchableOpacity style={styles.shareOption} onPress={handleInstagramShare}>
-                        <View style={[styles.shareIcon, { backgroundColor: '#E4405F' }]}>
-                          <Text style={styles.shareIconText}>📷</Text>
-                        </View>
-                        <Text style={styles.shareOptionText}>Instagram</Text>
-                      </TouchableOpacity>
-        
-                      <TouchableOpacity style={styles.shareOption} onPress={handleCopyLink}>
-                        <View style={[styles.shareIcon, { backgroundColor: '#007AFF' }]}>
-                          <Text style={styles.shareIconText}>🔗</Text>
-                        </View>
-                        <Text style={styles.shareOptionText}>Copy Link</Text>
-                      </TouchableOpacity>
-                    </View>
+                  <View style={styles.shareOptions}>
+                              <TouchableOpacity style={styles.shareOption} onPress={handleFacebookShare}>
+                                <View style={styles.shareIcon}>
+                                  {/* <Text style={styles.shareIconText}>f</Text> */}
+                                  <Image source={fbIcon} 
+                                  style ={{
+                                    height: Scale(70),
+                                    width: Scale(70),
+                                  }}
+                                  />
+                
+                                </View>
+                                <Text style={styles.shareOptionText}>Facebook</Text>
+                              </TouchableOpacity>
+                
+                              <TouchableOpacity style={styles.shareOption} onPress={handleTelegramShare}>
+                                <View style={styles.shareIcon}>
+                                 <Image source={telegramIcon} 
+                                  style ={{
+                                    height: Scale(65),
+                                    width: Scale(65),
+                                  }}
+                                  />
+                
+                                </View>
+                                <Text style={styles.shareOptionText}>Telegram</Text>
+                              </TouchableOpacity>
+                
+                              <TouchableOpacity style={styles.shareOption} onPress={handleWhatsAppShare}>
+                                <View style={styles.shareIcon}>
+                                 <Image source={whatsappIcon} 
+                                  style ={{
+                                    height: Scale(50),
+                                    width: Scale(50),
+                                    borderRadius: Scale(10),
+                                  }}
+                                  />
+                                </View>
+                                <Text style={styles.shareOptionText}>WhatsApp</Text>
+                              </TouchableOpacity>
+                
+                              <TouchableOpacity style={styles.shareOption} onPress={handleInstagramShare}>
+                                <View style={styles.shareIcon}>
+                               <Image source={instagram} 
+                                  style ={{
+                                    height: Scale(45),
+                                    width: Scale(45),
+                                  }}
+                                  />
+                                </View>
+                                <Text style={styles.shareOptionText}>Instagram</Text>
+                              </TouchableOpacity>
+                
+                              <TouchableOpacity style={styles.shareOption} onPress={handleCopyLink}>
+                                <View style={[styles.shareIcon, { backgroundColor: '#007AFF' }]}>
+                                  <Text style={styles.shareIconText}>🔗</Text>
+                                </View>
+                                <Text style={styles.shareOptionText}>Copy Link</Text>
+                              </TouchableOpacity>
+                            </View>
                   </View>
                 </View>
               </Modal>

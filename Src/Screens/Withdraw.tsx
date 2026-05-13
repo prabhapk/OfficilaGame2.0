@@ -59,6 +59,7 @@ const Withdraw = ({ navigation }: any) => {
   );
   const [selectedBank, setSelectedBank] = useState<any | null>(null);
 
+  
 
   useEffect(() => {
     dispatch(
@@ -116,105 +117,6 @@ const Withdraw = ({ navigation }: any) => {
   };
   
 
-  // const renderBankAccounts = ({ item }: { item: any }) => {
-  //   return (
-  //     <View>
-  //       <TouchableOpacity
-  //         style={{
-  //           marginTop: Scale(10),
-  //           marginHorizontal: Scale(10),
-  //           flexDirection: "row",
-  //           alignItems: "center",
-  //           justifyContent: "space-between",
-  //           borderColor: "#FF4242",
-  //           borderWidth: 1,
-  //           borderRadius: 10,
-  //           padding: Scale(15),
-  //           marginVertical: Scale(10),
-  //           width: "95%",
-  //         }}
-  //       >
-  //         <View style={{ flexDirection: "row", alignItems: "center" }}>
-  //           <Entypo
-  //             name={"wallet"}
-  //             size={Scale(30)}
-  //             color={"white"}
-  //             style={{ marginRight: Scale(20) }}
-  //           />
-
-  //           <View>
-  //             <Text
-  //               style={{
-  //                 fontSize: Scale(16),
-  //                 fontWeight: "bold",
-  //                 color: "#fff",
-  //               }}
-  //             >
-  //               {item.accountHolderName}
-  //             </Text>
-  //             <Text
-  //               style={{
-  //                 fontSize: Scale(12),
-  //                 fontWeight: "bold",
-  //                 color: "#fff",
-  //               }}
-  //             >
-  //               {item.accountNumber}
-  //             </Text>
-  //           </View>
-  //         </View>
-  //         <View>
-  //           <TouchableOpacity
-  //             style={{
-  //               flexDirection: "row",
-  //               alignItems: "center",
-  //               bottom: Scale(5),
-  //             }}
-  //             onPress={()=>
-  //               navigation.navigate("AddBankAccount", { bankAccountId: item.id })
-  //             }
-  //           >
-  //             <Entypo
-  //               name={"edit"}
-  //               size={Scale(14)}
-  //               color={"#FF4242"}
-  //               style={{ marginRight: Scale(5) }}
-  //             />
-  //             <View>
-  //               <Text
-  //                 style={{
-  //                   fontSize: Scale(12),
-  //                   fontWeight: "bold",
-  //                   color: "#FF4242",
-  //                 }}
-  //               >
-  //                 Edit
-  //               </Text>
-  //             </View>
-  //           </TouchableOpacity>
-  //           <TouchableOpacity
-  //             style={{
-  //               flexDirection: "row",
-  //               alignItems: "center",
-  //               marginTop: Scale(10),
-  //             }}
-  //             onPress={() => {
-  //               setSelectedBankId(item.id); // store selected bank id
-  //               setDeleteModalVisible(true);
-  //             }}
-  //           >
-  //             <AntDesign
-  //               name={"delete"}
-  //               size={Scale(14)}
-  //               color={"#FF4242"}
-  //               style={{ marginRight: Scale(5) }}
-  //             />
-  //           </TouchableOpacity>
-  //         </View>
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // };
   
   const renderBankAccounts = ({ item }: { item: any }) => {
     const isSelected = selectedBank?.id === item.id;
@@ -838,7 +740,7 @@ const Withdraw = ({ navigation }: any) => {
                       marginLeft: Scale(5),
                     }}
                   >
-                    ₹ {withdrawableAmount}
+                   ₹ {(Number(withdrawableAmount || 0) + 0.1).toFixed(1)}
                   </Text>
                 </View>
                 <View

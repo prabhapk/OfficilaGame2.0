@@ -8,8 +8,9 @@ import {
   Alert,
   Modal,
   Linking,
+  FlatList,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image } from 'expo-image';
 import {
   bannerLuna1,
@@ -25,11 +26,19 @@ import {
   earnCommissions,
   commissionRules,
   referalLevel,
-  referAndEarn
+  referAndEarn,
+  fbIcon,
+  telegramIcon,
+  instagram,
+  whatsappIcon,
+  casionCommissionRate,
+  colorCommissionRate,
+  teamSize,
+  threeDigitCommissionRate
 } from '../../assets/assets';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
 import { useNavigation } from '@react-navigation/native';
 import { useContainerScale } from '../hooks/useContainerScale';
@@ -39,6 +48,12 @@ import * as Clipboard from 'expo-clipboard';
 import { COLORS } from '../Constants/Theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import AgencyScreen from './AgencyScreen';
+import {
+  getAgentDashboardData,
+  getRechargeBonusData,
+} from "../Redux/Slice/agentSlice";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 const InviteScreen = ({route}: any) => {
   const [dateRange, setDateRange] = useState({
     start: new Date(),
@@ -48,6 +63,26 @@ const InviteScreen = ({route}: any) => {
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const navigation = useNavigation();
+   const dispatch = useDispatch();
+    const { rechargeBonusData, dashboardData, rechargeBonusFUllData } =
+      useSelector((state: RootState) => state.agentSlice);
+console.log('rechargeBonusData==>', rechargeBonusData);
+console.log('rechargeBonusFUllData==>', rechargeBonusFUllData);
+
+
+      
+
+        const { userId } = useSelector((state: RootState) => state.signInSlice);
+        console.log("userId==>", userId);
+
+        useEffect(() => {
+          dispatch(getRechargeBonusData({ userId: userId }));
+        }, [dispatch, userId]);
+        
+          const invitedlist = rechargeBonusFUllData?.userStats?.invitedlist || {};
+  const qualifiedUsers =
+    rechargeBonusFUllData?.userStats?.qualifiedUsersPerLevel || {};
+
   const handleDateChange = (
     event: any,
     selectedDate: Date | undefined,
@@ -134,49 +169,157 @@ const InviteScreen = ({route}: any) => {
   };
 
   const isProfile = route?.params?.isProfile;
+    const renderTeamReportItem = ({ item }: any) => {
+    const invitedCount = invitedlist[item.level] || 0;
+    const qualifiedCount = qualifiedUsers[item.level] || 0;
+
+    const inviteProgress = (invitedCount / item.totalPeopleRequired) * 100;
+
+    const depositProgress = (qualifiedCount / item.totalPeopleRequired) * 100;
+     const isCompleted =
+    qualifiedCount >= item.totalPeopleRequired;
+
+
+    return (
+      <View style={styles.levelCard}>
+        {/* HEADER */}
+        <LinearGradient
+          colors={[COLORS.linearOne, COLORS.linearTwo]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.levelHeader}
+        >
+          <View>
+            <Text style={styles.levelText}>Level {item.level}</Text>
+
+            <Text style={styles.bonusLabel}>Reward Bonus</Text>
+          </View>
+
+          <Text style={styles.bonusAmount}>₹{item.bonusAmount}</Text>
+        </LinearGradient>
+
+        {/* BODY */}
+        <View style={styles.levelBody}>
+          {/* TOP INFO ROW */}
+          <View style={styles.topInfoRow}>
+            {/* Recharge */}
+            <View style={styles.smallInfoCard}>
+              <Ionicons name="wallet-outline" size={18} color="black" />
+
+              <Text style={styles.smallInfoTitle}>Recharge</Text>
+
+              <Text style={styles.smallInfoValue}>
+                ₹{item.minimumRechargePerPerson}
+              </Text>
+            </View>
+
+            {/* Required */}
+            <View style={styles.smallInfoCard}>
+              <Ionicons name="people-outline" size={18} color="black" />
+
+              <Text style={styles.smallInfoTitle}>Required</Text>
+
+              <Text style={styles.smallInfoValue}>
+                {item.totalPeopleRequired}
+              </Text>
+            </View>
+          </View>
+
+          {/* INVITES */}
+          <View style={styles.progressContainer}>
+            <View style={styles.progressTop}>
+              <Text style={styles.progressLabel}>Invites</Text>
+
+              <Text style={styles.progressCount}>
+                {invitedCount}/{item.totalPeopleRequired}
+              </Text>
+            </View>
+
+            <View style={styles.progressBarBg}>
+              <View
+                style={[
+                  styles.progressBar,
+                  {
+                    width: `${Math.min(inviteProgress, 100)}%`,
+                  },
+                ]}
+              />
+            </View>
+          </View>
+
+          {/* DEPOSITS */}
+          <View style={styles.progressContainer}>
+            <View style={styles.progressTop}>
+              <Text style={styles.progressLabel}>Deposits</Text>
+
+              <Text style={styles.depositCount}>
+                {qualifiedCount}/{item.totalPeopleRequired}
+              </Text>
+            </View>
+
+            <View style={styles.progressBarBg}>
+              <View
+                style={[
+                  styles.depositBar,
+                  {
+                    width: `${Math.min(depositProgress, 100)}%`,
+                  },
+                ]}
+              />
+            </View>
+          </View>
+
+          {/* BUTTON */}
+         <TouchableOpacity
+          activeOpacity={0.85}
+          onPress={!isCompleted ? handleInvite : undefined}
+          disabled={isCompleted}
+        >
+          <LinearGradient
+            colors={
+              isCompleted
+                ? ["#00C853", "#00A86B"] // ✅ GREEN
+                : ["#FF416C", "#FF4B2B"] // ✅ RED
+            }
+            style={styles.completeButton}
+          >
+            <Ionicons
+              name={
+                isCompleted
+                  ? "checkmark-circle"
+                  : "share-social"
+              }
+              size={18}
+              color="#fff"
+            />
+
+            <Text style={styles.completeText}>
+              {isCompleted
+                ? "Completed"
+                : "Invite Now"}
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.linearTwo}} 
     >
-       {!isAgent && isProfile(
+       {!isAgent && (
        <NewAppHeader
         leftIconPress={() => navigation.goBack()}
         centerText={'Invite'}
       />
       )}
   
-      {!isAgent ? (
+  
     <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 60 }}
       >
    
-      {/* {isProfile && <NewAppHeader
-        leftIconPress={() => navigation.goBack()}
-        centerText={'Invite'}
-      />
-      } */}
-     
- 
-        
-        {/* Logo and Title Section */}
-        {/* <View style={styles.logoSection}>
-          <View style={styles.logoContainer}>
-            <View style={styles.logoIcon}>
-              <Text style={styles.logoText}>AL</Text>
-              <Text style={styles.crownText}>👑</Text>
-            </View>
-            <View style={styles.logoTextContainer}>
-              <Text style={styles.bhauText}>ANNAI</Text>
-              <Text style={styles.lotteryText}>LOTTERY</Text>
-            </View>
-          </View>
-        </View> */}
-
-        {/* Welcome Section */}
-        {/* <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeText}>Welcome to join</Text>
-          <Text style={styles.welcomeSubText}>ANNAI LOTTERY AGENT!</Text>
-        </View> */}
 
         {/* Hero Image and Description Section */}
         <View style ={{
@@ -233,26 +376,53 @@ const InviteScreen = ({route}: any) => {
             </View>
           </View>
         </View>
+          <FlatList
+                data={rechargeBonusData}
+                keyExtractor={(item) => item.level.toString()}
+                renderItem={renderTeamReportItem}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingBottom: Scale(10),
+                  paddingTop: Scale(10),
+                }}
+                removeClippedSubviews={false}
+              />
 
 
         {/* Motivational Section */}
-        <View style={styles.motivationalSection}>
+        {/* <View style={styles.motivationalSection}>
         <Image
          contentFit= "fill"
         source={referAndEarn} style={styles.agentLevelsImage} />
         <Image
       contentFit= "contain"
-        source={referalLevel} style={styles.agentLevelsImage} />
+        source={referalLevel} style={[styles.agentLevelsImage, {bottom: 10}]} />
         <Image
     contentFit= "contain"
-        source={inviteFriends} style={styles.agentLevelsImage} />
+        source={inviteFriends} style={[styles.agentLevelsImage, {marginTop: Scale(10)}]} />
         <Image
          contentFit= "contain"
-        source={earnCommissions} style={[styles.agentLevelsImage, {bottom: 20}]} />
+        source={earnCommissions} style={[styles.agentLevelsImage, {marginTop: Scale(20)}]} />
         <Image
          contentFit= "contain"
-        source={commissionRules} style={[styles.agentLevelsImage, {bottom: 20}]} />
+        source={commissionRules} style={[styles.agentLevelsImage, {marginTop: Scale(20)}]} />
         </View>
+
+        <View style={styles.motivationalSection}>
+        <Image
+         contentFit= "fill"
+        source={teamSize} style={styles.agentLevelsImage} />
+        <Image
+      contentFit= "fill"
+        source={threeDigitCommissionRate} style={[styles.agentLevelsImage, {marginTop: Scale(10)}]} />
+        <Image
+    contentFit= "fill"
+        source={casionCommissionRate} style={[styles.agentLevelsImage, {marginTop: Scale(10)}]} />
+        <Image
+         contentFit= "fill"
+        source={colorCommissionRate} style={[styles.agentLevelsImage, {marginTop: Scale(20)}]} />
+        </View> */}
+        
 
       
       {/* </LinearGradient> */}
@@ -294,29 +464,53 @@ const InviteScreen = ({route}: any) => {
             
             <View style={styles.shareOptions}>
               <TouchableOpacity style={styles.shareOption} onPress={handleFacebookShare}>
-                <View style={[styles.shareIcon, { backgroundColor: '#1877F2' }]}>
-                  <Text style={styles.shareIconText}>f</Text>
+                <View style={styles.shareIcon}>
+                  {/* <Text style={styles.shareIconText}>f</Text> */}
+                  <Image source={fbIcon} 
+                  style ={{
+                    height: Scale(70),
+                    width: Scale(70),
+                  }}
+                  />
+
                 </View>
                 <Text style={styles.shareOptionText}>Facebook</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.shareOption} onPress={handleTelegramShare}>
-                <View style={[styles.shareIcon, { backgroundColor: '#0088CC' }]}>
-                  <Text style={styles.shareIconText}>✈</Text>
+                <View style={styles.shareIcon}>
+                 <Image source={telegramIcon} 
+                  style ={{
+                    height: Scale(65),
+                    width: Scale(65),
+                  }}
+                  />
+
                 </View>
                 <Text style={styles.shareOptionText}>Telegram</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.shareOption} onPress={handleWhatsAppShare}>
-                <View style={[styles.shareIcon, { backgroundColor: '#25D366' }]}>
-                  <Text style={styles.shareIconText}>💬</Text>
+                <View style={styles.shareIcon}>
+                 <Image source={whatsappIcon} 
+                  style ={{
+                    height: Scale(50),
+                    width: Scale(50),
+                    borderRadius: Scale(10),
+                  }}
+                  />
                 </View>
                 <Text style={styles.shareOptionText}>WhatsApp</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.shareOption} onPress={handleInstagramShare}>
-                <View style={[styles.shareIcon, { backgroundColor: '#E4405F' }]}>
-                  <Text style={styles.shareIconText}>📷</Text>
+                <View style={styles.shareIcon}>
+               <Image source={instagram} 
+                  style ={{
+                    height: Scale(45),
+                    width: Scale(45),
+                  }}
+                  />
                 </View>
                 <Text style={styles.shareOptionText}>Instagram</Text>
               </TouchableOpacity>
@@ -332,13 +526,7 @@ const InviteScreen = ({route}: any) => {
         </View>
       </Modal>
         </ScrollView>
-        ) : (
-         
-          <AgencyScreen navigation={navigation} />
-       
-       
       
-      )}
     </View>
   );
 };
@@ -728,4 +916,140 @@ const createStyles = (Scale: any) => StyleSheet.create({
     // width:"100%",
     height: Scale(200),
   },
+   levelCard: {
+      marginHorizontal: Scale(10),
+      marginTop: Scale(14),
+      borderRadius: Scale(20),
+      overflow: "hidden",
+      backgroundColor: "#fff",
+
+      elevation: 6,
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      shadowOpacity: 0.12,
+      shadowRadius: 5,
+    },
+
+    levelHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingHorizontal: Scale(18),
+      paddingVertical: Scale(14),
+    },
+
+    levelBody: {
+      padding: Scale(14),
+    },
+
+    levelText: {
+      color: "#fff",
+      fontSize: Scale(20),
+      fontWeight: "700",
+    },
+
+    bonusLabel: {
+      color: "#E9D8FF",
+      marginTop: Scale(2),
+      fontSize: Scale(11),
+    },
+
+    bonusAmount: {
+      color: "#fff",
+      fontSize: Scale(24),
+      fontWeight: "bold",
+    },
+
+    topInfoRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginBottom: Scale(14),
+    },
+
+    smallInfoCard: {
+      flex: 0.48,
+      backgroundColor: "#F6F3FF",
+      borderRadius: Scale(14),
+      paddingVertical: Scale(12),
+      paddingHorizontal: Scale(12),
+    },
+
+    smallInfoTitle: {
+      fontSize: Scale(11),
+      color: "#666",
+      marginTop: Scale(6),
+    },
+
+    smallInfoValue: {
+      fontSize: Scale(17),
+      fontWeight: "700",
+      color: "#222",
+      marginTop: Scale(4),
+    },
+
+    progressContainer: {
+      marginBottom: Scale(12),
+    },
+
+    progressTop: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginBottom: Scale(6),
+    },
+
+    progressLabel: {
+      fontSize: Scale(13),
+      color: "#444",
+      fontWeight: "600",
+    },
+
+    progressCount: {
+      fontSize: Scale(13),
+      fontWeight: "700",
+      color: "#00C853",
+    },
+
+    depositCount: {
+      fontSize: Scale(13),
+      fontWeight: "700",
+      color: "#00A86B",
+    },
+
+    progressBarBg: {
+      height: Scale(8),
+      backgroundColor: "#ECECEC",
+      borderRadius: Scale(20),
+      overflow: "hidden",
+    },
+
+    progressBar: {
+      height: "100%",
+      backgroundColor: "#00C853",
+      borderRadius: Scale(20),
+    },
+
+    depositBar: {
+      height: "100%",
+      backgroundColor: "#00C853",
+      borderRadius: Scale(20),
+    },
+
+    completeButton: {
+      marginTop: Scale(10),
+      borderRadius: Scale(14),
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      paddingVertical: Scale(13),
+    },
+
+    completeText: {
+      color: "#fff",
+      fontSize: Scale(14),
+      fontWeight: "700",
+      marginLeft: Scale(8),
+    },
 });

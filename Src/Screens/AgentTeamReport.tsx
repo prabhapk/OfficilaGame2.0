@@ -293,6 +293,8 @@ const AgentTeamReport = ({ navigation }: any) => {
     const inviteProgress = (invitedCount / item.totalPeopleRequired) * 100;
 
     const depositProgress = (qualifiedCount / item.totalPeopleRequired) * 100;
+         const isCompleted =
+    qualifiedCount >= item.totalPeopleRequired;
 
     return (
       <View style={styles.levelCard}>
@@ -384,16 +386,36 @@ const AgentTeamReport = ({ navigation }: any) => {
           </View>
 
           {/* BUTTON */}
-          <TouchableOpacity activeOpacity={0.85} onPress={handleInvite}>
-            <LinearGradient
-              colors={["#FF416C", "#FF4B2B"]}
-              style={styles.completeButton}
-            >
-              <Ionicons name="share-social" size={18} color="#fff" />
+           <TouchableOpacity
+          activeOpacity={0.85}
+          onPress={!isCompleted ? handleInvite : undefined}
+          disabled={isCompleted}
+        >
+          <LinearGradient
+            colors={
+              isCompleted
+                ? ["#00C853", "#00A86B"] // ✅ GREEN
+                : ["#FF416C", "#FF4B2B"] // ✅ RED
+            }
+            style={styles.completeButton}
+          >
+            <Ionicons
+              name={
+                isCompleted
+                  ? "checkmark-circle"
+                  : "share-social"
+              }
+              size={18}
+              color="#fff"
+            />
 
-              <Text style={styles.completeText}>Invite Now</Text>
-            </LinearGradient>
-          </TouchableOpacity>
+            <Text style={styles.completeText}>
+              {isCompleted
+                ? "Completed"
+                : "Invite Now"}
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
         </View>
       </View>
     );

@@ -12,9 +12,13 @@ import {
   bigSpin,
   cancel,
   drawerLevel,
+  DrawerPromotion,
+  DrawerRebate,
+  DrawerSuperAgent,
   freeLottery,
   homeAppIcon,
   newLogo,
+  profileCustomerServiceImage,
   promotions,
   rebateMenu,
   robMoney,
@@ -31,7 +35,7 @@ import {
 } from "../../assets/assets";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { MenuBarList } from "../Constants/CommonFlatlist";
+// import { MenuBarList } from "../Constants/CommonFlatlist";
 import Entypo from "react-native-vector-icons/Entypo";
 import { ScrollView } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
@@ -44,6 +48,13 @@ const CustomSidebarMenu = ({ navigation }: any) => {
   const { isLoggedIn, userDetails, mainWalletBalance, withdrawBalance } =
     useSelector((state: RootState) => state.signInSlice);
     console.log('userDetails==>', userDetails);
+      const MenuBarList = [
+        {id:1, name:"Rebate", image:DrawerRebate, route:'RebateScreen'},
+        {id: 2, name:"Promotions", image:DrawerPromotion, route:'Promotions'},
+        {id: 3, name:"Super Agent", image:DrawerSuperAgent, route:'AgencyScreen'},
+        {id: 4, name:"24/7 Customer Service", image:profileCustomerServiceImage, route:'CustomerService'},
+
+      ]
     
     const vipImages = {
       0: vipNewLogoZero,
@@ -69,7 +80,7 @@ const CustomSidebarMenu = ({ navigation }: any) => {
       <TouchableOpacity
         key={item.id}
         style={styles.menuContainer}
-        onPress={() => navigation.navigate(item.component)}
+        onPress={() => navigation.navigate(item.route)}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image

@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useContainerScale } from "../../hooks/useContainerScale";
 import { ThreeDigitsLottery } from "../../Constants/CommonFlatlist";
 import CommonDigits from "../../Components/CommonDigits";
-import { chipIcon, multiUserIcon, quick3dMenu } from "../../../assets/assets";
+import { chipIcon, multiUserIcon, QUICK3DLOGO, quick3dMenu } from "../../../assets/assets";
 import { COLORS } from "../../Constants/Theme";
 
 const Quick3DigitsMenu = () => {
@@ -20,7 +20,7 @@ const Quick3DigitsMenu = () => {
       {/* 3Digit Game header - light purple bar with logo, title, number, people icon */}
       <View style={styles.headerBar}>
         <Image
-          source={quick3dMenu}
+          source={QUICK3DLOGO}
           style={styles.headerLogo}
           contentFit="contain"
         />
@@ -48,7 +48,7 @@ const Quick3DigitsMenu = () => {
               <Image
                 source={item.image}
                 style={styles.image}
-                contentFit="cover"
+                contentFit='cover'
               />
             </TouchableOpacity>
           ))}
@@ -72,9 +72,10 @@ const createStyles = (Scale: (n: number) => number) =>
       borderRadius: Scale(10),
     },
     headerLogo: {
-      width: Scale(36),
-      height: Scale(36),
+      width: Scale(40),
+      height: Scale(40),
       marginRight: Scale(8),
+      top: Scale(3)
     },
     headerTitle: {
       fontSize: Scale(16),
@@ -103,13 +104,10 @@ const createStyles = (Scale: (n: number) => number) =>
     },
     card: {
       flex: 1,
-      height: Scale(120),
-      borderRadius: Scale(12),
+      height: Scale(150),
       overflow: "hidden",
       marginHorizontal: Scale(4),
-      backgroundColor: COLORS.gameCardBg,
-      borderWidth: 1,
-      borderColor: COLORS.gameCardBorder,
+      backgroundColor: COLORS.backGroundCheck,
     },
     image: {
       width: "100%",

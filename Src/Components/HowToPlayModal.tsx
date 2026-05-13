@@ -18,6 +18,12 @@ type HowToPlayModalProps = {
   timeText: string;
   exampleTicketText?: string;
   exampleCombinationText?: string;
+  ticketPriceSingleDigit?: number;
+  ticketPriceDoubleDigit?: number;
+  ticketPriceThreeDigit?: number;
+  winningAmountSingleDigit?: number;
+  winningAmountDoubleDigit?: number;
+  winningAmountThreeDigit: number;
 };
 
   const HowToPlayModal = ({
@@ -26,6 +32,12 @@ type HowToPlayModalProps = {
     timeText,
     exampleTicketText = 'An example of a first prize ticket is 834',
     exampleCombinationText = 'A=8 B=3 C=4, AB=83 BC=34 AC=84, ABC=834',
+    ticketPriceSingleDigit,
+    ticketPriceDoubleDigit,
+    ticketPriceThreeDigit,
+    winningAmountSingleDigit,
+    winningAmountDoubleDigit,
+    winningAmountThreeDigit,
   }: HowToPlayModalProps) => {
     const modalVisible = useSelector(
       (state: any) => state.commonSlice.howToPlayVisible,
@@ -98,7 +110,7 @@ type HowToPlayModalProps = {
             <Text style={styles.priceLabel}>Ticket Price</Text>
             <View style={styles.priceRow}>
               <Text style={styles.priceLabel1}>₹</Text>
-              <Text style={styles.priceValue}>11</Text>
+              <Text style={styles.priceValue}>{ticketPriceSingleDigit}</Text>
             </View>
           </View>
 
@@ -106,7 +118,7 @@ type HowToPlayModalProps = {
             <Text style={styles.priceLabel}>Winning Amount</Text>
             <View style={styles.priceRow}>
               <Text style={styles.priceLabel1}>₹</Text>
-              <Text style={styles.priceValue}>100</Text>
+              <Text style={styles.priceValue}>{winningAmountSingleDigit}</Text>
             </View>
           </View>
 
@@ -123,7 +135,7 @@ type HowToPlayModalProps = {
             <Text style={styles.priceLabel}>Ticket Price</Text>
             <View style={styles.priceRow}>
               <Text style={styles.priceLabel1}>₹</Text>
-              <Text style={styles.priceValue}>11</Text>
+              <Text style={styles.priceValue}>{ticketPriceDoubleDigit}</Text>
             </View>
           </View>
 
@@ -131,7 +143,7 @@ type HowToPlayModalProps = {
             <Text style={styles.priceLabel}>Winning Amount</Text>
             <View style={styles.priceRow}>
               <Text style={styles.priceLabel1}>₹</Text>
-              <Text style={styles.priceValue}>100</Text>
+              <Text style={styles.priceValue}>{winningAmountDoubleDigit}</Text>
             </View>
           </View>
 
@@ -148,7 +160,7 @@ type HowToPlayModalProps = {
             <Text style={styles.priceLabel}>Ticket Price</Text>
             <View style={styles.priceRow}>
               <Text style={styles.priceLabel1}>₹</Text>
-              <Text style={styles.priceValue}>21</Text>
+              <Text style={styles.priceValue}>{ticketPriceThreeDigit}</Text>
             </View>
           </View>
 
@@ -156,7 +168,7 @@ type HowToPlayModalProps = {
             <Text style={styles.priceLabel}>Winning Amount</Text>
             <View style={styles.priceRow}>
               <Text style={styles.priceLabel1}>₹</Text>
-              <Text style={styles.priceValue}>10000, 500, 50</Text>
+              <Text style={styles.priceValue}>{winningAmountThreeDigit}</Text>
             </View>
           </View>
 
@@ -165,17 +177,17 @@ type HowToPlayModalProps = {
 
           <View style={styles.row}>
             <Text style={styles.priceLabel}>(i) Match ABC</Text>
-            <Text style={styles.priceValue}>10000</Text>
+            <Text style={styles.priceValue}>₹{winningAmountThreeDigit}</Text>
           </View>
 
           <View style={styles.row}>
             <Text style={styles.priceLabel}>(ii) Match BC</Text>
-            <Text style={styles.priceValue}>500</Text>
+            <Text style={styles.priceValue}>₹500</Text>
           </View>
 
           <View style={styles.row}>
             <Text style={styles.priceLabel}>(iii) Match C</Text>
-            <Text style={styles.priceValue}>50</Text>
+            <Text style={styles.priceValue}>₹50</Text>
           </View>
 
         </ScrollView>

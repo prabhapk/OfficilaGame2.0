@@ -30,6 +30,10 @@ const imageSource =
         cache: "force-cache", // improves loading
       }
     : Durga;
+console.log('imageUrl', imageSource
+);
+
+
 
 // console.log("IMAGE URL =>", `${BASE_URL}${data?.cardImageUrl}`);
   const dispatch = useDispatch();

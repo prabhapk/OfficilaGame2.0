@@ -40,6 +40,9 @@ import {
   vipNewLogoTen,
   vipNewLogoThirteen,
   vipNewLogoTwelve,
+  withdrawIconNew,
+  agencyCenterLogo,
+  passwordSecurityLogo,
 } from "../../assets/assets";
 import Modal from "react-native-modal";
 import WalletInfoModal from "../Components/Modal/WalletInfoModal";
@@ -58,9 +61,15 @@ import { COLORS } from "../Constants/Theme";
 import { Image } from 'expo-image';
 
 const ProfileScreen = ({ navigation }: any) => {
-  const { isLoggedIn, mainWalletBalance, withdrawBalance, vipLevelDetails, totalDeposit } = useSelector(
+  const { isLoggedIn, mainWalletBalance, withdrawBalance, vipLevelDetails, totalDeposit, mobileNumber,userDetails } = useSelector(
     (state: RootState) => state.signInSlice
   );
+const maskedMobileNumber = mobileNumber
+  ? `${String(mobileNumber).slice(0, 2)}******${String(
+      mobileNumber
+    ).slice(-2)}`
+  : "";
+
   console.log("withdrawBalanceScreenProfile==>", mainWalletBalance);
 
   const totalBalance = mainWalletBalance + withdrawBalance;
@@ -109,6 +118,12 @@ const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
       rightImage: leftArrowHeader,
       route: "RebateScreen",
     },
+    {
+      label: "Agency Center",
+      image: agencyCenterLogo,
+      rightImage: leftArrowHeader,
+      route: "AgencyScreen",
+    },
     { label: "Lotteries", 
     image: profileLotteriesImage, 
     rightImage: leftArrowHeader,
@@ -130,6 +145,12 @@ const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
       image: profileCustomerServiceImage,
       rightImage: leftArrowHeader,
       route: "CustomerService",
+    },
+    {
+      label: "Password & Security",
+      image: passwordSecurityLogo,
+      rightImage: leftArrowHeader,
+      route: "ForgotPassword",
     },
   ];
   // const tabItems = [
@@ -245,8 +266,65 @@ const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
             </LinearGradient>
           </TouchableOpacity>
         ) : (
-          <View style={styles.mt20} />
+           <LinearGradient
+       colors={[COLORS.linearOne, COLORS.linearTwo]}
+          start={{ x: 0, y: 0, }}
+          end={{ x: 1, y: 0 }}
+        style={{
+          borderRadius: Scale(10),
+          paddingVertical: Scale(12),
+          paddingHorizontal: Scale(15),
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.15,
+          shadowRadius: 3,
+          marginTop: Scale(10),
+          marginHorizontal: Scale(5),
+        }}
+      >
+         <TouchableOpacity activeOpacity={0.8} style={styles.container1}>
+      {/* Profile Image */}
+      <Image
+        source={{
+          uri: "https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001877.png",
+          // uri: "https://static.vecteezy.com/system/resources/thumbnails/048/216/761/small/modern-male-avatar-with-black-hair-and-hoodie-illustration-free-png.png",
+          // uri: "https://static.vecteezy.com/system/resources/thumbnails/027/951/137/small/stylish-spectacles-guy-3d-avatar-character-illustrations-png.png",
+        }}
+        style={styles.profileImage}
+      />
+
+      {/* User Details */}
+      <View style={styles.contentContainer}>
+        <View style={styles.topRow}>
+          <Text style={styles.userName}>UserId : {userDetails.id}</Text>
+
+          <View style={styles.vipBadge}>
+               <Image
+          source={vipLevelImage}
+          contentFit="contain"
+          style={styles.vipBadgeImage}
+        />
+          </View>
+        </View>
+
+        <View style={styles.mobileRow}>
+             <Entypo
+                name="mobile"
+                size={Scale(25)}
+                color= {COLORS.white}
+                style={styles.chevronIcon}
+              />
+
+          <Text style={styles.mobileText}>: {maskedMobileNumber}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+    </LinearGradient>
         )}
+
 
         {/* Wallet Section */}
         <LinearGradient
@@ -295,11 +373,14 @@ const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
             {
               label: "Recharge",
               route: "WalletScreen",
+              images: wallet
             },
             {
               label: "Withdraw",
               route: "Withdraw",
+              images: withdrawIconNew
             },
+        
           ].map((btn, idx) => (
             <LinearGradient
               key={idx}
@@ -317,11 +398,15 @@ const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
               >
                 <View style={styles.rowCenter}>
                   <Text style={styles.buttonText}>{btn.label}</Text>
-                  <Image
-                    source={wallet}
-                    contentFit="contain"
-                    style={styles.buttonIcon}
-                  />
+                    <Image
+            source={btn.images}
+            contentFit="contain"
+            style={
+              btn.label === "Recharge"
+                ? styles.buttonIcon
+                : styles.buttonIcon1
+            }
+          />
                 </View>
               </TouchableOpacity>
             </LinearGradient>
@@ -329,110 +414,45 @@ const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
         </View>
 
         {/* VIP Badge */}
-        {isLoggedIn ? (
-          // <TouchableOpacity
-          //   onPress={() => navigation.navigate("VipLevelDetailsScreen")}
-          //   style={styles.vipTouchable}
-          //   activeOpacity={0.8}
-          // >
-          //   <ImageBackground
-          //     source={vipBadgeBackground}
-          //     style={styles.vipImageBackground}
-          //   >
-          //     <View style={styles.vipTopRow}>
-          //       <Image
-          //         source={vipBadgeZero}
-          //         resizeMode="contain"
-          //         style={styles.vipBadgeImage}
-          //       />
-          //       <View style={styles.vipTopRight}>
-          //         <Text style={styles.vipText}>VIP {vipLevel}</Text>
-          //         <Text style={styles.vipText}>₹{totalDeposit ?totalDeposit : 0 } / ₹{vipLevelRecharge?vipLevelRecharge:0}</Text>
-          //       </View>
-          //     </View>
-          //     <View style={styles.vipProgressBackground}>
-          //       <View style={styles.vipProgressFill} />
-          //     </View>
-          //   </ImageBackground>
-          // </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("VipLevelDetailsScreen")}
-            style={styles.vipTouchable}
-            activeOpacity={0.8}
-          >
-            {/* <ImageBackground
-              source={vipBadgeBackground}
-              style={styles.vipImageBackground}
-            > */}
-            <View style ={{
-              backgroundColor: COLORS.primary,
-              borderRadius: Scale(10),
-              paddingVertical: Scale(12),
-              paddingHorizontal: Scale(15),
-              borderColor: COLORS.white,
-              borderWidth: 0.2,
-              shadowColor: "#fff",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.15,
-              shadowRadius: 3,
-            }}> 
-              <View style={styles.vipTopRow}>
-                <Image
-                  source={vipLevelImage}
-                  contentFit="contain"
-                  style={styles.vipBadgeImage}
-                />
-                <View style={styles.vipTopRight}>
-                  <Text style={styles.vipText}>VIP {vipLevel}</Text>
-                  {/* <Text style={styles.vipText}>₹{totalDeposit ? totalDeposit : 0 } / ₹{vipLevelRecharge?vipLevelRecharge:0}</Text> */}
-                  <Text style={styles.vipText}>
-  ₹{Math.round(totalDeposit || 0)} / ₹{Math.round(vipLevelRecharge || 0)}
-</Text>
+                    {isLoggedIn ? (
+<TouchableOpacity
+  onPress={() => navigation.navigate("VipLevelDetailsScreen")}
+  style={styles.vipTouchable}
+  activeOpacity={0.8}
+>
+  <ImageBackground
+    source={vipBadgeBackground}
+    style={styles.vipImageBackground}
+    imageStyle={styles.vipBgImageStyle}
+    resizeMode="cover"
+  >
+    {/* Overlay */}
+    <View style={styles.vipOverlay}>
+      <View style={styles.vipTopRow}>
+        <Image
+          source={vipLevelImage}
+          contentFit="contain"
+          style={styles.vipBadgeImage}
+        />
 
-                </View>
-              </View>
-              <View style={styles.vipProgressBackground}>
-                <View style={styles.vipProgressFill} />
-              </View>
-              </View>
-            {/* </ImageBackground> */}
-          </TouchableOpacity>
-        ) : null}
+        <View style={styles.vipTopRight}>
+          <Text style={styles.vipTitle}>VIP {vipLevel}</Text>
 
-        {/* <View style={{ paddingHorizontal: Scale(10), marginTop: Scale(10) }}>
-          <TouchableOpacity
-           style={{
-            backgroundColor: COLORS.white,
-            borderRadius: Scale(10),
-            paddingVertical: Scale(12),
-            paddingHorizontal: Scale(15),
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.15,
-            shadowRadius: 3,
-            elevation: 3,
-          }}
-          onPress={()=> navigation.navigate('RebateScreen')}
-          > 
-          <Text
-          style ={{
-            color: "#000",
-            fontSize: Scale(14),
-            fontWeight: "500",
-          }}
-          >
-            Rebate
+          <Text style={styles.vipAmountText}>
+            ₹{Math.round(totalDeposit || 0)} / ₹
+            {Math.round(vipLevelRecharge || 0)}
           </Text>
-          <Image source={newRebateLogo}
-          resizeMethod="resize"
-          style={{marginHorizontal: Scale(10), width: Scale(25), height: Scale(25), marginRight: Scale(10)}}
-          />
+        </View>
+      </View>
 
-          </TouchableOpacity> 
-        </View> */}
+      <View style={styles.vipProgressBackground}>
+        <View style={styles.vipProgressFill} />
+      </View>
+    </View>
+  </ImageBackground>
+</TouchableOpacity>
+
+        ) : null}
 
 
 <View style={{ paddingHorizontal: Scale(10), marginTop: Scale(10) }}>
@@ -504,58 +524,6 @@ const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
   ))}
 </View>
 
-
-  
-
-<View style={{ paddingHorizontal: Scale(10) }}>
-  <TouchableOpacity
-    onPress={() => {
-      isLoggedIn
-        ? navigation.navigate("ForgotPassword")
-        : navigation.navigate("SignInScreen");
-    }}
-    style={{
-      borderRadius: Scale(10),
-      marginVertical: Scale(8),
-      elevation: 3,
-    }}
-  >
-    <LinearGradient
-      colors={[COLORS.linearTwo, COLORS.linearOne]} // change gradient colors if needed
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={{
-        borderRadius: Scale(10),
-        paddingVertical: Scale(12),
-        paddingHorizontal: Scale(10),
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
-        shadowRadius: 3,
-      }}
-    >
-      <Text
-        style={{
-          color: COLORS.white,
-          fontSize: Scale(14),
-          fontWeight: "500",
-        }}
-      >
-        Password
-      </Text>
-
-      <Entypo
-        name="chevron-right"
-        style={{ marginRight: Scale(8) }}
-        size={Scale(20)}
-        color="white"
-      />
-    </LinearGradient>
-  </TouchableOpacity>
-</View>
 
         {/* Logout */}
         {isLoggedIn ? (
@@ -668,6 +636,7 @@ const createStyles = (Scale: any) =>
       padding: 20,
       marginBottom: 16,
       marginHorizontal: Scale(5),
+      marginTop: Scale(20),
     },
     walletTitle: {
       color: "#fff",
@@ -725,6 +694,11 @@ const createStyles = (Scale: any) =>
       width: Scale(40),
       marginHorizontal: Scale(5),
     },
+    buttonIcon1: {
+      height: Scale(40),
+      width: Scale(30),
+      marginHorizontal: Scale(10),
+    },
     buttonText: {
       fontSize: 20,
       color: "#fff",
@@ -737,50 +711,73 @@ const createStyles = (Scale: any) =>
     },
 
     /* ===== VIP Badge ===== */
-    vipTouchable: {
-      marginVertical: Scale(20),
-    },
-    vipImageBackground: {
-      width: "100%",
-      height: Scale(110),
-      borderRadius: Scale(10),
-      overflow: "hidden",
-    },
+  vipTouchable: {
+  marginVertical: Scale(20),
+},
+  vipImageBackground: {
+  width: "100%",
+  height: Scale(130),
+  justifyContent: "center",
+  overflow: "hidden",
+},
+vipBgImageStyle: {
+  borderRadius: Scale(14),
+},
     vipTopRow: {
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: Scale(20),
-      paddingTop: Scale(15),
+      // paddingHorizontal: Scale(20),
+      // paddingTop: Scale(15),
     },
     vipBadgeImage: {
       width: Scale(50),
       height: Scale(50),
+      marginLeft: Scale(50),
     },
-    vipTopRight: {
-      flex: 1,
-      flexDirection: "row",
-      justifyContent: "space-between",
-      paddingHorizontal: Scale(20),
-    },
+    vipOverlay: {
+  flex: 1,
+  justifyContent: "center",
+  borderRadius: Scale(14),
+  paddingHorizontal: Scale(16),
+  paddingVertical: Scale(14),
+},
+
+vipTopRight: {
+  flex: 1,
+  marginLeft: Scale(14),
+  justifyContent: "space-between",
+},
+vipTitle: {
+  color: COLORS.winningsPillGoldBg,
+  fontSize: Scale(24),
+  fontWeight: "bold",
+},
     vipText: {
       color: "white",
       fontSize: Scale(22),
       fontWeight: "bold",
     },
-    vipProgressBackground: {
-      marginTop: Scale(10),
-      marginHorizontal: Scale(20),
-      backgroundColor: "rgba(255,255,255,0.3)",
-      height: Scale(10),
-      borderRadius: 999,
-      overflow: "hidden",
-    },
-    vipProgressFill: {
-      width: "65%",
-      height: "100%",
-      backgroundColor: "white",
-      borderRadius: 999,
-    },
+    vipAmountText: {
+  color: COLORS.white,
+  fontSize: Scale(14),
+  marginTop: Scale(4),
+  fontWeight: "bold",
+},
+vipProgressBackground: {
+  marginTop: Scale(10),
+  backgroundColor: "rgba(255,255,255,0.25)",
+  height: Scale(10),
+  borderRadius: 999,
+  overflow: "hidden",
+  width: "70%",
+  marginLeft: Scale(55),
+},
+   vipProgressFill: {
+  width: "60%",
+  height: "100%",
+  backgroundColor: COLORS.white,
+  borderRadius: 999,
+},
 
     /* ===== Bottom Tabs ===== */
     bottomTabs: {
@@ -931,4 +928,67 @@ const createStyles = (Scale: any) =>
     loadingText: {
       opacity: 0.6,
     },
+    container1: {
+    paddingHorizontal: Scale(5),
+    paddingVertical: Scale(5),
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  profileImage: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    borderWidth: 3,
+    borderColor: "#D9D9D9",
+    backgroundColor: "#fff",
+  },
+
+  contentContainer: {
+    flex: 1,
+    marginLeft: 18,
+  },
+
+  topRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  userName: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "700",
+  },
+
+  vipBadge: {
+    flex: 1,
+    // marginLeft: 18,
+    // backgroundColor: "#DCC9A0",
+    // paddingHorizontal: 22,
+    // paddingVertical: 6,
+    // borderRadius: 10,
+    // minWidth: 90,
+    alignItems: 'flex-end',
+    justifyContent:'flex-end',
+    top: 15,
+  },
+
+  vipText1: {
+    color: "#FFFFFF",
+    fontSize: 22,
+    fontWeight: "700",
+  },
+
+  mobileRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    right: Scale(10),
+  },
+
+  mobileText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "500",
+    marginLeft: 5,
+  },
   });

@@ -1,4 +1,4 @@
-import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, CasionoGamesIcon, color, dice, digit, digitMenu, dragonvsTiger, DrawerPromotion, DrawerRebate, DrawerSuperAgent, fiveMin3DImage, homeActiveTab, homeNewIcon, homeNewIconSilver, homeTab, hot, hotGamesIcon, inviteActiveTab, inviteNewIcon, inviteTab, jdb, Jili, lottery1, LotteryGamesIcon, meActiveTab, meNewIcon, meTab, multiUserIcon, oneMin3DImage, pg, promotionNewIcon, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultNewIcon, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
+import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, CasionoGamesIcon, color, dice, digit, digitMenu, dragonvsTiger, DrawerPromotion, DrawerRebate, DrawerSuperAgent, fiveMin3DImage, homeActiveTab, homeNewIcon, homeNewIconSilver, homeTab, hot, hotGamesIcon, inviteActiveTab, inviteNewIcon, inviteTab, jdb, Jili, lottery1, LotteryGamesIcon, meActiveTab, meNewIcon, meTab, multiUserIcon, oneMin3DImage, pg, profileCustomerServiceImage, promotionNewIcon, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultNewIcon, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
 import CasinoScreen from "../Screens/CasinoScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import InviteScreen from "../Screens/InviteScreen";
@@ -132,6 +132,7 @@ export const ThreeDigitsLottery = [
     {id:1, name:"Rebate", image:DrawerRebate, component:RebateScreen},
     {id: 2, name:"Promotions", image:DrawerPromotion, component:Promotions},
     {id: 3, name:"Super Agent", image:DrawerSuperAgent, component:AgencyScreen},
+    // {id: 4, name:"24/7 Customer Service", image:profileCustomerServiceImage, component:CustomerService},
     // {id: 2, name:"Quick 3D", image:quick3dMenu, component:Quick3DScreen},
     // {id: 3, name:"Official 3 Digits", image:digitMenu, component:ThreeDigitMain},
     // {id:4, name:"Casino", image:casinMenu, component:HomeScreen},

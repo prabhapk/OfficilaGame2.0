@@ -1031,6 +1031,13 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
               gameTitle={individualGameData[0]?.name ?? "Three Digit Game"}
               introText={`${individualGameData[0]?.name ?? "This game"} is an exhilarating lottery game with fun and excitement and more frequent bonus opportunities.`}
               timeText={`Time: 24-hour drawing${selectedTime ? `, draw at ${selectedTime}` : ""}`}
+              ticketPriceSingleDigit={individualGameData[0]?.ticketprize}
+              ticketPriceDoubleDigit={individualGameData[1]?.ticketprize}
+              ticketPriceThreeDigit={individualGameData[2]?.ticketprize}
+              winningAmountSingleDigit={individualGameData[0]?.prizeamount}
+              winningAmountDoubleDigit={individualGameData[1]?.prizeamount}
+              winningAmountThreeDigit={individualGameData[2]?.prizeamount}
+              
             />
           </View>
         </View>

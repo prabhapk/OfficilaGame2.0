@@ -1,3 +1,5 @@
+import { backGround } from "../../assets/assets";
+
 const COLORS = {
   primary: '#001F4F',
   test: '#d5f0af',
@@ -17,6 +19,7 @@ const COLORS = {
   check: '#794CB7',
   check1: '#5E319C',
   check3: '#beceeb',
+  backGroundCheck: '#000211',
 
   // Screen & section backgrounds
   primaryBackground: 'white',

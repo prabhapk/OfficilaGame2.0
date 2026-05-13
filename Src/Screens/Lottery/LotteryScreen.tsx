@@ -90,7 +90,7 @@ const createStyles = (Scale: (n: number) => number) =>
       flex: 1,
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: COLORS.gamesBackground,
+      backgroundColor: COLORS.backGroundCheck,
     },
     gameListContent: {
       marginHorizontal: Scale(10),

@@ -16,7 +16,7 @@ import { COLORS } from '../Constants/Theme';
 import { useDispatch, useSelector } from 'react-redux';
 import { claimRebate, getRebateList, getRebateSummary } from '../Redux/Slice/rebateSlice';
 import { RootState } from '../Redux/store';
-import { formatDateTime, formatTime24to12, formatToTimeIST } from '../Utils/Common';
+import { formatDateTime, formatFullDate, formatTime24to12, formatToTimeIST } from '../Utils/Common';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Toast from 'react-native-toast-message';
 import { Image } from 'expo-image';
@@ -155,7 +155,7 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
   const renderRebateItem = ({ item }) => (
     <View style={styles.rebateCard}>
       <View style={styles.rebateHeader}>
-        <Text style={styles.dateText}>{formatDateTime(item?.date)}</Text>
+        <Text style={styles.dateText}>{formatFullDate(item?.date)}</Text>
         <Text style={[styles.statusText, { color: getStatusColor(item.status) }]}>
           {item.status}
         </Text>
@@ -170,7 +170,7 @@ const RebateScreen = ({ navigation }: { navigation: any }) => {
               contentFit="contain"
             />
             <Text style={styles.infoText}>
-              Estimated Recharge: ₹{item?.rebatePercentage?.toFixed(2)}
+              Estimated Betting: ₹{item?.rebatePercentage?.toFixed(2)}
             </Text>
           </View>
 
@@ -383,6 +383,7 @@ const createStyles = (Scale: any) =>
       shadowOpacity: 0.3,
       shadowRadius: 3.84,
       elevation: 5,
+      marginTop: Scale(10),
     },
     rebateHeader: {
       flexDirection: 'row',

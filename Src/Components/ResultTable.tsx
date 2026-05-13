@@ -96,12 +96,12 @@ const ResultTable: React.FC<ResultTableProps> = ({
           </Text>
         </View>
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-          <Text style={{ color: textColor, textAlignVertical: "center" }}>
+          <Text style={{ color: textColor, textAlignVertical: "center",marginLeft:Scale(50) }}>
             {gameTime}
           </Text>
         </View>
         <View
-          style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}
+          style={{ flex: 1, flexDirection: "row", justifyContent: "center",left:Scale(12) }}
         >
           <TableCommonBall
             backgroundColor="#DE3C3F"
