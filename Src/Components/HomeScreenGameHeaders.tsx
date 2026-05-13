@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from '../Constants/Theme';
@@ -23,24 +23,22 @@ const HomeScreenGameHeaders: React.FC<HeaderProps> = ({
     <View style={styles.listContent}>
       {headerList.map((item) => {
         const isSelected = item.id === selectedId;
+
         return (
           <TouchableOpacity
             key={item.id}
-            style={[styles.tab, isSelected && styles.tabSelected]}
+            style={[
+              styles.tab,
+              isSelected && styles.tabSelected,
+            ]}
             onPress={() => onSelect(item.id)}
             activeOpacity={0.8}
           >
-           
-              <Image
-                source={item.image}
-                style={styles.icon}
-                contentFit="contain"
-                />
-                <Text style={{
-                  color: isSelected ? 'white' : '#000',
-                }}>{item.name}</Text>
-              
-           
+            <Image
+              source={item.image}
+              style={styles.icon}
+              contentFit="fill"
+            />
           </TouchableOpacity>
         );
       })}
@@ -58,40 +56,26 @@ const createStyles = (Scale: (n: number) => number) =>
       width: '100%',
       marginTop: Scale(20),
     },
+
     tab: {
-      flex: 1,
-      backgroundColor: COLORS.tabInactiveBg,
-      borderRadius: Scale(12),
-      paddingVertical: Scale(10),
-      paddingHorizontal: Scale(6),
-      alignItems: 'center',
-      justifyContent: 'center',
+    flex: 1,
+      height: Scale(130),
+      overflow: "hidden",
       marginHorizontal: Scale(4),
       borderWidth: 1,
-      borderColor: COLORS.tabInactiveBorder,
+      borderColor: 'transparent',
+      borderRadius: Scale(12),
     },
+
     tabSelected: {
-      backgroundColor: COLORS.primary,
-      borderColor: COLORS.primary,
+      borderColor: COLORS.winningsPillGoldBg,
     },
-    iconWrap: {
-      width: Scale(56),
-      height: Scale(56),
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: Scale(4),
-    },
+
     icon: {
-      width: Scale(54),
-      height: Scale(54),
-    },
-    label: {
-      fontSize: Scale(12),
-      fontWeight: '600',
-      color: COLORS.tabInactiveText,
-    },
-    labelSelected: {
-      color: COLORS.tabActiveText,
+      width: '100%',
+      height: Scale(130),
+      // height: '100%',
+      bottom: Scale(1),
     },
   });
 
