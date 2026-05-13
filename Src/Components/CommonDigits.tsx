@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { COLORS } from "../Constants/Theme";
-import { AnnaPoorna, Durga } from "../../assets/assets";
+import { agencyCenterLogo, AnnaPoorna, Durga } from "../../assets/assets";
 
 interface Props {
   data: any;
@@ -67,7 +67,7 @@ console.log('imageUrl', imageSource
   return (
     <TouchableOpacity onPress={onPress3Digits} style={styles.container}>
       <ImageBackground
-        source={imageSource}
+        source={agencyCenterLogo}
         style={styles.imageBackground}
         imageStyle={styles.imageStyle}
         resizeMode='stretch'

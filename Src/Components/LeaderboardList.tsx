@@ -1,309 +1,370 @@
-import React from "react";
-import { View, Text, StyleSheet, ImageBackground } from "react-native";
-import { Image } from "expo-image";
+import React, { useMemo, useState } from "react";
 import {
-  leaderboardHeading,
-  leaderboardFireworks,
-  leaderboardFirst,
-  leaderboardSecond,
-  leaderboardThird,
-  avatar1,
-  avatar10,
-  avatar11,
-  avatar12,
-  avatar2,
-  avatar3,
-  avatar4,
-  avatar5,
-  avatar6,
-  avatar7,
-  avatar8,
-  avatar9,
-} from "../../assets/assets";
-import { useContainerScale } from "../hooks/useContainerScale";
-import { COLORS } from "../Constants/Theme";
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import Scale from "./Scale";
 
-const LEADERBOARD_DATA = [
-  { rank: 1, name: "Player90*****78", amount: "₹1,25,386.20", image: avatar1 },
-  { rank: 2, name: "Player98*****97", amount: "₹32,380.00", image: avatar2 },
-  { rank: 3, name: "Player93*****50", amount: "₹11,580.00", image: avatar3 },
-  { rank: 4, name: "Player95*****90", amount: "₹10,041.60", image: avatar7 },
-  { rank: 5, name: "Ramkumar", amount: "₹9,226.49", image: avatar8 },
-  { rank: 6, name: "Player92*****11", amount: "₹5,885.29", image: avatar10 },
-  { rank: 7, name: "Player91*****22", amount: "₹5,562.00", image: avatar7 },
-  { rank: 8, name: "Player94*****33", amount: "₹5,189.70", image: avatar8 },
-  { rank: 9, name: "Player96*****44", amount: "₹4,900.00", image: avatar1 },
-  { rank: 10, name: "Player97*****55", amount: "₹4,626.45" , image: avatar10 },
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+const leaderboardData = [
+  {
+    id: "1",
+    rank: 1,
+    name: "Rahul K.",
+    amount: "₹1,25,000",
+    image:
+      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
+  },
+  {
+    id: "2",
+    rank: 2,
+    name: "Priya S.",
+    amount: "₹95,000",
+    image:
+      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
+  },
+  {
+    id: "3",
+    rank: 3,
+    name: "Arun M.",
+    amount: "₹75,000",
+    image:
+      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
+  },
+  {
+    id: "4",
+    rank: 4,
+    name: "Karthik",
+    amount: "₹65,000",
+    image:
+      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
+  },
+  {
+    id: "5",
+    rank: 5,
+    name: "Anjali",
+    amount: "₹58,000",
+    image:
+      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
+  },
+  {
+    id: "6",
+    rank: 6,
+    name: "Vijay",
+    amount: "₹51,000",
+    image:
+      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
+  },
+  {
+    id: "7",
+    rank: 7,
+    name: "Meera",
+    amount: "₹49,000",
+    image:
+      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
+  },
+  {
+    id: "8",
+    rank: 8,
+    name: "lal",
+    amount: "₹35,000",
+    image:
+      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
+  },
+  {
+    id: "9",
+    rank: 9,
+    name: "yuvi",
+    amount: "₹30,000",
+    image:
+      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
+  },
+  {
+    id: "10",
+    rank: 10,
+    name: "Mani",
+    amount: "₹17,000",
+    image:
+      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
+  },
 ];
 
 const LeaderboardList = () => {
-  const { Scale } = useContainerScale();
-  const styles = createStyles(Scale);
-  const topThree = LEADERBOARD_DATA.slice(0, 3);
-  const listItems = LEADERBOARD_DATA.slice(3, 10);
+const [showAll, setShowAll] = useState(false);
+
+  const topThree = useMemo(() => leaderboardData.slice(0, 3), []);
+  const remainingUsers = useMemo(
+    () => leaderboardData.slice(3),
+    []
+  );
+
+  const toggleViewAll = () => {
+    LayoutAnimation.configureNext(
+      LayoutAnimation.Presets.easeInEaseOut
+    );
+    setShowAll(!showAll);
+  };
+
+  const renderTopCard = (
+    item: any,
+    index: number
+  ) => {
+    const isFirst = item.rank === 1;
+
+    return (
+      <LinearGradient
+        colors={
+          isFirst
+            ? ["#F9D976", "#B8860B"]
+            : index === 1
+            ? ["#535353", "#1E1E1E"]
+            : ["#9C5B32", "#3D1F12"]
+        }
+        style={[
+          styles.topCard,
+          isFirst && styles.firstCard,
+        ]}
+      >
+        <Text style={styles.rankText}>
+          {item.rank}
+        </Text>
+
+        <Image
+          source={{ uri: item.image }}
+          style={styles.avatar}
+        />
+
+        <Text style={styles.name}>
+          {item.name}
+        </Text>
+
+        <Text style={styles.amount}>
+          {item.amount}
+        </Text>
+      </LinearGradient>
+    );
+  };
+
+  const renderUser = ({ item }: any) => (
+    <LinearGradient
+      colors={["#5B1A83", "#2B0B45"]}
+      style={styles.userRow}
+    >
+      <View style={styles.leftContainer}>
+        <Text style={styles.rowRank}>
+          {item.rank}
+        </Text>
+
+        <Image
+          source={{ uri: item.image }}
+          style={styles.rowAvatar}
+        />
+
+        <Text style={styles.rowName}>
+          {item.name}
+        </Text>
+      </View>
+
+      <Text style={styles.rowAmount}>
+        {item.amount}
+      </Text>
+    </LinearGradient>
+  );
 
   return (
-    <View style={styles.outerWrap}>
-      {/* Title - outside card so it's not cropped by border, sits on the border */}
-      <View style={styles.titleWrap} pointerEvents="none">
-        <Image
-          source={leaderboardHeading}
-          style={styles.titleImage}
-          contentFit="contain"
+    <LinearGradient
+      colors={["#2B0047", "#170021"]}
+      style={styles.container}
+    >
+      {/* HEADER */}
+      <Text style={styles.heading}>
+        LEADERBOARD
+      </Text>
+
+      <Text style={styles.subHeading}>
+        TODAY'S BIGGEST WINNERS
+      </Text>
+
+      {/* TOP 3 */}
+      <View style={styles.topContainer}>
+        {topThree.map((item, index) =>
+          renderTopCard(item, index)
+        )}
+      </View>
+
+      {/* EXPANDED LIST */}
+      {showAll && (
+        <FlatList
+          data={remainingUsers}
+          keyExtractor={(item) => item.id}
+          renderItem={renderUser}
+          scrollEnabled={false}
+          contentContainerStyle={{
+            marginTop: 18,
+          }}
         />
-      </View>
+      )}
 
-      <View style={styles.card}>
-      {/* Top 3 only - fireworks background constrained to this section */}
-      <View style={styles.top3SectionWrap}>
-        <ImageBackground
-          source={leaderboardFireworks}
-          style={styles.top3Section}
-          resizeMode="cover"
+      {/* BUTTON */}
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={toggleViewAll}
+      >
+        <LinearGradient
+          colors={["#D66BFF", "#7A00CC"]}
+          style={styles.button}
         >
-          <View style={styles.top3Row}>
-            {/* #2 Left */}
-            <View style={styles.top3Item}>
-              <Image
-                source={leaderboardSecond}
-                style={styles.top3Avatar}
-                contentFit="contain"
-              />
-              <Text style={styles.top3Name} numberOfLines={1}>
-                {topThree[1].name}
-              </Text>
-              <View style={[styles.winningsPill, styles.winningsPillSilver]}>
-                <Text style={styles.winningsText}>{topThree[1].amount}</Text>
-              </View>
-            </View>
-            {/* #1 Center - elevated above #2 and #3 */}
-            <View style={styles.top3ItemCenter}>
-              <Image
-                source={leaderboardFirst}
-                style={styles.top3AvatarCenter}
-                contentFit="contain"
-              />
-              <Text style={styles.top3Name} numberOfLines={1}>
-                {topThree[0].name}
-              </Text>
-              <View style={[styles.winningsPill, styles.winningsPillGold]}>
-                <Text style={styles.winningsTextGold}>{topThree[0].amount}</Text>
-              </View>
-            </View>
-            {/* #3 Right */}
-            <View style={styles.top3Item}>
-              <Image
-                source={leaderboardThird}
-                style={styles.top3Avatar}
-                contentFit="contain"
-              />
-              <Text style={styles.top3Name} numberOfLines={1}>
-                {topThree[2].name}
-              </Text>
-              <View style={[styles.winningsPill, styles.winningsPillSilver]}>
-                <Text style={styles.winningsText}>{topThree[2].amount}</Text>
-              </View>
-            </View>
-          </View>
-        </ImageBackground>
-      </View>
-
-      {/* Ranks #4–10 list - no fireworks, solid background */}
-      <View style={styles.listSection}>
-        {listItems.map((item) => (
-          <View key={item.rank} style={styles.listRow}>
-            <View style={styles.rankBadge}>
-              <Text style={styles.rankBadgeText}>#{item.rank}</Text>
-            </View>
-            <View style={styles.avatarPlaceholder}>
-              <Image
-                source={item.image}
-                style={{
-                  width: Scale(32),
-                  height: Scale(32),
-                  borderRadius: Scale(16),
-                  alignItems: "center",
-                  justifyContent: "center",
-                  alignSelf: "center",
-                }}
-                contentFit="contain"
-              />
-            </View>
-            <Text style={styles.listName} numberOfLines={1}>
-              {item.name}
-            </Text>
-            <View style={styles.listWinningsPill}>
-              <Text style={styles.listWinningsText}>{item.amount}</Text>
-            </View>
-          </View>
-        ))}
-      </View>
-      </View>
-    </View>
+          <Text style={styles.buttonText}>
+            {showAll ? "VIEW LESS" : "VIEW ALL"}
+          </Text>
+        </LinearGradient>
+      </TouchableOpacity>
+    </LinearGradient>
   );
 };
-
-const createStyles = (Scale: (n: number) => number) =>
-  StyleSheet.create({
-    outerWrap: {
-      marginHorizontal: Scale(12),
-      marginTop: Scale(16),
-      marginBottom: Scale(8),
-      position: "relative",
-    },
-    card: {
-      backgroundColor: COLORS.primary,
-      borderRadius: Scale(16),
-      borderWidth: 2,
-      borderColor: COLORS.primary,
-      overflow: "hidden",
-    },
-    titleWrap: {
-      position: "absolute",
-      top: Scale(-40),
-      left: 0,
-      right: 0,
-      alignItems: "center",
-      zIndex: 10,
-    },
-    titleImage: {
-      height: Scale(100),
-      width: Scale(260),
-    },
-    top3SectionWrap: {
-      height: Scale(200),
-      width: "100%",
-      overflow: "hidden",
-      marginTop:Scale(30),
-
-    },
-    top3Section: {
-      flex: 1,
-      paddingVertical: Scale(16),
-      paddingHorizontal: Scale(8),
-      justifyContent: "center",
-      alignItems: "center",
-      width:"100%",
-      height:"100%",
-    },
-    top3Row: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "flex-end",
-      paddingHorizontal: Scale(4),
-    },
-    top3Item: {
-      alignItems: "center",
-      flex: 1,
-    },
-    top3ItemCenter: {
-      alignItems: "center",
-      flex: 1,
-      marginBottom: Scale(28),
-      marginHorizontal:Scale(20)
-    },
-    top3Avatar: {
-      width: Scale(70),
-      height: Scale(85),
-      marginBottom: Scale(4),
-    },
-    top3AvatarCenter: {
-      width: Scale(90),
-      height: Scale(110),
-      marginBottom: Scale(4),
-    },
-    top3Rank: {
-      fontSize: Scale(14),
-      fontWeight: "bold",
-      color: COLORS.black,
-      marginBottom: Scale(2),
-    },
-    top3Name: {
-      fontSize: Scale(10),
-      fontWeight: "600",
-      color: COLORS.white,
-      maxWidth: Scale(75),
-      textAlign: "center",
-      marginBottom: Scale(4),
-    },
-    winningsPill: {
-      paddingVertical: Scale(4),
-      paddingHorizontal: Scale(10),
-      borderRadius: Scale(20),
+const styles = StyleSheet.create({
+  container: {
+    margin: 16,
+    borderRadius: 24,
+    padding: 18,
+    overflow: "hidden",
       borderWidth: 1,
-    },
-    winningsPillGold: {
-      backgroundColor: COLORS.white,
-      borderColor: COLORS.white,
-    },
-    winningsPillSilver: {
-      backgroundColor: COLORS.white,
-      borderColor: COLORS.white,
-    },
-    winningsText: {
-      fontSize: Scale(10),
-      fontWeight: "700",
-      color: COLORS.black,
-    },
-    winningsTextGold: {
-      fontSize: Scale(11),
-      fontWeight: "700",
-      color: COLORS.black,
-    },
-    listSection: {
-      backgroundColor: COLORS.white,
-      paddingHorizontal: Scale(12),
-      paddingTop: Scale(8),
-      paddingBottom: Scale(16),
-    },
-    listRow: {
-      flexDirection: "row",
-      alignItems: "center",
-      backgroundColor: COLORS.listRowBg,
-      borderRadius: Scale(12),
-      paddingVertical: Scale(8),
-      paddingHorizontal: Scale(10),
-      marginBottom: Scale(6),
-      borderWidth: 1,
-      borderColor: COLORS.listRowBorder,
-    },
-    rankBadge: {
-      backgroundColor: COLORS.primary,
-      borderRadius: Scale(8),
-      paddingVertical: Scale(4),
-      paddingHorizontal: Scale(8),
-      marginRight: Scale(8),
-    },
-    rankBadgeText: {
-      fontSize: Scale(12),
-      fontWeight: "bold",
-      color: COLORS.white,
-    },
-    avatarPlaceholder: {
-      width: Scale(32),
-      height: Scale(32),
-      borderRadius: Scale(16),
-      backgroundColor: COLORS.primary,
-      opacity: 0.8,
-      marginRight: Scale(8),
-    },
-    listName: {
-      flex: 1,
-      fontSize: Scale(13),
-      fontWeight: "600",
-      color: COLORS.sectionHeaderText,
-    },
-    listWinningsPill: {
-      backgroundColor: COLORS.primary,
-      paddingVertical: Scale(6),
-      paddingHorizontal: Scale(12),
-      borderRadius: Scale(16),
-    },
-    listWinningsText: {
-      fontSize: Scale(12),
-      fontWeight: "700",
-      color: COLORS.white,
-    },
-  });
+    borderColor: "#FFD86B",
+    marginTop: Scale(30),
+  },
 
-export default LeaderboardList;
+  heading: {
+    color: "#FFD86B",
+    fontSize: 24,
+    fontWeight: "800",
+    textAlign: "center",
+  },
+
+  subHeading: {
+    color: "#FFFFFF",
+    fontSize: 12,
+    textAlign: "center",
+    marginTop: 6,
+    opacity: 0.8,
+  },
+
+  topContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 22,
+  },
+
+  topCard: {
+    width: "31%",
+    borderRadius: 18,
+    paddingVertical: 16,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#FFD86B",
+  },
+
+  firstCard: {
+    marginTop: -10,
+  },
+
+  rankText: {
+    color: "#FFF",
+    fontSize: 28,
+    fontWeight: "900",
+  },
+
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginVertical: 10,
+    borderWidth: 2,
+    borderColor: "#FFF",
+  },
+
+  name: {
+    color: "#FFF",
+    fontWeight: "700",
+    fontSize: 14,
+  },
+
+  amount: {
+    color: "#FFE16B",
+    fontWeight: "800",
+    fontSize: 16,
+    marginTop: 6,
+  },
+
+  userRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#B96DFF",
+  },
+
+  leftContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  rowRank: {
+    color: "#FFD86B",
+    fontSize: 20,
+    fontWeight: "800",
+    width: 35,
+  },
+
+  rowAvatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    marginRight: 10,
+  },
+
+  rowName: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+
+  rowAmount: {
+    color: "#FFE16B",
+    fontSize: 18,
+    fontWeight: "800",
+  },
+
+  button: {
+    alignSelf: "center",
+    marginTop: 18,
+    paddingHorizontal: 36,
+    paddingVertical: 14,
+    borderRadius: 40,
+  },
+
+  buttonText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "800",
+  },
+});
+
+export default LeaderboardList

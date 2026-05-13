@@ -1,4 +1,4 @@
-import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, CasionoGamesIcon, color, dice, digit, digitMenu, dragonvsTiger, DrawerPromotion, DrawerRebate, DrawerSuperAgent, fiveMin3DImage, homeActiveTab, homeNewIcon, homeNewIconSilver, homeTab, hot, hotGamesIcon, inviteActiveTab, inviteNewIcon, inviteTab, jdb, Jili, lottery1, LotteryGamesIcon, meActiveTab, meNewIcon, meTab, multiUserIcon, oneMin3DImage, pg, profileCustomerServiceImage, promotionNewIcon, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveTab, resultNewIcon, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
+import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, CasionoGamesIcon, color, dice, digit, digitMenu, dragonvsTiger, DrawerPromotion, DrawerRebate, DrawerSuperAgent, fiveMin3DImage, homeActiveIcon, homeActiveTab, homeNewIcon, homeNewIconSilver, homeTab, hot, hotGamesIcon, inviteActiveTab, inviteNewIcon, inviteTab, jdb, Jili, lottery1, LotteryGamesIcon, meActiveIcon, meActiveTab, meNewIcon, meTab, multiUserIcon, oneMin3DImage, pg, profileCustomerServiceImage, promotionActiveIcon, promotionNewIcon, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveIcon, resultActiveTab, resultNewIcon, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
 import CasinoScreen from "../Screens/CasinoScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import InviteScreen from "../Screens/InviteScreen";
@@ -145,14 +145,14 @@ export const ThreeDigitsLottery = [
     name: 'Home',
     component: HomeScreen,
     label: 'Home',
-    focusedIcon: homeNewIconSilver,
+    focusedIcon: homeActiveIcon,
     unfocusedIcon: homeNewIconSilver,
   },
   {
     name: 'Promotions',
     component: Promotions,
     label: 'Promotions',
-    focusedIcon:promotionNewIcon,
+    focusedIcon:promotionActiveIcon,
     unfocusedIcon: promotionNewIcon,
   },
   {
@@ -166,7 +166,7 @@ export const ThreeDigitsLottery = [
     name: 'Result',
     component: ResultScreen,
     label: 'Result',
-    focusedIcon: resultNewIcon,
+    focusedIcon: resultActiveIcon,
     unfocusedIcon: resultNewIcon,
   },
  
@@ -174,7 +174,7 @@ export const ThreeDigitsLottery = [
     name: 'Me',
     component: Profile,
     label: 'Me',
-    focusedIcon: meNewIcon,
+    focusedIcon: meActiveIcon,
     unfocusedIcon: meNewIcon,
   },
 ];

@@ -299,7 +299,10 @@ const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
       {/* User Details */}
       <View style={styles.contentContainer}>
         <View style={styles.topRow}>
-          <Text style={styles.userName}>UserId : {userDetails.id}</Text>
+          <Text style={styles.userName}>UserId : 
+            *** 
+            {/* {userDetails.id} */}
+            </Text>
 
           <View style={styles.vipBadge}>
                <Image
