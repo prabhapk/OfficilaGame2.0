@@ -342,7 +342,7 @@ console.log('rechargeBonusFUllData==>', rechargeBonusFUllData);
         <View style={styles.contactSection}>
           <View style={styles.contactEmailBar}>
             <Text style={styles.contactLabel}>Contact Email:</Text>
-            <Text style={styles.contactEmail}>annailottery@gmail.com</Text>
+            <Text style={styles.contactEmail}>Dear24Gaming@gmail.com</Text>
           </View>
           <TouchableOpacity style={styles.rulesButton} onPress={() => navigation.navigate('InvitationRulesScreen')}>
           <LinearGradient
@@ -916,13 +916,12 @@ const createStyles = (Scale: any) => StyleSheet.create({
     // width:"100%",
     height: Scale(200),
   },
-   levelCard: {
+  levelCard: {
       marginHorizontal: Scale(10),
       marginTop: Scale(14),
       borderRadius: Scale(20),
       overflow: "hidden",
       backgroundColor: "#fff",
-
       elevation: 6,
       shadowColor: "#000",
       shadowOffset: {
@@ -938,11 +937,11 @@ const createStyles = (Scale: any) => StyleSheet.create({
       justifyContent: "space-between",
       alignItems: "center",
       paddingHorizontal: Scale(18),
-      paddingVertical: Scale(14),
+      paddingVertical: Scale(10),
     },
 
     levelBody: {
-      padding: Scale(14),
+      padding: Scale(10),
     },
 
     levelText: {
@@ -955,6 +954,7 @@ const createStyles = (Scale: any) => StyleSheet.create({
       color: "#E9D8FF",
       marginTop: Scale(2),
       fontSize: Scale(11),
+      fontWeight: "bold",
     },
 
     bonusAmount: {
@@ -973,8 +973,8 @@ const createStyles = (Scale: any) => StyleSheet.create({
       flex: 0.48,
       backgroundColor: "#F6F3FF",
       borderRadius: Scale(14),
-      paddingVertical: Scale(12),
-      paddingHorizontal: Scale(12),
+      paddingVertical: Scale(5),
+      paddingHorizontal: Scale(5),
     },
 
     smallInfoTitle: {

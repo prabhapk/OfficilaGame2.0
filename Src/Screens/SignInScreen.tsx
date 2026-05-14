@@ -297,7 +297,7 @@ const createStyles = (Scale: any) =>
   bottomContainer: {
     backgroundColor: COLORS.primary,
     borderTopRightRadius: Scale(80),
-    marginTop: -Scale(70),
+    marginTop: -Scale(60),
     paddingBottom: Scale(30),
   },
   logoHeader: {

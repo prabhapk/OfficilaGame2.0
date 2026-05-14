@@ -934,7 +934,6 @@ const createStyles = (Scale: any) =>
       borderRadius: Scale(20),
       overflow: "hidden",
       backgroundColor: "#fff",
-
       elevation: 6,
       shadowColor: "#000",
       shadowOffset: {
@@ -950,11 +949,11 @@ const createStyles = (Scale: any) =>
       justifyContent: "space-between",
       alignItems: "center",
       paddingHorizontal: Scale(18),
-      paddingVertical: Scale(14),
+      paddingVertical: Scale(10),
     },
 
     levelBody: {
-      padding: Scale(14),
+      padding: Scale(10),
     },
 
     levelText: {
@@ -967,6 +966,7 @@ const createStyles = (Scale: any) =>
       color: "#E9D8FF",
       marginTop: Scale(2),
       fontSize: Scale(11),
+      fontWeight: "bold",
     },
 
     bonusAmount: {
@@ -985,8 +985,8 @@ const createStyles = (Scale: any) =>
       flex: 0.48,
       backgroundColor: "#F6F3FF",
       borderRadius: Scale(14),
-      paddingVertical: Scale(12),
-      paddingHorizontal: Scale(12),
+      paddingVertical: Scale(5),
+      paddingHorizontal: Scale(5),
     },
 
     smallInfoTitle: {
