@@ -22,3 +22,15 @@ allprojects {
 
 apply plugin: "expo-root-project"
 apply plugin: "com.facebook.react.rootproject"
+
+// react-native-freshchat-sdk references LocalBroadcastManager but does not declare this dependency.
+subprojects { subproject ->
+  subproject.plugins.withId("com.android.library") {
+    if (subproject.name == "react-native-freshchat-sdk") {
+      subproject.dependencies.add(
+        "implementation",
+        "androidx.localbroadcastmanager:localbroadcastmanager:1.1.0"
+      )
+    }
+  }
+}
