@@ -15,6 +15,7 @@ import { useContainerScale } from '../hooks/useContainerScale';
 import { COLORS } from '../Constants/Theme';
 import { Image } from 'expo-image';
 
+
 interface Props {
   openSheet: (event: GestureResponderEvent) => void;
   totalAmount: number;
@@ -46,30 +47,33 @@ const GameFooter: React.FC<Props> = ({
   return (
     <View
       style={{
-        flex: 1,
-        marginVertical: Scale(5),
+        // flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: COLORS.primary,
-        paddingVertical: Scale(20),
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: Scale(12),
+    paddingVertical: Scale(10),
+        
       }}
     >
       <TouchableOpacity
         onPress={openSheet}
-        style={{ flexDirection: 'row', marginHorizontal: Scale(10) }}
+        style={{ flexDirection: 'row', marginHorizontal: Scale(10),
+         }}
       >
         <Image
           source={FooterWallet}
           contentFit="contain"
           style={{ width: 30, height: 30, }}
         />
-        <View style={{ marginHorizontal: Scale(10) }}>
+        <View style={{ marginHorizontal: Scale(10), }}>
           <Text
             style={{ fontSize: Scale(20), fontWeight: 'bold', color: '#fff' }}
           >
             ₹ {totalAmount.toFixed(2)}
           </Text>
-          <Text style={{ fontSize: Scale(14), color: '#fff' }}>
+          <Text style={{ fontSize: Scale(14), color: '#fff', paddingVertical: Scale(2), marginBottom: Scale(2) }}>
             {totalCount} numbers
           </Text>
         </View>

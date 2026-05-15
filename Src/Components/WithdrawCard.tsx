@@ -64,7 +64,7 @@ const WithdrawCard : React.FC<Props> = (
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Description</Text>
-        <Text style={styles.label}>{description}</Text>
+        <Text style={[styles.label, {width: Scale(200), left: Scale(30)}]}>{description}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Order Number</Text>

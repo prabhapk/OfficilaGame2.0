@@ -4,6 +4,7 @@ import Modal from 'react-native-modal';
 import { close } from '../../../assets/assets';
 import { useContainerScale } from '../../hooks/useContainerScale';
 import {Image} from 'expo-image';
+import { COLORS } from '../../Constants/Theme';
 
 type AlertSuccessModalProps = {
   isVisible: boolean;
@@ -31,7 +32,8 @@ const AlertSuccessModal: React.FC<AlertSuccessModalProps> = ({
       <View style={styles.modalContainer}>
         {/* Close Button */}
         <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-          <Image source={close} style={styles.closeIcon} />
+          <Image
+          source={close} style={styles.closeIcon} />
         </TouchableOpacity>
 
         {/* Header */}
@@ -50,7 +52,7 @@ const AlertSuccessModal: React.FC<AlertSuccessModalProps> = ({
 
 const createStyles = (Scale: any) => StyleSheet.create({
   modalContainer: {
-    backgroundColor: '#360400',
+    backgroundColor: COLORS.white,
     borderRadius: Scale(10),
     padding: Scale(20),
     marginBottom: Scale(16),
@@ -74,7 +76,7 @@ const createStyles = (Scale: any) => StyleSheet.create({
     marginBottom: Scale(20),
   },
   headerText: {
-    color: 'green',
+    color: COLORS.primary,
     fontWeight: 'bold',
     fontSize: Scale(16),
     textAlign: 'center',
@@ -83,7 +85,7 @@ const createStyles = (Scale: any) => StyleSheet.create({
     alignItems: 'center',
   },
   bodyText: {
-    color: 'white',
+    color: COLORS.black,
     fontWeight: 'bold',
     fontSize: Scale(16),
     textAlign: 'center',

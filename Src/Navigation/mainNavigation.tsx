@@ -36,7 +36,7 @@ const Stack = createNativeStackNavigator();
 
 function MainNavigation() {
   const linking = {
-    prefixes: ["http://localhost:8081", "annai-lottery://"],
+    prefixes: ["http://localhost:8081", "dear24-Gaming://"],
     config: {
       screens: {
         SplashScreen: "",

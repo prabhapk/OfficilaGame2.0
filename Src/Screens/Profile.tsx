@@ -204,8 +204,8 @@ const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
     try {
       // Pass real user details here
       await setFreshchatUser({
-        name: "Annai Lottery User",
-        email: "user@annailottery.com",
+        name: "Dear24 Lottery User",
+        email: "user@dear24gaming.com",
         phoneCountryCode: "+91",
         phone: "9876543210",
         externalId: "user-123",

@@ -1086,8 +1086,8 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
           </View>
         </View>
       )}
-      <SafeAreaView
-        style={{ position: "absolute", bottom: Scale(-30), left: 0, right: 0, }}
+      <View
+        style={{ position: "absolute", left: 0, right: 0, bottom: Scale(0) }}
       >
         <View style={styles.footerWrapper}>
           <GameFooter
@@ -1152,7 +1152,7 @@ const ThreeDigitMain = ({ navigation, route }: any) => {
             bodyText="Please add funds to your wallet to continue"
           />
         </View>
-      </SafeAreaView>
+      </View>
 
       {/* Web: in-place overlay so modal stays inside mobile container */}
       {Platform.OS === "web" && switchSlotConfirmVisible && (
@@ -1212,7 +1212,7 @@ const createStyles = (Scale: any) =>
     },
     footerWrapper: {
       // backgroundColor: COLORS.headerBackground,
-      height: Scale(80),
+      // height: Scale(80),
       elevation: 10,
     },
     subContainer: {

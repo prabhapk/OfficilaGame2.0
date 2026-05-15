@@ -127,3 +127,30 @@ export   const tableData = [
     },
     
   ];
+
+  export const defaultRechargeData = [
+  {
+    level: 1,
+    bonusAmount: 100,
+    minimumRechargePerPerson: 200,
+    totalPeopleRequired: 2,
+  },
+  {
+    level: 2,
+    bonusAmount: 2000,
+    minimumRechargePerPerson: 500,
+    totalPeopleRequired: 20,
+  },
+  {
+    level: 3,
+    bonusAmount: 10000,
+    minimumRechargePerPerson: 1000,
+    totalPeopleRequired: 50,
+  },
+  {
+    level: 4,
+    bonusAmount: 50000,
+    minimumRechargePerPerson: 2000,
+    totalPeopleRequired: 1000,
+  },
+];

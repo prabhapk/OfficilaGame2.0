@@ -53,6 +53,7 @@ import {
   getRechargeBonusData,
 } from "../Redux/Slice/agentSlice";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { defaultRechargeData } from '../Utils/Constants';
 
 const InviteScreen = ({route}: any) => {
   const [dateRange, setDateRange] = useState({
@@ -70,7 +71,10 @@ console.log('rechargeBonusData==>', rechargeBonusData);
 console.log('rechargeBonusFUllData==>', rechargeBonusFUllData);
 
 
-      
+     const safeRechargeData =
+  rechargeBonusData?.length > 0
+    ? rechargeBonusData
+    : defaultRechargeData; 
 
         const { userId } = useSelector((state: RootState) => state.signInSlice);
         console.log("userId==>", userId);
@@ -377,7 +381,7 @@ console.log('rechargeBonusFUllData==>', rechargeBonusFUllData);
           </View>
         </View>
           <FlatList
-                data={rechargeBonusData}
+                data={safeRechargeData}
                 keyExtractor={(item) => item.level.toString()}
                 renderItem={renderTeamReportItem}
                 showsVerticalScrollIndicator={false}

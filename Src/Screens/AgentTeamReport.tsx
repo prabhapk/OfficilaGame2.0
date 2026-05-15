@@ -25,6 +25,7 @@ import * as Sharing from "expo-sharing";
 import * as Clipboard from "expo-clipboard";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
+import { defaultRechargeData } from "../Utils/Constants";
 
 const AgentTeamReport = ({ navigation }: any) => {
   const DATA = [
@@ -44,6 +45,10 @@ const AgentTeamReport = ({ navigation }: any) => {
     useSelector((state: RootState) => state.agentSlice);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
+     const safeRechargeData =
+    rechargeBonusData?.length > 0
+      ? rechargeBonusData
+      : defaultRechargeData; 
 
   const itemsPerPage = 5;
 
@@ -508,7 +513,7 @@ const AgentTeamReport = ({ navigation }: any) => {
       <NewAppHeader leftIconPress={handleBackPress} centerText="Team Report" />
 
       <FlatList
-        data={rechargeBonusData}
+        data={safeRechargeData}
         keyExtractor={(item) => item.level.toString()}
         renderItem={renderTeamReportItem}
         showsVerticalScrollIndicator={false}

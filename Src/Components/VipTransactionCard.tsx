@@ -54,7 +54,7 @@ const VipTransactionCard : React.FC<Props> = (
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Description</Text>
-        <Text style={styles.label}>{description}</Text>
+        <Text style={[styles.label,{width: Scale(250), left: Scale(20)}]}>{description}</Text>
       </View>
       <View style={styles.infoRow}>
         <Text style={styles.label}>Order Time</Text>

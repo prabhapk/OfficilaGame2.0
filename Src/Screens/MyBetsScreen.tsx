@@ -334,7 +334,7 @@ useEffect(() => {
         }
         imageSource={hot}
         winOrLossId={item.betUniqueId}
-        gameName={item.gameName || "AnnaiGaming"}
+        gameName={item.gameName || "Dear24Gaming"}
         totalWinningAmount={item.totalAmount}
       />
     );

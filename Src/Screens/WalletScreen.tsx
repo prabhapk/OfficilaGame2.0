@@ -22,7 +22,7 @@ import { Image } from 'expo-image';
 const WalletScreenUI = ({navigation}: any) => {
   const [walletAmount, setWalletAmount] = useState(0);
   const [selectedAmount, setSelectedAmount] = useState('500');
-  const amounts = ['500', '1000', '2000', '5000', '10000', '20000', '50000', '300'];
+  const amounts = ['300','500', '1000', '2000', '5000', '10000', '20000', '50000'];
   const [selectedRechargeOption, setSelectedRechargeOption] = useState<'option1' | 'option2' | null>(null);
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -371,7 +371,7 @@ const createStyles = (Scale: any) =>
   },
   chipText: {
     color: '#fff',
-    fontSize: Scale(14),
+    fontSize: Scale(12),
     textAlign: 'center',
     paddingHorizontal: Scale(4),
     paddingVertical: Scale(4),

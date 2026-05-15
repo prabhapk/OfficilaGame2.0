@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Annai Lottery",
-    "slug": "annai-lottery",
+    "name": "Dear24Gaming",
+    "slug": "dear24-gaming",   
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/newAppIcon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/newAppIcon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -16,18 +16,23 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.ajay-gaming.Demo"
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true,
-      "package": "com.ajay_gaming.Demo"
-    },
+   "android": {
+  "edgeToEdgeEnabled": false,
+  "adaptiveIcon": {
+    "foregroundImage": "./assets/newAppIcon.png",
+    "backgroundColor": "#ffffff"
+  },
+  "package": "com.ajay_gaming.Demo",
+  "statusBar": {
+    "backgroundColor": "black",
+    "barStyle": "dark-content",
+    "translucent": false
+  }
+},
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "annai-lottery",
+    "scheme": "dear24gaming",
     "extra": {
       "eas": {
         "projectId": "40bc88ac-9f46-4364-b391-35541389ad1d"

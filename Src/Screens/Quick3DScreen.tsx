@@ -67,13 +67,14 @@ import { getQuick3DResultByGroupId } from "../Redux/Slice/resultSlice";
 import NewAppHeader from "../Components/NewAppHeader";
 import ResultTable from "../Components/ResultTable";
 import { Image } from 'expo-image';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Quick3DScreen = ({ navigation, route }: any) => {
   const { Scale } = useContainerScale();
   const styles = createStyles(Scale);
   const gameData = route.params.gameData;
   console.log("gameData==>", gameData);
-
+const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
   const refRBSheet: any = useRef();
 
@@ -715,6 +716,9 @@ getMyOrders({
       </>
     );
   };
+  const transformedGameData = transformApiResponse(quick3dGamesList || {});
+  console.log("NewwCheck===",transformedGameData );
+  
 
   return (
     // <View style={styles.mainContainer}>
@@ -775,6 +779,7 @@ getMyOrders({
         />
 
         <View style={styles.subContainer}>
+          
           {/* Conditionally Render UI Based on Selection */}
           <View style={styles.renderDataView}>{renderContent()}</View>
           <View>
@@ -782,6 +787,12 @@ getMyOrders({
               gameTitle={`Quick 3D ${selectedOption}`}
               introText={`Quick 3D ${selectedOption} is an exhilarating lottery game. The lottery game mode that opens every ${selectedOption} has increased fun and excitement, and more frequent bonus opportunities.`}
               timeText={`Time: 24-hour drawing, once every ${selectedOption}`}
+              ticketPriceSingleDigit={transformedGameData.doubleDigitPrice}
+              ticketPriceDoubleDigit={transformedGameData.doubleDigitPrice}
+              ticketPriceThreeDigit={transformedGameData.doubleDigitPrice}
+              winningAmountSingleDigit={transformedGameData.doubleDigitPrice}
+              winningAmountDoubleDigit={transformedGameData.doubleDigitPrice}
+              winningAmountThreeDigit={transformedGameData.doubleDigitPrice}
             />
           </View>
         </View>
@@ -853,8 +864,12 @@ getMyOrders({
           )}
         </View>
       </RBSheet>
-      <SafeAreaView
-        style={{ position: "absolute", bottom: Scale(-30), left: 0, right: 0 }}
+      <View
+        style={{ 
+          position: "absolute", 
+                    bottom: Scale(0), 
+
+          left: 0, right: 0 }}
       >
         <View style={styles.footerWrapper}>
           <GameFooter
@@ -878,8 +893,7 @@ getMyOrders({
           headerText="Insufficient Balance!"
           bodyText="Please add funds to your wallet to continue"
         />
-      </SafeAreaView>
-
+      </View>
     </LinearGradient>
   );
 };
@@ -892,14 +906,16 @@ const createStyles = (Scale: any) =>
     },
     scrollView: {
       flex: 1,
+      
       // backgroundColor: COLORS.gamesBackground,
     },
     scrollContent: {
       flexGrow: 1,
+        paddingBottom: 100,
+      
     },
     footerWrapper: {
-      // backgroundColor: COLORS.headerBackground,
-      height: Scale(80),
+      // height: Scale(80),
       elevation: 10,
     },
     subContainer: {

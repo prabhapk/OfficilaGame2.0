@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, StatusBar } from "react-native";
+import { View, StyleSheet,} from "react-native";
 import { newSplashScreen, updatedSplashscreen } from "../../assets/assets";
 import { Image } from "expo-image";
+import { COLORS } from "../Constants/Theme";
+import { StatusBar } from "expo-status-bar";
 
 const SplashScreen = ({ navigation }: { navigation: any }) => {
   useEffect(() => {
@@ -14,11 +16,12 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="black" barStyle="dark-content" />
-      {/* <Image source={splashScreen} style={styles.logoImg}/> */}
+     <StatusBar
+  style="dark"
+  backgroundColor={'#5A1C1C'}
+/>
       <Image 
       contentFit='fill'
-      // source={newSplashScreen} style={styles.logoImg} />
       source={updatedSplashscreen} style={styles.logoImg} />
     </View>
   );
@@ -27,14 +30,13 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.cardBorderAccent,
   },
   logoImg: {
+    flex: 1,
     width: "100%",
-    height: "100%",
   },
 });
+
 
 export default SplashScreen;
