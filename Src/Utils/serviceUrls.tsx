@@ -56,7 +56,7 @@ export const serviceUrls = {
     vipLists: '/api/user/User/vip-config'
   },
   payment: {
-      paymentGatewayLists: "/api/admin/payment-config",
+      paymentGatewayLists: "/api/user/payment-config",
       depositPayment: '/api/Payment/deposit-payment',
   },
   Agent: {

@@ -7,8 +7,8 @@ import { useContainerScale } from "../hooks/useContainerScale";
 import { ImageBackground } from "expo-image";
 import { copyImage, myOrdersWinLabel, winLabel } from "../../assets/assets";
 import { LinearGradient } from "expo-linear-gradient";
-import * as Clipboard from 'expo-clipboard';
-import { Image } from 'expo-image';
+import * as Clipboard from "expo-clipboard";
+import { Image } from "expo-image";
 
 type BetData = {
   type: string;
@@ -17,7 +17,7 @@ type BetData = {
   result: string;
   totalAmount?: number; // optional total for that bet
   betCount?: number; // optional times for this bet
-  };
+};
 
 type MyBetsCardProps = {
   headers: string[];
@@ -51,55 +51,41 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
   winOrLossId,
   gameName,
   totalWinningAmount,
-  
 }) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
   const getRowAmount = (bet: BetData) => {
     if (bet.totalAmount !== undefined && !isNaN(Number(bet.totalAmount))) {
-    return Number(bet.totalAmount);
+      return Number(bet.totalAmount);
     }
     const count = bet.betCount !== undefined ? Number(bet.betCount) : 1;
     return Number(bet.payment || 0) * count;
-    };
-    
-    const orderTotal =
-    typeof paymentAmount === "number"
-    ? Number(paymentAmount)
-    : myBetsTableData.reduce((s, b) => s + getRowAmount(b), 0);
+  };
 
-    const hasWinningBet = myBetsTableData.some(
-      (bet) => bet.result === "Won"
-    );
-    
-    const hasDrawPending = myBetsTableData.some(
-      (bet) => bet.result === "To Be Drawn"
-    );
-    
-    let derivedStatus: "Won" | "No Won" | "To Be Drawn";
-    
-    if (hasWinningBet) {
-      derivedStatus = "Won";
-    } else if (hasDrawPending) {
-      derivedStatus = "To Be Drawn";
-    } else {
-      derivedStatus = "No Won";
-    }
-    
+  const orderTotal =
+    typeof paymentAmount === "number"
+      ? Number(paymentAmount)
+      : myBetsTableData.reduce((s, b) => s + getRowAmount(b), 0);
+
+  const hasWinningBet = myBetsTableData.some((bet) => bet.result === "Won");
+
+  const hasDrawPending = myBetsTableData.some(
+    (bet) => bet.result === "To Be Drawn",
+  );
+
+  let derivedStatus: "Won" | "No Won" | "To Be Drawn";
+
+  if (hasWinningBet) {
+    derivedStatus = "Won";
+  } else if (hasDrawPending) {
+    derivedStatus = "To Be Drawn";
+  } else {
+    derivedStatus = "No Won";
+  }
 
   return (
     <View style={styles.cardContainer}>
-      <Text
-        style={{
-          color: "white",
-          fontSize: Scale(18),
-          fontWeight: "bold",
-          marginTop: Scale(20),
-          marginHorizontal: Scale(20),
-        }}
-      >
-        Draw Results:
-      </Text>
+      <Text style={styles.drawResultsTitle}>Draw Results:</Text>
       {/* Top Balls */}
       <View style={styles.ballsRow}>
         {topBalls.map((ball, idx) => (
@@ -126,236 +112,112 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
       <View style={styles.detailsContainer}>
         {/* Win Ui  */}
         <View>
-  {/* === Status Label Section === */}
-  {derivedStatus === "Won" && (
-    <ImageBackground
-      source={myOrdersWinLabel}
-      style={{
-        marginVertical: Scale(10),
-        height: Scale(35),
-        marginHorizontal: Scale(10),
-      }}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          alignSelf: "center",
-        }}
-      >
-        <Text
-          style={{
-            textAlign: "center",
-            fontSize: Scale(16),
-            fontWeight: "bold",
-            color: "white",
-            marginLeft: Scale(110),
-            marginVertical: Scale(5),
-          }}
-        >
-          {winOrLossId}
-        </Text>
-        <TouchableOpacity
-        onPress={() => {
-          Clipboard.setStringAsync(winOrLossId);
-          Alert.alert('Copied!', 'ID copied to clipboard');
-        }}
-      >
-        <Image
-          source={copyImage}
-          style={{
-            width: Scale(20),
-            height: Scale(20),
-            marginLeft: Scale(10),
-            marginTop: Scale(5),
-          }}
-        />
-      </TouchableOpacity>
-      </View>
-    </ImageBackground>
-  )}
-  
+          {/* === Status Label Section === */}
+          {derivedStatus === "Won" && (
+            <ImageBackground
+              source={myOrdersWinLabel}
+              style={styles.winLabelImageStyle}
+            >
+              <View style={styles.winLabelViewStyle}>
+                <Text style={styles.winLabelTextStyle}>{winOrLossId}</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    Clipboard.setStringAsync(winOrLossId);
+                    Alert.alert("Copied!", "ID copied to clipboard");
+                  }}
+                >
+                  <Image source={copyImage} style={styles.copyIconStyle} />
+                </TouchableOpacity>
+              </View>
+            </ImageBackground>
+          )}
 
-  {derivedStatus === "No Won" && (
-    <LinearGradient
-      colors={[COLORS.linearOne, COLORS.linearTwo]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 0 }}
-      style={{
-        borderBottomLeftRadius: 10,
-        borderTopRightRadius: 10,
-        paddingHorizontal: 10,
-        height: 30,
-        bottom: 10,
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "row",
-        marginHorizontal: 15,
-        marginTop: 10,
-      }}
-    >
-      <Text
-        style={{
-          fontSize: Scale(16),
-          fontWeight: "bold",
-          color: "white",
-          marginLeft: Scale(10),
-          marginVertical: Scale(5),
-        }}
-      >
-        NO WON
-      </Text>
-      <Text
-        style={{
-          fontSize: Scale(16),
-          fontWeight: "bold",
-          color: "white",
-          marginLeft: Scale(20),
-          marginVertical: Scale(5),
-        }}
-      >
-        {winOrLossId}
-      </Text>
-      <TouchableOpacity
-        onPress={() => {
-          Clipboard.setStringAsync(winOrLossId);
-          Alert.alert('Copied!', 'ID copied to clipboard');
-        }}
-      >
-        <Image
-          source={copyImage}
-          style={{
-            width: Scale(20),
-            height: Scale(20),
-            marginLeft: Scale(10),
-            marginTop: Scale(5),
-          }}
-        />
-      </TouchableOpacity>
-    </LinearGradient>
-  )}
+          {derivedStatus === "No Won" && (
+            <LinearGradient
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.linearGradientStyle}
+            >
+              <Text style={styles.noWonTextStyle}>NO WON</Text>
+              <Text style={styles.winOrLossIdTextStyle}>{winOrLossId}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  Clipboard.setStringAsync(winOrLossId);
+                  Alert.alert("Copied!", "ID copied to clipboard");
+                }}
+              >
+                <Image source={copyImage} style={styles.copyIconStyle} />
+              </TouchableOpacity>
+            </LinearGradient>
+          )}
 
-  {/* {status === "No Won" && winningNumber === null && ( */}
-  {derivedStatus === "To Be Drawn" &&  (
-    <LinearGradient
-    colors={[COLORS.linearOne, COLORS.linearTwo]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 0 }}
-      style={{
-        borderBottomLeftRadius: 10,
-        borderTopRightRadius: 10,
-        paddingHorizontal: 10,
-        height: 30,
-        bottom: 10,
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "row",
-        marginHorizontal: 15,
-        marginTop: 10,
-      }}
-    >
-      <Text
-        style={{
-          fontSize: Scale(16),
-          fontWeight: "bold",
-          color: "white",
-          marginLeft: Scale(10),
-          marginVertical: Scale(5),
-        }}
-      >
-        TO BE DRAWN
-      </Text>
-      <Text
-        style={{
-          fontSize: Scale(16),
-          fontWeight: "bold",
-          color: "white",
-          marginLeft: Scale(20),
-          marginVertical: Scale(5),
-        }}
-      >
-        {winOrLossId}
-      </Text>
-      <TouchableOpacity
-        onPress={() => {
-          Clipboard.setStringAsync(winOrLossId);
-          Alert.alert('Copied!', 'ID copied to clipboard');
-        }}
-      >
-        <Image
-          source={copyImage}
-          style={{
-            width: Scale(20),
-            height: Scale(20),
-            marginLeft: Scale(10),
-            marginTop: Scale(5),
-          }}
-        />
-      </TouchableOpacity>
-    </LinearGradient>
-  )}
+          {/* {status === "No Won" && winningNumber === null && ( */}
+          {derivedStatus === "To Be Drawn" && (
+            <LinearGradient
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.linearGradientStyle}
+            >
+              <Text style={styles.dobeDrawnTextStyle}>TO BE DRAWN</Text>
+              <Text style={styles.winOrLossIdTextStyle}>{winOrLossId}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  Clipboard.setStringAsync(winOrLossId);
+                  Alert.alert("Copied!", "ID copied to clipboard");
+                }}
+              >
+                <Image source={copyImage} style={styles.copyIconStyle} />
+              </TouchableOpacity>
+            </LinearGradient>
+          )}
 
-  {/* === Game Name + Time + Payment === */}
-  <View style={styles.detailsSubHeader}>
-    <View>
-      <Text style={styles.detailText}>{gameName || "AvisGaming"}</Text>
-      <Text style={[styles.detailText1, { flexWrap: "wrap" }]}>
-        Draw time: {drawTime || "-"}
-      </Text>
-    </View>
-    <View>
-      <Text style={styles.paymentAmount}>Payment</Text>
-      {/* <Text style={styles.paymentAmount1}>₹ {paymentAmount}</Text> */}
-      <Text style={styles.paymentAmount1}>
-  ₹ {myBetsTableData.reduce((sum, bet) => {
-        const rowTotal = (bet?.betCount ?? 1) * (bet?.payment ?? 0);
-        return sum + rowTotal;
-      }, 0).toFixed(2)}
-</Text>
+          {/* === Game Name + Time + Payment === */}
+          <View style={styles.detailsSubHeader}>
+            <View>
+              <Text style={styles.detailText}>{gameName || "AvisGaming"}</Text>
+              <Text style={[styles.detailText1, { flexWrap: "wrap" }]}>
+                Draw time: {drawTime || "-"}
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.paymentAmount}>Payment</Text>
+              {/* <Text style={styles.paymentAmount1}>₹ {paymentAmount}</Text> */}
+              <Text style={styles.paymentAmount1}>
+                ₹{" "}
+                {myBetsTableData
+                  .reduce((sum, bet) => {
+                    const rowTotal = (bet?.betCount ?? 1) * (bet?.payment ?? 0);
+                    return sum + rowTotal;
+                  }, 0)
+                  .toFixed(2)}
+              </Text>
+            </View>
+          </View>
 
-    </View>
-  </View>
-
-  {/* === Footer (Win / Loss Message) === */}
-  <View style={{ marginTop: Scale(10), marginBottom: Scale(5) }}>
-    {derivedStatus === "Won" && (
-      <ImageBackground
-        source={winLabel}
-        style={{
-          width: "100%",
-          height: 80,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        contentFit="fill"
-      >
-        <Text
-          style={{
-            color: COLORS.black,
-            fontSize: Scale(14),
-            fontWeight: "bold",
-            textAlign: "center",
-            paddingHorizontal: Scale(50),
-          }}
-        >
-          Congratulations! {"\n"}You won the game lottery and claim your winning
-          amount ₹{totalWinningAmount}
-        </Text>
-      </ImageBackground>
-    )
-  }
-    {derivedStatus === "No Won" && (
-      <Text style={styles.footerText}>
-        Sorry, your guess is wrong, Try next time
-      </Text>
-    )}
-    {derivedStatus === "To Be Drawn" && (
-      <>
-      </>
-    )}
-  </View>
-</View>
+          {/* === Footer (Win / Loss Message) === */}
+          <View style={styles.footerViewStyle}>
+            {derivedStatus === "Won" && (
+              <ImageBackground
+                source={winLabel}
+                style={styles.winningImageStyle}
+                contentFit="fill"
+              >
+                <Text style={styles.winningTextStyle}>
+                  Congratulations! {"\n"}You won the game lottery and claim your
+                  winning amount ₹{totalWinningAmount}
+                </Text>
+              </ImageBackground>
+            )}
+            {derivedStatus === "No Won" && (
+              <Text style={styles.footerText}>
+                Sorry, your guess is wrong, Try next time
+              </Text>
+            )}
+            {derivedStatus === "To Be Drawn" && <></>}
+          </View>
+        </View>
 
         <View style={styles.newDivider} />
         <View style={styles.dateStatusRow}>
@@ -363,109 +225,110 @@ const MyOrders: React.FC<MyBetsCardProps> = ({
           <Text style={styles.dateText}>{bettingTime}</Text>
         </View>
 
-     {/* Table */}
-<View style={{ backgroundColor: COLORS.tableTopColor }}>
-  {/* Table Header */}
-  <View style={styles.tableHeader}>
-    <View style={{ flexDirection: "row" }}>
-      {headers.map((head) => {
-        let color =
-          head === "A"
-            ? "#DE3C3F"
-            : head === "B"
-            ? "#EC8204"
-            : "#066FEA";
-        return (
-          <TableCommonBall
-            key={head}
-            backgroundColor={color}
-            innerText={head}
-            borderColor={color}
-          />
-        );
-      })}
-    </View>
-    <Text style={styles.tableHeaderText}>Payment</Text>
-    <Text style={[styles.tableHeaderText, { marginRight: 10 }]}>
-      Result
-    </Text>
-  </View>
+        {/* Table */}
+        <View style={{ backgroundColor: COLORS.tableTopColor }}>
+          {/* Table Header */}
+          <View style={styles.tableHeader}>
+            <View style={{ flexDirection: "row" }}>
+              {headers.map((head) => {
+                let color =
+                  head === "A"
+                    ? "#DE3C3F"
+                    : head === "B"
+                      ? "#EC8204"
+                      : "#066FEA";
+                return (
+                  <TableCommonBall
+                    key={head}
+                    backgroundColor={color}
+                    innerText={head}
+                    borderColor={color}
+                  />
+                );
+              })}
+            </View>
+            <Text style={styles.tableHeaderText}>Payment</Text>
+            <Text style={[styles.tableHeaderText, { marginRight: 10 }]}>
+              Result
+            </Text>
+          </View>
 
-  {/* Table Rows */}
-  {myBetsTableData.map((bet, rowIndex) => {
-  const isEvenRow = rowIndex % 2 === 0;
-  const rowBgColor = isEvenRow ? COLORS.tableSecondaryColor  : COLORS.tableTopColor;
-  console.log('myBetsTableData==>', myBetsTableData);
+          {/* Table Rows */}
+          {myBetsTableData.map((bet, rowIndex) => {
+            const isEvenRow = rowIndex % 2 === 0;
+            const rowBgColor = isEvenRow
+              ? COLORS.tableSecondaryColor
+              : COLORS.tableTopColor;
+            console.log("myBetsTableData==>", myBetsTableData);
 
-  const totalPaymentAmount = bet?.betCount * bet?.payment;
+            const totalPaymentAmount = bet?.betCount * bet?.payment;
 
-  return (
-    <View
-    key={`${bet.type}-${rowIndex}`}
-    style={[styles.tableRow, { backgroundColor: rowBgColor }]}
-  >
-    {/* Balls Column */}
-    <View style={styles.ballsColumn}>
-      {headers.map((colHead) => {
-        let color =
-          colHead === "A" ? "#DE3C3F" :
-          colHead === "B" ? "#EC8204" :
-          "#066FEA";
-  
-        const digits = String(bet.value).split("");
-        let showDigit = "-";
-  
-        if (bet.type?.length === digits?.length) {
-          const pos = bet?.type?.indexOf(colHead);
-          if (pos !== -1) showDigit = digits[pos] || "-";
-        } else if (bet?.type?.includes(colHead)) {
-          showDigit = digits[0] || "-";
-        }
-  
-        return (
-          <TableCommonBall
-            key={colHead}
-            backgroundColor={showDigit !== "-" ? color : "#BFBFBF"}
-            innerText={showDigit}
-            borderColor={showDigit !== "-" ? color : "#BFBFBF"}
-          />
-        );
-      })}
-    </View>
-  
-    {/* Payment Column */}
-    <View style={styles.paymentColumn}>
-      <Text style={styles.paymentText}>
-        ₹{totalPaymentAmount.toFixed(2)}
-      </Text>
-    </View>
-  
-    {/* Result Column */}
-    <View style={styles.resultColumn}>
-      <Text
-        style={[
-          styles.resultText,
-          {
-            color:
-              bet.result === "Won"
-                ? "#2ECC71"
-                : bet.result === "No Won"
-                ? "#E74C3C"
-                : COLORS.white,
-          },
-        ]}
-        numberOfLines={1}
-      >
-        {bet.result}
-      </Text>
-    </View>
-  </View>
-  
-  );
-})}
+            return (
+              <View
+                key={`${bet.type}-${rowIndex}`}
+                style={[styles.tableRow, { backgroundColor: rowBgColor }]}
+              >
+                {/* Balls Column */}
+                <View style={styles.ballsColumn}>
+                  {headers.map((colHead) => {
+                    let color =
+                      colHead === "A"
+                        ? "#DE3C3F"
+                        : colHead === "B"
+                          ? "#EC8204"
+                          : "#066FEA";
 
-</View>
+                    const digits = String(bet.value).split("");
+                    let showDigit = "-";
 
+                    if (bet.type?.length === digits?.length) {
+                      const pos = bet?.type?.indexOf(colHead);
+                      if (pos !== -1) showDigit = digits[pos] || "-";
+                    } else if (bet?.type?.includes(colHead)) {
+                      showDigit = digits[0] || "-";
+                    }
+
+                    return (
+                      <TableCommonBall
+                        key={colHead}
+                        backgroundColor={showDigit !== "-" ? color : "#BFBFBF"}
+                        innerText={showDigit}
+                        borderColor={showDigit !== "-" ? color : "#BFBFBF"}
+                      />
+                    );
+                  })}
+                </View>
+
+                {/* Payment Column */}
+                <View style={styles.paymentColumn}>
+                  <Text style={styles.paymentText}>
+                    ₹{totalPaymentAmount.toFixed(2)}
+                  </Text>
+                </View>
+
+                {/* Result Column */}
+                <View style={styles.resultColumn}>
+                  <Text
+                    style={[
+                      styles.resultText,
+                      {
+                        color:
+                          bet.result === "Won"
+                            ? "#2ECC71"
+                            : bet.result === "No Won"
+                              ? "#E74C3C"
+                              : COLORS.white,
+                      },
+                    ]}
+                    numberOfLines={1}
+                  >
+                    {bet.result}
+                  </Text>
+                </View>
+              </View>
+            );
+          })}
+        </View>
       </View>
     </View>
   );
@@ -581,28 +444,110 @@ const createStyles = (Scale: any) =>
       flexDirection: "row",
       marginLeft: 10,
     },
-    
+
     paymentColumn: {
       width: Scale(120),
       alignItems: "flex-start",
       paddingRight: 10,
     },
-    
+
     paymentText: {
       color: COLORS.white,
       fontSize: 14,
       fontWeight: "600",
     },
-    
+
     resultColumn: {
       width: Scale(70),
       alignItems: "flex-start",
       paddingRight: 10,
     },
-    
+
     resultText: {
       fontSize: 14,
       fontWeight: "600",
+    },
+    drawResultsTitle: {
+      color: "white",
+      fontSize: Scale(18),
+      fontWeight: "bold",
+      marginTop: Scale(20),
+      marginHorizontal: Scale(20),
+    },
+    winLabelImageStyle: {
+      marginVertical: Scale(10),
+      height: Scale(35),
+      marginHorizontal: Scale(10),
+    },
+    winLabelViewStyle: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+    },
+    winLabelTextStyle: {
+      textAlign: "center",
+      fontSize: Scale(16),
+      fontWeight: "bold",
+      color: "white",
+      marginLeft: Scale(110),
+      marginVertical: Scale(5),
+    },
+    copyIconStyle: {
+      width: Scale(20),
+      height: Scale(20),
+      marginLeft: Scale(10),
+      marginTop: Scale(5),
+    },
+    linearGradientStyle: {
+      borderBottomLeftRadius: 10,
+      borderTopRightRadius: 10,
+      paddingHorizontal: 10,
+      height: 30,
+      bottom: 10,
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      marginHorizontal: 15,
+      marginTop: 10,
+    },
+    noWonTextStyle: {
+      fontSize: Scale(16),
+      fontWeight: "bold",
+      color: "white",
+      marginLeft: Scale(10),
+      marginVertical: Scale(5),
+    },
+    winOrLossIdTextStyle: {
+      fontSize: Scale(16),
+      fontWeight: "bold",
+      color: "white",
+      marginLeft: Scale(20),
+      marginVertical: Scale(5),
+    },
+    dobeDrawnTextStyle: {
+      fontSize: Scale(16),
+      fontWeight: "bold",
+      color: "white",
+      marginLeft: Scale(10),
+      marginVertical: Scale(5),
+    },
+    footerViewStyle: {
+      marginTop: Scale(10),
+      marginBottom: Scale(5),
+    },
+    winningImageStyle: {
+      width: "100%",
+      height: 80,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    winningTextStyle: {
+      color: COLORS.black,
+      fontSize: Scale(14),
+      fontWeight: "bold",
+      textAlign: "center",
+      paddingHorizontal: Scale(50),
     },
   });
 

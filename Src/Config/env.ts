@@ -8,7 +8,8 @@ const extra = (Constants.expoConfig?.extra || {}) as ExtraConfig;
 
 export const API_BASE_URL =
   // extra.API_BASE_URL ?? 'http://136.115.20.223';
-  extra.API_BASE_URL ?? 'http://34.122.224.159';
+  // extra.API_BASE_URL ?? 'http://34.122.224.159';
+  extra.API_BASE_URL ?? 'https://www.d3421.online';
 
 // Debug logging to verify API_BASE_URL is loaded correctly
 console.log('🔧 API_BASE_URL from env:', API_BASE_URL);

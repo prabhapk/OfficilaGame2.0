@@ -66,7 +66,7 @@ import {
             {/* Left Icon */}
             {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
             {
-              leftText && <Text style ={{color: 'grey', fontWeight:'bold'}}>+91 | </Text>
+              leftText && <Text style ={styles.nineOneTextStyle}>+91 | </Text>
             }
             {/* Text Input */}
             <TextInput
@@ -159,6 +159,10 @@ import {
       color: 'red',
       marginTop: Scale(4),
     },
+    nineOneTextStyle:
+     {color: 'grey', 
+      fontWeight:'bold'
+     },
   });
   
   export default CommonTextInput;

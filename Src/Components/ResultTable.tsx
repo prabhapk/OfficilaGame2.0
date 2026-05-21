@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+} from "react-native";
 import React, { useState } from "react";
 import TableCommonBall from "./TableCommonBall";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -37,10 +43,10 @@ const ResultTable: React.FC<ResultTableProps> = ({
   // const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const { myOrdersData, myOrdersLoader } = useSelector(
-    (state: RootState) => state.threeDigit
+    (state: RootState) => state.threeDigit,
   );
   const { tableCurrentPage } = useSelector(
-    (state: RootState) => state.commonSlice
+    (state: RootState) => state.commonSlice,
   );
 
   console.log("myOrdersData====>", myOrdersData);
@@ -57,7 +63,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
   // Get data for the current page
   const currentData = tableData?.slice(
     (tableCurrentPage - 1) * itemsPerPage,
-    tableCurrentPage * itemsPerPage
+    tableCurrentPage * itemsPerPage,
   );
 
   // Handle Page Change
@@ -70,13 +76,23 @@ const ResultTable: React.FC<ResultTableProps> = ({
   const tableRenderItem = ({ item, index }: { item: any; index: number }) => {
     const winningBalls = item.winningNumber.split("");
     const rowBg = useLightTheme
-      ? (index % 2 === 1 ? COLORS.resultTableRowOdd : COLORS.resultTableRowOdd)
-      : (index % 2 === 1 ? COLORS.resultTableRowOdd : COLORS.listRowBg);
+      ? index % 2 === 1
+        ? COLORS.resultTableRowOdd
+        : COLORS.resultTableRowOdd
+      : index % 2 === 1
+        ? COLORS.resultTableRowOdd
+        : COLORS.listRowBg;
     const textColor = useLightTheme
-      ? (index % 2 === 1 ? COLORS.primaryTextColor : COLORS.primaryTextColor)
-      : (index % 2 === 1 ? COLORS.primaryTextColor : COLORS.primaryTextColor);
+      ? index % 2 === 1
+        ? COLORS.primaryTextColor
+        : COLORS.primaryTextColor
+      : index % 2 === 1
+        ? COLORS.primaryTextColor
+        : COLORS.primaryTextColor;
     // const textColor = useLightTheme ? COLORS.primaryTextColor : COLORS.white;
-    const borderColor = useLightTheme ? COLORS.resultTableBorder : COLORS.gameCardBorder;
+    const borderColor = useLightTheme
+      ? COLORS.resultTableBorder
+      : COLORS.gameCardBorder;
     const gameTime = formatTime(item.gameTime);
     return (
       <View
@@ -90,18 +106,33 @@ const ResultTable: React.FC<ResultTableProps> = ({
           paddingHorizontal: Scale(10),
         }}
       >
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
           <Text style={{ color: textColor, textAlignVertical: "center" }}>
             {item.uid}
           </Text>
         </View>
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-          <Text style={{ color: textColor, textAlignVertical: "center",marginLeft:Scale(50) }}>
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Text
+            style={{
+              color: textColor,
+              textAlignVertical: "center",
+              marginLeft: Scale(50),
+            }}
+          >
             {gameTime}
           </Text>
         </View>
         <View
-          style={{ flex: 1, flexDirection: "row", justifyContent: "center",left:Scale(12) }}
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            left: Scale(12),
+          }}
         >
           <TableCommonBall
             backgroundColor="#DE3C3F"
@@ -126,7 +157,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
   const getVisiblePages = (
     currentPage: number,
     totalPages: number,
-    maxVisible: number = 5
+    maxVisible: number = 5,
   ) => {
     let start = Math.max(currentPage - 2, 1);
     let end = start + maxVisible - 1;
@@ -141,8 +172,8 @@ const ResultTable: React.FC<ResultTableProps> = ({
 
   const myOrderRenterItem = ({ item }: { item: any; index: number }) => {
     let status: string;
-    console.log('itemmmm====>', item);
-    
+    console.log("itemmmm====>", item);
+
     if (item.isWinning) {
       status = "Won";
     } else if (!item.isWinning && item.winningNumber !== null) {
@@ -153,27 +184,24 @@ const ResultTable: React.FC<ResultTableProps> = ({
 
     return (
       <MyOrders
-        headers={["A", "B", "C"]}        
+        headers={["A", "B", "C"]}
         myBetsTableData={item.bets.map((b) => ({
           // ✅ NORMALIZED FIELDS FOR UI
           type: b.betType,
           value: b.selectedNumber,
           payment: b.amount,
-        
+
           betCount: b.betCount ?? 1,
           totalAmount: b.totalAmount,
-        
+
           // ✅ result logic (already correct)
           result:
             b.isWinning === true
               ? "Won"
               : b.isWinning === false && item.winningNumber !== null
-              ? "No Won"
-              : "To Be Drawn",
+                ? "No Won"
+                : "To Be Drawn",
         }))}
-        
-        
-        
         id={item.betUniqueId}
         bettingTime={item.betTime.split("T")[0]}
         paymentAmount={item.totalAmount} // order total (used by MyOrders to show order total)
@@ -203,8 +231,8 @@ const ResultTable: React.FC<ResultTableProps> = ({
           item.isWinning
             ? "Won"
             : item.winningNumber !== null
-            ? "No Won"
-            : "To Be Drawn"
+              ? "No Won"
+              : "To Be Drawn"
         }
         imageSource={hot}
         winOrLossId={item.betUniqueId}
@@ -240,32 +268,40 @@ const ResultTable: React.FC<ResultTableProps> = ({
             ))}
           </View>
         )}
-        <View style={{ marginVertical: Scale(20) }}>
+        <View style={styles.resultHistoryViewStyle}>
           {onTableSelect === "ResultHistory" ? (
             <>
               <View
                 style={[
                   styles.tableHeaderRow,
-                  { backgroundColor: useLightTheme ? COLORS.primary : COLORS.primary },
+                  {
+                    backgroundColor: useLightTheme
+                      ? COLORS.primary
+                      : COLORS.primary,
+                  },
                 ]}
               >
-                <View style={{ flex: 1.5 }}>
-                  <Text style={[styles.tableHeaderText, { color: useLightTheme ? COLORS.white : COLORS.white }]}>
+                <View style={styles.issueViewStyle}>
+                  <Text
+                    style={[
+                      styles.tableHeaderText,
+                      { color: useLightTheme ? COLORS.white : COLORS.white },
+                    ]}
+                  >
                     Issue
                   </Text>
                 </View>
-                <View style={{ flex: 1.3, alignItems: "center" }}>
-                  <Text style={[styles.tableHeaderText, { color: useLightTheme ? COLORS.white : COLORS.white }]}>
+                <View style={styles.timeViewStyle}>
+                  <Text
+                    style={[
+                      styles.tableHeaderText,
+                      { color: useLightTheme ? COLORS.white : COLORS.white },
+                    ]}
+                  >
                     Time
                   </Text>
                 </View>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "center",
-                  }}
-                >
+                <View style={styles.ballsViewStyle}>
                   <TableCommonBall
                     backgroundColor="#DE3C3F"
                     innerText="A"
@@ -309,7 +345,8 @@ const ResultTable: React.FC<ResultTableProps> = ({
                       <Text
                         style={[
                           styles.pageButtonText,
-                          tableCurrentPage === page && styles.pageButtonTextActive,
+                          tableCurrentPage === page &&
+                            styles.pageButtonTextActive,
                         ]}
                       >
                         {page}
@@ -324,7 +361,11 @@ const ResultTable: React.FC<ResultTableProps> = ({
                     <FontAwesome5
                       name="chevron-left"
                       size={15}
-                      color={tableCurrentPage === 1 ? COLORS.secondaryTextColor : COLORS.white}
+                      color={
+                        tableCurrentPage === 1
+                          ? COLORS.secondaryTextColor
+                          : COLORS.white
+                      }
                     />
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -335,7 +376,11 @@ const ResultTable: React.FC<ResultTableProps> = ({
                     <FontAwesome5
                       name="chevron-right"
                       size={15}
-                      color={tableCurrentPage === totalPage ? COLORS.secondaryTextColor : COLORS.white}
+                      color={
+                        tableCurrentPage === totalPage
+                          ? COLORS.secondaryTextColor
+                          : COLORS.white
+                      }
                     />
                   </TouchableOpacity>
                 </View>
@@ -349,20 +394,10 @@ const ResultTable: React.FC<ResultTableProps> = ({
                 showsVerticalScrollIndicator={false}
                 renderItem={myOrderRenterItem}
                 ListEmptyComponent={
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
+                  <View style={styles.emptyViewStyle}>
                     <Image
                       source={noDataImage}
-                      style={{
-                        width: 100,
-                        height: 100,
-                        marginVertical: Scale(20),
-                      }}
+                      style={styles.noDateImageStyle}
                     />
                     <Text style={styles.emptyStateText}>
                       Please place the order to see your bets!
@@ -475,6 +510,31 @@ const createStyles = (Scale: (n: number) => number) =>
       color: COLORS.secondaryTextColor,
       fontSize: 16,
       fontWeight: "bold",
+    },
+    resultHistoryViewStyle: {
+      marginVertical: Scale(20),
+    },
+    issueViewStyle: {
+      flex: 1.5,
+    },
+    timeViewStyle: {
+      flex: 1.3,
+      alignItems: "center",
+    },
+    ballsViewStyle: {
+      flex: 1,
+      flexDirection: "row",
+      justifyContent: "center",
+    },
+    emptyViewStyle: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    noDateImageStyle: {
+      width: 100,
+      height: 100,
+      marginVertical: Scale(20),
     },
   });
 

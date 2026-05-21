@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   TextInput,
@@ -7,8 +7,8 @@ import {
   TextInputProps,
   TouchableOpacity,
   Alert,
-} from 'react-native';
-import { COLORS } from '../Constants/Theme';
+} from "react-native";
+import { COLORS } from "../Constants/Theme";
 
 interface CustomInputProps extends TextInputProps {
   label: string;
@@ -38,14 +38,8 @@ const CustomInput: React.FC<CustomInputProps> = ({
         {...props}
       />
       {showSendButton && (
-        <TouchableOpacity onPress={onPressSend}
-          style={{ position: 'absolute', right: 10, top: 10, padding: 8 }}
-        >
-          <Text
-            style={{ color: '#e43d3dff', fontSize: 16, fontWeight: 'bold' }}
-          >
-            Send
-          </Text>
+        <TouchableOpacity onPress={onPressSend} style={styles.sendButtonStyle}>
+          <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
       )}
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
@@ -57,33 +51,44 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
     borderWidth: 0.2,
-    borderColor: '#fff',
+    borderColor: "#fff",
     borderRadius: 8,
     backgroundColor: COLORS.primary,
     padding: 8,
   },
   label: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 14,
   },
   required: {
-    color: 'red',
+    color: "red",
   },
   input: {
     fontSize: 14,
-    color: '#fff',
+    color: "#fff",
     // dark input bg
     borderRadius: 8,
-    padding:10,
-    outlineWidth: 0, 
+    padding: 10,
+    outlineWidth: 0,
   },
   errorBorder: {
-    borderColor: 'red',
+    borderColor: "red",
   },
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 12,
     marginTop: 4,
+  },
+  sendButtonStyle: {
+    position: "absolute",
+    right: 10,
+    top: 10,
+    padding: 8,
+  },
+  sendButtonText: {
+    color: "#e43d3dff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

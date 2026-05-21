@@ -17,8 +17,8 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
      <StatusBar
-  style="dark"
-  backgroundColor={'#5A1C1C'}
+  style="light"
+  backgroundColor='black'
 />
       <Image 
       contentFit='fill'
@@ -30,7 +30,7 @@ const SplashScreen = ({ navigation }: { navigation: any }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.cardBorderAccent,
+    backgroundColor: 'transparent',
   },
   logoImg: {
     flex: 1,

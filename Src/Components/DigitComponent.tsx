@@ -1,5 +1,12 @@
 import React, { use, useEffect, useRef, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  TextInput,
+} from "react-native";
 import CommonBall from "./CommonBall";
 import SingleIntegerTextInput from "./SingleIntegerTextInput";
 import CountButtons from "./CountButtons";
@@ -49,7 +56,7 @@ export interface IDigitProps {
     price: number,
     groupId: number,
     gameId: number,
-    targetDateProp: any
+    targetDateProp: any,
   ) => void;
   selectedOption: any;
 
@@ -72,7 +79,7 @@ export interface IDigitProps {
     threeDigitPrice: any,
     groupId: number,
     threeDigitGameId: number,
-    targetDateProp: any
+    targetDateProp: any,
   ) => void;
   onStateChange: any;
   targetDateProp?: any;
@@ -260,30 +267,16 @@ const DigitComponent: React.FC<IDigitProps> = ({
     }
   }, [targetDateProp]);
 
-    
-    
-
-
-
   return (
     <>
       <View style={styles.container}>
         <View style={styles.gameDetailView}>
-          <View
-            style={{
-              paddingHorizontal: Scale(10),
-              paddingVertical: Scale(20),
-              flexDirection: "column",
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "flex-start",
-            }}
-          >
+          <View style={styles.gameDetailSubView}>
             <View style={{ flexDirection: "row" }}>
               <Text style={styles.gameNameText}>{gameName}</Text>
               <TouchableOpacity
                 onPress={() => {
-                  dispatch(showHowToPlay())
+                  dispatch(showHowToPlay());
                 }}
                 style={styles.howtoplayBtn}
               >
@@ -313,7 +306,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
             </View>
           </View>
 
-          <View style={{ paddingHorizontal: 10, paddingVertical: 20 }}>
+          <View style={styles.timeRemainingContainer}>
             <Text style={styles.gameNameText}>Time Remaining</Text>
             <CountdownTimer
               targetDate={targetDate}
@@ -323,7 +316,9 @@ const DigitComponent: React.FC<IDigitProps> = ({
               }}
               onComplete={onTimerComplete}
             />
-            <Text style={[styles.gameNameText, { marginTop: Scale(10) }]}>{nextGameId}</Text>
+            <Text style={[styles.gameNameText, { marginTop: Scale(10) }]}>
+              {nextGameId}
+            </Text>
           </View>
         </View>
 
@@ -346,14 +341,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={{
-                borderBottomLeftRadius: 10,
-                padding: 3,
-                height: 30,
-                bottom: 10,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+              style={styles.linearGradientStyle}
             >
               <Text style={styles.DigitTitleText1}>
                 {" "}
@@ -411,7 +399,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   singleDigitPrice,
                   groupId,
                   singleDigitGameId,
-                  targetDateProp
+                  targetDateProp,
                 )
               }
             />
@@ -458,7 +446,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   singleDigitPrice,
                   groupId,
                   singleDigitGameId,
-                  targetDateProp
+                  targetDateProp,
                 )
               }
             />
@@ -505,7 +493,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   singleDigitPrice,
                   groupId,
                   singleDigitGameId,
-                  targetDateProp
+                  targetDateProp,
                 )
               }
             />
@@ -531,14 +519,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={{
-                borderBottomLeftRadius: 10,
-                padding: 3,
-                height: 30,
-                bottom: 10,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+              style={styles.linearGradientStyle}
             >
               <Text style={styles.DigitTitleText1}>
                 {" "}
@@ -631,7 +612,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   doubleDigitPrice,
                   groupId,
                   doubleDigitGameId,
-                  targetDateProp
+                  targetDateProp,
                 )
               }
             />
@@ -712,7 +693,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   doubleDigitPrice,
                   groupId,
                   doubleDigitGameId,
-                  targetDateProp
+                  targetDateProp,
                 )
               }
             />
@@ -793,7 +774,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   doubleDigitPrice,
                   groupId,
                   doubleDigitGameId,
-                  targetDateProp
+                  targetDateProp,
                 )
               }
             />
@@ -820,14 +801,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
               colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={{
-                borderBottomLeftRadius: 10,
-                padding: 3,
-                height: 30,
-                bottom: 10,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+              style={styles.linearGradientStyle}
             >
               <Text style={styles.DigitTitleText1}>
                 {" "}
@@ -902,21 +876,8 @@ const DigitComponent: React.FC<IDigitProps> = ({
             </View>
           </View>
 
-          <View
-            style={{
-              flexDirection: "row",
-              marginVertical: Scale(20),
-              justifyContent: "space-between",
-              flex: 1,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                flex: 1,
-              }}
-            >
+          <View style={styles.finalViewStyle}>
+            <View style={styles.finalSubViewStyle}>
               {threeDigitA !== "" &&
                 threeDigitB !== "" &&
                 threeDigitC !== "" && (
@@ -933,13 +894,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                   />
                 )}
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                flex: 0.7,
-              }}
-            >
+            <View style={styles.finalSubOneViewStyle}>
               <CommonAddButton
                 innerText={"BOX"}
                 opacity={
@@ -963,7 +918,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                     threeDigitPrice,
                     groupId,
                     threeDigitGameId,
-                    targetDateProp
+                    targetDateProp,
                   );
                 }}
               />
@@ -996,7 +951,7 @@ const DigitComponent: React.FC<IDigitProps> = ({
                     threeDigitPrice,
                     groupId,
                     threeDigitGameId,
-                    targetDateProp
+                    targetDateProp,
                   )
                 }
               />
@@ -1172,6 +1127,42 @@ const createStyles = (Scale: any) =>
       justifyContent: "space-between",
       marginHorizontal: Scale(5),
       marginVertical: Scale(5),
+    },
+    gameDetailSubView: {
+      paddingHorizontal: Scale(10),
+      paddingVertical: Scale(20),
+      flexDirection: "column",
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "flex-start",
+    },
+    timeRemainingContainer: {
+      paddingHorizontal: 10,
+      paddingVertical: 20,
+    },
+    linearGradientStyle: {
+      borderBottomLeftRadius: 10,
+      padding: 3,
+      height: 30,
+      bottom: 10,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    finalViewStyle: {
+      flexDirection: "row",
+      marginVertical: Scale(20),
+      justifyContent: "space-between",
+      flex: 1,
+    },
+    finalSubViewStyle: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      flex: 1,
+    },
+    finalSubOneViewStyle: {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      flex: 0.7,
     },
   });
 

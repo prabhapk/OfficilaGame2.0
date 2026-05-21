@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import CommonBall from "./CommonBall"; // adjust path
 import TableCommonBall from "./TableCommonBall"; // adjust path
 import { COLORS } from "../Constants/Theme";
@@ -14,7 +8,7 @@ import { ImageBackground } from "expo-image";
 import { copyImage, myOrdersWinLabel, winLabel } from "../../assets/assets";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Clipboard from "expo-clipboard";
-import { Image } from 'expo-image';
+import { Image } from "expo-image";
 
 type BetData = {
   type: string;
@@ -143,7 +137,9 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
         <View style={styles.gameDetailsSection}>
           <View style={styles.detailsSubHeader}>
             <View>
-              <Text style={styles.detailText}>{gameName || "AvisGaming"}</Text>
+              <Text style={styles.detailText}>
+                {gameName || "Dear24Gaming"}
+              </Text>
               <Text style={[styles.detailText1, { flexWrap: "wrap" }]}>
                 Draw time: {drawTime || "-"}
               </Text>
@@ -182,8 +178,8 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
                     head === "A"
                       ? "#DE3C3F"
                       : head === "B"
-                      ? "#EC8204"
-                      : "#066FEA";
+                        ? "#EC8204"
+                        : "#066FEA";
                   return (
                     <TableCommonBall
                       key={head}
@@ -203,7 +199,9 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
             {/* Table Rows */}
             {myBetsTableData.map((bet, rowIndex) => {
               const isEvenRow = rowIndex % 2 === 0;
-              const rowBgColor = isEvenRow ? COLORS.tableSecondaryColor  : COLORS.tableTopColor;
+              const rowBgColor = isEvenRow
+                ? COLORS.tableSecondaryColor
+                : COLORS.tableTopColor;
 
               const totalPaymentAmount = bet?.betCount * bet?.payment;
 
@@ -213,14 +211,14 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
                   style={[styles.tableRow, { backgroundColor: rowBgColor }]}
                 >
                   {/* Row Balls */}
-                  <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
+                  <View style={styles.rowBalls}>
                     {headers.map((colHead) => {
                       let color =
                         colHead === "A"
                           ? "#DE3C3F"
                           : colHead === "B"
-                          ? "#EC8204"
-                          : "#066FEA";
+                            ? "#EC8204"
+                            : "#066FEA";
 
                       const digits = String(bet.value).split("");
                       let showDigit = "-";
@@ -251,9 +249,7 @@ const MyBets3DigitsCard: React.FC<MyBetsCardProps> = ({
                   </Text>
 
                   {/* Result */}
-                  <Text style={{ color: COLORS.white, marginRight: 20 }}>
-                    {status}
-                  </Text>
+                  <Text style={styles.resultText}>{status}</Text>
                 </View>
               );
             })}
@@ -368,7 +364,7 @@ const createStyles = (Scale: any) =>
       borderStyle: "dashed",
     },
     myBetsSection: {
-      backgroundColor:COLORS.gameDetailColor,
+      backgroundColor: COLORS.gameDetailColor,
     },
     dateStatusRow: {
       flexDirection: "row",
@@ -478,6 +474,14 @@ const createStyles = (Scale: any) =>
       fontSize: 16,
       color: "white",
       marginVertical: 30,
+    },
+    rowBalls: {
+      flexDirection: "row",
+      marginHorizontal: 10,
+    },
+    resultText: {
+      color: COLORS.white,
+      marginRight: 20,
     },
   });
 

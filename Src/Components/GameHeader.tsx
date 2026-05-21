@@ -8,19 +8,30 @@ import {
   View,
   ActivityIndicator,
   Platform,
-} from 'react-native';
-import React, { useEffect, useState, useCallback } from 'react';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { customerService, CustomerServiceIcon, customerServiceTopIcon, headerWallet, refreshIcon, walletIcon } from '../../assets/assets';
-import { LinearGradient } from 'expo-linear-gradient';
-import Theme, { COLORS, Fonts } from '../Constants/Theme';
-import { Image } from 'expo-image';
-import CommonAddButton from './CommonAddButton';
-import { useContainerScale } from '../hooks/useContainerScale';
-import { initFreshchat, setFreshchatUser, openFreshchat } from '../Utils/freshchat';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Entypo from 'react-native-vector-icons/Entypo';
+} from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import Feather from "react-native-vector-icons/Feather";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import {
+  customerService,
+  CustomerServiceIcon,
+  customerServiceTopIcon,
+  headerWallet,
+  refreshIcon,
+  walletIcon,
+} from "../../assets/assets";
+import { LinearGradient } from "expo-linear-gradient";
+import Theme, { COLORS, Fonts } from "../Constants/Theme";
+import { Image } from "expo-image";
+import CommonAddButton from "./CommonAddButton";
+import { useContainerScale } from "../hooks/useContainerScale";
+import {
+  initFreshchat,
+  setFreshchatUser,
+  openFreshchat,
+} from "../Utils/freshchat";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Entypo from "react-native-vector-icons/Entypo";
 interface Props {
   HeaderText: string;
   leftonPress: (event: GestureResponderEvent) => void;
@@ -40,9 +51,8 @@ const GameHeader: React.FC<Props> = ({
   onPressWithdraw,
   onPressRecharge,
   walletBalance,
-  onPressRefresh
+  onPressRefresh,
 }) => {
-
   const { Scale, verticalScale } = useContainerScale();
   const insets = useSafeAreaInsets();
   const styles = createStyles(Scale, insets);
@@ -56,7 +66,7 @@ const GameHeader: React.FC<Props> = ({
     // Show loading state
     console.log("Opening Freshchat...");
     setIsChatLoading(true);
-    
+
     try {
       // Pass real user details here
       await setFreshchatUser({
@@ -67,15 +77,14 @@ const GameHeader: React.FC<Props> = ({
         externalId: "user-123",
         properties: { tier: "gold" },
       });
-      
+
       // Open chat (will auto-open on web, no second click needed)
       openFreshchat();
-      
+
       // Hide loading after a delay to allow chat to open
       setTimeout(() => {
         setIsChatLoading(false);
       }, 2000);
-      
     } catch (error) {
       console.error("Error opening chat:", error);
       setIsChatLoading(false);
@@ -88,21 +97,20 @@ const GameHeader: React.FC<Props> = ({
         colors={[COLORS.white, COLORS.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
-        style={styles.button}>
+        style={styles.button}
+      >
         <View style={styles.topRowWrap}>
           <View style={styles.topRow}>
-            <TouchableOpacity style={styles.leftImageStyle} onPress={leftonPress}>
-               <Entypo
-                              name={'chevron-left'}
-                              size={Scale(30)}
-                             tintColor={!isChatLoading ? COLORS.primary : COLORS.white}
-                             style={{
-                                alignItems: "center",
-      marginHorizontal: 4,
-      marginVertical: 2,
-      marginTop: 10,
-                             }}
-                            />
+            <TouchableOpacity
+              style={styles.leftImageStyle}
+              onPress={leftonPress}
+            >
+              <Entypo
+                name={"chevron-left"}
+                size={Scale(30)}
+                tintColor={!isChatLoading ? COLORS.primary : COLORS.white}
+                style={styles.iconLeftIconStyle}
+              />
             </TouchableOpacity>
             <View style={styles.headerTextWrap}>
               <Text style={styles.headerTextStyle}>{HeaderText}</Text>
@@ -110,7 +118,8 @@ const GameHeader: React.FC<Props> = ({
             <TouchableOpacity
               onPress={onPressChat}
               style={styles.chatButtonWrap}
-              disabled={isChatLoading}>
+              disabled={isChatLoading}
+            >
               <View style={{ position: "relative" }}>
                 <Image
                   source={CustomerServiceIcon}
@@ -143,20 +152,22 @@ const GameHeader: React.FC<Props> = ({
             {/* <TouchableOpacity onPress={onPressWithdraw} style={styles.withdrawButton}>
               <Text style={styles.withdrawButtonText}>Withdraw</Text>
             </TouchableOpacity> */}
-             <LinearGradient
+            <LinearGradient
               colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={styles.rechargeGradient}>
+              style={styles.rechargeGradient}
+            >
               <TouchableOpacity onPress={onPressRecharge}>
-              <Text style={styles.rechargeButtonText}>Withdraw</Text>
+                <Text style={styles.rechargeButtonText}>Withdraw</Text>
               </TouchableOpacity>
             </LinearGradient>
             <LinearGradient
               colors={[COLORS.linearOne, COLORS.linearTwo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={styles.rechargeGradient}>
+              style={styles.rechargeGradient}
+            >
               <TouchableOpacity onPress={onPressRecharge}>
                 <Text style={styles.rechargeButtonText}>Recharge</Text>
               </TouchableOpacity>
@@ -167,7 +178,6 @@ const GameHeader: React.FC<Props> = ({
     </View>
   );
 };
-
 
 const createStyles = (Scale: any, insets: any) =>
   StyleSheet.create({
@@ -300,6 +310,12 @@ const createStyles = (Scale: any, insets: any) =>
       justifyContent: "center",
       alignItems: "center",
       marginLeft: Scale(10),
+    },
+    iconLeftIconStyle: {
+      alignItems: "center",
+      marginHorizontal: 4,
+      marginVertical: 2,
+      marginTop: 10,
     },
   });
 

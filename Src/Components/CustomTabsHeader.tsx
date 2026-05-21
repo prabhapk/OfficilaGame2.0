@@ -1,7 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, TouchableOpacity, ScrollView, Text } from 'react-native';
-import { useContainerScale } from '../hooks/useContainerScale';
-import { COLORS } from '../Constants/Theme';
+import React, { useRef, useState, useEffect } from "react";
+import {
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Text,
+  StyleSheet,
+} from "react-native";
+import { useContainerScale } from "../hooks/useContainerScale";
+import { COLORS } from "../Constants/Theme";
 
 interface TabItem {
   id: number | string;
@@ -27,11 +33,14 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
   lightTheme = false,
 }) => {
   const scrollRef = useRef<ScrollView>(null);
-  const [tabLayouts, setTabLayouts] = useState<{ x: number; width: number }[]>([]);
+  const [tabLayouts, setTabLayouts] = useState<{ x: number; width: number }[]>(
+    [],
+  );
   const { Scale } = useContainerScale();
+  const styles = createStyles(Scale);
 
-  const textColor = lightTheme ? COLORS.white : '#fff';
-  const borderColor = lightTheme ? COLORS.white : '#fff';
+  const textColor = lightTheme ? COLORS.white : "#fff";
+  const borderColor = lightTheme ? COLORS.white : "#fff";
 
   useEffect(() => {
     if (tabLayouts[index] && scrollRef.current) {
@@ -43,24 +52,27 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
   }, [index, tabLayouts]);
 
   return (
-    <View style={[{ backgroundColor: lightTheme ? COLORS.primary : COLORS.primary }, style]}>
+    <View
+      style={[
+        { backgroundColor: lightTheme ? COLORS.primary : COLORS.primary },
+        style,
+      ]}
+    >
       <ScrollView
         ref={scrollRef}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ alignItems: 'center' }}
+        contentContainerStyle={{ alignItems: "center" }}
       >
         {tabs.map((tab: any, idx) => (
           <TouchableOpacity
             key={tab.id}
-            style={{
-              paddingHorizontal: 20,
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingVertical: 12,
-              borderBottomWidth: 3,
-              borderBottomColor: idx === index ? borderColor : 'transparent',
-            }}
+            style={[
+              styles.touchableStyle,
+              {
+                borderBottomColor: idx === index ? borderColor : "transparent",
+              },
+            ]}
             onPress={() => {
               onIndexChange(idx);
               onSelectGameTypeId?.(tab?.gameTypeId);
@@ -77,7 +89,7 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
             <Text
               style={{
                 color: textColor,
-                fontWeight: idx === index ? '700' : '500',
+                fontWeight: idx === index ? "700" : "500",
               }}
             >
               {tab.name}
@@ -88,5 +100,15 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
     </View>
   );
 };
+const createStyles = (Scale: any) =>
+  StyleSheet.create({
+    touchableStyle: {
+      paddingHorizontal: 20,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 12,
+      borderBottomWidth: 3,
+    },
+  });
 
 export default CustomTabs;
