@@ -22,6 +22,7 @@ import {
 } from "../Redux/Slice/depositSlice";
 import Toast from "react-native-toast-message";
 import { Image } from "expo-image";
+import LoadingSpinnerButton from "../Components/LoadingSpinnerButton";
 const WalletScreenUI = ({ navigation }: any) => {
   const [walletAmount, setWalletAmount] = useState(0);
   const [selectedAmount, setSelectedAmount] = useState("300");
@@ -44,7 +45,7 @@ const WalletScreenUI = ({ navigation }: any) => {
   const { mainWalletBalance } = useSelector(
     (state: RootState) => state.signInSlice,
   );
-  const { paymentGateWayLists, paymentGateWayListsLoader } = useSelector(
+  const { paymentGateWayLists, paymentGateWayListsLoader, depositLoader } = useSelector(
     (state: RootState) => state.depositSlice,
   );
 
@@ -293,8 +294,13 @@ const WalletScreenUI = ({ navigation }: any) => {
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.signInButton}
-          >
-            <Text style={styles.signInButtonText}>Recharge</Text>
+            >
+             {depositLoader ? (
+      <LoadingSpinnerButton color="#fff" durationMs={1000} />
+    ) : (
+      <Text style={styles.signInButtonText}>Recharge</Text>
+    )} 
+          
           </LinearGradient>
         </TouchableOpacity>
       </View>

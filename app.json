@@ -1,46 +1,53 @@
 {
   "expo": {
     "name": "Dear24Gaming",
-    "slug": "dear24-gaming",   
+    "slug": "dear24-gaming",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/newAppIcon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+
     "splash": {
       "image": "./assets/newAppIcon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ajay-gaming.Demo"
+      "bundleIdentifier": "com.ajaygaming.dear24gaming"
     },
-   "android": {
-  "edgeToEdgeEnabled": false,
-  "adaptiveIcon": {
-    "foregroundImage": "./assets/newAppIcon.png",
-    "backgroundColor": "#ffffff"
-  },
-  "package": "com.ajay_gaming.Demo",
-  "statusBar": {
-    "backgroundColor": "black",
-    "barStyle": "dark-content",
-    "translucent": false
-  }
-},
+
+    "android": {
+      "edgeToEdgeEnabled": false,
+
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/newAppIcon.png",
+        "backgroundColor": "#ffffff"
+      },
+
+      "package": "com.ajaygaming.dear24gaming",
+
+      "statusBar": {
+        "backgroundColor": "black",
+        "barStyle": "dark-content",
+        "translucent": false
+      }
+    },
+
     "web": {
       "favicon": "./assets/favicon.png"
     },
+
     "scheme": "dear24gaming",
+
     "extra": {
       "eas": {
-        "projectId": "40bc88ac-9f46-4364-b391-35541389ad1d"
+        "projectId": "70cdc270-4f3b-45cd-9988-6a9ea5ce7bc7"
       }
     },
-    "runtimeVersion": "1.0.0",
-    "updates": {
-      "url": "https://u.expo.dev/40bc88ac-9f46-4364-b391-35541389ad1d"
-    }
+
+    "runtimeVersion": "1.0.0"
   }
 }
