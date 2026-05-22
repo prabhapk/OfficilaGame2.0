@@ -124,6 +124,7 @@ export interface CommonSliceState {
     paymentGateWayListsLoader: boolean,
     depositLoader:boolean,
     depositData:any
+    paymentPageURL:string
   }
 
   export interface agentSliceState {
@@ -143,7 +144,8 @@ export interface CommonSliceState {
     commissionBonusData: any;
     totalRecharge: number;
     totalCommissions: number;
-    rechargeBonusFUllData:any
+    rechargeBonusFUllData:any;
+    teamData:any
   }
   export interface rebateSliceState {
     rebateData: any;

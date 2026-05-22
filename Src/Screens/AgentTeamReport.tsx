@@ -18,6 +18,7 @@ import NewAppHeader from "../Components/NewAppHeader";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAgentDashboardData,
+  getMyTeamData,
   getRechargeBonusData,
 } from "../Redux/Slice/agentSlice";
 import { RootState } from "../Redux/store";
@@ -28,21 +29,39 @@ import { Ionicons } from "@expo/vector-icons";
 import { defaultRechargeData } from "../Utils/Constants";
 
 const AgentTeamReport = ({ navigation }: any) => {
-  const DATA = [
-    { id: "1", userId: "1", recharge: "₹10.00", commission: "₹5.00" },
-    { id: "2", userId: "2", recharge: "₹0.00", commission: "₹0.00" },
-    { id: "3", userId: "3", recharge: "₹70.00", commission: "₹13.00" },
-    { id: "4", userId: "4", recharge: "₹0.00", commission: "₹0.00" },
-    { id: "5", userId: "5", recharge: "₹0.00", commission: "₹0.00" },
-    { id: "6", userId: "6", recharge: "₹0.00", commission: "₹0.00" },
-    { id: "7", userId: "7", recharge: "₹0.00", commission: "₹0.00" },
-  ];
+    const { rechargeBonusData, dashboardData, rechargeBonusFUllData, teamData } =
+    useSelector((state: RootState) => state.agentSlice);
+  const [selectedLevel, setSelectedLevel] = useState("All");
+const levelsData = teamData?.data?.levels || [];
+const tableData =
+  selectedLevel === "All"
+    ? levelsData.flatMap((levelItem: any) =>
+        levelItem.members.map((member: any) => ({
+          id: `${levelItem.level}-${member.userId}`,
+          level: levelItem.level,
+          userId: member.userId,
+          recharge: member.totalRecharge,
+          commission: member.totalBetCommission,
+        })),
+      )
+    : levelsData
+        .filter(
+          (item: any) => item.level === Number(selectedLevel),
+        )
+        .flatMap((levelItem: any) =>
+          levelItem.members.map((member: any) => ({
+            id: `${levelItem.level}-${member.userId}`,
+            level: levelItem.level,
+            userId: member.userId,
+            recharge: member.totalRecharge,
+            commission: member.totalBetCommission,
+          })),
+        );
   const dispatch = useDispatch();
   const [showShareModal, setShowShareModal] = useState(false);
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
-  const { rechargeBonusData, dashboardData, rechargeBonusFUllData } =
-    useSelector((state: RootState) => state.agentSlice);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
      const safeRechargeData =
@@ -53,9 +72,11 @@ const AgentTeamReport = ({ navigation }: any) => {
   const itemsPerPage = 5;
 
   // FILTERED DATA
-  const filteredData = DATA.filter((item) =>
-    item.userId.toLowerCase().includes(searchText.toLowerCase()),
-  );
+const filteredData = tableData.filter((item: any) =>
+  String(item.userId)
+    .toLowerCase()
+    .includes(searchText.toLowerCase()),
+);
 
   // TOTAL PAGES
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -66,13 +87,17 @@ const AgentTeamReport = ({ navigation }: any) => {
     currentPage * itemsPerPage,
   );
 
-  const { userId } = useSelector((state: RootState) => state.signInSlice);
+  const { userId, agentId } = useSelector((state: RootState) => state.signInSlice);
   console.log("userId==>", userId);
   console.log("dashboardData==>", dashboardData);
 
   useEffect(() => {
     dispatch(getRechargeBonusData({ userId: userId }));
   }, [dispatch, userId]);
+
+  useEffect(() => {
+    dispatch(getMyTeamData({ agentId: agentId }));
+  }, [dispatch, agentId]);
 
   const handleBackPress = () => {
     navigation.goBack();
@@ -84,213 +109,6 @@ const AgentTeamReport = ({ navigation }: any) => {
   const qualifiedUsers =
     rechargeBonusFUllData?.userStats?.qualifiedUsersPerLevel || {};
 
-  //   const renderTeamReportItem = ({ item }) => {
-  //     const invitedCount = invitedlist[item.level] || 0;
-  // const qualifiedCount = qualifiedUsers[item.level] || 0;
-  //       return (
-  //           <View style ={{
-  //               backgroundColor: COLORS.white,
-  //               marginHorizontal: Scale(20),
-  //               marginTop: Scale(10),
-  //               borderRadius: Scale(6),
-  //               padding: Scale(10),
-  //               borderWidth: 1,
-  //               borderColor: '#fff',
-  //               marginBottom: Scale(10),
-  //           }}>
-  //               <View style ={{
-  //                   flexDirection: 'row',
-  //                   justifyContent: 'space-between',
-  //                   alignItems: 'center',
-  //                   borderBottomColor: COLORS.black,
-  //                   borderBottomWidth: 1,
-  //                   padding: Scale(5),
-  //                   borderTopColor: 'transparent',
-  //                   borderTopWidth: 0,
-  //                   borderLeftColor: 'transparent',
-  //                   borderRightColor: 'transparent',
-
-  //               }}>
-  //               <Text style= {{
-  //                   fontSize: Scale(20),
-  //                   fontWeight: 'bold',
-  //                   color: '#000',
-  //               }}>Level {item?.level}</Text>
-  //               <Text
-  //               style={{
-  //                   fontSize: Scale(20),
-  //                   fontWeight: 'bold',
-  //                   color: '#000'
-  //               }}
-  //               >₹{item.bonusAmount}</Text>
-  //               </View>
-  //               <View style ={{
-  //                   flexDirection: 'row',
-  //                   justifyContent: 'space-between',
-  //                   alignItems: 'center',
-  //                   backgroundColor: '#F1F2F6',
-  //                   padding: Scale(5),
-  //                   borderWidth: 1,
-  //                   borderRadius: Scale(4),
-  //                   marginVertical: Scale(5),
-  //                   borderColor: '#F1F2F6',
-  //                   marginTop: Scale(10),
-  //               }}>
-  //                    <Text style= {{
-  //                       fontSize: Scale(14),
-  //                       fontWeight: '400',
-  //                       color: '#000',
-  //                       paddingVertical: Scale(5),
-  //                   }}>
-  //                       Number of invites
-  //                   </Text>
-  //                   <Text style= {{
-  //                       fontSize: Scale(14),
-  //                       fontWeight: 'bold',
-  //                   }}>
-  //                     1
-  //                   </Text>
-  //               </View>
-  //               <View style ={{
-  //                   flexDirection: 'row',
-  //                   justifyContent: 'space-between',
-  //                   alignItems: 'center',
-  //                   backgroundColor: '#F1F2F6',
-  //                   padding: Scale(5),
-  //                   borderWidth: 1,
-  //                   borderRadius: Scale(4),
-  //                   marginVertical: Scale(2),
-  //                   borderColor: '#F1F2F6',
-  //                   marginTop: Scale(5),
-  //               }}>
-  //                   <Text style= {{
-  //                       fontSize: Scale(14),
-  //                       fontWeight: '400',
-  //                       color: '#000',
-  //                   }}>
-  //                       Recharge per people
-  //                   </Text>
-  //                   <Text style ={{
-  //                       fontSize: Scale(14),
-  //                       fontWeight: 'bold',
-  //                       color: '#000'
-  //                   }}>
-  //                   ₹{item.minimumRechargePerPerson}
-  //                   </Text>
-  //               </View>
-  //               <View style ={{
-  //                   flexDirection: 'row',
-  //                   justifyContent: 'space-between',
-  //                   alignItems: 'center',
-  //               }}>
-  //                   <View style ={{
-  //                       marginHorizontal: Scale(20),
-  //                       marginTop: Scale(20),
-  //                   }}>
-  //                       <View style ={{
-  //                           flexDirection: 'row',
-  //                           alignItems: 'center',
-  //                           marginLeft: Scale(20),
-  //                       }}>
-  //                   <Text style ={{
-  //                       fontSize: Scale(16),
-  //                       fontWeight: 'bold',
-  //                       color: 'red',
-  //                   }}>
-  //                       {invitedCount}/
-  //                   </Text>
-  //                   <Text style ={{
-  //                       fontSize: Scale(16),
-  //                       fontWeight: 'bold',
-  //                       color: COLORS.black
-  //                   }}>
-  //                       {item.totalPeopleRequired}
-  //                   </Text>
-  //                   </View>
-  //                   <Text style ={{
-  //                       fontSize: Scale(12),
-  //                       fontWeight: '600',
-  //                       color: COLORS.black,
-  //                       marginVertical: Scale(5),
-  //                   }}>
-  //                       Number of invites
-  //                   </Text>
-  //                   </View>
-  //                   <View style ={{
-  //                       marginHorizontal: Scale(20),
-  //                       marginTop: Scale(20),
-  //                   }}>
-  //                   <View style ={{
-  //                       flexDirection: 'row',
-  //                       alignItems: 'center',
-  //                       marginLeft: Scale(20),
-  //                   }}>
-  //                   <Text style ={{
-  //                       fontSize: Scale(16),
-  //                       fontWeight: 'bold',
-  //                       color: 'red'
-  //                   }}>
-  //                      {qualifiedCount}/
-  //                   </Text>
-  //                   <Text style ={{
-  //                       fontSize: Scale(16),
-  //                       fontWeight: 'bold',
-  //                       color: COLORS.black
-  //                   }}>
-  //                       {item.totalPeopleRequired}
-  //                   </Text>
-  //                   </View>
-  //                   <Text style ={{
-  //                       fontSize: Scale(12),
-  //                       fontWeight: '600',
-  //                       color: COLORS.black,
-  //                       marginVertical: Scale(5),
-  //                   }}>
-  //                      Deposit number
-  //                   </Text>
-  //                   </View>
-  //               </View>
-  //               <View>
-
-  //                   {/* <TouchableOpacity
-  //                   style ={{
-  //                       backgroundColor: '#00B612',
-  //                       padding: Scale(10),
-  //                       borderRadius: Scale(20),
-  //                       marginTop: Scale(15),
-  //                       marginHorizontal: Scale(10),
-  //                   }}
-  //                   onPress={handleInvite}
-  //                   >
-  //                       <Text style ={{
-  //                           color: COLORS.white,
-  //                           fontSize: Scale(14),
-  //                           fontWeight: 'bold',
-  //                           textAlign: 'center',
-  //                       }}>
-  //                           Go Complete
-  //                       </Text>
-  //                   </TouchableOpacity> */}
-  //                   <LinearGradient
-  //           // colors={[COLORS.linearOne, COLORS.linearTwo]}
-  //           colors={['red', 'grey']}
-  //           start={{ x: 0, y: 0 }}
-  //           end={{ x: 1, y: 0 }}
-  //           style={styles.invitationLinkButton}
-  //         >
-  //           <TouchableOpacity
-  //             style={styles.invitationLinkTouchable}
-  //             onPress={handleInvite}
-  //           >
-  //             <Text style={styles.invitationLinkText}>Go Complete</Text>
-  //           </TouchableOpacity>
-  //         </LinearGradient>
-
-  //               </View>
-  //           </View>
-  //       )
-
-  //   }
   const renderTeamReportItem = ({ item }: any) => {
     const invitedCount = invitedlist[item.level] || 0;
     const qualifiedCount = qualifiedUsers[item.level] || 0;
@@ -496,15 +314,33 @@ const AgentTeamReport = ({ navigation }: any) => {
     }
   };
 
-  const renderTableItem = ({ item }: any) => (
-    <View style={styles.row}>
-      <Text style={styles.userText}>{item.userId}</Text>
+const renderTableItem = ({ item, index }: any) => (
+  <View
+    style={[
+      styles.row,
+      {
+        backgroundColor:
+          index % 2 === 0 ? "#FFFFFF" : "#F8F8F8",
+      },
+    ]}
+  >
+    <View style={styles.userContainer}>
+   
 
-      <Text style={styles.rechargeText}>{item.recharge}</Text>
-
-      <Text style={styles.commissionText}>{item.commission}</Text>
+      <Text style={styles.userText}>
+        {item.userId}
+      </Text>
     </View>
-  );
+
+    <Text style={styles.rechargeText}>
+      ₹{Number(item.recharge).toFixed(2)}
+    </Text>
+
+    <Text style={styles.commissionText}>
+      ₹{Number(item.commission).toFixed(2)}
+    </Text>
+  </View>
+);
 
   return (
     <View style={styles.container}>
@@ -520,6 +356,7 @@ const AgentTeamReport = ({ navigation }: any) => {
         contentContainerStyle={{
           paddingBottom: Scale(10),
           paddingTop: Scale(10),
+
         }}
         removeClippedSubviews={false}
       />
@@ -528,12 +365,14 @@ const AgentTeamReport = ({ navigation }: any) => {
         style={{
           // marginTop: Scale(20),
           marginHorizontal: Scale(20),
+          
         }}
       >
+
         {/* Header */}
         <View style={styles.topContainer}>
           <View style={styles.titleContainer}>
-            <Ionicons name="people" size={20} color="white" />
+            <Ionicons name="people" size={16} color="white" />
             <Text style={styles.title}>My Teams</Text>
           </View>
 
@@ -552,12 +391,46 @@ const AgentTeamReport = ({ navigation }: any) => {
             />
           </View>
         </View>
+                <ScrollView
+  horizontal
+  showsHorizontalScrollIndicator={false}
+  contentContainerStyle={{
+    paddingVertical: Scale(10),
+  }}
+>
+  {["All", "1", "2", "3", "4"].map((level) => {
+    const isActive = selectedLevel === level;
+
+    return (
+      <TouchableOpacity
+        key={level}
+        onPress={() => {
+          setSelectedLevel(level);
+          setCurrentPage(1);
+        }}
+        style={[
+          styles.filterButton,
+          isActive && styles.activeFilterButton,
+        ]}
+      >
+        <Text
+          style={[
+            styles.filterButtonText,
+            isActive && styles.activeFilterText,
+          ]}
+        >
+          {level === "All" ? "All" : `Level ${level}`}
+        </Text>
+      </TouchableOpacity>
+    );
+  })}
+</ScrollView>
 
         {/* Table */}
         <View style={styles.tableContainer}>
           {/* Table Header */}
           <View style={styles.tableHeader}>
-            <Text style={styles.headerText}>USER</Text>
+            <Text style={styles.headerText}>USER ID</Text>
             <Text style={styles.headerText}>RECHARGE</Text>
             <Text style={styles.headerText}>COMMISSION</Text>
           </View>
@@ -819,15 +692,15 @@ const createStyles = (Scale: any) =>
       color: "#fff",
       textAlign: "center",
     },
-    row: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      paddingVertical: 15,
-      paddingHorizontal: 18,
-      borderBottomWidth: 1,
-      borderBottomColor: "#F0F0F0",
-    },
+    // row: {
+    //   flexDirection: "row",
+    //   justifyContent: "space-between",
+    //   alignItems: "center",
+    //   paddingVertical: 15,
+    //   paddingHorizontal: 18,
+    //   borderBottomWidth: 1,
+    //   borderBottomColor: "#F0F0F0",
+    // },
 
     userText: {
       flex: 1,
@@ -856,7 +729,7 @@ const createStyles = (Scale: any) =>
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      marginBottom: 20,
+      // marginBottom: 10,
       paddingVertical: 5,
     },
 
@@ -866,7 +739,7 @@ const createStyles = (Scale: any) =>
     },
 
     title: {
-      fontSize: 20,
+      fontSize: Scale(16),
       fontWeight: "700",
       color: "white",
       marginLeft: 8,
@@ -878,10 +751,12 @@ const createStyles = (Scale: any) =>
       backgroundColor: "#fff",
       borderRadius: 12,
       paddingHorizontal: 12,
-      width: "50%",
-      height: 40,
+      // width: "50%",
+      height: Scale(40),
       elevation: 2,
       marginVertical: Scale(5),
+      flex: 1,
+marginLeft: Scale(30),
     },
 
     input: {
@@ -890,29 +765,29 @@ const createStyles = (Scale: any) =>
       color: "#000",
     },
 
-    tableContainer: {
-      backgroundColor: "#fff",
-      borderRadius: 18,
-      overflow: "hidden",
-    },
+    // tableContainer: {
+    //   backgroundColor: "#fff",
+    //   borderRadius: 18,
+    //   overflow: "hidden",
+    // },
 
-    tableHeader: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      paddingVertical: 18,
-      paddingHorizontal: 18,
-      borderBottomWidth: 1,
-      borderBottomColor: "#C9A3E6",
-      backgroundColor: "#FAF9FD",
-    },
+    // tableHeader: {
+    //   flexDirection: "row",
+    //   justifyContent: "space-between",
+    //   paddingVertical: 18,
+    //   paddingHorizontal: 18,
+    //   borderBottomWidth: 1,
+    //   borderBottomColor: "#C9A3E6",
+    //   backgroundColor: "#FAF9FD",
+    // },
 
-    headerText: {
-      flex: 1,
-      fontSize: 14,
-      fontWeight: "700",
-      color: "#3B214A",
-      textAlign: "center",
-    },
+    // headerText: {
+    //   flex: 1,
+    //   fontSize: 14,
+    //   fontWeight: "700",
+    //   color: "#3B214A",
+    //   textAlign: "center",
+    // },
     infoBox: {
       backgroundColor: "#F5F2FF",
       borderRadius: Scale(14),
@@ -954,16 +829,17 @@ const createStyles = (Scale: any) =>
       justifyContent: "space-between",
       alignItems: "center",
       paddingHorizontal: Scale(18),
-      paddingVertical: Scale(10),
+      paddingVertical: Scale(5),
     },
 
     levelBody: {
-      padding: Scale(10),
+      padding: Scale(5),
+      paddingHorizontal: Scale(10),
     },
 
     levelText: {
       color: "#fff",
-      fontSize: Scale(20),
+      fontSize: Scale(16),
       fontWeight: "700",
     },
 
@@ -976,14 +852,14 @@ const createStyles = (Scale: any) =>
 
     bonusAmount: {
       color: "#fff",
-      fontSize: Scale(24),
+      fontSize: Scale(16),
       fontWeight: "bold",
     },
 
     topInfoRow: {
       flexDirection: "row",
       justifyContent: "space-between",
-      marginBottom: Scale(14),
+      marginBottom: Scale(10),
     },
 
     smallInfoCard: {
@@ -995,13 +871,13 @@ const createStyles = (Scale: any) =>
     },
 
     smallInfoTitle: {
-      fontSize: Scale(11),
+      fontSize: Scale(10),
       color: "#666",
       marginTop: Scale(6),
     },
 
     smallInfoValue: {
-      fontSize: Scale(17),
+      fontSize: Scale(14),
       fontWeight: "700",
       color: "#222",
       marginTop: Scale(4),
@@ -1018,25 +894,25 @@ const createStyles = (Scale: any) =>
     },
 
     progressLabel: {
-      fontSize: Scale(13),
+      fontSize: Scale(10),
       color: "#444",
       fontWeight: "600",
     },
 
     progressCount: {
-      fontSize: Scale(13),
+      fontSize: Scale(10),
       fontWeight: "700",
       color: "#00C853",
     },
 
     depositCount: {
-      fontSize: Scale(13),
+      fontSize: Scale(10),
       fontWeight: "700",
       color: "#00A86B",
     },
 
     progressBarBg: {
-      height: Scale(8),
+      height: Scale(6),
       backgroundColor: "#ECECEC",
       borderRadius: Scale(20),
       overflow: "hidden",
@@ -1060,7 +936,7 @@ const createStyles = (Scale: any) =>
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      paddingVertical: Scale(13),
+      paddingVertical: Scale(10),
     },
 
     completeText: {
@@ -1081,7 +957,7 @@ const createStyles = (Scale: any) =>
       width: Scale(38),
       height: Scale(38),
       borderRadius: Scale(10),
-      backgroundColor: COLORS.linearOne,
+      backgroundColor: COLORS.primary,
       justifyContent: "center",
       alignItems: "center",
       marginHorizontal: Scale(4),
@@ -1111,7 +987,7 @@ const createStyles = (Scale: any) =>
     },
 
     activePageNumber: {
-      backgroundColor: COLORS.linearOne,
+      backgroundColor: COLORS.primary,
     },
 
     pageText: {
@@ -1127,5 +1003,98 @@ const createStyles = (Scale: any) =>
       minHeight: Scale(260),
       maxHeight: Scale(260),
     },
+   filterButton: {
+  paddingHorizontal: 18,
+  paddingVertical: 8,
+  borderRadius: 30,
+  backgroundColor: "#fff",
+  marginRight: 10,
+  marginBottom: 10,
+  elevation: 3,
+
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.08,
+  shadowRadius: 3,
+},
+
+activeFilterButton: {
+  backgroundColor: COLORS.primary,
+  borderColor: COLORS.white,
+  borderWidth: 1,
+},
+
+filterButtonText: {
+  color: "#333",
+  fontWeight: "700",
+},
+
+activeFilterText: {
+  color: "#fff",
+},
+userContainer: {
+  flex: 1,
+  flexDirection: "row",
+  alignItems: "center",
+},
+
+avatarCircle: {
+  width: Scale(30),
+  height: Scale(30),
+  borderRadius: Scale(15),
+  backgroundColor: COLORS.linearOne,
+  justifyContent: "center",
+  alignItems: "center",
+  marginRight: Scale(8),
+},
+
+avatarText: {
+  color: "#fff",
+  fontWeight: "700",
+},
+
+tableContainer: {
+  backgroundColor: "#fff",
+  borderRadius: 18,
+  overflow: "hidden",
+  marginBottom: Scale(30),
+  elevation: 5,
+
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 3,
+  },
+  shadowOpacity: 0.12,
+  shadowRadius: 5,
+},
+
+tableHeader: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  paddingVertical: 16,
+  paddingHorizontal: 16,
+  backgroundColor: COLORS.secondaryTextColor,
+},
+
+headerText: {
+  flex: 1,
+  fontSize: 13,
+  fontWeight: "700",
+  color: "#fff",
+  textAlign: "center",
+},
+
+row: {
+  flexDirection: "row",
+  alignItems: "center",
+  paddingVertical: 14,
+  paddingHorizontal: 16,
+  borderBottomWidth: 1,
+  borderBottomColor: "#F1F1F1",
+},
   });
 export default AgentTeamReport;

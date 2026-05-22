@@ -25,6 +25,7 @@ const initialValues: agentSliceState = {
     totalRecharge:0,
     totalCommissions: 0,
     rechargeBonusFUllData:[],
+    teamData:[]
 }
 
 export const getAgentDailyStats = createAsyncThunk<
@@ -107,6 +108,31 @@ export const getRechargeBonusData = createAsyncThunk<
     }
   }
 );
+export const getMyTeamData = createAsyncThunk<
+  any,
+  { agentId: number }
+>(
+  'games/getMyTeamData',
+  async ({ agentId }, thunkAPI) => {
+    try {
+      const url = `${serviceUrls.Agent.myTeamData}/${agentId}`;
+      console.log('teamDataURL====>',url );
+      
+
+      const response = await axiosInstance.post(url);
+
+      console.log('getMyTeamDataResponse', response.data);
+      return response.data;
+
+    } catch (error: any) {
+      console.log('getMyTeamDataApiError', error);
+
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || error.message || String(error)
+      );
+    }
+  }
+);
 
 
 
@@ -130,12 +156,20 @@ export const agentSlice = createSlice({
     builder.addCase(getAgentDashboardData.pending, (state, action) => {
        state.agentLoader = true;
     });
+    builder.addCase(getMyTeamData.pending, (state, action) => {
+       state.agentLoader = true;
+    });
 
   
     // Fulfilled
     builder.addCase(getAgentDailyStats.fulfilled, (state, action) => {
         state.userData= action.payload
         console.log('userDataState==>', state.userData)
+        state.agentLoader = false;
+    });
+    builder.addCase(getMyTeamData.fulfilled, (state, action) => {
+        state.teamData= action.payload
+        console.log('teamData==>', state.teamData)
         state.agentLoader = false;
     });
     builder.addCase(getAgentDashboardData.fulfilled, (state, action) => {
@@ -183,6 +217,9 @@ export const agentSlice = createSlice({
         state.agentLoader = false;
     });
     builder.addCase(getAgentDashboardData.rejected, (state, action) => {
+        state.agentLoader = false;
+    });
+    builder.addCase(getMyTeamData.rejected, (state, action) => {
         state.agentLoader = false;
     });
 

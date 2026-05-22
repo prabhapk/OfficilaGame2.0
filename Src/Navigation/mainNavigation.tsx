@@ -30,6 +30,7 @@ import Promotions from "../Screens/Promotions";
 import AgentTeamReport from "../Screens/AgentTeamReport";
 import AgentCommissionDetail from "../Screens/AgentCommissionDetail";
 import PromotionsMain from "../Screens/PromotionsMain";
+import PaymentScreen from "../Screens/PaymentScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -62,6 +63,7 @@ function MainNavigation() {
         AgencyScreen: "agency",
         InvitationRulesScreen: "invitation-rules",
         Promotions: "promotions",
+        PaymentScreen: "PaymentScreen",
       },
     },
   };
@@ -162,6 +164,13 @@ function MainNavigation() {
         <Stack.Screen
           name="PromotionsMain"
           component={PromotionsMain}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="PaymentScreen"
+          component={PaymentScreen}
           options={{
             headerShown: false,
           }}

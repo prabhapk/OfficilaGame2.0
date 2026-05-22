@@ -11,7 +11,8 @@ const initialValues: depositState = {
     paymentGateWayLists: [],
     paymentGateWayListsLoader: false,
     depositLoader:false,
-    depositData:[]
+    depositData:[],
+    paymentPageURL:""
 }
 
 
@@ -59,7 +60,7 @@ export const DepositPayment = createAsyncThunk<
         data,
       );
       console.log("DepositPaymentResponse", response.data);
-      Alert.alert("Deposit Successful")
+      
       return response.data;
     } catch (error: any) {
       console.log('DepositPaymentApiError', error);
@@ -98,6 +99,10 @@ export const depositSlice = createSlice({
     });
     builder.addCase(DepositPayment.fulfilled, (state, action) => {
         state.depositLoader = false;
+        state.depositData = action.payload
+        console.log("statedepositData", state.depositData)
+        state.paymentPageURL = action.payload.data.pgUrl
+        console.log("statepaymentPageURL==>", state.paymentPageURL)
     });
 
     // Rejected
