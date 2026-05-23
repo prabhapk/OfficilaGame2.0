@@ -20,102 +20,112 @@ if (
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const leaderboardData = [
-  {
-    id: "1",
-    rank: 1,
-    name: "Rahul K.",
-    amount: "₹1,25,000",
-    image:
-      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "2",
-    rank: 2,
-    name: "Priya S.",
-    amount: "₹95,000",
-    image:
-      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "3",
-    rank: 3,
-    name: "Arun M.",
-    amount: "₹75,000",
-    image:
-      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "4",
-    rank: 4,
-    name: "Karthik",
-    amount: "₹65,000",
-    image:
-      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "5",
-    rank: 5,
-    name: "Anjali",
-    amount: "₹58,000",
-    image:
-      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "6",
-    rank: 6,
-    name: "Vijay",
-    amount: "₹51,000",
-    image:
-      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "7",
-    rank: 7,
-    name: "Meera",
-    amount: "₹49,000",
-    image:
-      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "8",
-    rank: 8,
-    name: "lal",
-    amount: "₹35,000",
-    image:
-      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "9",
-    rank: 9,
-    name: "yuvi",
-    amount: "₹30,000",
-    image:
-      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "10",
-    rank: 10,
-    name: "Mani",
-    amount: "₹17,000",
-    image:
-      "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
+/* -------------------------------------------------------------------------- */
+/*                                  AVATARS                                   */
+/* -------------------------------------------------------------------------- */
+
+const maleAvatar =
+  "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png";
+
+const femaleAvatar =
+  "https://t4.ftcdn.net/jpg/09/61/69/75/360_F_961697523_EFd1m8P4tdcwB0TYvlQAagqKR1xHSuwk.jpg";
+
+/* -------------------------------------------------------------------------- */
+/*                                   USERS                                    */
+/* -------------------------------------------------------------------------- */
+
+const users = [
+  { name: "Rahul", gender: "male" },
+  { name: "Arun", gender: "male" },
+  { name: "Karthik", gender: "male" },
+  { name: "Vijay", gender: "male" },
+  { name: "Ajith", gender: "male" },
+  { name: "Suresh", gender: "male" },
+  { name: "Mani", gender: "male" },
+  { name: "Yuvi", gender: "male" },
+  { name: "Harish", gender: "male" },
+  { name: "Ravi", gender: "male" },
+  { name: "Sanjay", gender: "male" },
+  { name: "Kumar", gender: "male" },
+
+  { name: "Priya", gender: "female" },
+  { name: "Meera", gender: "female" },
+  { name: "Anjali", gender: "female" },
+  { name: "Deepa", gender: "female" },
+  { name: "Kavya", gender: "female" },
+  { name: "Nisha", gender: "female" },
+  { name: "Divya", gender: "female" },
+  { name: "Sneha", gender: "female" },
+  { name: "Keerthi", gender: "female" },
+  { name: "Swathi", gender: "female" },
+  { name: "Ramya", gender: "female" },
+  { name: "Pooja", gender: "female" },
 ];
 
-const LeaderboardList = () => {
-const [showAll, setShowAll] = useState(false);
+/* -------------------------------------------------------------------------- */
+/*                        DAILY RANDOM LEADERBOARD DATA                       */
+/* -------------------------------------------------------------------------- */
 
-  const topThree = useMemo(() => leaderboardData.slice(0, 3), []);
+const generateLeaderboard = () => {
+  const today = new Date().getDate();
+
+  const shuffledUsers = [...users].sort((a, b) => {
+    return (
+      (a.name.charCodeAt(0) + today) % 10 -
+      ((b.name.charCodeAt(0) + today) % 10)
+    );
+  });
+
+  const selectedUsers = shuffledUsers.slice(0, 10);
+
+  const leaderboard = selectedUsers.map((user, index) => {
+    const amount =
+      Math.floor(Math.random() * 90000) + 15000;
+
+    return {
+      id: `${index + 1}`,
+      rank: index + 1,
+      name: user.name,
+      gender: user.gender,
+      amount,
+      image:
+        user.gender === "male"
+          ? maleAvatar
+          : femaleAvatar,
+    };
+  });
+
+  leaderboard.sort((a, b) => b.amount - a.amount);
+
+  return leaderboard.map((item, index) => ({
+    ...item,
+    rank: index + 1,
+  }));
+};
+
+const LeaderboardList = () => {
+  const [showAll, setShowAll] = useState(false);
+
+  const leaderboardData = useMemo(
+    () => generateLeaderboard(),
+    []
+  );
+
+  const topThree = useMemo(
+    () => leaderboardData.slice(0, 3),
+    [leaderboardData]
+  );
+
   const remainingUsers = useMemo(
     () => leaderboardData.slice(3),
-    []
+    [leaderboardData]
   );
 
   const toggleViewAll = () => {
     LayoutAnimation.configureNext(
       LayoutAnimation.Presets.easeInEaseOut
     );
+
     setShowAll(!showAll);
   };
 
@@ -153,7 +163,7 @@ const [showAll, setShowAll] = useState(false);
         </Text>
 
         <Text style={styles.amount}>
-          {item.amount}
+          ₹{item.amount.toLocaleString("en-IN")}
         </Text>
       </LinearGradient>
     );
@@ -180,7 +190,7 @@ const [showAll, setShowAll] = useState(false);
       </View>
 
       <Text style={styles.rowAmount}>
-        {item.amount}
+        ₹{item.amount.toLocaleString("en-IN")}
       </Text>
     </LinearGradient>
   );
@@ -191,6 +201,7 @@ const [showAll, setShowAll] = useState(false);
       style={styles.container}
     >
       {/* HEADER */}
+
       <Text style={styles.heading}>
         LEADERBOARD
       </Text>
@@ -200,13 +211,15 @@ const [showAll, setShowAll] = useState(false);
       </Text>
 
       {/* TOP 3 */}
+
       <View style={styles.topContainer}>
         {topThree.map((item, index) =>
           renderTopCard(item, index)
         )}
       </View>
 
-      {/* EXPANDED LIST */}
+      {/* USER LIST */}
+
       {showAll && (
         <FlatList
           data={remainingUsers}
@@ -220,6 +233,7 @@ const [showAll, setShowAll] = useState(false);
       )}
 
       {/* BUTTON */}
+
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={toggleViewAll}
@@ -236,13 +250,14 @@ const [showAll, setShowAll] = useState(false);
     </LinearGradient>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     margin: 16,
     borderRadius: 24,
     padding: 18,
     overflow: "hidden",
-      borderWidth: 1,
+    borderWidth: 1,
     borderColor: "#FFD86B",
     marginTop: Scale(30),
   },
@@ -367,4 +382,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LeaderboardList
+export default LeaderboardList;

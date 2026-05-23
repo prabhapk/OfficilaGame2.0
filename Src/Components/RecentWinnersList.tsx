@@ -20,75 +20,125 @@ if (
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const winnersData = [
-  {
-    id: "1",
-    name: "Arun",
-    amount: "₹12,500",
-    game: "Lucky 7",
-    image: "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "2",
-    name: "Meena",
-    amount: "₹8,300",
-    game: "Dragon Tiger",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvPx5Ngn3BqU_b1o4MO5-90QnJXVEdVLYmaA&s",
-  },
-  {
-    id: "3",
-    name: "Suresh",
-    amount: "₹25,000",
-    game: "Teen Patti",
-    image: "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "4",
-    name: "Divya",
-    amount: "₹7,800",
-    game: "Poker",
-    image: "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "5",
-    name: "Vikram",
-    amount: "₹15,300",
-    game: "Andar Bahar",
-    image: "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "6",
-    name: "Karan",
-    amount: "₹31,000",
-    game: "Rummy",
-    image: "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
-  {
-    id: "7",
-    name: "Anjali",
-    amount: "₹18,500",
-    game: "Roulette",
-    image: "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png",
-  },
+/* -------------------------------------------------------------------------- */
+/*                                   AVATARS                                  */
+/* -------------------------------------------------------------------------- */
+
+const maleAvatar =
+  "https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-user-profile-avatar-png-image_10211467.png";
+
+const femaleAvatar =
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvPx5Ngn3BqU_b1o4MO5-90QnJXVEdVLYmaA&s";
+
+/* -------------------------------------------------------------------------- */
+/*                                    USERS                                   */
+/* -------------------------------------------------------------------------- */
+
+const users = [
+  { name: "Arun", gender: "male" },
+  { name: "Suresh", gender: "male" },
+  { name: "Vikram", gender: "male" },
+  { name: "Karan", gender: "male" },
+  { name: "Ajith", gender: "male" },
+  { name: "Rahul", gender: "male" },
+  { name: "Mani", gender: "male" },
+  { name: "Yuvi", gender: "male" },
+  { name: "Harish", gender: "male" },
+  { name: "Ravi", gender: "male" },
+  { name: "Sanjay", gender: "male" },
+  { name: "Kumar", gender: "male" },
+
+  { name: "Meena", gender: "female" },
+  { name: "Divya", gender: "female" },
+  { name: "Anjali", gender: "female" },
+  { name: "Deepa", gender: "female" },
+  { name: "Kavya", gender: "female" },
+  { name: "Nisha", gender: "female" },
+  { name: "Sneha", gender: "female" },
+  { name: "Ramya", gender: "female" },
+  { name: "Pooja", gender: "female" },
+  { name: "Swathi", gender: "female" },
 ];
+
+/* -------------------------------------------------------------------------- */
+/*                                    GAMES                                   */
+/* -------------------------------------------------------------------------- */
+
+const games = [
+  "Lucky 7",
+  "Dragon Tiger",
+  "Teen Patti",
+  "Poker",
+  "Andar Bahar",
+  "Rummy",
+  "Roulette",
+  "Blackjack",
+  "Color Prediction",
+  "Casino War",
+];
+
+/* -------------------------------------------------------------------------- */
+/*                        DAILY RANDOM WINNERS DATA                           */
+/* -------------------------------------------------------------------------- */
+
+const generateWinnersData = () => {
+  const today = new Date().getDate();
+
+  const shuffledUsers = [...users].sort((a, b) => {
+    return (
+      (a.name.charCodeAt(0) + today) % 10 -
+      ((b.name.charCodeAt(0) + today) % 10)
+    );
+  });
+
+  const selectedUsers = shuffledUsers.slice(0, 10);
+
+  return selectedUsers.map((user, index) => {
+    const amount =
+      Math.floor(Math.random() * 40000) + 5000;
+
+    const randomGame =
+      games[
+        Math.floor(Math.random() * games.length)
+      ];
+
+    return {
+      id: `${index + 1}`,
+      name: user.name,
+      gender: user.gender,
+      amount,
+      game: randomGame,
+      image:
+        user.gender === "male"
+          ? maleAvatar
+          : femaleAvatar,
+    };
+  });
+};
 
 const RecentWinnersList = () => {
   const [expanded, setExpanded] = useState(false);
 
+  const winnersData = useMemo(
+    () => generateWinnersData(),
+    []
+  );
+
   const initialUsers = useMemo(
     () => winnersData.slice(0, 5),
-    []
+    [winnersData]
   );
 
   const remainingUsers = useMemo(
     () => winnersData.slice(5),
-    []
+    [winnersData]
   );
 
   const toggleViewAll = () => {
     LayoutAnimation.configureNext(
       LayoutAnimation.Presets.easeInEaseOut
     );
+
     setExpanded(!expanded);
   };
 
@@ -112,12 +162,8 @@ const RecentWinnersList = () => {
             {item.game}
           </Text>
 
-          {/* <Text style={styles.wonText}>
-            won
-          </Text> */}
-
           <Text style={styles.amount}>
-            {item.amount}
+            ₹{item.amount.toLocaleString("en-IN")}
           </Text>
         </View>
       </LinearGradient>
@@ -127,11 +173,13 @@ const RecentWinnersList = () => {
   return (
     <View>
       {/* TOP BAR */}
+
       <LinearGradient
         colors={["#2C004D", "#140020"]}
         style={styles.container}
       >
         {/* LEFT TITLE */}
+
         <View style={styles.liveContainer}>
           <Text style={styles.liveText}>
             LIVE
@@ -143,6 +191,7 @@ const RecentWinnersList = () => {
         </View>
 
         {/* USERS */}
+
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -157,6 +206,7 @@ const RecentWinnersList = () => {
           ))}
 
           {/* VIEW ALL BUTTON */}
+
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={toggleViewAll}
@@ -172,6 +222,7 @@ const RecentWinnersList = () => {
       </LinearGradient>
 
       {/* EXPANDED USERS */}
+
       {expanded && (
         <FlatList
           data={remainingUsers}
@@ -218,7 +269,10 @@ const RecentWinnersList = () => {
                       styles.expandedAmount
                     }
                   >
-                    {item.amount}
+                    ₹
+                    {item.amount.toLocaleString(
+                      "en-IN"
+                    )}
                   </Text>
                 </View>
               </View>
@@ -291,12 +345,6 @@ const styles = StyleSheet.create({
     color: "#C98FFF",
     fontSize: 11,
     marginTop: 1,
-  },
-
-  wonText: {
-    color: "#FFFFFF",
-    fontSize: 11,
-    marginTop: 2,
   },
 
   amount: {
