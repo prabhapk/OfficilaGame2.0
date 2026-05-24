@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   ScrollView,
   ImageBackground,
-} from 'react-native';
-import Scale from '../Components/Scale';
-import CommonTextInput from '../Components/CommonTextInput';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { LinearGradient } from 'expo-linear-gradient';
+} from "react-native";
+import Scale from "../Components/Scale";
+import CommonTextInput from "../Components/CommonTextInput";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   lefArrow,
   loginImageBackground,
@@ -21,9 +21,9 @@ import {
   signInLogoNew,
   signInLogoNew2,
   signInMain,
-} from '../../assets/assets';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../Redux/store';
+} from "../../assets/assets";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../Redux/store";
 import {
   setMobileNumber,
   setOtp,
@@ -32,15 +32,15 @@ import {
   setIsNotify,
   GetRegistrationOtp,
   VerifyRegisterationOtp,
-} from '../Redux/Slice/signUpSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
-import Toast from 'react-native-toast-message';
-import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
-import { useContainerScale } from '../hooks/useContainerScale';
+} from "../Redux/Slice/signUpSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import Toast from "react-native-toast-message";
+import LoadingSpinnerButton from "../Components/LoadingSpinnerButton";
+import { useContainerScale } from "../hooks/useContainerScale";
 import { COLORS } from "../Constants/Theme";
-import { Image } from 'expo-image';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Entypo from 'react-native-vector-icons/Entypo';
+import { Image } from "expo-image";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Entypo from "react-native-vector-icons/Entypo";
 const SignUpScreen = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
@@ -67,9 +67,9 @@ const SignUpScreen = ({ navigation }: any) => {
 
   const showToast = () => {
     Toast.show({
-      type: 'success',
-      text1: 'Hello',
-      text2: 'This is some something 👋',
+      type: "success",
+      text1: "Hello",
+      text2: "This is some something 👋",
     });
   };
 
@@ -77,19 +77,19 @@ const SignUpScreen = ({ navigation }: any) => {
     if (mobileNumberValid) {
       const resultAction = await dispatch(GetRegistrationOtp({ mobileNumber }));
       const data = unwrapResult(resultAction);
-      console.log('getOtpResponse==>', data);
+      console.log("getOtpResponse==>", data);
       setCountdown(60);
-      
+
       Toast.show({
-        type: 'success',
-        text1: 'OTP sent successfully',
-        position: 'top',
+        type: "success",
+        text1: "OTP sent successfully",
+        position: "top",
       });
     } else {
       Toast.show({
-        type: 'error',
-        text1: 'Please enter a valid mobile number',
-        position: 'top',
+        type: "error",
+        text1: "Please enter a valid mobile number",
+        position: "top",
       });
     }
   };
@@ -97,7 +97,7 @@ const SignUpScreen = ({ navigation }: any) => {
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (countdown > 0) {
-      timer = setTimeout(() => setCountdown(prev => prev - 1), 1000);
+      timer = setTimeout(() => setCountdown((prev) => prev - 1), 1000);
     }
     return () => clearTimeout(timer);
   }, [countdown]);
@@ -114,7 +114,7 @@ const SignUpScreen = ({ navigation }: any) => {
   };
 
   const handleVerifyOtp = async () => {
-    console.log('request handddNext');
+    console.log("request handddNext");
     try {
       const resultAction = await dispatch(
         VerifyRegisterationOtp({
@@ -124,20 +124,20 @@ const SignUpScreen = ({ navigation }: any) => {
           navigation: navigation,
         }),
       );
-      console.log('request', resultAction);
+      console.log("request", resultAction);
 
       unwrapResult(resultAction);
       Toast.show({
-        type: 'success',
-        text1: 'OTP Verified successfully',
-        position: 'top',
+        type: "success",
+        text1: "OTP Verified successfully",
+        position: "top",
       });
     } catch (error: any) {
-      console.log('error', error);
+      console.log("error", error);
       Toast.show({
-        type: 'error',
-        text1: 'Please enter a valid otp',
-        position: 'top',
+        type: "error",
+        text1: "Please enter a valid otp",
+        position: "top",
       });
     }
   };
@@ -153,11 +153,11 @@ const SignUpScreen = ({ navigation }: any) => {
               contentFit="contain"
             /> */}
             <Entypo
-                                          name="chevron-left"
-                                          size={Scale(40)}
-                                          color={COLORS.white}
-                                          style={styles.leftArrow}
-                                        />
+              name="chevron-left"
+              size={Scale(40)}
+              color={COLORS.white}
+              style={styles.leftArrow}
+            />
           </TouchableOpacity>
         </ImageBackground>
 
@@ -188,14 +188,7 @@ const SignUpScreen = ({ navigation }: any) => {
               }
             />
             {mobileNumber && !mobileRegex.test(mobileNumber) && (
-              <Text
-                style={{
-                  color: 'red',
-                  fontSize: Scale(12),
-                  marginLeft: Scale(10),
-                  marginBottom: Scale(10),
-                }}
-              >
+              <Text style={styles.mobileNumberError}>
                 Mobile number must be exactly 10 digits
               </Text>
             )}
@@ -229,14 +222,7 @@ const SignUpScreen = ({ navigation }: any) => {
                 }
               />
               {otp && !otpRegex.test(otp) && (
-                <Text
-                  style={{
-                    color: 'red',
-                    fontSize: Scale(12),
-                    marginLeft: Scale(10),
-                    marginBottom: Scale(10),
-                  }}
-                >
+                <Text style={styles.otpError}>
                   OTP must be exactly 6 digits
                 </Text>
               )}
@@ -254,21 +240,14 @@ const SignUpScreen = ({ navigation }: any) => {
                     source={referral}
                     style={{ width: Scale(18), height: Scale(18) }}
                     contentFit="contain"
-                    tintColor={'#999'}
+                    tintColor={"#999"}
                   />
                 }
               />
             </View>
           </View>
           <View style={{ marginHorizontal: Scale(10) }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginHorizontal: Scale(10),
-                marginTop: Scale(10),
-              }}
-            >
+            <View style={styles.container1}>
               <TouchableOpacity
                 style={styles.container}
                 onPress={() => dispatch(setIsEighteenPlus(!isEighteenPlus))}
@@ -280,27 +259,28 @@ const SignUpScreen = ({ navigation }: any) => {
                   ]}
                 >
                   {isEighteenPlus && (
-                    <Ionicons name="checkmark" size={14} color={COLORS.primary} />
+                    <Ionicons
+                      name="checkmark"
+                      size={14}
+                      color={COLORS.primary}
+                    />
                   )}
                 </View>
               </TouchableOpacity>
               <Text style={styles.label}>I confirm I am 18+</Text>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginTop: Scale(20),
-                marginHorizontal: Scale(10),
-              }}
-            >
+            <View style={styles.container2}>
               <TouchableOpacity
                 style={styles.container}
                 onPress={() => dispatch(setIsNotify(!isNotify))}
               >
                 <View style={[styles.circle, isNotify && styles.checkedCircle]}>
                   {isNotify && (
-                    <Ionicons name="checkmark" size={14} color={COLORS.primary} />
+                    <Ionicons
+                      name="checkmark"
+                      size={14}
+                      color={COLORS.primary}
+                    />
                   )}
                 </View>
               </TouchableOpacity>
@@ -338,10 +318,10 @@ const SignUpScreen = ({ navigation }: any) => {
           </TouchableOpacity>
           <View style={styles.accountTextView}>
             <Text style={styles.accountText}>
-              Already have an account? {''}
+              Already have an account? {""}
             </Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate('SignInScreen')}
+              onPress={() => navigation.navigate("SignInScreen")}
             >
               <Text style={styles.siginText}>Sign in</Text>
             </TouchableOpacity>
@@ -356,171 +336,195 @@ export default SignUpScreen;
 
 const createStyles = (Scale: any) =>
   StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.primary,
-  },
-  topImage: {
-    width: '100%',
-    height: Scale(260),
-  },
-  bottomContainer: {
-    backgroundColor: COLORS.primary,
-    borderTopRightRadius: Scale(80),
-    marginTop: -Scale(60),
-    paddingBottom: Scale(30),
-  },
-  logoHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: Scale(20),
-    marginTop: Scale(30),
-  },
-  logo: {
-    width: Scale(50),
-    height: Scale(50),
-    marginTop: Scale(8),
-  },
-  headerText: {
-    fontSize: Scale(36),
-    fontWeight: 'bold',
-    color: 'white',
-    marginLeft: Scale(10),
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    backgroundColor: COLORS.primary,
-    borderRadius: 999,
-    marginHorizontal: Scale(20),
-    marginTop: Scale(40),
-    padding: Scale(4),
-    borderWidth: 1,
-    borderColor: COLORS.primary,
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: Scale(12),
-    borderRadius: Scale(25),
-    alignItems: 'center',
-  },
-  activeTab: {
-    backgroundColor: '#fff',
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-  },
-  tabText: {
-    fontSize: Scale(16),
-    fontWeight: 'bold',
-  },
-  activeText: {
-    color: COLORS.primary,
-  },
-  inactiveText: {
-    color: '#fff',
-    opacity: 0.6,
-  },
-  inputWrapper: {
-    marginHorizontal: Scale(20),
-    marginTop: Scale(30),
-  },
-  inputSpacing: {
-    marginTop: Scale(10),
-  },
-  forgotPassword: {
-    // marginTop: Scale(10),
-    alignItems: 'center',
-  },
-  forgotPasswordText: {
-    color: '#FFAD45',
-    fontSize: Scale(16),
-    fontWeight: 'bold',
-  },
-  buttonWrapper: {
-    marginTop: Scale(30),
-    marginHorizontal: Scale(20),
-  },
-  buttonWrapperRegister: {
-    marginTop: Scale(30),
-    marginHorizontal: Scale(20),
-    paddingVertical: Scale(14),
-    borderRadius: Scale(25),
-    alignItems: 'center',
-    borderColor: '#FFAD45',
-    borderWidth: 1,
-  },
+    safeArea: {
+      flex: 1,
+      backgroundColor: COLORS.primary,
+    },
+    topImage: {
+      width: "100%",
+      height: Scale(260),
+    },
+    bottomContainer: {
+      backgroundColor: COLORS.primary,
+      borderTopRightRadius: Scale(80),
+      marginTop: -Scale(60),
+      paddingBottom: Scale(30),
+    },
+    logoHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginHorizontal: Scale(20),
+      marginTop: Scale(30),
+    },
+    logo: {
+      width: Scale(50),
+      height: Scale(50),
+      marginTop: Scale(8),
+    },
+    headerText: {
+      fontSize: Scale(36),
+      fontWeight: "bold",
+      color: "white",
+      marginLeft: Scale(10),
+    },
+    tabContainer: {
+      flexDirection: "row",
+      backgroundColor: COLORS.primary,
+      borderRadius: 999,
+      marginHorizontal: Scale(20),
+      marginTop: Scale(40),
+      padding: Scale(4),
+      borderWidth: 1,
+      borderColor: COLORS.primary,
+    },
+    tab: {
+      flex: 1,
+      paddingVertical: Scale(12),
+      borderRadius: Scale(25),
+      alignItems: "center",
+    },
+    activeTab: {
+      backgroundColor: "#fff",
+      borderColor: COLORS.primary,
+      borderWidth: 1,
+    },
+    tabText: {
+      fontSize: Scale(16),
+      fontWeight: "bold",
+    },
+    activeText: {
+      color: COLORS.primary,
+    },
+    inactiveText: {
+      color: "#fff",
+      opacity: 0.6,
+    },
+    inputWrapper: {
+      marginHorizontal: Scale(20),
+      marginTop: Scale(30),
+    },
+    inputSpacing: {
+      marginTop: Scale(10),
+    },
+    forgotPassword: {
+      // marginTop: Scale(10),
+      alignItems: "center",
+    },
+    forgotPasswordText: {
+      color: "#FFAD45",
+      fontSize: Scale(16),
+      fontWeight: "bold",
+    },
+    buttonWrapper: {
+      marginTop: Scale(30),
+      marginHorizontal: Scale(20),
+    },
+    buttonWrapperRegister: {
+      marginTop: Scale(30),
+      marginHorizontal: Scale(20),
+      paddingVertical: Scale(14),
+      borderRadius: Scale(25),
+      alignItems: "center",
+      borderColor: "#FFAD45",
+      borderWidth: 1,
+    },
 
-  signInButton: {
-    paddingVertical: Scale(14),
-    borderRadius: Scale(25),
-    alignItems: 'center',
-  },
-  signInButtonText: {
-    color: '#fff',
-    fontSize: Scale(16),
-    fontWeight: 'bold',
-  },
-  registerText: {
-    color: '#fff',
-    fontSize: Scale(16),
-    fontWeight: 'bold',
-  },
-  getOtpText: {
-    color: '#ff5f5f',
-    fontWeight: 'bold',
-    marginLeft: Scale(10),
-    marginHorizontal: Scale(10),
-  },
-  signInCustomerLogoStyle: {
-    width: Scale(80),
-    height: Scale(80),
-  },
-  customerViewLogo: {
-    alignItems: 'center',
-    marginTop: Scale(30),
-  },
-  siginText: {
-    color: '#fff',
-    fontSize: Scale(16),
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
-  },
-  accountTextView: {
-    alignItems: 'center',
-    marginTop: Scale(30),
-    flexDirection: 'row',
-    marginHorizontal: Scale(30),
-  },
-  accountText: {
-    color: '#999',
-    fontSize: Scale(16),
-    fontWeight: 'bold',
-  },
-  container: {
-    alignItems: 'center',
-  },
-  circle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  checkedCircle: {
-    backgroundColor: '#fff',
-  },
-  label: {
-    fontSize: Scale(16),
-    color: 'white',
-    fontWeight: '400',
-    marginHorizontal: Scale(10),
-  },
-  leftArrow: {
-   width: Scale(24),
-    height: Scale(34),
-    marginTop: Scale(20),
-    marginLeft: Scale(10),
-  },
-});
+    signInButton: {
+      paddingVertical: Scale(14),
+      borderRadius: Scale(25),
+      alignItems: "center",
+    },
+    signInButtonText: {
+      color: "#fff",
+      fontSize: Scale(16),
+      fontWeight: "bold",
+    },
+    registerText: {
+      color: "#fff",
+      fontSize: Scale(16),
+      fontWeight: "bold",
+    },
+    getOtpText: {
+      color: "#ff5f5f",
+      fontWeight: "bold",
+      marginLeft: Scale(10),
+      marginHorizontal: Scale(10),
+    },
+    signInCustomerLogoStyle: {
+      width: Scale(80),
+      height: Scale(80),
+    },
+    customerViewLogo: {
+      alignItems: "center",
+      marginTop: Scale(30),
+    },
+    siginText: {
+      color: "#fff",
+      fontSize: Scale(16),
+      fontWeight: "bold",
+      textDecorationLine: "underline",
+    },
+    accountTextView: {
+      alignItems: "center",
+      marginTop: Scale(30),
+      flexDirection: "row",
+      marginHorizontal: Scale(30),
+    },
+    accountText: {
+      color: "#999",
+      fontSize: Scale(16),
+      fontWeight: "bold",
+    },
+    container: {
+      alignItems: "center",
+    },
+    circle: {
+      width: 24,
+      height: 24,
+      borderRadius: 12,
+      borderWidth: 2,
+      borderColor: "#fff",
+      justifyContent: "center",
+      alignItems: "center",
+      marginRight: 10,
+    },
+    checkedCircle: {
+      backgroundColor: "#fff",
+    },
+    label: {
+      fontSize: Scale(16),
+      color: "white",
+      fontWeight: "400",
+      marginHorizontal: Scale(10),
+    },
+    leftArrow: {
+      width: Scale(24),
+      height: Scale(34),
+      marginTop: Scale(20),
+      marginLeft: Scale(10),
+    },
+    mobileNumberError: {
+      color: "red",
+      fontSize: Scale(12),
+      marginLeft: Scale(10),
+      marginBottom: Scale(10),
+    },
+    otpError: {
+      color: "red",
+      fontSize: Scale(12),
+      marginLeft: Scale(10),
+      marginBottom: Scale(10),
+    },
+    container1: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginHorizontal: Scale(10),
+      marginTop: Scale(10),
+    },
+    container2: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: Scale(20),
+      marginHorizontal: Scale(10),
+    },
+  });

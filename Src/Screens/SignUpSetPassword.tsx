@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,33 +6,33 @@ import {
   TouchableOpacity,
   ScrollView,
   ImageBackground,
-} from 'react-native';
-import CommonTextInput from '../Components/CommonTextInput';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import { LinearGradient } from 'expo-linear-gradient';
+} from "react-native";
+import CommonTextInput from "../Components/CommonTextInput";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import Entypo from "react-native-vector-icons/Entypo";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   lefArrow,
   loginImageBackground,
   signInLogo,
   signInLogoNew2,
   signInMain,
-} from '../../assets/assets';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../Redux/store';
+} from "../../assets/assets";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../Redux/store";
 import {
   setMobileNumber,
   setPassword,
   setConfirmPassword,
   RegisterUSer,
-} from '../Redux/Slice/signUpSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
-import Toast from 'react-native-toast-message';
-import LoadingSpinnerButton from '../Components/LoadingSpinnerButton';
-import { useContainerScale } from '../hooks/useContainerScale';
-import { COLORS } from '../Constants/Theme';
-import { Image } from 'expo-image';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from "../Redux/Slice/signUpSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import Toast from "react-native-toast-message";
+import LoadingSpinnerButton from "../Components/LoadingSpinnerButton";
+import { useContainerScale } from "../hooks/useContainerScale";
+import { COLORS } from "../Constants/Theme";
+import { Image } from "expo-image";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUpSetPassword = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -46,8 +46,8 @@ const SignUpSetPassword = ({ navigation }: any) => {
     otp,
     singUpConfirmLoader,
   } = useSelector((state: RootState) => state.signUpSlice);
-  const [passwordError, setPasswordError] = useState('');
-  const [confirmError, setConfirmError] = useState('');
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmError, setConfirmError] = useState("");
   const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
   const handleMobileNumber = (value: string) => {
     dispatch(setMobileNumber(value));
@@ -56,18 +56,18 @@ const SignUpSetPassword = ({ navigation }: any) => {
     dispatch(setPassword(value));
     if (!passwordRegex.test(value)) {
       setPasswordError(
-        'Password must be at least 8 chars, 1 uppercase & 1 special char.',
+        "Password must be at least 8 chars, 1 uppercase & 1 special char.",
       );
     } else {
-      setPasswordError('');
+      setPasswordError("");
     }
   };
   const handleConfirmPassword = (value: string) => {
     dispatch(setConfirmPassword(value));
     if (password && value !== password) {
-      setConfirmError('Passwords do not match.');
+      setConfirmError("Passwords do not match.");
     } else {
-      setConfirmError('');
+      setConfirmError("");
     }
   };
   const isFormValid =
@@ -86,16 +86,16 @@ const SignUpSetPassword = ({ navigation }: any) => {
           navigation: navigation,
         }),
       );
-      console.log('request', resultAction);
+      console.log("request", resultAction);
 
       unwrapResult(resultAction);
       Toast.show({
-        type: 'success',
-        text1: 'Account Created Successfully!',
-        position: 'top',
+        type: "success",
+        text1: "Account Created Successfully!",
+        position: "top",
       });
     } catch (error: any) {
-      console.log('error', error);
+      console.log("error", error);
     }
   };
   return (
@@ -103,12 +103,12 @@ const SignUpSetPassword = ({ navigation }: any) => {
       <ScrollView contentContainerStyle={{ paddingBottom: Scale(30) }}>
         <ImageBackground source={signInMain} style={styles.topImage}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-           <Entypo
-                                         name="chevron-left"
-                                         size={Scale(40)}
-                                         color={COLORS.white}
-                                         style={styles.leftArrow}
-                                       />
+            <Entypo
+              name="chevron-left"
+              size={Scale(40)}
+              color={COLORS.white}
+              style={styles.leftArrow}
+            />
           </TouchableOpacity>
         </ImageBackground>
         <View style={styles.bottomContainer}>
@@ -195,137 +195,137 @@ export default SignUpSetPassword;
 
 const createStyles = (Scale: any) =>
   StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.primary,
-  },
-  topImage: {
-    width: '100%',
-    height: Scale(260),
-  },
-  bottomContainer: {
-    backgroundColor: COLORS.primary,
-    borderTopRightRadius: Scale(80),
-    marginTop: -Scale(60),
-    paddingBottom: Scale(30),
-  },
-  logoHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: Scale(20),
-    marginTop: Scale(30),
-  },
-  logo: {
-    width: Scale(50),
-    height: Scale(50),
-    marginTop: Scale(5),
-  },
-  headerText: {
-    fontSize: Scale(36),
-    fontWeight: 'bold',
-    color: 'white',
-    marginLeft: Scale(10),
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#2e0b0b',
-    borderRadius: 999,
-    marginHorizontal: Scale(20),
-    marginTop: Scale(40),
-    padding: Scale(4),
-    borderWidth: 1,
-    borderColor: '#ff5f5f',
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: Scale(12),
-    borderRadius: Scale(25),
-    alignItems: 'center',
-  },
-  activeTab: {
-    backgroundColor: '#fff',
-    borderColor: '#ff5f5f',
-    borderWidth: 1,
-  },
-  tabText: {
-    fontSize: Scale(16),
-    fontWeight: 'bold',
-  },
-  activeText: {
-    color: '#ff5f5f',
-  },
-  inactiveText: {
-    color: '#ff5f5f',
-    opacity: 0.6,
-  },
-  inputWrapper: {
-    marginHorizontal: Scale(20),
-    marginTop: Scale(40),
-  },
-  inputSpacing: {
-    marginTop: Scale(10),
-  },
-  forgotPassword: {
-    // marginTop: Scale(10),
-    alignItems: 'center',
-  },
-  forgotPasswordText: {
-    color: '#FFAD45',
-    fontSize: Scale(16),
-    fontWeight: 'bold',
-  },
-  buttonWrapper: {
-    marginTop: Scale(30),
-    marginHorizontal: Scale(20),
-  },
-  buttonWrapperRegister: {
-    marginTop: Scale(30),
-    marginHorizontal: Scale(20),
-    paddingVertical: Scale(14),
-    borderRadius: Scale(25),
-    alignItems: 'center',
-    borderColor: '#FFAD45',
-    borderWidth: 1,
-  },
+    safeArea: {
+      flex: 1,
+      backgroundColor: COLORS.primary,
+    },
+    topImage: {
+      width: "100%",
+      height: Scale(260),
+    },
+    bottomContainer: {
+      backgroundColor: COLORS.primary,
+      borderTopRightRadius: Scale(80),
+      marginTop: -Scale(60),
+      paddingBottom: Scale(30),
+    },
+    logoHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginHorizontal: Scale(20),
+      marginTop: Scale(30),
+    },
+    logo: {
+      width: Scale(50),
+      height: Scale(50),
+      marginTop: Scale(5),
+    },
+    headerText: {
+      fontSize: Scale(36),
+      fontWeight: "bold",
+      color: "white",
+      marginLeft: Scale(10),
+    },
+    tabContainer: {
+      flexDirection: "row",
+      backgroundColor: "#2e0b0b",
+      borderRadius: 999,
+      marginHorizontal: Scale(20),
+      marginTop: Scale(40),
+      padding: Scale(4),
+      borderWidth: 1,
+      borderColor: "#ff5f5f",
+    },
+    tab: {
+      flex: 1,
+      paddingVertical: Scale(12),
+      borderRadius: Scale(25),
+      alignItems: "center",
+    },
+    activeTab: {
+      backgroundColor: "#fff",
+      borderColor: "#ff5f5f",
+      borderWidth: 1,
+    },
+    tabText: {
+      fontSize: Scale(16),
+      fontWeight: "bold",
+    },
+    activeText: {
+      color: "#ff5f5f",
+    },
+    inactiveText: {
+      color: "#ff5f5f",
+      opacity: 0.6,
+    },
+    inputWrapper: {
+      marginHorizontal: Scale(20),
+      marginTop: Scale(40),
+    },
+    inputSpacing: {
+      marginTop: Scale(10),
+    },
+    forgotPassword: {
+      // marginTop: Scale(10),
+      alignItems: "center",
+    },
+    forgotPasswordText: {
+      color: "#FFAD45",
+      fontSize: Scale(16),
+      fontWeight: "bold",
+    },
+    buttonWrapper: {
+      marginTop: Scale(30),
+      marginHorizontal: Scale(20),
+    },
+    buttonWrapperRegister: {
+      marginTop: Scale(30),
+      marginHorizontal: Scale(20),
+      paddingVertical: Scale(14),
+      borderRadius: Scale(25),
+      alignItems: "center",
+      borderColor: "#FFAD45",
+      borderWidth: 1,
+    },
 
-  signInButton: {
-    paddingVertical: Scale(14),
-    borderRadius: Scale(25),
-    alignItems: 'center',
-  },
-  signInButtonText: {
-    color: '#fff',
-    fontSize: Scale(16),
-    fontWeight: 'bold',
-  },
-  registerText: {
-    color: '#fff',
-    fontSize: Scale(16),
-    fontWeight: 'bold',
-  },
-  getOtpText: {
-    color: '#ff5f5f',
-    fontWeight: 'bold',
-    marginLeft: Scale(10),
-    marginHorizontal: Scale(10),
-  },
-  signInCustomerLogoStyle: {
-    width: Scale(80),
-    height: Scale(80),
-  },
-  leftArrow: {
-   width: Scale(24),
-    height: Scale(34),
-    marginTop: Scale(20),
-    marginLeft: Scale(10),
-  },
-  customerViewLogo: {
-    alignItems: 'center',
-    marginTop: Scale(30),
-  },
-  errorText: {
-    color: 'red',
-    fontSize: Scale(12),
-    marginTop: Scale(5),
-  },
-});
+    signInButton: {
+      paddingVertical: Scale(14),
+      borderRadius: Scale(25),
+      alignItems: "center",
+    },
+    signInButtonText: {
+      color: "#fff",
+      fontSize: Scale(16),
+      fontWeight: "bold",
+    },
+    registerText: {
+      color: "#fff",
+      fontSize: Scale(16),
+      fontWeight: "bold",
+    },
+    getOtpText: {
+      color: "#ff5f5f",
+      fontWeight: "bold",
+      marginLeft: Scale(10),
+      marginHorizontal: Scale(10),
+    },
+    signInCustomerLogoStyle: {
+      width: Scale(80),
+      height: Scale(80),
+    },
+    leftArrow: {
+      width: Scale(24),
+      height: Scale(34),
+      marginTop: Scale(20),
+      marginLeft: Scale(10),
+    },
+    customerViewLogo: {
+      alignItems: "center",
+      marginTop: Scale(30),
+    },
+    errorText: {
+      color: "red",
+      fontSize: Scale(12),
+      marginTop: Scale(5),
+    },
+  });

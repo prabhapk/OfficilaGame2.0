@@ -270,20 +270,7 @@ const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
        colors={[COLORS.linearOne, COLORS.linearTwo]}
           start={{ x: 0, y: 0, }}
           end={{ x: 1, y: 0 }}
-        style={{
-          borderRadius: Scale(10),
-          paddingVertical: Scale(12),
-          paddingHorizontal: Scale(15),
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.15,
-          shadowRadius: 3,
-          marginTop: Scale(10),
-          marginHorizontal: Scale(5),
-        }}
+        style={styles.linearGradientStyle}
       >
          <TouchableOpacity activeOpacity={0.8} style={styles.container1}>
       {/* Profile Image */}
@@ -458,45 +445,26 @@ const vipLevelImage = vipImages[vipLevel] || vipNewLogoZero;
         ) : null}
 
 
-<View style={{ paddingHorizontal: Scale(10), marginTop: Scale(10) }}>
+<View style={styles.viewBelowVip}>
   {tabItems.map((item) => (
     <TouchableOpacity
       key={item.label}
       onPress={() => handleActionButtonPress(item.route)}
       disabled={item.label === "Customer Service" && isChatLoading}
-      style={{
-        borderRadius: Scale(10),
-        marginVertical: Scale(8),
-        elevation: 3,
-      }}
+      style={styles.tabTouchable}
     >
       <LinearGradient
         colors={[COLORS.linearTwo, COLORS.linearOne]} // change gradient colors here
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={{
-          borderRadius: Scale(10),
-          paddingVertical: Scale(12),
-          paddingHorizontal: Scale(15),
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.15,
-          shadowRadius: 3,
-        }}
+        style={styles.linearGradientStyle1}
       >
         {/* Left Section */}
-        <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+        <View style={styles.leftSection}>
           <Image
           contentFit="contain"
             source={item.image}
-            style={{
-              height: Scale(24),
-              width: Scale(24),
-              marginRight: Scale(12),
-            }}
+            style={styles.leftImage}
           />
 
           <Text
@@ -994,4 +962,47 @@ vipProgressBackground: {
     fontWeight: "500",
     marginLeft: 5,
   },
+  linearGradientStyle: {
+          borderRadius: Scale(10),
+          paddingVertical: Scale(12),
+          paddingHorizontal: Scale(15),
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.15,
+          shadowRadius: 3,
+          marginTop: Scale(10),
+          marginHorizontal: Scale(5),
+        },
+        viewBelowVip: {
+           paddingHorizontal: Scale(10), 
+           marginTop: Scale(10)
+           },
+           tabTouchable: {
+        borderRadius: Scale(10),
+        marginVertical: Scale(8),
+        elevation: 3,
+      },
+      linearGradientStyle1: {
+          borderRadius: Scale(10),
+          paddingVertical: Scale(12),
+          paddingHorizontal: Scale(15),
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.15,
+          shadowRadius: 3,
+        },
+        leftSection: { flexDirection: "row", alignItems: "center", flex: 1 },
+        leftImage: {
+              height: Scale(24),
+              width: Scale(24),
+              marginRight: Scale(12),
+            },
+
+
   });

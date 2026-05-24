@@ -33,17 +33,18 @@ import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { set } from "date-fns";
 import { getWalletBalance } from "../Redux/Slice/signInSlice";
 import { COLORS } from "../Constants/Theme";
-import { Image } from 'expo-image';
+import { Image } from "expo-image";
 
 const Withdraw = ({ navigation }: any) => {
   const dispatch = useDispatch();
   const [walletAmount, setWalletAmount] = useState(0);
-  const [selectedAmount, setSelectedAmount] = useState<any | null>(
-    null);
+  const [selectedAmount, setSelectedAmount] = useState<any | null>(null);
   // const amounts = ["₹100", "₹200", "₹500", "₹1000"];
   const amounts = ["100", "200", "500", "1000"];
-  const withdrawAmounts = [110, 300, 500, 1000, 2000,5000, 10000,20000,35000];
-  const [selectedWithdrawAmounts, setSelectedWithdrawAmounts] = useState(0)
+  const withdrawAmounts = [
+    110, 300, 500, 1000, 2000, 5000, 10000, 20000, 35000,
+  ];
+  const [selectedWithdrawAmounts, setSelectedWithdrawAmounts] = useState(0);
   const actualAmount = walletAmount / 0.03;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [withdrawableAmount, setWithdrawableAmount] = useState(0);
@@ -51,30 +52,28 @@ const Withdraw = ({ navigation }: any) => {
   const { Scale, verticalScale } = useContainerScale();
   const styles = createStyles(Scale);
   const { withdrawBalance, userId, mainWalletBalance } = useSelector(
-    (state: RootState) => state.signInSlice
+    (state: RootState) => state.signInSlice,
   );
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [selectedBankId, setSelectedBankId] = React.useState<number | null>(
-    null
+    null,
   );
   const [selectedBank, setSelectedBank] = useState<any | null>(null);
-
-  
 
   useEffect(() => {
     dispatch(
       getBankAccounts({
         userId: userId,
-      })
+      }),
     );
   }, []);
   const { bankAccountsData } = useSelector(
-    (state: RootState) => state.withdrawSlice
+    (state: RootState) => state.withdrawSlice,
   );
 
   console.log("bankAccountsDataScreenData==>", bankAccountsData);
 
-  const bankName = "Avis Bank of Australia";
+  const bankName = "Dear24 Bank of India";
 
   const handleWithDrawAmount = async () => {
     if (!selectedBank) {
@@ -85,7 +84,7 @@ const Withdraw = ({ navigation }: any) => {
       });
       return;
     }
-  
+
     try {
       const resultAction = await dispatch(
         withDrawAmount({
@@ -96,7 +95,7 @@ const Withdraw = ({ navigation }: any) => {
           ifsc: selectedBank.ifsc,
           holderName: selectedBank.accountHolderName,
           upi: selectedBank.upi,
-        })
+        }),
       );
       unwrapResult(resultAction);
       Toast.show({
@@ -105,7 +104,7 @@ const Withdraw = ({ navigation }: any) => {
         position: "top",
       });
       setWalletAmount(0);
-      dispatch(getWalletBalance())
+      dispatch(getWalletBalance());
     } catch (error: any) {
       console.log("error", error);
       Toast.show({
@@ -115,66 +114,38 @@ const Withdraw = ({ navigation }: any) => {
       });
     }
   };
-  
 
-  
   const renderBankAccounts = ({ item }: { item: any }) => {
     const isSelected = selectedBank?.id === item.id;
-  
+
     return (
       <TouchableOpacity
-        onPress={() => setSelectedBank(item)} // select bank
-        style={{
-          marginTop: Scale(10),
-          marginHorizontal: Scale(10),
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderColor: isSelected ? "#fff" : "grey",
-          borderWidth: 2,
-          borderRadius: 10,
-          padding: Scale(15),
-          marginVertical: Scale(10),
-          width: "95%",
-          backgroundColor: "transparent",
-        }}
+        onPress={() => setSelectedBank(item)}
+        style={[
+          styles.renderBankAccountsStyle,
+          {
+            borderColor: isSelected ? "#fff" : "grey",
+          },
+        ]}
       >
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={styles.renderBankAccountsStyle1}>
           <Entypo
             name={"wallet"}
             size={Scale(30)}
             color={"white"}
             style={{ marginRight: Scale(20) }}
           />
-  
+
           <View>
-            <Text
-              style={{
-                fontSize: Scale(16),
-                fontWeight: "bold",
-                color: "#fff",
-              }}
-            >
+            <Text style={styles.accountHolderNameText}>
               {item.accountHolderName}
             </Text>
-            <Text
-              style={{
-                fontSize: Scale(12),
-                fontWeight: "bold",
-                color: "#fff",
-              }}
-            >
-              {item.accountNumber}
-            </Text>
+            <Text style={styles.accountNumberText}>{item.accountNumber}</Text>
           </View>
         </View>
         <View>
           <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              bottom: Scale(5),
-            }}
+            style={styles.bankIdTouchable}
             onPress={() =>
               navigation.navigate("AddBankAccount", { bankAccountId: item.id })
             }
@@ -185,22 +156,10 @@ const Withdraw = ({ navigation }: any) => {
               color={"#fff"}
               style={{ marginRight: Scale(5) }}
             />
-            <Text
-              style={{
-                fontSize: Scale(12),
-                fontWeight: "bold",
-                color: "#fff",
-              }}
-            >
-              Edit
-            </Text>
+            <Text style={styles.editText}>Edit</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginTop: Scale(10),
-            }}
+            style={styles.deleteButton}
             onPress={() => {
               setSelectedBankId(item.id);
               setDeleteModalVisible(true);
@@ -217,23 +176,22 @@ const Withdraw = ({ navigation }: any) => {
       </TouchableOpacity>
     );
   };
-  
 
   const handleDelete = async () => {
     if (!selectedBankId) return;
-  
+
     try {
       const resultAction = await dispatch(
-        deleteBankAccount({ id: selectedBankId })
+        deleteBankAccount({ id: selectedBankId }),
       );
-  
+
       const data = unwrapResult(resultAction);
       console.log("dataDelete===>", data);
-  
+
       setDeleteModalVisible(false);
       setSelectedBankId(null); // reset state
       dispatch(getBankAccounts({ userId: userId }));
-  
+
       Toast.show({
         type: "success",
         text1: "Account deleted successfully",
@@ -255,13 +213,13 @@ const Withdraw = ({ navigation }: any) => {
     //   });
     //   return;
     // }
-  
+
     try {
       const resultAction = await dispatch(
         withdrawBalanceConversion({
           amount: withdrawableAmount,
-  transferType: "transfer",
-        })
+          transferType: "transfer",
+        }),
       );
       unwrapResult(resultAction);
       Toast.show({
@@ -270,9 +228,9 @@ const Withdraw = ({ navigation }: any) => {
         position: "top",
       });
       setWalletAmount(0);
-      setWithdrawableAmount(0)
+      setWithdrawableAmount(0);
       setSelectedAmount(0);
-      dispatch(getWalletBalance())
+      dispatch(getWalletBalance());
     } catch (error: any) {
       console.log("error", error);
       Toast.show({
@@ -282,11 +240,8 @@ const Withdraw = ({ navigation }: any) => {
       });
     }
   };
-  
 
-  
-
-  return (  
+  return (
     <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
       <NewAppHeader
         leftIconPress={() => navigation.goBack()}
@@ -295,7 +250,7 @@ const Withdraw = ({ navigation }: any) => {
       <ScrollView style={styles.container}>
         {/* Wallet Header */}
         <LinearGradient
-          colors={[COLORS.linearOne,COLORS.linearTwo]}
+          colors={[COLORS.linearOne, COLORS.linearTwo]}
           style={styles.walletHeader}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
@@ -311,9 +266,9 @@ const Withdraw = ({ navigation }: any) => {
                   ₹ {formatToDecimal(withdrawBalance)}
                 </Text>
                 <TouchableOpacity
-                  onPress={() => 
+                  onPress={() =>
                     // setBankAccountModalVisible(true);
-                  dispatch(getWalletBalance())
+                    dispatch(getWalletBalance())
                   }
                 >
                   <Image source={refresh} style={styles.iconMedium} />
@@ -336,24 +291,12 @@ const Withdraw = ({ navigation }: any) => {
           <View style={{}}>
             <LinearGradient
               // colors={["black", "transparent"]}
-              colors={['#f5eceb', 'transparent']}
-              style={{
-                // backgroundColor: '#909191',
-                borderRadius: 10,
-                width: "100%",
-                padding: Scale(10),
-                marginTop: Scale(10),
-              }}
+              colors={["#f5eceb", "transparent"]}
+              style={styles.linearGradientStyle}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
+              <View style={styles.transferMethodStyle}>
                 <View>
                   <Text style={styles.currentMethod}>Transfer</Text>
                   <Text style={styles.warningText}>
@@ -380,192 +323,118 @@ const Withdraw = ({ navigation }: any) => {
 
         {/* Amount Box */}
         <View style={styles.amountBox}>
-          <Text
-            style={{
-              fontSize: Scale(20),
-              fontWeight: "bold",
-              color: "#fff",
-              marginVertical: Scale(10),
-            }}
-          >
+          <Text style={styles.transferBankAccountText}>
             Transfer to bank account
           </Text>
 
-          <View
-            style={{
-              backgroundColor: COLORS.primary,
-              borderRadius: 10,
-              padding: Scale(12),
-              marginBottom: Scale(12),
-              width: "100%",
-              maxHeight: Scale(250),
-              flexGrow: 0,
-            }}
-          >
+          <View style={styles.bankAccountsStyle}>
             <FlatList
-    data={bankAccountsData}
-    keyExtractor={(item, index) => index.toString()}
-    renderItem={renderBankAccounts}
-    showsVerticalScrollIndicator={true} 
-    scrollEnabled={true} 
-  nestedScrollEnabled={true}
-    ListFooterComponent={
-      <View>
-        <TouchableOpacity
-          style={{
-            padding: Scale(12),
-            alignItems: "center",
-            alignSelf: "center",
-          }}
-          onPress={() => navigation.navigate("AddBankAccount")}
-        >
-          <AntDesign name="plus" size={Scale(30)} color="#fff" />
-          <Text
-            style={{
-              textAlign: "center",
-              fontSize: Scale(16),
-              color: "#fff",
-              fontWeight: "bold",
-              marginVertical: Scale(10),
-            }}
-          >
-            Add Bank Account
-          </Text>
-        </TouchableOpacity>
-      </View>
-    }
-  />
+              data={bankAccountsData}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderBankAccounts}
+              showsVerticalScrollIndicator={true}
+              scrollEnabled={true}
+              nestedScrollEnabled={true}
+              ListFooterComponent={
+                <View>
+                  <TouchableOpacity
+                    style={{
+                      padding: Scale(12),
+                      alignItems: "center",
+                      alignSelf: "center",
+                    }}
+                    onPress={() => navigation.navigate("AddBankAccount")}
+                  >
+                    <AntDesign name="plus" size={Scale(30)} color="#fff" />
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        fontSize: Scale(16),
+                        color: "#fff",
+                        fontWeight: "bold",
+                        marginVertical: Scale(10),
+                      }}
+                    >
+                      Add Bank Account
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              }
+            />
           </View>
         </View>
 
         {/* Self Service Recharge */}
         <View style={styles.rechargeSection}>
           <Text style={styles.sectionTitle}>Withdrawable Amount</Text>
-              <View style={styles.amountChipsRowWithdraw}>
-                    {withdrawAmounts.map((amt, i) => {
-                      const isSelected = selectedAmount === amt;
+          <View style={styles.amountChipsRowWithdraw}>
+            {withdrawAmounts.map((amt, i) => {
+              const isSelected = selectedAmount === amt;
 
-                      const withDrawChipContent = (
-                        <Text
-                          style={[
-                            styles.chipText,
-                            isSelected && styles.activeChipText,
-                          ]}
-                        >
-                          ₹{amt}
-                        </Text>
-                      );
+              const withDrawChipContent = (
+                <Text
+                  style={[styles.chipText, isSelected && styles.activeChipText]}
+                >
+                  ₹{amt}
+                </Text>
+              );
 
-                      return (
-                        <TouchableOpacity
-                          key={i}
-                          onPress={() => {
-                            // setWithdrawableAmount(amt);
-                            setSelectedAmount(amt);
-                            setSelectedWithdrawAmounts(amt);
-                          }}
-                          style={{ borderRadius: Scale(8), overflow: "hidden" }}
-                        >
-                          {isSelected ? (
-                            <LinearGradient
-                              colors={[COLORS.linearOne, COLORS.linearTwo]}
-                              // start={{ x: 0, y: 0 }}
-                              // end={{ x: 1, y: 0 }}
-                              style={styles.amountChipWithdraw}
-                            >
-                              {withDrawChipContent}
-                            </LinearGradient>
-                          ) : (
-                            <View style={styles.amountChipWithdraw}>{withDrawChipContent}</View>
-                          )}
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
+              return (
+                <TouchableOpacity
+                  key={i}
+                  onPress={() => {
+                    // setWithdrawableAmount(amt);
+                    setSelectedAmount(amt);
+                    setSelectedWithdrawAmounts(amt);
+                  }}
+                  style={{ borderRadius: Scale(8), overflow: "hidden" }}
+                >
+                  {isSelected ? (
+                    <LinearGradient
+                      colors={[COLORS.linearOne, COLORS.linearTwo]}
+                      // start={{ x: 0, y: 0 }}
+                      // end={{ x: 1, y: 0 }}
+                      style={styles.amountChipWithdraw}
+                    >
+                      {withDrawChipContent}
+                    </LinearGradient>
+                  ) : (
+                    <View style={styles.amountChipWithdraw}>
+                      {withDrawChipContent}
+                    </View>
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
           <Text style={[styles.sectionTitle, { marginVertical: Scale(20) }]}>
             Actual amount received:₹ {actualAmount}{" "}
           </Text>
           <Divider style={{ marginVertical: Scale(10) }} />
-          <Text
-            style={{
-              fontSize: Scale(16),
-              fontWeight: "bold",
-              color: "#fff",
-              marginVertical: Scale(10),
-            }}
-          >
+          <Text style={styles.withdrawalPercentageText}>
             Withdrawal will be charged with 3% of withdraw fee will be charged.
           </Text>
-          <Text
-            style={{
-              fontSize: Scale(16),
-              fontWeight: "bold",
-              color: "#fff",
-              marginVertical: Scale(10),
-            }}
-          >
+          <Text style={styles.withdrawalPercentageText}>
             Each user could withdraw (3) times per day.
           </Text>
-          <Text
-            style={{
-              fontSize: Scale(16),
-              fontWeight: "bold",
-              color: "#fff",
-              marginVertical: Scale(10),
-            }}
-          >
+          <Text style={styles.withdrawalPercentageText}>
             Note: Withdrawal may be delayed due to bank issues. In this case,
             the withdrawn amount will be returned to your wallet. Thank you for
             your patience.
           </Text>
-          <Text
-            style={{
-              fontSize: Scale(16),
-              fontWeight: "bold",
-              color: "#fff",
-              marginVertical: Scale(10),
-            }}
-          >
+          <Text style={styles.withdrawalPercentageText}>
             Our platforms withdrawal delay compensation polices.
           </Text>
-          <Text
-            style={{
-              fontSize: Scale(16),
-              fontWeight: "bold",
-              color: "#fff",
-              marginVertical: Scale(10),
-            }}
-          >
+          <Text style={styles.withdrawalPercentageText}>
             1. Within 24 hours to 72 hours - 5% of withdrawal amount.
           </Text>
-          <Text
-            style={{
-              fontSize: Scale(16),
-              fontWeight: "bold",
-              color: "#fff",
-              marginVertical: Scale(10),
-            }}
-          >
+          <Text style={styles.withdrawalPercentageText}>
             2. Within 72 hours to 168 hours - 30% of withdrawal amount.
           </Text>
-          <Text
-            style={{
-              fontSize: Scale(16),
-              fontWeight: "bold",
-              color: "#fff",
-              marginVertical: Scale(10),
-            }}
-          >
+          <Text style={styles.withdrawalPercentageText}>
             Over 168 hours - 100% compensation of withdrawal amount.
           </Text>
-          <Text
-            style={{
-              fontSize: Scale(16),
-              fontWeight: "bold",
-              color: "#fff",
-              marginVertical: Scale(10),
-            }}
-          >
+          <Text style={styles.withdrawalPercentageText}>
             Note: No Compensation of payment within 24 hours. Compensation will
             be added to user's wallet after his bank account's credited. To
             claim the compensation, user have to contact customer service.
@@ -587,37 +456,16 @@ const Withdraw = ({ navigation }: any) => {
             <KeyboardAvoidingView
               style={{ flex: 1, justifyContent: "flex-end" }}
             >
-              <View
-                style={{
-                  backgroundColor: COLORS.primary,
-                  borderRadius: 10,
-                  padding: 20,
-                  // marginBottom: 16,
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: Scale(20),
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "white",
-                      fontWeight: "bold",
-                      fontSize: Scale(16),
+              <View style={styles.modalContainer1}>
+                <View style={styles.modalTransferView}>
+                  <Text style={styles.modalTransferText}>Transfer</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setIsModalVisible(false);
+                      setWithdrawableAmount(0);
+                      setSelectedAmount(0);
                     }}
                   >
-                    Transfer
-                  </Text>
-                  <TouchableOpacity onPress={() =>{ 
-                    setIsModalVisible(false)
-                    setWithdrawableAmount(0)
-                    setSelectedAmount(0);
-      
-                  }}>
                     <AntDesign
                       name={"delete"}
                       size={Scale(18)}
@@ -628,23 +476,9 @@ const Withdraw = ({ navigation }: any) => {
                 </View>
 
                 {/* TextInput wrapper */}
-                <View
-                  style={{
-                    borderWidth: 1,
-                    borderColor: "#fff",
-                    borderRadius: 8,
-                    paddingHorizontal: 12,
-                    paddingVertical: 4,
-                    marginTop: 10,
-                  }}
-                >
+                <View style={styles.modalTextInputWrapper}>
                   <TextInput
-                    style={{
-                      fontSize: Scale(16),
-                      color: "white",
-                      fontWeight: "bold",
-                      outlineWidth: 0,
-                    }}
+                    style={styles.modalTransferTextInputStyle}
                     placeholder="Enter Withdrawable amount"
                     placeholderTextColor="#999"
                     value={withdrawableAmount}
@@ -653,9 +487,7 @@ const Withdraw = ({ navigation }: any) => {
                     maxLength={10}
                   />
                 </View>
-                <View
-                  style={{ marginTop: Scale(20), marginHorizontal: Scale(2) }}
-                >
+                <View style={styles.amountChipsTopRow}>
                   <View style={styles.amountChipsRow}>
                     {amounts.map((amt, i) => {
                       const isSelected = selectedAmount === amt;
@@ -697,58 +529,23 @@ const Withdraw = ({ navigation }: any) => {
                     })}
                   </View>
                 </View>
-                <Text
-                  style={{
-                    marginTop: Scale(10),
-                    marginHorizontal: Scale(10),
-                    color: "white",
-                    fontSize: Scale(12),
-                    fontWeight: "500",
-                  }}
-                >
+                <Text style={styles.descriptionText}>
                   After clicking Confirm, your withdrawable balance will be
                   converted into Recharge wallet and you will the corresponding
                   bonus.
                 </Text>
-                <Divider
-                  style={{
-                    marginVertical: Scale(20),
-                    marginHorizontal: Scale(10),
-                  }}
-                />
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "white",
-                      fontSize: Scale(12),
-                      fontWeight: "500",
-                    }}
-                  >
-                    Will get:
-                  </Text>
-                  <Text
-                    style={{
-                      color: "white",
-                      fontSize: Scale(16),
-                      fontWeight: "bold",
-                      marginLeft: Scale(5),
-                    }}
-                  >
-                   ₹ {(Number(withdrawableAmount || 0) + 0.1).toFixed(1)}
+                <Divider style={styles.dividerStyle} />
+                <View style={styles.willGetView}>
+                  <Text style={styles.willGetText}>Will get:</Text>
+                  <Text style={styles.willGetTextAmount}>
+                    ₹ {(Number(withdrawableAmount || 0) + 0.1).toFixed(1)}
                   </Text>
                 </View>
-                <View
-                  style={{ marginTop: Scale(10), marginHorizontal: Scale(10) }}
-                >
-                  <TouchableOpacity 
-                  onPress={handleWithdrawConversion}
-                  style={styles.buttonWrapper}>
+                <View style={styles.withdrawButtonView}>
+                  <TouchableOpacity
+                    onPress={handleWithdrawConversion}
+                    style={styles.buttonWrapper}
+                  >
                     <LinearGradient
                       colors={[COLORS.linearOne, COLORS.linearTwo]}
                       start={{ x: 0, y: 0 }}
@@ -1039,15 +836,14 @@ const createStyles = (Scale: any) =>
       marginTop: Scale(10),
       color: COLORS.primary,
       fontWeight: "bold",
-      fontSize: Scale(16)
-
+      fontSize: Scale(16),
     },
     warningText: {
       color: COLORS.primary,
       fontSize: Scale(12),
       marginTop: Scale(4),
       width: Scale(300),
-      fontWeight:'600'
+      fontWeight: "600",
     },
     amountBox: {
       backgroundColor: COLORS.primary,
@@ -1075,7 +871,7 @@ const createStyles = (Scale: any) =>
     },
     amountChipsRowWithdraw: {
       flexDirection: "row",
-      flexWrap: 'wrap',
+      flexWrap: "wrap",
       gap: Scale(15),
     },
     amountChipWithdraw: {
@@ -1280,6 +1076,137 @@ const createStyles = (Scale: any) =>
       fontWeight: "bold",
       fontSize: Scale(14),
     },
+    renderBankAccountsStyle: {
+      marginTop: Scale(10),
+      marginHorizontal: Scale(10),
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      borderWidth: 2,
+      borderRadius: 10,
+      padding: Scale(15),
+      marginVertical: Scale(10),
+      width: "95%",
+      backgroundColor: "transparent",
+    },
+    renderBankAccountsStyle1: { flexDirection: "row", alignItems: "center" },
+    accountHolderNameText: {
+      fontSize: Scale(16),
+      fontWeight: "bold",
+      color: "#fff",
+    },
+    accountNumberText: {
+      fontSize: Scale(12),
+      fontWeight: "bold",
+      color: "#fff",
+    },
+    bankIdTouchable: {
+      flexDirection: "row",
+      alignItems: "center",
+      bottom: Scale(5),
+    },
+    editText: {
+      fontSize: Scale(12),
+      fontWeight: "bold",
+      color: "#fff",
+    },
+    deleteButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: Scale(10),
+    },
+    linearGradientStyle: {
+      borderRadius: 10,
+      width: "100%",
+      padding: Scale(10),
+      marginTop: Scale(10),
+    },
+    transferMethodStyle: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    transferBankAccountText: {
+      fontSize: Scale(20),
+      fontWeight: "bold",
+      color: "#fff",
+      marginVertical: Scale(10),
+    },
+    bankAccountsStyle: {
+      backgroundColor: COLORS.primary,
+      borderRadius: 10,
+      padding: Scale(12),
+      marginBottom: Scale(12),
+      width: "100%",
+      maxHeight: Scale(250),
+      flexGrow: 0,
+    },
+    withdrawalPercentageText: {
+      fontSize: Scale(16),
+      fontWeight: "bold",
+      color: "#fff",
+      marginVertical: Scale(10),
+    },
+    modalContainer1: {
+      backgroundColor: COLORS.primary,
+      borderRadius: 10,
+      padding: 20,
+      // marginBottom: 16,
+    },
+    modalTransferView: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: Scale(20),
+    },
+    modalTransferText: {
+      color: "white",
+      fontWeight: "bold",
+      fontSize: Scale(16),
+    },
+    modalTextInputWrapper: {
+      borderWidth: 1,
+      borderColor: "#fff",
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 4,
+      marginTop: 10,
+    },
+    modalTransferTextInputStyle: {
+      fontSize: Scale(16),
+      color: "white",
+      fontWeight: "bold",
+      outlineWidth: 0,
+    },
+    amountChipsTopRow: { marginTop: Scale(20), marginHorizontal: Scale(2) },
+    descriptionText: {
+      marginTop: Scale(10),
+      marginHorizontal: Scale(10),
+      color: "white",
+      fontSize: Scale(12),
+      fontWeight: "500",
+    },
+    dividerStyle: {
+      marginVertical: Scale(20),
+      marginHorizontal: Scale(10),
+    },
+    willGetView: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    willGetText: {
+      color: "white",
+      fontSize: Scale(12),
+      fontWeight: "500",
+    },
+    willGetTextAmount: {
+      color: "white",
+      fontSize: Scale(16),
+      fontWeight: "bold",
+      marginLeft: Scale(5),
+    },
+    withdrawButtonView: { marginTop: Scale(10), marginHorizontal: Scale(10) },
   });
 
 export default Withdraw;

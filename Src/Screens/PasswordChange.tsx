@@ -13,10 +13,10 @@ const PasswordChange = ({navigation}: any) => {
     const [confirmPassword, setConfirmPassword] = React.useState('');
     const [otp, setOtp] = React.useState('');
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.container}>
          <ImageBackground
       source={backGround1}
-      style={{flex: 1}}
+      style={styles.container}
       > 
      <CustomHeaderRegister
      leftIconPress={() => navigation.goBack()}
@@ -24,7 +24,7 @@ const PasswordChange = ({navigation}: any) => {
       leftIcon={leftArrowHeader}
       centerText={'Set Password'}
       />
-      <View style ={{marginTop: Scale(20), marginHorizontal: Scale(20)}}>
+      <View style ={styles.container1}>
       <CommonTextInput
             placeholderText="Enter Password (6-15)"
             value={password}
@@ -37,7 +37,7 @@ const PasswordChange = ({navigation}: any) => {
             }
           />
       </View>
-      <View style ={{marginTop: Scale(50), marginHorizontal: Scale(20)}}>
+      <View style ={styles.container2}>
       <CommonTextInput
             placeholderText="Enter Confirm Password (6-15)"
             value={password}
@@ -50,7 +50,7 @@ const PasswordChange = ({navigation}: any) => {
             }
           />
       </View>
-      <View style ={{marginTop: Scale(50), marginHorizontal: Scale(20)}}>
+      <View style ={styles.container3}>
           <CommonTextInput
             placeholderText="Enter OTP"
             value={otp}
@@ -68,7 +68,7 @@ const PasswordChange = ({navigation}: any) => {
             }
           />
           </View>
-          <View style ={{marginTop: Scale(50), marginHorizontal: Scale(20)}}>
+          <View style ={styles.container4}>
           <TouchableOpacity style={styles.signInButton}>
         <Text style={styles.signInButtonText}>Confirm</Text>
       </TouchableOpacity>
@@ -92,5 +92,23 @@ const createStyles = (Scale: any) =>
         fontSize: Scale(16),
         fontWeight: 'bold',
       },
+      container: {flex: 1},
+      container1: {
+        marginTop: Scale(20), 
+        marginHorizontal: Scale(20)
+      },
+      container2: {
+        marginTop: Scale(50), 
+        marginHorizontal: Scale(20)
+      },
+      container3: {
+        marginTop: Scale(50),
+         marginHorizontal: Scale(20)
+        },
+        container4: {
+          marginTop: Scale(50), 
+          marginHorizontal: Scale(20)
+        },
+
     })
 export default PasswordChange

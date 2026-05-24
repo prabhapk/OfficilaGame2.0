@@ -342,45 +342,30 @@ useEffect(() => {
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: COLORS.primary }}
+      style={styles.scrollView}
       stickyHeaderIndices={[0]}
       nestedScrollEnabled={true}
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >
       <CustomLoader visible={myOrdersLoader} />
-      <View style={{ backgroundColor: COLORS.primary, elevation: 10 }}>
+      <View style={styles.mainContainer}>
         <View style={styles.headrrcontainer}>
           <TouchableOpacity
-            style={{
-              alignItems: "center",
-              paddingVertical: 5,
-            }}
+            style={styles.backButtonView}
             onPress={() => navigation.pop()}
           >
             <Entypo
               name="chevron-left"
               size={Scale(30)}
               color={COLORS.white}
-              style={{
-                width: Scale(24),
-                height: Scale(34),
-                marginTop: Scale(10),
-                marginLeft: Scale(10),
-              }}
+              style={styles.backButton}
             />
-            {/* <Image
-              source={lefArrow}
-              tintColor={"#fff"}
-              contentFit="contain"
-              style={{ width: Scale(20), height: Scale(20) }}
-            /> */}
           </TouchableOpacity>
 
           <Text style={styles.resultText}>My Bets</Text>
           <TouchableOpacity
             style={styles.filterButton}
-            // onPress={() => setShowFilter(!showFilter)}
             onPress={() => setOpen(true)}
           >
             <Icon name="filter" size={16} color="white" />
@@ -424,7 +409,7 @@ useEffect(() => {
         </View>
       </View>
 
-      <View style={{ marginHorizontal: 15, paddingBottom: 20 }}>
+      <View style={styles.bottomContainer}>
         <FlatList
           data={filteredOrders}
           keyExtractor={(item) => item.betUniqueId}
@@ -433,27 +418,14 @@ useEffect(() => {
           scrollEnabled={false}
           ListEmptyComponent={
             <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: Scale(100),
-              }}
+              style={styles.noDataContainer}
             >
               <Image
                 source={noDataImage}
-                style={{
-                  width: 100,
-                  height: 100,
-                  marginVertical: Scale(20),
-                }}
+                style={styles.noDataImageStyle}
               />
               <Text
-                style={{
-                  color: "white",
-                  fontSize: 16,
-                  fontWeight: "bold",
-                }}
+                style={styles.noDataTextStyle}
               >
                 Please place the order to see your bets!
               </Text>
@@ -572,4 +544,43 @@ const createStyles = (Scale: any) =>
     selectedText: {
       fontWeight: "bold",
     },
+    scrollView: { 
+      flex: 1, 
+      backgroundColor: COLORS.primary 
+    },
+    mainContainer: { 
+      backgroundColor: COLORS.primary,
+       elevation: 10 
+      },
+      backButtonView: {
+              alignItems: "center",
+              paddingVertical: 5,
+            },
+            backButton: {
+                width: Scale(24),
+                height: Scale(34),
+                marginTop: Scale(10),
+                marginLeft: Scale(10),
+              },
+              bottomContainer: { 
+                marginHorizontal: 15, 
+                paddingBottom: 20 
+              },
+              noDataContainer: {
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: Scale(100),
+              },
+              noDataImageStyle: {
+                  width: 100,
+                  height: 100,
+                  marginVertical: Scale(20),
+                },
+                noDataTextStyle: {
+                  color: "white",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                },
+
   });

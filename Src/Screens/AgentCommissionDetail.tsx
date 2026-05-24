@@ -29,17 +29,17 @@ const AgentCommissionDetail = ({ navigation }: any) => {
   const [showShareModal, setShowShareModal] = useState(false);
 
   const { commissionBonusData } = useSelector(
-    (state: RootState) => state.agentSlice
+    (state: RootState) => state.agentSlice,
   );
   const { isLoggedIn, userDetails } = useSelector(
-    (state: RootState) => state.signInSlice
+    (state: RootState) => state.signInSlice,
   );
 
   const levels = Array.from(
-    new Set(commissionBonusData.map((item) => item.agentLevel))
+    new Set(commissionBonusData.map((item) => item.agentLevel)),
   );
   const filteredData = commissionBonusData.filter(
-    (item) => item.agentLevel === selectedLevel
+    (item) => item.agentLevel === selectedLevel,
   );
   const shareUrl =
     "https://yourapp.com/invite?code=" + (userDetails.referralCode || "");
@@ -53,225 +53,38 @@ const AgentCommissionDetail = ({ navigation }: any) => {
   const renderCommissionDetailItem = ({ item }) => {
     return (
       <View>
-        <View
-          style={{
-            backgroundColor: COLORS.white,
-            marginHorizontal: Scale(20),
-            marginTop: Scale(10),
-            borderRadius: Scale(6),
-            padding: Scale(10),
-            borderWidth: 1,
-            borderColor: "#fff",
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              borderBottomColor: COLORS.black,
-              borderBottomWidth: 1,
-              padding: Scale(5),
-              borderTopColor: "transparent",
-              borderTopWidth: 0,
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: Scale(20),
-                fontWeight: "bold",
-                color: "#000",
-              }}
-            >
-              Commission Details
-            </Text>
-            <Text
-              style={{
-                fontSize: Scale(14),
-                fontWeight: "bold",
-                color: "#000",
-              }}
-            >
-             ({item?.gameType})
-            </Text>
+        <View style={styles.commissionDetailItem}>
+          <View style={styles.commissionDetailsStyle}>
+            <Text style={styles.commisionDetailsText}>Commission Details</Text>
+            <Text style={styles.gameTypeText}>({item?.gameType})</Text>
           </View>
 
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              backgroundColor: "#fff",
-              padding: Scale(5),
-              borderWidth: 0.2,
-              borderRadius: Scale(4),
-              marginVertical: Scale(2),
-              borderBottomColor: "#000",
-              borderTopColor: "transparent",
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent",
-              marginTop: Scale(5),
-            }}
-          >
-            <Text
-              style={{
-                fontSize: Scale(14),
-                fontWeight: "400",
-                color: "#000",
-                paddingVertical: Scale(5),
-              }}
-            >
-              level1Commission
-            </Text>
-            <Text
-              style={{
-                fontSize: Scale(14),
-                fontWeight: "bold",
-                color: "#000",
-              }}
-            >
+          <View style={styles.level1CommisionStyle}>
+            <Text style={styles.level1CommisionText}>level1Commission</Text>
+            <Text style={styles.level1CommisionTextApiData}>
               ₹{item.level1Commission}
             </Text>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              backgroundColor: "#fff",
-              padding: Scale(5),
-              borderWidth: 0.2,
-              borderRadius: Scale(4),
-              marginVertical: Scale(2),
-              borderBottomColor: "#000",
-              borderTopColor: "transparent",
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent",
-              marginTop: Scale(5),
-            }}
-          >
-            <Text
-              style={{
-                fontSize: Scale(14),
-                fontWeight: "400",
-                color: "#000",
-                paddingVertical: Scale(5),
-              }}
-            >
-              Level2Commission
-            </Text>
-            <Text
-              style={{
-                fontSize: Scale(14),
-                fontWeight: "bold",
-                color: "#000",
-              }}
-            >
+          <View style={styles.level2CommisionStyle}>
+            <Text style={styles.level2CommisionText}>Level2Commission</Text>
+            <Text style={styles.level2CommisionTextApiData}>
               ₹{item.level2Commission}
             </Text>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              backgroundColor: "#fff",
-              padding: Scale(5),
-              borderWidth: 0.2,
-              borderRadius: Scale(4),
-              marginVertical: Scale(2),
-              borderBottomColor: "#000",
-              borderTopColor: "transparent",
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent",
-              marginTop: Scale(5),
-            }}
-          >
-            <Text
-              style={{
-                fontSize: Scale(14),
-                fontWeight: "400",
-                color: "#000",
-              }}
-            >
-              Level3Commission
-            </Text>
-            <Text
-              style={{
-                fontSize: Scale(14),
-                fontWeight: "bold",
-                color: "#000",
-                paddingVertical: Scale(5),
-              }}
-            >
+          <View style={styles.level3CommisionStyle}>
+            <Text style={styles.level3CommisionText}>Level3Commission</Text>
+            <Text style={styles.level3CommisionTextApiData}>
               ₹{item.level3Commission}
             </Text>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              backgroundColor: "#fff",
-              padding: Scale(5),
-              borderWidth: 0.2,
-              borderRadius: Scale(4),
-              marginVertical: Scale(2),
-              borderBottomColor: "#000",
-              borderTopColor: "transparent",
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent",
-              marginTop: Scale(5),
-            }}
-          >
-            <Text
-              style={{
-                fontSize: Scale(14),
-                fontWeight: "400",
-                color: "#000",
-                paddingVertical: Scale(5),
-              }}
-            >
-              Level4Commission
-            </Text>
-            <Text
-              style={{
-                fontSize: Scale(14),
-                fontWeight: "bold",
-                color: "#000",
-              }}
-            >
+          <View style={styles.level4CommisionStyle}>
+            <Text style={styles.level4CommisionText}>Level4Commission</Text>
+            <Text style={styles.level4CommisionTextApiData}>
               ₹{item.level4Commission}
             </Text>
           </View>
 
           <View>
-            {/* <LinearGradient
-            colors={[COLORS.linearOne, COLORS.linearTwo]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.invitationLinkButton}
-          >
-          <TouchableOpacity
-                    style ={{
-                        backgroundColor: '#00B612',
-                        padding: Scale(10),
-                        borderRadius: Scale(20),
-                        marginTop: Scale(15),
-                        marginHorizontal: Scale(10),
-                    }}
-                    onPress={handleInvite}
-                    >
-             <Text style ={{
-                            color: COLORS.white,
-                            fontSize: Scale(14),
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                        }}>Go Complete</Text>
-            </TouchableOpacity>
-          </LinearGradient> */}
             <LinearGradient
               // colors={[COLORS.linearOne, COLORS.linearTwo]}
               colors={["black", "grey"]}
@@ -301,7 +114,7 @@ const AgentCommissionDetail = ({ navigation }: any) => {
   const handleFacebookShare = async () => {
     try {
       const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-        shareUrl
+        shareUrl,
       )}`;
       await Linking.openURL(facebookUrl);
       setShowShareModal(false);
@@ -314,7 +127,7 @@ const AgentCommissionDetail = ({ navigation }: any) => {
   const handleTelegramShare = async () => {
     try {
       const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(
-        shareUrl
+        shareUrl,
       )}&text=${encodeURIComponent(shareMessage)}`;
       await Linking.openURL(telegramUrl);
       setShowShareModal(false);
@@ -327,7 +140,7 @@ const AgentCommissionDetail = ({ navigation }: any) => {
   const handleWhatsAppShare = async () => {
     try {
       const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(
-        shareMessage
+        shareMessage,
       )}`;
       await Linking.openURL(whatsappUrl);
       setShowShareModal(false);
@@ -343,7 +156,7 @@ const AgentCommissionDetail = ({ navigation }: any) => {
       await Linking.openURL("instagram://");
       Alert.alert(
         "Instagram",
-        "Please paste the link in your Instagram story or post"
+        "Please paste the link in your Instagram story or post",
       );
       setShowShareModal(false);
     } catch (error) {
@@ -380,25 +193,18 @@ const AgentCommissionDetail = ({ navigation }: any) => {
               centerText="Commission Details"
             />
 
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-around",
-                marginVertical: Scale(15),
-                paddingHorizontal: Scale(10),
-              }}
-            >
+            <View style={styles.levelsView}>
               {levels.map((level) => (
                 <TouchableOpacity
                   key={level}
                   onPress={() => setSelectedLevel(level)}
-                  style={{
-                    paddingVertical: Scale(8),
-                    paddingHorizontal: Scale(15),
-                    borderRadius: Scale(20),
-                    backgroundColor:
-                      selectedLevel === level ? "grey" : "#F1F2F6",
-                  }}
+                  style={[
+                    styles.levelButton,
+                    {
+                      backgroundColor:
+                        selectedLevel === level ? "grey" : "#F1F2F6",
+                    },
+                  ]}
                 >
                   <Text
                     style={{
@@ -591,6 +397,152 @@ const createStyles = (Scale: any) =>
       fontWeight: "bold",
       color: "#fff",
       textAlign: "center",
+    },
+    commissionDetailItem: {
+      backgroundColor: COLORS.white,
+      marginHorizontal: Scale(20),
+      marginTop: Scale(10),
+      borderRadius: Scale(6),
+      padding: Scale(10),
+      borderWidth: 1,
+      borderColor: "#fff",
+    },
+    commissionDetailsStyle: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      borderBottomColor: COLORS.black,
+      borderBottomWidth: 1,
+      padding: Scale(5),
+      borderTopColor: "transparent",
+      borderTopWidth: 0,
+      borderLeftColor: "transparent",
+      borderRightColor: "transparent",
+    },
+    commisionDetailsText: {
+      fontSize: Scale(20),
+      fontWeight: "bold",
+      color: "#000",
+    },
+    gameTypeText: {
+      fontSize: Scale(14),
+      fontWeight: "bold",
+      color: "#000",
+    },
+    level1CommisionStyle: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: "#fff",
+      padding: Scale(5),
+      borderWidth: 0.2,
+      borderRadius: Scale(4),
+      marginVertical: Scale(2),
+      borderBottomColor: "#000",
+      borderTopColor: "transparent",
+      borderLeftColor: "transparent",
+      borderRightColor: "transparent",
+      marginTop: Scale(5),
+    },
+    level1CommisionText: {
+      fontSize: Scale(14),
+      fontWeight: "400",
+      color: "#000",
+      paddingVertical: Scale(5),
+    },
+    level1CommisionTextApiData: {
+      fontSize: Scale(14),
+      fontWeight: "bold",
+      color: "#000",
+    },
+    level2CommisionStyle: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: "#fff",
+      padding: Scale(5),
+      borderWidth: 0.2,
+      borderRadius: Scale(4),
+      marginVertical: Scale(2),
+      borderBottomColor: "#000",
+      borderTopColor: "transparent",
+      borderLeftColor: "transparent",
+      borderRightColor: "transparent",
+      marginTop: Scale(5),
+    },
+    level2CommisionText: {
+      fontSize: Scale(14),
+      fontWeight: "400",
+      color: "#000",
+      paddingVertical: Scale(5),
+    },
+    level2CommisionTextApiData: {
+      fontSize: Scale(14),
+      fontWeight: "bold",
+      color: "#000",
+    },
+    level3CommisionStyle: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: "#fff",
+      padding: Scale(5),
+      borderWidth: 0.2,
+      borderRadius: Scale(4),
+      marginVertical: Scale(2),
+      borderBottomColor: "#000",
+      borderTopColor: "transparent",
+      borderLeftColor: "transparent",
+      borderRightColor: "transparent",
+      marginTop: Scale(5),
+    },
+    level3CommisionText: {
+      fontSize: Scale(14),
+      fontWeight: "400",
+      color: "#000",
+    },
+    level3CommisionTextApiData: {
+      fontSize: Scale(14),
+      fontWeight: "bold",
+      color: "#000",
+      paddingVertical: Scale(5),
+    },
+    level4CommisionStyle: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: "#fff",
+      padding: Scale(5),
+      borderWidth: 0.2,
+      borderRadius: Scale(4),
+      marginVertical: Scale(2),
+      borderBottomColor: "#000",
+      borderTopColor: "transparent",
+      borderLeftColor: "transparent",
+      borderRightColor: "transparent",
+      marginTop: Scale(5),
+    },
+    level4CommisionText: {
+      fontSize: Scale(14),
+      fontWeight: "400",
+      color: "#000",
+      paddingVertical: Scale(5),
+    },
+    level4CommisionTextApiData: {
+      fontSize: Scale(14),
+      fontWeight: "bold",
+      color: "#000",
+    },
+    levelsView: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      marginVertical: Scale(15),
+      paddingHorizontal: Scale(10),
+    },
+    levelButton: {
+      paddingVertical: Scale(8),
+      paddingHorizontal: Scale(15),
+      borderRadius: Scale(20),
     },
   });
 

@@ -35,7 +35,7 @@ import {
   whatsappIcon,
 } from "../../assets/assets";
 import { CommonActions } from "@react-navigation/native";
-import { Image } from 'expo-image';
+import { Image } from "expo-image";
 
 const AgencyScreen = ({ navigation }: { navigation: any }) => {
   const { Scale, verticalScale } = useContainerScale();
@@ -64,13 +64,14 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
     agentCreatedDate,
     totalRecharge,
     totalCommissions,
-    userData
+    userData,
   } = useSelector((state: RootState) => state.agentSlice);
-  console.log('totalCommissions===>', totalCommissions);
-  console.log('userDataScreen==>', userData);
-  
-  
-  const { mobileNumber, agentId } = useSelector((state: RootState) => state.signInSlice);
+  console.log("totalCommissions===>", totalCommissions);
+  console.log("userDataScreen==>", userData);
+
+  const { mobileNumber, agentId } = useSelector(
+    (state: RootState) => state.signInSlice,
+  );
 
   const handleBackPress = () => {
     navigation.goBack();
@@ -83,20 +84,20 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
         index: 0,
         routes: [
           {
-            name: 'BottomNavigation',
+            name: "BottomNavigation",
             state: {
               index: 4,
               routes: [
-                { name: 'Home' },
-                { name: 'Promotions' },
-                { name: 'Invite' },
-                { name: 'Result' },
-                { name: 'Me' },
+                { name: "Home" },
+                { name: "Promotions" },
+                { name: "Invite" },
+                { name: "Result" },
+                { name: "Me" },
               ],
             },
           },
         ],
-      })
+      }),
     );
   };
 
@@ -129,90 +130,93 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
   const handleCustomerService = () => {
     Alert.alert("Customer Service", "Opening customer service...");
   };
-    const { userDetails , isAgent} = useSelector(
-      (state: RootState) => state.signInSlice,
-    );
+  const { userDetails, isAgent } = useSelector(
+    (state: RootState) => state.signInSlice,
+  );
 
   useEffect(() => {
-  if (isAgent) {
-    dispatch(
-      getAgentDailyStats({
-        agentId: Number(agentId),
-        date: '2022-08-01',
-      })
-    );
-  }
-}, [isAgent, agentId]);
+    if (isAgent) {
+      dispatch(
+        getAgentDailyStats({
+          agentId: Number(agentId),
+          date: "2022-08-01",
+        }),
+      );
+    }
+  }, [isAgent, agentId]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (isAgent) {
       dispatch(getAgentDashboardData({ agentId: agentId }));
     }
   }, [isAgent, agentId]);
 
-    const handleInvite = async () => {
-      setShowShareModal(true);
+  const handleInvite = async () => {
+    setShowShareModal(true);
   };
-  
-  const shareUrl = 'https://yourapp.com/invite?code=' + (userDetails.referralCode || '');
-    const shareMessage = `Join me on this amazing app! Use my referral code: ${userDetails.referralCode || ''}\n\nDownload the app: ${shareUrl}`;
-  
-    const handleFacebookShare = async () => {
-      try {
-        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
-        await Linking.openURL(facebookUrl);
-        setShowShareModal(false);
-      } catch (error) {
-        console.log('Error sharing to Facebook:', error);
-        Alert.alert('Error', 'Unable to share to Facebook');
-      }
-    };
-  
-    const handleTelegramShare = async () => {
-      try {
-        const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareMessage)}`;
-        await Linking.openURL(telegramUrl);
-        setShowShareModal(false);
-      } catch (error) {
-        console.log('Error sharing to Telegram:', error);
-        Alert.alert('Error', 'Unable to share to Telegram');
-      }
-    };
-  
-    const handleWhatsAppShare = async () => {
-      try {
-        const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(shareMessage)}`;
-        await Linking.openURL(whatsappUrl);
-        setShowShareModal(false);
-      } catch (error) {
-        console.log('Error sharing to WhatsApp:', error);
-        Alert.alert('Error', 'Unable to share to WhatsApp');
-      }
-    };
-  
-    const handleInstagramShare = async () => {
-      try {
-        // Instagram doesn't support direct URL sharing, so we'll copy the link
-        await Linking.openURL('instagram://');
-        Alert.alert('Instagram', 'Please paste the link in your Instagram story or post');
-        setShowShareModal(false);
-      } catch (error) {
-        console.log('Error opening Instagram:', error);
-        Alert.alert('Error', 'Instagram app not found');
-      }
-    };
-  
-    const handleCopyLink = async () => {
-      try {
-        await Clipboard.setStringAsync(shareUrl);
-        Alert.alert('Copied!', 'Link copied to clipboard');
-        setShowShareModal(false);
-      } catch (error) {
-        console.log('Error copying link:', error);
-        Alert.alert('Error', 'Unable to copy link');
-      }
-    };
-  
+
+  const shareUrl =
+    "https://yourapp.com/invite?code=" + (userDetails.referralCode || "");
+  const shareMessage = `Join me on this amazing app! Use my referral code: ${userDetails.referralCode || ""}\n\nDownload the app: ${shareUrl}`;
+
+  const handleFacebookShare = async () => {
+    try {
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+      await Linking.openURL(facebookUrl);
+      setShowShareModal(false);
+    } catch (error) {
+      console.log("Error sharing to Facebook:", error);
+      Alert.alert("Error", "Unable to share to Facebook");
+    }
+  };
+
+  const handleTelegramShare = async () => {
+    try {
+      const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareMessage)}`;
+      await Linking.openURL(telegramUrl);
+      setShowShareModal(false);
+    } catch (error) {
+      console.log("Error sharing to Telegram:", error);
+      Alert.alert("Error", "Unable to share to Telegram");
+    }
+  };
+
+  const handleWhatsAppShare = async () => {
+    try {
+      const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(shareMessage)}`;
+      await Linking.openURL(whatsappUrl);
+      setShowShareModal(false);
+    } catch (error) {
+      console.log("Error sharing to WhatsApp:", error);
+      Alert.alert("Error", "Unable to share to WhatsApp");
+    }
+  };
+
+  const handleInstagramShare = async () => {
+    try {
+      // Instagram doesn't support direct URL sharing, so we'll copy the link
+      await Linking.openURL("instagram://");
+      Alert.alert(
+        "Instagram",
+        "Please paste the link in your Instagram story or post",
+      );
+      setShowShareModal(false);
+    } catch (error) {
+      console.log("Error opening Instagram:", error);
+      Alert.alert("Error", "Instagram app not found");
+    }
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await Clipboard.setStringAsync(shareUrl);
+      Alert.alert("Copied!", "Link copied to clipboard");
+      setShowShareModal(false);
+    } catch (error) {
+      console.log("Error copying link:", error);
+      Alert.alert("Error", "Unable to copy link");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -225,147 +229,132 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
         rightIcon={require("../../assets/wallet-icon.webp")}
         rightIconPress={handleWalletPress}
       />
-        {isAgent ? (
-
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 60 }}
-      >
-
-        {/* User Profile Card */}
-        <View style={styles.profileCard}>
-          <View style={styles.avatarContainer}>
-            <Image
-              source={require("../../assets/ProfileScreen/wallet3DImage.webp")}
-              style={styles.avatar}
-              contentFit="cover"
-            />
-            <View style={styles.levelBadge}>
-              <Text style={styles.levelText}>Lv.1</Text>
-            </View>
-          </View>
-          <View style={styles.userInfo}>
-            <Text style={styles.userId}>{mobileNumber}</Text>
-            <Text style={styles.registerDate}>
-              Register Date: {formatToDDMMYYYY(agentCreatedDate)}
-            </Text>
-          </View>
-        </View>
-
-        {/* Today's User Data Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Today's User Data</Text>
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <View style={styles.statIcon}>
-                {/* <Text style={styles.statIconText}>👥</Text> */}
-                <Image
-                  source={agentActiveUser}
-                  style={{
-                    width: Scale(25),
-                    height: Scale(25),
-                  }}
-                />
+      {isAgent ? (
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollCotainerStyle}
+        >
+          {/* User Profile Card */}
+          <View style={styles.profileCard}>
+            <View style={styles.avatarContainer}>
+              <Image
+                source={require("../../assets/ProfileScreen/wallet3DImage.webp")}
+                style={styles.avatar}
+                contentFit="cover"
+              />
+              <View style={styles.levelBadge}>
+                <Text style={styles.levelText}>Lv.1</Text>
               </View>
-              <Text style={styles.statNumber}>
-                {dashBoardUserDataActiveUser || 0}
+            </View>
+            <View style={styles.userInfo}>
+              <Text style={styles.userId}>{mobileNumber}</Text>
+              <Text style={styles.registerDate}>
+                Register Date: {formatToDDMMYYYY(agentCreatedDate)}
               </Text>
-              <Text style={styles.statLabel}>ACTIVE</Text>
-            </View>
-            <View style={styles.statItem}>
-              <View style={styles.statIcon}>
-                {/* <Text style={styles.statIconText}>💳</Text> */}
-                <Image
-                  source={agentRecharge}
-                  style={{
-                    width: Scale(25),
-                    height: Scale(25),
-                  }}
-                />
-              </View>
-              <Text style={styles.statNumber}>
-                {userData?.totalRechargeAmount}
-              </Text>
-              <Text style={styles.statLabel}>RECHARGE</Text>
-            </View>
-            <View style={styles.statItem}>
-              <View style={styles.statIcon}>
-                <Image
-                  source={agentNewUsers}
-                  style={{
-                    width: Scale(30),
-                    height: Scale(30),
-                  }}
-                />
-              </View>
-              <Text style={styles.statNumber}>{dashBoardUserDataNewUser || 0}</Text>
-              <Text style={styles.statLabel}>NEW USER</Text>
             </View>
           </View>
-        </View>
 
-        {/* Total Month Data Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Total Data</Text>
-          <View style={styles.monthStatsContainer}>
-            <View style={styles.monthStatItem}>
-              <View style={styles.monthStatHeader}>
-                <View style={styles.monthStatIcon}>
+          {/* Today's User Data Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Today's User Data</Text>
+            <View style={styles.statsContainer}>
+              <View style={styles.statItem}>
+                <View style={styles.statIcon}>
+                  {/* <Text style={styles.statIconText}>👥</Text> */}
                   <Image
-                    source={agentRechargeMonth}
-                    style={{
-                      width: Scale(25),
-                      height: Scale(25),
-                    }}
+                    source={agentActiveUser}
+                    style={styles.agentActiveUserStyle}
                   />
                 </View>
-                <Text style={styles.monthStatLabel}>RECHARGE</Text>
-              </View>
-              <Text style={styles.monthStatAmount}>
-                ₹{totalRecharge?.toFixed(2)}
-              </Text>
-              <View style={styles.monthStatChange}>
-                <Text style={styles.monthStatChangeText}>
-                  ₹{monthData?.recharge.toFixed(2)}
+                <Text style={styles.statNumber}>
+                  {dashBoardUserDataActiveUser || 0}
                 </Text>
-                <Text style={styles.monthStatArrow}>↗</Text>
+                <Text style={styles.statLabel}>ACTIVE</Text>
               </View>
-            </View>
-            <View style={styles.monthStatItem}>
-              <View style={styles.monthStatHeader}>
-                <View style={styles.monthStatIcon}>
+              <View style={styles.statItem}>
+                <View style={styles.statIcon}>
+                  {/* <Text style={styles.statIconText}>💳</Text> */}
                   <Image
-                    source={agentCommission}
-                    style={{
-                      width: Scale(25),
-                      height: Scale(25),
-                    }}
+                    source={agentRecharge}
+                    style={styles.agentActiveUserStyle}
                   />
                 </View>
-                <Text style={styles.monthStatLabel}>COMMISSION</Text>
-              </View>
-              <Text style={styles.monthStatAmount}>
-                ₹{totalCommissions?.toFixed(2) || 0}
-              </Text>
-              <View style={styles.monthStatChange}>
-                <Text style={styles.monthStatChangeText}>
-                  ₹{dashBoardDailyDataCommission?.toFixed(2)}
+                <Text style={styles.statNumber}>
+                  {userData?.totalRechargeAmount}
                 </Text>
-                <Text style={styles.monthStatArrow}>↗</Text>
+                <Text style={styles.statLabel}>RECHARGE</Text>
+              </View>
+              <View style={styles.statItem}>
+                <View style={styles.statIcon}>
+                  <Image
+                    source={agentNewUsers}
+                    style={styles.agentNewUsersStyle}
+                  />
+                </View>
+                <Text style={styles.statNumber}>
+                  {dashBoardUserDataNewUser || 0}
+                </Text>
+                <Text style={styles.statLabel}>NEW USER</Text>
               </View>
             </View>
           </View>
-        </View>
 
-        {/* My Invitation Code Section */}
-        <View style={styles.section}>
-          <View style={styles.invitationHeader}>
-            <View style={styles.invitationTitleContainer}>
-              <View style={styles.redBar} />
-              <Text style={styles.invitationTitle}>My invitation code</Text>
+          {/* Total Month Data Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Total Data</Text>
+            <View style={styles.monthStatsContainer}>
+              <View style={styles.monthStatItem}>
+                <View style={styles.monthStatHeader}>
+                  <View style={styles.monthStatIcon}>
+                    <Image
+                      source={agentRechargeMonth}
+                      style={styles.agentActiveUserStyle}
+                    />
+                  </View>
+                  <Text style={styles.monthStatLabel}>RECHARGE</Text>
+                </View>
+                <Text style={styles.monthStatAmount}>
+                  ₹{totalRecharge?.toFixed(2)}
+                </Text>
+                <View style={styles.monthStatChange}>
+                  <Text style={styles.monthStatChangeText}>
+                    ₹{monthData?.recharge.toFixed(2)}
+                  </Text>
+                  <Text style={styles.monthStatArrow}>↗</Text>
+                </View>
+              </View>
+              <View style={styles.monthStatItem}>
+                <View style={styles.monthStatHeader}>
+                  <View style={styles.monthStatIcon}>
+                    <Image
+                      source={agentCommission}
+                      style={styles.agentActiveUserStyle}
+                    />
+                  </View>
+                  <Text style={styles.monthStatLabel}>COMMISSION</Text>
+                </View>
+                <Text style={styles.monthStatAmount}>
+                  ₹{totalCommissions?.toFixed(2) || 0}
+                </Text>
+                <View style={styles.monthStatChange}>
+                  <Text style={styles.monthStatChangeText}>
+                    ₹{dashBoardDailyDataCommission?.toFixed(2)}
+                  </Text>
+                  <Text style={styles.monthStatArrow}>↗</Text>
+                </View>
+              </View>
             </View>
-            {/* <TouchableOpacity
+          </View>
+
+          {/* My Invitation Code Section */}
+          <View style={styles.section}>
+            <View style={styles.invitationHeader}>
+              <View style={styles.invitationTitleContainer}>
+                <View style={styles.redBar} />
+                <Text style={styles.invitationTitle}>My invitation code</Text>
+              </View>
+              {/* <TouchableOpacity
               style={styles.resetButton}
               onPress={handleResetLink}
             >
@@ -379,84 +368,95 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
               />
               <Text style={styles.resetButtonText}>Reset Link</Text>
             </TouchableOpacity> */}
+            </View>
+
+            <View style={styles.invitationCodeContainer}>
+              <View style={styles.invitationCodeBox}>
+                <Text style={styles.invitationCodeText}>{inviteCode}</Text>
+                <Text style={styles.invitationCodeLabel}>
+                  My invitation code
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.copyButton}
+                onPress={handleInvite}
+              >
+                <Text style={styles.copyButtonText}>Copy</Text>
+              </TouchableOpacity>
+            </View>
+
+            <LinearGradient
+              colors={[COLORS.linearOne, COLORS.linearTwo]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.invitationLinkButton}
+            >
+              <TouchableOpacity
+                style={styles.invitationLinkTouchable}
+                onPress={handleCopyLink}
+              >
+                <Text style={styles.invitationLinkText}>INVITATION LINK</Text>
+              </TouchableOpacity>
+            </LinearGradient>
           </View>
 
-          <View style={styles.invitationCodeContainer}>
-            <View style={styles.invitationCodeBox}>
-              <Text style={styles.invitationCodeText}>{inviteCode}</Text>
-              <Text style={styles.invitationCodeLabel}>My invitation code</Text>
-            </View>
+          {/* Navigation Items */}
+          <View style={styles.navigationSection}>
             <TouchableOpacity
-              style={styles.copyButton}
-              onPress={handleInvite}
+              style={styles.navigationItem}
+              onPress={handleTeamReport}
             >
-              <Text style={styles.copyButtonText}>Copy</Text>
+              <View style={styles.navigationLeft}>
+                <View
+                  style={[
+                    styles.navigationIcon,
+                    { backgroundColor: "#FF8C00" },
+                  ]}
+                >
+                  <Text style={styles.navigationIconText}>📊</Text>
+                </View>
+                <Text style={styles.navigationText}>Team report</Text>
+              </View>
+              <Text style={styles.navigationArrow}>›</Text>
             </TouchableOpacity>
-          </View>
 
-          <LinearGradient
-            colors={[COLORS.linearOne, COLORS.linearTwo]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.invitationLinkButton}
-          >
             <TouchableOpacity
-              style={styles.invitationLinkTouchable}
-              onPress={handleCopyLink}
+              style={styles.navigationItem}
+              onPress={handleCommissionDetail}
             >
-              <Text style={styles.invitationLinkText}>INVITATION LINK</Text>
+              <View style={styles.navigationLeft}>
+                <View
+                  style={[
+                    styles.navigationIcon,
+                    { backgroundColor: "#4CAF50" },
+                  ]}
+                >
+                  <Text style={styles.navigationIconText}>$</Text>
+                </View>
+                <Text style={styles.navigationText}>Commission detail</Text>
+              </View>
+              <Text style={styles.navigationArrow}>›</Text>
             </TouchableOpacity>
-          </LinearGradient>
-        </View>
 
-        {/* Navigation Items */}
-        <View style={styles.navigationSection}>
-          <TouchableOpacity
-            style={styles.navigationItem}
-            onPress={handleTeamReport}
-          >
-            <View style={styles.navigationLeft}>
-              <View
-                style={[styles.navigationIcon, { backgroundColor: "#FF8C00" }]}
-              >
-                <Text style={styles.navigationIconText}>📊</Text>
+            <TouchableOpacity
+              style={styles.navigationItem}
+              onPress={handleInvitationRules}
+            >
+              <View style={styles.navigationLeft}>
+                <View
+                  style={[
+                    styles.navigationIcon,
+                    { backgroundColor: "#2196F3" },
+                  ]}
+                >
+                  <Text style={styles.navigationIconText}>📖</Text>
+                </View>
+                <Text style={styles.navigationText}>Invitation rules</Text>
               </View>
-              <Text style={styles.navigationText}>Team report</Text>
-            </View>
-            <Text style={styles.navigationArrow}>›</Text>
-          </TouchableOpacity>
+              <Text style={styles.navigationArrow}>›</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.navigationItem}
-            onPress={handleCommissionDetail}
-          >
-            <View style={styles.navigationLeft}>
-              <View
-                style={[styles.navigationIcon, { backgroundColor: "#4CAF50" }]}
-              >
-                <Text style={styles.navigationIconText}>$</Text>
-              </View>
-              <Text style={styles.navigationText}>Commission detail</Text>
-            </View>
-            <Text style={styles.navigationArrow}>›</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.navigationItem}
-            onPress={handleInvitationRules}
-          >
-            <View style={styles.navigationLeft}>
-              <View
-                style={[styles.navigationIcon, { backgroundColor: "#2196F3" }]}
-              >
-                <Text style={styles.navigationIconText}>📖</Text>
-              </View>
-              <Text style={styles.navigationText}>Invitation rules</Text>
-            </View>
-            <Text style={styles.navigationArrow}>›</Text>
-          </TouchableOpacity>
-
-          {/* <TouchableOpacity style={styles.navigationItem} onPress={handleCustomerService}>
+            {/* <TouchableOpacity style={styles.navigationItem} onPress={handleCustomerService}>
             <View style={styles.navigationLeft}>
               <View style={[styles.navigationIcon, { backgroundColor: '#9C27B0' }]}>
                 <Text style={styles.navigationIconText}>🎧</Text>
@@ -465,115 +465,115 @@ const AgencyScreen = ({ navigation }: { navigation: any }) => {
             </View>
             <Text style={styles.navigationArrow}>›</Text>
           </TouchableOpacity> */}
-
-        </View>
-           <Modal
-                visible={showShareModal}
-                transparent={true}
-                animationType="fade"
-                onRequestClose={() => setShowShareModal(false)}
-              >
-                <View style={styles.modalOverlay}>
-                  <View style={styles.shareModal}>
-                    <TouchableOpacity
-                      style={styles.closeButton}
-                      onPress={() => setShowShareModal(false)}
-                    >
-                      <Text style={styles.closeButtonText}>×</Text>
-                    </TouchableOpacity>
-                    
-                    <Text style={styles.shareTitle}>Share</Text>
-                    
-                  <View style={styles.shareOptions}>
-                              <TouchableOpacity style={styles.shareOption} onPress={handleFacebookShare}>
-                                <View style={styles.shareIcon}>
-                                  {/* <Text style={styles.shareIconText}>f</Text> */}
-                                  <Image source={fbIcon} 
-                                  style ={{
-                                    height: Scale(70),
-                                    width: Scale(70),
-                                  }}
-                                  />
-                
-                                </View>
-                                <Text style={styles.shareOptionText}>Facebook</Text>
-                              </TouchableOpacity>
-                
-                              <TouchableOpacity style={styles.shareOption} onPress={handleTelegramShare}>
-                                <View style={styles.shareIcon}>
-                                 <Image source={telegramIcon} 
-                                  style ={{
-                                    height: Scale(65),
-                                    width: Scale(65),
-                                  }}
-                                  />
-                
-                                </View>
-                                <Text style={styles.shareOptionText}>Telegram</Text>
-                              </TouchableOpacity>
-                
-                              <TouchableOpacity style={styles.shareOption} onPress={handleWhatsAppShare}>
-                                <View style={styles.shareIcon}>
-                                 <Image source={whatsappIcon} 
-                                  style ={{
-                                    height: Scale(50),
-                                    width: Scale(50),
-                                    borderRadius: Scale(10),
-                                  }}
-                                  />
-                                </View>
-                                <Text style={styles.shareOptionText}>WhatsApp</Text>
-                              </TouchableOpacity>
-                
-                              <TouchableOpacity style={styles.shareOption} onPress={handleInstagramShare}>
-                                <View style={styles.shareIcon}>
-                               <Image source={instagram} 
-                                  style ={{
-                                    height: Scale(45),
-                                    width: Scale(45),
-                                  }}
-                                  />
-                                </View>
-                                <Text style={styles.shareOptionText}>Instagram</Text>
-                              </TouchableOpacity>
-                
-                              <TouchableOpacity style={styles.shareOption} onPress={handleCopyLink}>
-                                <View style={[styles.shareIcon, { backgroundColor: '#007AFF' }]}>
-                                  <Text style={styles.shareIconText}>🔗</Text>
-                                </View>
-                                <Text style={styles.shareOptionText}>Copy Link</Text>
-                              </TouchableOpacity>
-                            </View>
-                  </View>
-                </View>
-              </Modal>
-      </ScrollView>
-      ):(
-        <View style ={{
-          marginHorizontal: Scale(20),
-          alignItems: 'center',
-          justifyContent: 'center',
-          flex: 1,
-          bottom: Scale(50),
-        }}>
-          <Text style={{
-            textAlign: 'left',
-            fontSize: Scale(22),
-            color: '#fff',
-            fontWeight: 'bold',
-          }}>
-            Hello User!
-          </Text>
-          <Text style={{
-            textAlign: 'left',
-            fontSize: Scale(14),
-            color: '#fff',
-            fontWeight: 'bold',
-            marginTop: Scale(10),
-          }}>
-          You are not a agent, You can only see your profile and transactions once you become a super agent.
-          </Text>
           </View>
+          <Modal
+            visible={showShareModal}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={() => setShowShareModal(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.shareModal}>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setShowShareModal(false)}
+                >
+                  <Text style={styles.closeButtonText}>×</Text>
+                </TouchableOpacity>
+
+                <Text style={styles.shareTitle}>Share</Text>
+
+                <View style={styles.shareOptions}>
+                  <TouchableOpacity
+                    style={styles.shareOption}
+                    onPress={handleFacebookShare}
+                  >
+                    <View style={styles.shareIcon}>
+                      {/* <Text style={styles.shareIconText}>f</Text> */}
+                      <Image
+                        source={fbIcon}
+                        style={{
+                          height: Scale(70),
+                          width: Scale(70),
+                        }}
+                      />
+                    </View>
+                    <Text style={styles.shareOptionText}>Facebook</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.shareOption}
+                    onPress={handleTelegramShare}
+                  >
+                    <View style={styles.shareIcon}>
+                      <Image
+                        source={telegramIcon}
+                        style={{
+                          height: Scale(65),
+                          width: Scale(65),
+                        }}
+                      />
+                    </View>
+                    <Text style={styles.shareOptionText}>Telegram</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.shareOption}
+                    onPress={handleWhatsAppShare}
+                  >
+                    <View style={styles.shareIcon}>
+                      <Image
+                        source={whatsappIcon}
+                        style={{
+                          height: Scale(50),
+                          width: Scale(50),
+                          borderRadius: Scale(10),
+                        }}
+                      />
+                    </View>
+                    <Text style={styles.shareOptionText}>WhatsApp</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.shareOption}
+                    onPress={handleInstagramShare}
+                  >
+                    <View style={styles.shareIcon}>
+                      <Image
+                        source={instagram}
+                        style={{
+                          height: Scale(45),
+                          width: Scale(45),
+                        }}
+                      />
+                    </View>
+                    <Text style={styles.shareOptionText}>Instagram</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.shareOption}
+                    onPress={handleCopyLink}
+                  >
+                    <View
+                      style={[styles.shareIcon, { backgroundColor: "#007AFF" }]}
+                    >
+                      <Text style={styles.shareIconText}>🔗</Text>
+                    </View>
+                    <Text style={styles.shareOptionText}>Copy Link</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </ScrollView>
+      ) : (
+        <View style={styles.notAgentView}>
+          <Text style={styles.helloUser}>Hello User!</Text>
+          <Text style={styles.userDescription}>
+            You are not a agent, You can only see your profile and transactions
+            once you become a super agent.
+          </Text>
+        </View>
       )}
     </View>
   );
@@ -884,70 +884,101 @@ const createStyles = (Scale: any) =>
       color: "#fff",
       fontWeight: "bold",
     },
-     modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  shareModal: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 20,
-    width: '100%',
-    maxWidth: 350,
-    alignItems: 'center',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 15,
-    left: 15,
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  closeButtonText: {
-    fontSize: 24,
-    color: '#666',
-    fontWeight: 'bold',
-  },
-  shareTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 20,
-    marginTop: 10,
-  },
-  shareOptions: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    width: '100%',
-  },
-  shareOption: {
-    alignItems: 'center',
-    marginVertical: 10,
-    width: '20%',
-  },
-  shareIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  shareIconText: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  shareOptionText: {
-    fontSize: 12,
-    color: '#333',
-    textAlign: 'center',
-  },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    shareModal: {
+      backgroundColor: "#fff",
+      borderRadius: 20,
+      padding: 20,
+      width: "100%",
+      maxWidth: 350,
+      alignItems: "center",
+    },
+    closeButton: {
+      position: "absolute",
+      top: 15,
+      left: 15,
+      width: 30,
+      height: 30,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    closeButtonText: {
+      fontSize: 24,
+      color: "#666",
+      fontWeight: "bold",
+    },
+    shareTitle: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: "#333",
+      marginBottom: 20,
+      marginTop: 10,
+    },
+    shareOptions: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      justifyContent: "space-around",
+      width: "100%",
+    },
+    shareOption: {
+      alignItems: "center",
+      marginVertical: 10,
+      width: "20%",
+    },
+    shareIcon: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: 8,
+    },
+    shareIconText: {
+      color: "#fff",
+      fontSize: 20,
+      fontWeight: "bold",
+    },
+    shareOptionText: {
+      fontSize: 12,
+      color: "#333",
+      textAlign: "center",
+    },
+    scrollCotainerStyle: {
+      paddingBottom: Scale(60),
+    },
+    agentActiveUserStyle: {
+      width: Scale(25),
+      height: Scale(25),
+    },
+    agentNewUsersStyle: {
+      width: Scale(30),
+      height: Scale(30),
+    },
+    notAgentView: {
+      marginHorizontal: Scale(20),
+      alignItems: "center",
+      justifyContent: "center",
+      flex: 1,
+      bottom: Scale(50),
+    },
+    helloUser: {
+      textAlign: "left",
+      fontSize: Scale(22),
+      color: "#fff",
+      fontWeight: "bold",
+    },
+    userDescription: {
+      textAlign: "left",
+      fontSize: Scale(14),
+      color: "#fff",
+      fontWeight: "bold",
+      marginTop: Scale(10),
+    },
   });
 
 export default AgencyScreen;

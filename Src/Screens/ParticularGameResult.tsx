@@ -21,6 +21,7 @@ import { setTableCurrentPage } from "../Redux/Slice/commonSlice";
 import { getIndividualGameData } from "../Redux/Slice/HomeSlice";
 import { formatToTimeIST } from "../Utils/Common";
 import { Image } from 'expo-image';
+import { API_BASE_URL } from "../Config/env";
 
 const QUICK3D_SUB_TABS = [
   { id: "1min", name: "1 min", groupId: 2 },
@@ -46,7 +47,7 @@ const ParticularGameResult = ({ route, navigation }: any) => {
     (state: RootState) => state.commonSlice
   );
 
-  const BaseURL = "http://8.148.148.185";
+  const BASE_URL = API_BASE_URL;
   const GametypeId = data?.[0]?.gametypeId;
   const isQuick3D = category === "Quick 3D";
   const activeQuick3DSubTab = QUICK3D_SUB_TABS[quick3dSubIndex];
@@ -102,9 +103,10 @@ const ParticularGameResult = ({ route, navigation }: any) => {
           <View style={styles.headerRow}>
             <View style={styles.headerLeft}>
               <Image
-                source={{ uri: BaseURL + individualGameData?.[0]?.cardImageUrl }}
+                source={{ uri: BASE_URL + individualGameData?.[0]?.cardImageUrl }}
                 style={styles.gameImage}
-              />
+                contentFit="fill"
+                />
               <View>
                 <Text style={styles.categoryTitle}>{category}</Text>
                 <Text style={styles.drawResultsLabel}>Draw Results</Text>
@@ -212,9 +214,9 @@ const createStyles = (Scale: (n: number) => number) =>
       alignItems: "center",
     },
     gameImage: {
-      width: Scale(50),
-      height: Scale(50),
-      borderRadius: Scale(10),
+      width: Scale(40),
+      height: Scale(40),
+      borderRadius: Scale(25),
     },
     categoryTitle: {
       fontWeight: "bold",

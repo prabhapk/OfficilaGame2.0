@@ -29,26 +29,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { defaultRechargeData } from "../Utils/Constants";
 
 const AgentTeamReport = ({ navigation }: any) => {
-    const { rechargeBonusData, dashboardData, rechargeBonusFUllData, teamData } =
+  const { rechargeBonusData, dashboardData, rechargeBonusFUllData, teamData } =
     useSelector((state: RootState) => state.agentSlice);
   const [selectedLevel, setSelectedLevel] = useState("All");
-const levelsData = teamData?.data?.levels || [];
-const tableData =
-  selectedLevel === "All"
-    ? levelsData.flatMap((levelItem: any) =>
-        levelItem.members.map((member: any) => ({
-          id: `${levelItem.level}-${member.userId}`,
-          level: levelItem.level,
-          userId: member.userId,
-          recharge: member.totalRecharge,
-          commission: member.totalBetCommission,
-        })),
-      )
-    : levelsData
-        .filter(
-          (item: any) => item.level === Number(selectedLevel),
-        )
-        .flatMap((levelItem: any) =>
+  const levelsData = teamData?.data?.levels || [];
+  const tableData =
+    selectedLevel === "All"
+      ? levelsData.flatMap((levelItem: any) =>
           levelItem.members.map((member: any) => ({
             id: `${levelItem.level}-${member.userId}`,
             level: levelItem.level,
@@ -56,7 +43,18 @@ const tableData =
             recharge: member.totalRecharge,
             commission: member.totalBetCommission,
           })),
-        );
+        )
+      : levelsData
+          .filter((item: any) => item.level === Number(selectedLevel))
+          .flatMap((levelItem: any) =>
+            levelItem.members.map((member: any) => ({
+              id: `${levelItem.level}-${member.userId}`,
+              level: levelItem.level,
+              userId: member.userId,
+              recharge: member.totalRecharge,
+              commission: member.totalBetCommission,
+            })),
+          );
   const dispatch = useDispatch();
   const [showShareModal, setShowShareModal] = useState(false);
   const { Scale, verticalScale } = useContainerScale();
@@ -64,19 +62,15 @@ const tableData =
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
-     const safeRechargeData =
-    rechargeBonusData?.length > 0
-      ? rechargeBonusData
-      : defaultRechargeData; 
+  const safeRechargeData =
+    rechargeBonusData?.length > 0 ? rechargeBonusData : defaultRechargeData;
 
   const itemsPerPage = 5;
 
   // FILTERED DATA
-const filteredData = tableData.filter((item: any) =>
-  String(item.userId)
-    .toLowerCase()
-    .includes(searchText.toLowerCase()),
-);
+  const filteredData = tableData.filter((item: any) =>
+    String(item.userId).toLowerCase().includes(searchText.toLowerCase()),
+  );
 
   // TOTAL PAGES
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -87,7 +81,9 @@ const filteredData = tableData.filter((item: any) =>
     currentPage * itemsPerPage,
   );
 
-  const { userId, agentId } = useSelector((state: RootState) => state.signInSlice);
+  const { userId, agentId } = useSelector(
+    (state: RootState) => state.signInSlice,
+  );
   console.log("userId==>", userId);
   console.log("dashboardData==>", dashboardData);
 
@@ -116,8 +112,7 @@ const filteredData = tableData.filter((item: any) =>
     const inviteProgress = (invitedCount / item.totalPeopleRequired) * 100;
 
     const depositProgress = (qualifiedCount / item.totalPeopleRequired) * 100;
-         const isCompleted =
-    qualifiedCount >= item.totalPeopleRequired;
+    const isCompleted = qualifiedCount >= item.totalPeopleRequired;
 
     return (
       <View style={styles.levelCard}>
@@ -209,36 +204,30 @@ const filteredData = tableData.filter((item: any) =>
           </View>
 
           {/* BUTTON */}
-           <TouchableOpacity
-          activeOpacity={0.85}
-          onPress={!isCompleted ? handleInvite : undefined}
-          disabled={isCompleted}
-        >
-          <LinearGradient
-            colors={
-              isCompleted
-                ? ["#00C853", "#00A86B"] // ✅ GREEN
-                : ["#FF416C", "#FF4B2B"] // ✅ RED
-            }
-            style={styles.completeButton}
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={!isCompleted ? handleInvite : undefined}
+            disabled={isCompleted}
           >
-            <Ionicons
-              name={
+            <LinearGradient
+              colors={
                 isCompleted
-                  ? "checkmark-circle"
-                  : "share-social"
+                  ? ["#00C853", "#00A86B"] // ✅ GREEN
+                  : ["#FF416C", "#FF4B2B"] // ✅ RED
               }
-              size={18}
-              color="#fff"
-            />
+              style={styles.completeButton}
+            >
+              <Ionicons
+                name={isCompleted ? "checkmark-circle" : "share-social"}
+                size={18}
+                color="#fff"
+              />
 
-            <Text style={styles.completeText}>
-              {isCompleted
-                ? "Completed"
-                : "Invite Now"}
-            </Text>
-          </LinearGradient>
-        </TouchableOpacity>
+              <Text style={styles.completeText}>
+                {isCompleted ? "Completed" : "Invite Now"}
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -314,33 +303,28 @@ const filteredData = tableData.filter((item: any) =>
     }
   };
 
-const renderTableItem = ({ item, index }: any) => (
-  <View
-    style={[
-      styles.row,
-      {
-        backgroundColor:
-          index % 2 === 0 ? "#FFFFFF" : "#F8F8F8",
-      },
-    ]}
-  >
-    <View style={styles.userContainer}>
-   
+  const renderTableItem = ({ item, index }: any) => (
+    <View
+      style={[
+        styles.row,
+        {
+          backgroundColor: index % 2 === 0 ? "#FFFFFF" : "#F8F8F8",
+        },
+      ]}
+    >
+      <View style={styles.userContainer}>
+        <Text style={styles.userText}>{item.userId}</Text>
+      </View>
 
-      <Text style={styles.userText}>
-        {item.userId}
+      <Text style={styles.rechargeText}>
+        ₹{Number(item.recharge).toFixed(2)}
+      </Text>
+
+      <Text style={styles.commissionText}>
+        ₹{Number(item.commission).toFixed(2)}
       </Text>
     </View>
-
-    <Text style={styles.rechargeText}>
-      ₹{Number(item.recharge).toFixed(2)}
-    </Text>
-
-    <Text style={styles.commissionText}>
-      ₹{Number(item.commission).toFixed(2)}
-    </Text>
-  </View>
-);
+  );
 
   return (
     <View style={styles.container}>
@@ -356,7 +340,6 @@ const renderTableItem = ({ item, index }: any) => (
         contentContainerStyle={{
           paddingBottom: Scale(10),
           paddingTop: Scale(10),
-
         }}
         removeClippedSubviews={false}
       />
@@ -365,10 +348,8 @@ const renderTableItem = ({ item, index }: any) => (
         style={{
           // marginTop: Scale(20),
           marginHorizontal: Scale(20),
-          
         }}
       >
-
         {/* Header */}
         <View style={styles.topContainer}>
           <View style={styles.titleContainer}>
@@ -391,40 +372,40 @@ const renderTableItem = ({ item, index }: any) => (
             />
           </View>
         </View>
-                <ScrollView
-  horizontal
-  showsHorizontalScrollIndicator={false}
-  contentContainerStyle={{
-    paddingVertical: Scale(10),
-  }}
->
-  {["All", "1", "2", "3", "4"].map((level) => {
-    const isActive = selectedLevel === level;
-
-    return (
-      <TouchableOpacity
-        key={level}
-        onPress={() => {
-          setSelectedLevel(level);
-          setCurrentPage(1);
-        }}
-        style={[
-          styles.filterButton,
-          isActive && styles.activeFilterButton,
-        ]}
-      >
-        <Text
-          style={[
-            styles.filterButtonText,
-            isActive && styles.activeFilterText,
-          ]}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingVertical: Scale(10),
+          }}
         >
-          {level === "All" ? "All" : `Level ${level}`}
-        </Text>
-      </TouchableOpacity>
-    );
-  })}
-</ScrollView>
+          {["All", "1", "2", "3", "4"].map((level) => {
+            const isActive = selectedLevel === level;
+
+            return (
+              <TouchableOpacity
+                key={level}
+                onPress={() => {
+                  setSelectedLevel(level);
+                  setCurrentPage(1);
+                }}
+                style={[
+                  styles.filterButton,
+                  isActive && styles.activeFilterButton,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.filterButtonText,
+                    isActive && styles.activeFilterText,
+                  ]}
+                >
+                  {level === "All" ? "All" : `Level ${level}`}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
 
         {/* Table */}
         <View style={styles.tableContainer}>
@@ -464,55 +445,55 @@ const renderTableItem = ({ item, index }: any) => (
             }
           />
           {filteredData.length > 0 && (
-          <View style={styles.paginationContainer}>
-            <TouchableOpacity
-              disabled={currentPage === 1}
-              onPress={() => setCurrentPage(currentPage - 1)}
-              style={[
-                styles.pageButton,
-                currentPage === 1 && styles.disabledButton,
-              ]}
-            >
-              <Ionicons name="chevron-back" size={18} color="#fff" />
-            </TouchableOpacity>
+            <View style={styles.paginationContainer}>
+              <TouchableOpacity
+                disabled={currentPage === 1}
+                onPress={() => setCurrentPage(currentPage - 1)}
+                style={[
+                  styles.pageButton,
+                  currentPage === 1 && styles.disabledButton,
+                ]}
+              >
+                <Ionicons name="chevron-back" size={18} color="#fff" />
+              </TouchableOpacity>
 
-            {/* PAGE NUMBERS */}
-            {Array.from({ length: totalPages }, (_, index) => {
-              const page = index + 1;
+              {/* PAGE NUMBERS */}
+              {Array.from({ length: totalPages }, (_, index) => {
+                const page = index + 1;
 
-              return (
-                <TouchableOpacity
-                  key={page}
-                  onPress={() => setCurrentPage(page)}
-                  style={[
-                    styles.pageNumber,
-                    currentPage === page && styles.activePageNumber,
-                  ]}
-                >
-                  <Text
+                return (
+                  <TouchableOpacity
+                    key={page}
+                    onPress={() => setCurrentPage(page)}
                     style={[
-                      styles.pageText,
-                      currentPage === page && styles.activePageText,
+                      styles.pageNumber,
+                      currentPage === page && styles.activePageNumber,
                     ]}
                   >
-                    {page}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+                    <Text
+                      style={[
+                        styles.pageText,
+                        currentPage === page && styles.activePageText,
+                      ]}
+                    >
+                      {page}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
 
-            {/* NEXT */}
-            <TouchableOpacity
-              disabled={currentPage === totalPages}
-              onPress={() => setCurrentPage(currentPage + 1)}
-              style={[
-                styles.pageButton,
-                currentPage === totalPages && styles.disabledButton,
-              ]}
-            >
-              <Ionicons name="chevron-forward" size={18} color="#fff" />
-            </TouchableOpacity>
-          </View>
+              {/* NEXT */}
+              <TouchableOpacity
+                disabled={currentPage === totalPages}
+                onPress={() => setCurrentPage(currentPage + 1)}
+                style={[
+                  styles.pageButton,
+                  currentPage === totalPages && styles.disabledButton,
+                ]}
+              >
+                <Ionicons name="chevron-forward" size={18} color="#fff" />
+              </TouchableOpacity>
+            </View>
           )}
         </View>
       </View>
@@ -756,7 +737,7 @@ const createStyles = (Scale: any) =>
       elevation: 2,
       marginVertical: Scale(5),
       flex: 1,
-marginLeft: Scale(30),
+      marginLeft: Scale(30),
     },
 
     input: {
@@ -1003,98 +984,98 @@ marginLeft: Scale(30),
       minHeight: Scale(260),
       maxHeight: Scale(260),
     },
-   filterButton: {
-  paddingHorizontal: 18,
-  paddingVertical: 8,
-  borderRadius: 30,
-  backgroundColor: "#fff",
-  marginRight: 10,
-  marginBottom: 10,
-  elevation: 3,
+    filterButton: {
+      paddingHorizontal: 18,
+      paddingVertical: 8,
+      borderRadius: 30,
+      backgroundColor: "#fff",
+      marginRight: 10,
+      marginBottom: 10,
+      elevation: 3,
 
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 2,
-  },
-  shadowOpacity: 0.08,
-  shadowRadius: 3,
-},
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.08,
+      shadowRadius: 3,
+    },
 
-activeFilterButton: {
-  backgroundColor: COLORS.primary,
-  borderColor: COLORS.white,
-  borderWidth: 1,
-},
+    activeFilterButton: {
+      backgroundColor: COLORS.primary,
+      borderColor: COLORS.white,
+      borderWidth: 1,
+    },
 
-filterButtonText: {
-  color: "#333",
-  fontWeight: "700",
-},
+    filterButtonText: {
+      color: "#333",
+      fontWeight: "700",
+    },
 
-activeFilterText: {
-  color: "#fff",
-},
-userContainer: {
-  flex: 1,
-  flexDirection: "row",
-  alignItems: "center",
-},
+    activeFilterText: {
+      color: "#fff",
+    },
+    userContainer: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+    },
 
-avatarCircle: {
-  width: Scale(30),
-  height: Scale(30),
-  borderRadius: Scale(15),
-  backgroundColor: COLORS.linearOne,
-  justifyContent: "center",
-  alignItems: "center",
-  marginRight: Scale(8),
-},
+    avatarCircle: {
+      width: Scale(30),
+      height: Scale(30),
+      borderRadius: Scale(15),
+      backgroundColor: COLORS.linearOne,
+      justifyContent: "center",
+      alignItems: "center",
+      marginRight: Scale(8),
+    },
 
-avatarText: {
-  color: "#fff",
-  fontWeight: "700",
-},
+    avatarText: {
+      color: "#fff",
+      fontWeight: "700",
+    },
 
-tableContainer: {
-  backgroundColor: "#fff",
-  borderRadius: 18,
-  overflow: "hidden",
-  marginBottom: Scale(30),
-  elevation: 5,
+    tableContainer: {
+      backgroundColor: "#fff",
+      borderRadius: 18,
+      overflow: "hidden",
+      marginBottom: Scale(30),
+      elevation: 5,
 
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 3,
-  },
-  shadowOpacity: 0.12,
-  shadowRadius: 5,
-},
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      shadowOpacity: 0.12,
+      shadowRadius: 5,
+    },
 
-tableHeader: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  paddingVertical: 16,
-  paddingHorizontal: 16,
-  backgroundColor: COLORS.secondaryTextColor,
-},
+    tableHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      paddingVertical: 16,
+      paddingHorizontal: 16,
+      backgroundColor: COLORS.secondaryTextColor,
+    },
 
-headerText: {
-  flex: 1,
-  fontSize: 13,
-  fontWeight: "700",
-  color: "#fff",
-  textAlign: "center",
-},
+    headerText: {
+      flex: 1,
+      fontSize: 13,
+      fontWeight: "700",
+      color: "#fff",
+      textAlign: "center",
+    },
 
-row: {
-  flexDirection: "row",
-  alignItems: "center",
-  paddingVertical: 14,
-  paddingHorizontal: 16,
-  borderBottomWidth: 1,
-  borderBottomColor: "#F1F1F1",
-},
+    row: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: "#F1F1F1",
+    },
   });
 export default AgentTeamReport;
