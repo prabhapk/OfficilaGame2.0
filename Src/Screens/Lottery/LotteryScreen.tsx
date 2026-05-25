@@ -1,7 +1,7 @@
 import { View, Text, FlatList, ScrollView, StyleSheet } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
-import { chipIcon, lotteryMenu, multiUserIcon, quick3dMenu } from "../../../assets/assets";
+import {lotteryMenu, multiUserIcon } from "../../../assets/assets";
 import CommonDigits from "../../Components/CommonDigits";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";

@@ -8,7 +8,6 @@ import {
   ImageBackground,
 } from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
-import { gameTypeAct } from "../../assets/assets";
 import { Image } from "expo-image";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { COLORS } from "../Constants/Theme";

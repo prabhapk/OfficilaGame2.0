@@ -14,9 +14,7 @@ import React, { use, useEffect, useMemo, useRef, useState } from "react";
 import {
   cancel,
   CustomerServiceIcon,
-  customerServiceTopIcon,
   lefArrow,
-  quick3min,
   sameClock,
 } from "../../assets/assets";
 import { useDispatch, useSelector } from "react-redux";

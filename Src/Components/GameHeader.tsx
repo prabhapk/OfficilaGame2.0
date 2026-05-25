@@ -13,10 +13,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import {
-  customerService,
   CustomerServiceIcon,
-  customerServiceTopIcon,
-  headerWallet,
   refreshIcon,
   walletIcon,
 } from "../../assets/assets";

@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useContainerScale } from "../../hooks/useContainerScale";
 import { ThreeDigitsLottery } from "../../Constants/CommonFlatlist";
 import CommonDigits from "../../Components/CommonDigits";
-import { chipIcon, multiUserIcon, QUICK3DLOGO, quick3dMenu } from "../../../assets/assets";
+import { multiUserIcon, QUICK3DLOGO } from "../../../assets/assets";
 import { COLORS } from "../../Constants/Theme";
 
 const Quick3DigitsMenu = () => {

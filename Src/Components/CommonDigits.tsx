@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { COLORS } from "../Constants/Theme";
-import { agencyCenterLogo, AnnaPoorna, Durga } from "../../assets/assets";
+import { agencyCenterLogo, } from "../../assets/assets";
 import { API_BASE_URL } from "../Config/env";
 
 interface Props {
@@ -36,7 +36,7 @@ const CommonDigits: React.FC<Props> = ({ data, onPress3Digits }) => {
         uri: `${BASE_URL}${data.cardImageUrl}`,
         cache: "force-cache",
       }
-    : Durga;
+    : null;
 
   const dispatch = useDispatch();
 

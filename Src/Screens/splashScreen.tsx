@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet,} from "react-native";
-import { newSplashScreen, updatedSplashscreen } from "../../assets/assets";
+import { updatedSplashscreen } from "../../assets/assets";
 import { Image } from "expo-image";
 import { COLORS } from "../Constants/Theme";
 import { StatusBar } from "expo-status-bar";

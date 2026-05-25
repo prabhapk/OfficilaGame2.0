@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Platform, Linking } from 'rea
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '../Constants/Theme';
 import { useContainerScale } from '../hooks/useContainerScale';
-import { annaiIcon } from '../../assets/assets';
+import { updatedSplashscreen } from '../../assets/assets';
 import { Image } from 'expo-image';
 
 interface DownloadBannerProps {
@@ -42,7 +42,7 @@ const DownloadBanner: React.FC<DownloadBannerProps> = ({ onClose }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={[COLORS.linearOne, COLORS.linearTwo]} // Purple gradient similar to reference
+        colors={[COLORS.linearTwo, COLORS.black]} // Purple gradient similar to reference
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.gradientContainer}
@@ -50,7 +50,7 @@ const DownloadBanner: React.FC<DownloadBannerProps> = ({ onClose }) => {
         {/* Shield Icon */}
         <View style={styles.shieldContainer}>
           <View style={styles.shield}>
-           <Image source={annaiIcon} style={styles.shield} />
+           <Image source={updatedSplashscreen} style={styles.shield} />
           </View>
         </View>
 
@@ -94,12 +94,13 @@ const createStyles = (Scale: any, verticalScale: any) =>
     },
     shield: {
       width: Scale(40),
-      height: Scale(40),
+      height: Scale(50),
       backgroundColor: '#10B981', // Green color
       borderRadius: Scale(8),
       alignItems: 'center',
       justifyContent: 'center',
       position: 'relative',
+
     },
     shieldText: {
       color: 'white',

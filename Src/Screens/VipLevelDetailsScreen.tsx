@@ -10,18 +10,6 @@ import React, {useEffect, useState} from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   bonusCash,
-  levelEightBadge,
-  levelFiveBadge,
-  levelFourBadge,
-  levelNineBadge,
-  levelOneBadge,
-  levelSevenBadge,
-  levelSixBadge,
-  levelThreeBadge,
-  levelTwoBadge,
-  levelZeroBadge,
-  spin,
-  vipBadgeZero,
   vipNewLogoEight,
   vipNewLogoEleven,
   vipNewLogoFifteen,
@@ -58,18 +46,6 @@ const VipLevelDetailsScreen = ({navigation}: any) => {
   },[]);
   const {vipLists} = useSelector((state: RootState) => state.vipSlice);
 
-  const tableDatas = [
-    {id: 1, bonus: '0', image: levelZeroBadge},
-    {id: 2, bonus: '8', image: levelOneBadge},
-    {id: 3, bonus: '5', image: levelTwoBadge},
-    {id: 4, bonus: '198',  image: levelThreeBadge},
-    {id: 5, bonus: '1300', image: levelFourBadge},
-    {id: 6, bonus: '2300', image: levelFiveBadge},
-    {id: 7, bonus: '13000', image: levelSixBadge},
-    {id: 8, bonus: '23000', image: levelSevenBadge},
-    {id: 9, bonus: '130000',  image: levelEightBadge},
-    {id: 10, bonus: '560000',  image: levelNineBadge},
-  ];
   const vipCardTargets = [
     300, 1000, 10000, 50000, 100000, 500000, 1000000, 2000000, 5000000,
     10000000,

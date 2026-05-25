@@ -4,9 +4,6 @@ import Entypo from "react-native-vector-icons/Entypo";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
 import {
-  amountIcon,
-  hIcon,
-  homeAppIcon,
   newHomeWallet,
   newHomeWallet1,
   newLogo,

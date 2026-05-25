@@ -13,11 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   lefArrow,
-  loginImageBackground,
   signInCustomerLogo,
-  signInLogo,
-  signInLogoNew,
-  signInLogoNew1,
   signInLogoNew2,
   signInMain,
 } from '../../assets/assets';
@@ -131,7 +127,6 @@ const SignInScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={{ paddingBottom: Scale(30) }} showsVerticalScrollIndicator={false}>
-        {/* <Image source={loginImageBackground} style={styles.topImage} /> */}
         <ImageBackground source={signInMain} style={styles.topImage}>
           <TouchableOpacity
             onPress={() => navigation.replace("DrawerNavigation")}

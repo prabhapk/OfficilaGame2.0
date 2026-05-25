@@ -13,8 +13,6 @@ import Entypo from "react-native-vector-icons/Entypo";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   lefArrow,
-  loginImageBackground,
-  signInLogo,
   signInLogoNew2,
   signInMain,
 } from "../../assets/assets";

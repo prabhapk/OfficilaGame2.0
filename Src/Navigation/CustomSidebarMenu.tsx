@@ -9,20 +9,13 @@ import {
 import Modal from "react-native-modal";
 import { COLORS } from "../Constants/Theme";
 import {
-  bigSpin,
   cancel,
-  drawerLevel,
   DrawerPromotion,
   DrawerRebate,
   DrawerSuperAgent,
-  freeLottery,
-  homeAppIcon,
   newLogo,
   profileCustomerServiceImage,
   promotions,
-  rebateMenu,
-  robMoney,
-  superAgent,
   vipNewLogoFive,
   vipNewLogoFour,
   vipNewLogoOne,

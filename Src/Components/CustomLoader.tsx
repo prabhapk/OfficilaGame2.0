@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
-import LottieView from "lottie-react-native";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { rupeeCoinLoaderGif } from "../../assets/assets";
 import { Image } from "expo-image";

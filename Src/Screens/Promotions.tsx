@@ -10,7 +10,7 @@ import {
 import CustomHeader from "../Components/CustomHeader";
 import { useContainerScale } from "../hooks/useContainerScale";
 import { COLORS } from "../Constants/Theme";
-import { agentBonus, attendanceBonus, comeBackBanner, insideAttendanceBonus, insideBannerAgent, insideBannerComeBack, insideBannerMegaRecharge, insideBannerVip, megaRechargeBonus, promotionBanner4, vipWeeklySalary } from "../../assets/assets";
+import { agentBonus, attendanceBonus, comeBackBanner, insideAttendanceBonus, insideBannerAgent, insideBannerComeBack, insideBannerMegaRecharge, insideBannerVip, megaRechargeBonus, vipWeeklySalary } from "../../assets/assets";
 import { Image } from "expo-image";
 
 const { width } = Dimensions.get("window");

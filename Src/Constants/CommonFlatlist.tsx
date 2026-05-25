@@ -1,4 +1,4 @@
-import { bhutan, casinMenu, casino, casinoActiveTab, casinoTab, CasionoGamesIcon, color, dice, digit, digitMenu, dragonvsTiger, DrawerPromotion, DrawerRebate, DrawerSuperAgent, fiveMin3DImage, homeActiveFocused, homeNewIcon, homeNewIconSilver, homeTab, hot, hotGamesIcon, inviteActiveTab, inviteNewIcon, inviteTab, jdb, Jili, lottery1, LotteryGamesIcon, meActiveIcon, meNewIcon, meTab, multiUserIcon, oneMin3DImage, pg, profileCustomerServiceImage, promotionActiveIcon, promotionNewIcon, promotions, quick1, quick2, quick3, quick3d1min, quick3d3min, quick3d5min, quick3dMenu, quick3min, resultActiveIcon, resultActiveTab, resultNewIcon, resultTab, rummy, scratch, scratchMenu, sevenUpAndDown, sportMenu, sports, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
+import {casino, CasionoGamesIcon, color, dice, digit, dragonvsTiger, DrawerPromotion, DrawerRebate, DrawerSuperAgent, fiveMin3DImage, homeActiveFocused, homeNewIconSilver, hot, hotGamesIcon, inviteNewIcon, jdb, Jili, LotteryGamesIcon, meActiveIcon, meNewIcon, pg, profileCustomerServiceImage, promotionActiveIcon, promotionNewIcon, promotions, quick1, quick2, quick3, resultActiveIcon, resultNewIcon, sevenUpAndDown, teenPatti, threeMin3DImage, threePatti } from "../../assets/assets";
 import CasinoScreen from "../Screens/CasinoScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import InviteScreen from "../Screens/InviteScreen";
@@ -38,106 +38,17 @@ export const lotteryGamesList = [
 ]
 
 export const ThreeDigitsLottery = [
-  // { id: 1, name: "1minGame", image: quick3d1min },
-  // { id: 2, name: "3minGame", image: quick3d3min },
-  // { id: 3, name: "5minGame", image: quick3d5min },
   { id: 1, name: "1minGame", image: quick1 },
   { id: 2, name: "3minGame", image: quick2 },
   { id: 3, name: "5minGame", image: quick3 },
 ]
 
- export const ThreeDigits = [
-    {
-      win_price: '10,000',
-      price: '11.00',
-      title: 'Quick 3D 1min',
-      ends_On: "2025-07-22T15:58:27.123Z",
-      bgImage:quick3min,
-      gameTye:"Custom",
-      id:"1minGame"
-    },
-       {
-      win_price: '10,000',
-      price: '11.00',
-      title: 'Quick 3D 3min',
-      ends_On: "2025-07-22T23:52:27.123Z",
-      bgImage:quick3min,
-       gameTye:"Custom",
-      id:"3minGame"
-    },
-       {
-      win_price: '10,000',
-      price: '11.00',
-      title: 'Quick 3D 5min',
-      ends_On: "2025-07-22T23:58:27.123Z",
-      bgImage:quick3min,
-       gameTye:"Custom",
-      id:"5minGame"
-    },
-    {
-      win_price: '30,000',
-      price: '11.00',
-      title: 'Bhutan Jackpot',
-      ends_On: "2025-07-03T18:42:27.123Z",
-      bgImage:bhutan,
-       gameTye:"RealGame",
-      id:"real"
-    },
-    // {win_price: '25,000', price: '11.00', title: 'Skywin', ends_On: targetDate,  bgImage:skywin,
-    //    gameTye:"RealGame",
-    //   id:"real"},
-    // {
-    //   win_price: '30,000',
-    //   price: '11.00',
-    //   title: 'Chennai lottery',
-    //   ends_On: targetDate,
-    //   bgImage:chennaiLottery,
-    //    gameTye:"RealGame",
-    //   id:"real"
-    // },
-    // {
-    //   win_price: '10,000',
-    //   price: '11.00',
-    //   title: 'Quick 3D 5min',
-    //   ends_On: targetDate,
-    //   bgImage:Quick3DImage,
-    //    gameTye:"RealGame",
-    //   id:"real"
-    // },
-    // {win_price: '15,000', price: '11.00', title: 'Lucwin', ends_On: targetDate,  bgImage:LucwinImage},
-    // {
-    //   win_price: '50,000',
-    //   price: '11.00',
-    //   title: 'Kubeer lottery',
-    //   ends_On: targetDate,
-    //   bgImage:KubberLotteryImage
-    // },
-    // {
-    //   win_price: '15,000',
-    //   price: '11.00',
-    //   title: 'Dear lottery',
-    //   ends_On: targetDate,
-    //   bgImage:DearLotteryImage
-    // },
-    // {
-    //   win_price: '15,000',
-    //   price: '11.00',
-    //   title: 'Kerala lottery',
-    //   ends_On: targetDate,
-    //   bgImage:KeralaLotteryImage
-    // },
-  ];
 
   export const MenuBarList = [
     {id:1, name:"Rebate", image:DrawerRebate, component:RebateScreen},
     {id: 2, name:"Promotions", image:DrawerPromotion, component:Promotions},
     {id: 3, name:"Super Agent", image:DrawerSuperAgent, component:AgencyScreen},
     // {id: 4, name:"24/7 Customer Service", image:profileCustomerServiceImage, component:CustomerService},
-    // {id: 2, name:"Quick 3D", image:quick3dMenu, component:Quick3DScreen},
-    // {id: 3, name:"Official 3 Digits", image:digitMenu, component:ThreeDigitMain},
-    // {id:4, name:"Casino", image:casinMenu, component:HomeScreen},
-    // {id:4, name:"Scratch", image:scratchMenu},
-    // {id:5, name:"Sport", image:sportMenu}
   ]
 
   export const tabScreens = [

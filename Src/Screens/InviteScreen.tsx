@@ -13,14 +13,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import {
-  bannerLuna1,
-  CommissionIcon,
-  graphIcon,
-  inviteRecharge,
-  invitetop,
-  inviteHero,
-  rightTime,
-  agentLevels,
   inviteScreenTopImage,
   inviteFriends,
   earnCommissions,

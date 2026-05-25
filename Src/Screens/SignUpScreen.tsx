@@ -14,11 +14,8 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   lefArrow,
-  loginImageBackground,
   referral,
   signInCustomerLogo,
-  signInLogo,
-  signInLogoNew,
   signInLogoNew2,
   signInMain,
 } from "../../assets/assets";
