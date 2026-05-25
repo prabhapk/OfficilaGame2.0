@@ -398,6 +398,7 @@ const ResultTable: React.FC<ResultTableProps> = ({
                     <Image
                       source={noDataImage}
                       style={styles.noDateImageStyle}
+                      contentFit="contain"
                     />
                     <Text style={styles.emptyStateText}>
                       Please place the order to see your bets!
@@ -532,8 +533,8 @@ const createStyles = (Scale: (n: number) => number) =>
       alignItems: "center",
     },
     noDateImageStyle: {
-      width: 100,
-      height: 100,
+      width: 200,
+      height: 200,
       marginVertical: Scale(20),
     },
   });
