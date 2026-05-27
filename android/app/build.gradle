@@ -87,9 +87,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.ajay_gaming.Demo'
+    namespace 'com.ajaygaming.dear24gaming'
     defaultConfig {
-        applicationId 'com.ajay_gaming.Demo'
+        applicationId 'com.ajaygaming.dear24gaming'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

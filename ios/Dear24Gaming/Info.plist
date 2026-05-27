@@ -27,8 +27,8 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>dear24-Gaming</string>
-          <string>com.ajay-gaming.Demo</string>
+          <string>dear24gaming</string>
+          <string>com.ajaygaming.dear24gaming</string>
         </array>
       </dict>
     </array>

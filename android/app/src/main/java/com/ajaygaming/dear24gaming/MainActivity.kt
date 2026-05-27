@@ -1,4 +1,4 @@
-package com.ajay_gaming.Demo
+package com.ajaygaming.dear24gaming
 
 import android.os.Build
 import android.os.Bundle

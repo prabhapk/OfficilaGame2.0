@@ -16,10 +16,7 @@ import { COLORS } from "../Constants/Theme";
 import { useContainerScale } from "../hooks/useContainerScale";
 import NewAppHeader from "../Components/NewAppHeader";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getMyTeamData,
-  getRechargeBonusData,
-} from "../Redux/Slice/agentSlice";
+import { getMyTeamData, getRechargeBonusData } from "../Redux/Slice/agentSlice";
 import { RootState } from "../Redux/store";
 import * as Clipboard from "expo-clipboard";
 import { LinearGradient } from "expo-linear-gradient";
@@ -33,11 +30,9 @@ const AgentTeamReport = ({ navigation }: any) => {
 
   const styles = createStyles(Scale);
 
-  const {
-    rechargeBonusData,
-    rechargeBonusFUllData,
-    teamData,
-  } = useSelector((state: RootState) => state.agentSlice);
+  const { rechargeBonusData, rechargeBonusFUllData, teamData } = useSelector(
+    (state: RootState) => state.agentSlice,
+  );
 
   const { userId, agentId, isLoggedIn, userDetails } = useSelector(
     (state: RootState) => state.signInSlice,
@@ -54,9 +49,7 @@ const AgentTeamReport = ({ navigation }: any) => {
   const levelsData = teamData?.data?.levels || [];
 
   const safeRechargeData =
-    rechargeBonusData?.length > 0
-      ? rechargeBonusData
-      : defaultRechargeData;
+    rechargeBonusData?.length > 0 ? rechargeBonusData : defaultRechargeData;
 
   useEffect(() => {
     dispatch(getRechargeBonusData({ userId: userId }));
@@ -92,9 +85,7 @@ const AgentTeamReport = ({ navigation }: any) => {
 
   const filteredData = useMemo(() => {
     return tableData.filter((item: any) =>
-      String(item.userId)
-        .toLowerCase()
-        .includes(searchText.toLowerCase()),
+      String(item.userId).toLowerCase().includes(searchText.toLowerCase()),
     );
   }, [tableData, searchText]);
 
@@ -107,8 +98,7 @@ const AgentTeamReport = ({ navigation }: any) => {
     currentPage * itemsPerPage,
   );
 
-  const invitedlist =
-    rechargeBonusFUllData?.userStats?.invitedlist || {};
+  const invitedlist = rechargeBonusFUllData?.userStats?.invitedlist || {};
 
   const qualifiedUsers =
     rechargeBonusFUllData?.userStats?.qualifiedUsersPerLevel || {};
@@ -126,8 +116,7 @@ const AgentTeamReport = ({ navigation }: any) => {
   };
 
   const shareUrl =
-    "https://yourapp.com/invite?code=" +
-    (userDetails.referralCode || "");
+    "https://yourapp.com/invite?code=" + (userDetails.referralCode || "");
 
   const shareMessage = `Join me on this amazing app! Use my referral code: ${
     userDetails.referralCode || ""
@@ -179,10 +168,7 @@ const AgentTeamReport = ({ navigation }: any) => {
     try {
       await Linking.openURL("instagram://");
 
-      Alert.alert(
-        "Instagram",
-        "Paste your invite link manually in story/post",
-      );
+      Alert.alert("Instagram", "Paste your invite link manually in story/post");
 
       setShowShareModal(false);
     } catch (error) {
@@ -207,14 +193,11 @@ const AgentTeamReport = ({ navigation }: any) => {
 
     const qualifiedCount = qualifiedUsers[item.level] || 0;
 
-    const inviteProgress =
-      (invitedCount / item.totalPeopleRequired) * 100;
+    const inviteProgress = (invitedCount / item.totalPeopleRequired) * 100;
 
-    const depositProgress =
-      (qualifiedCount / item.totalPeopleRequired) * 100;
+    const depositProgress = (qualifiedCount / item.totalPeopleRequired) * 100;
 
-    const isCompleted =
-      qualifiedCount >= item.totalPeopleRequired;
+    const isCompleted = qualifiedCount >= item.totalPeopleRequired;
 
     return (
       <View style={styles.levelCard}>
@@ -225,32 +208,20 @@ const AgentTeamReport = ({ navigation }: any) => {
           style={styles.levelHeader}
         >
           <View>
-            <Text style={styles.levelText}>
-              Level {item.level}
-            </Text>
+            <Text style={styles.levelText}>Level {item.level}</Text>
 
-            <Text style={styles.bonusLabel}>
-              Reward Bonus
-            </Text>
+            <Text style={styles.bonusLabel}>Reward Bonus</Text>
           </View>
 
-          <Text style={styles.bonusAmount}>
-            ₹{item.bonusAmount}
-          </Text>
+          <Text style={styles.bonusAmount}>₹{item.bonusAmount}</Text>
         </LinearGradient>
 
         <View style={styles.levelBody}>
           <View style={styles.topInfoRow}>
             <View style={styles.smallInfoCard}>
-              <Ionicons
-                name="wallet-outline"
-                size={16}
-                color="#333"
-              />
+              <Ionicons name="wallet-outline" size={16} color="#333" />
 
-              <Text style={styles.smallInfoTitle}>
-                Recharge
-              </Text>
+              <Text style={styles.smallInfoTitle}>Recharge</Text>
 
               <Text style={styles.smallInfoValue}>
                 ₹{item.minimumRechargePerPerson}
@@ -258,15 +229,9 @@ const AgentTeamReport = ({ navigation }: any) => {
             </View>
 
             <View style={styles.smallInfoCard}>
-              <Ionicons
-                name="people-outline"
-                size={16}
-                color="#333"
-              />
+              <Ionicons name="people-outline" size={16} color="#333" />
 
-              <Text style={styles.smallInfoTitle}>
-                Required
-              </Text>
+              <Text style={styles.smallInfoTitle}>Required</Text>
 
               <Text style={styles.smallInfoValue}>
                 {item.totalPeopleRequired}
@@ -276,9 +241,7 @@ const AgentTeamReport = ({ navigation }: any) => {
 
           <View style={styles.progressContainer}>
             <View style={styles.progressTop}>
-              <Text style={styles.progressLabel}>
-                Invites
-              </Text>
+              <Text style={styles.progressLabel}>Invites</Text>
 
               <Text style={styles.progressCount}>
                 {invitedCount}/{item.totalPeopleRequired}
@@ -290,10 +253,7 @@ const AgentTeamReport = ({ navigation }: any) => {
                 style={[
                   styles.progressBar,
                   {
-                    width: `${Math.min(
-                      inviteProgress,
-                      100,
-                    )}%`,
+                    width: `${Math.min(inviteProgress, 100)}%`,
                   },
                 ]}
               />
@@ -302,9 +262,7 @@ const AgentTeamReport = ({ navigation }: any) => {
 
           <View style={styles.progressContainer}>
             <View style={styles.progressTop}>
-              <Text style={styles.progressLabel}>
-                Deposits
-              </Text>
+              <Text style={styles.progressLabel}>Deposits</Text>
 
               <Text style={styles.depositCount}>
                 {qualifiedCount}/{item.totalPeopleRequired}
@@ -316,10 +274,7 @@ const AgentTeamReport = ({ navigation }: any) => {
                 style={[
                   styles.depositBar,
                   {
-                    width: `${Math.min(
-                      depositProgress,
-                      100,
-                    )}%`,
+                    width: `${Math.min(depositProgress, 100)}%`,
                   },
                 ]}
               />
@@ -333,26 +288,18 @@ const AgentTeamReport = ({ navigation }: any) => {
           >
             <LinearGradient
               colors={
-                isCompleted
-                  ? ["#00C853", "#00A86B"]
-                  : ["#FF416C", "#FF4B2B"]
+                isCompleted ? ["#00C853", "#00A86B"] : ["#FF416C", "#FF4B2B"]
               }
               style={styles.completeButton}
             >
               <Ionicons
-                name={
-                  isCompleted
-                    ? "checkmark-circle"
-                    : "share-social"
-                }
+                name={isCompleted ? "checkmark-circle" : "share-social"}
                 size={16}
                 color="#fff"
               />
 
               <Text style={styles.completeText}>
-                {isCompleted
-                  ? "Completed"
-                  : "Invite Now"}
+                {isCompleted ? "Completed" : "Invite Now"}
               </Text>
             </LinearGradient>
           </TouchableOpacity>
@@ -366,22 +313,16 @@ const AgentTeamReport = ({ navigation }: any) => {
       style={[
         styles.row,
         {
-          backgroundColor:
-            index % 2 === 0 ? "#FFFFFF" : "#FAFAFA",
+          backgroundColor: index % 2 === 0 ? "#FFFFFF" : "#FAFAFA",
         },
       ]}
     >
       <View style={styles.userContainer}>
         <View style={styles.avatarCircle}>
-          <Text style={styles.avatarText}>
-            {String(item.userId).charAt(0)}
-          </Text>
+          <Text style={styles.avatarText}>{String(item.userId).charAt(0)}</Text>
         </View>
 
-        <Text
-          style={styles.userText}
-          numberOfLines={1}
-        >
+        <Text style={styles.userText} numberOfLines={1}>
           {item.userId}
         </Text>
       </View>
@@ -410,91 +351,85 @@ const AgentTeamReport = ({ navigation }: any) => {
           paddingTop: Scale(10),
         }}
       />
+      <View
+        style={{
+          backgroundColor: "#F4F6FB",
+          borderTopLeftRadius: 18,
+          borderTopRightRadius: 18,
+          borderWidth: 1,
+          borderTopColor: "black",
+          borderBottomColor: "transparent",
+          marginTop: Scale(10),
+          marginHorizontal: Scale(10),
+        }}
+      >
+        <View style={styles.teamSection}>
+          <View style={styles.topContainer}>
+            <View style={styles.titleContainer}>
+              <Ionicons name="people" size={16} color="black" />
 
-      <View style={styles.teamSection}>
-        <View style={styles.topContainer}>
-          <View style={styles.titleContainer}>
-            <Ionicons
-              name="people"
-              size={16}
-              color="#fff"
-            />
+              <Text style={styles.title}>My Teams</Text>
+            </View>
 
-            <Text style={styles.title}>My Teams</Text>
-          </View>
+            <View style={styles.searchContainer}>
+              <Ionicons name="search" size={18} color="#777" />
 
-          <View style={styles.searchContainer}>
-            <Ionicons
-              name="search"
-              size={18}
-              color="#777"
-            />
-
-            <TextInput
-              placeholder="Search User Id"
-              placeholderTextColor="#999"
-              style={styles.input}
-              value={searchText}
-              onChangeText={(text) => {
-                setSearchText(text);
-                setCurrentPage(1);
-              }}
-            />
-          </View>
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingVertical: Scale(10),
-          }}
-        >
-          {["All", "1", "2", "3", "4"].map((level) => {
-            const isActive = selectedLevel === level;
-
-            return (
-              <TouchableOpacity
-                key={level}
-                onPress={() => {
-                  setSelectedLevel(level);
+              <TextInput
+                placeholder="Search User Id"
+                placeholderTextColor="#999"
+                style={styles.input}
+                value={searchText}
+                onChangeText={(text) => {
+                  setSearchText(text);
                   setCurrentPage(1);
                 }}
-                style={[
-                  styles.filterButton,
-                  isActive &&
-                    styles.activeFilterButton,
-                ]}
-              >
-                <Text
+              />
+            </View>
+          </View>
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingVertical: Scale(10),
+            }}
+          >
+            {["All", "1", "2", "3", "4"].map((level) => {
+              const isActive = selectedLevel === level;
+
+              return (
+                <TouchableOpacity
+                  key={level}
+                  onPress={() => {
+                    setSelectedLevel(level);
+                    setCurrentPage(1);
+                  }}
                   style={[
-                    styles.filterButtonText,
-                    isActive &&
-                      styles.activeFilterText,
+                    styles.filterButton,
+                    isActive && styles.activeFilterButton,
                   ]}
                 >
-                  {level === "All"
-                    ? "All"
-                    : `Level ${level}`}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+                  <Text
+                    style={[
+                      styles.filterButtonText,
+                      isActive && styles.activeFilterText,
+                    ]}
+                  >
+                    {level === "All" ? "All" : `Level ${level}`}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
 
-        <View style={styles.tableContainer}>
-          <View style={styles.tableHeader}>
-            <Text style={styles.headerText}>
-              USER ID
-            </Text>
+          <View style={styles.tableContainer}>
+            <View style={styles.tableHeader}>
+              <Text style={styles.headerText}>USER ID</Text>
 
-            <Text style={styles.headerText}>
-              RECHARGE
-            </Text>
+              <Text style={styles.headerText}>RECHARGE</Text>
 
-            <Text style={styles.headerText}>
-              COMMISSION
-            </Text>
+              <Text style={styles.headerText}>COMMISSION</Text>
+            </View>
           </View>
         </View>
       </View>
@@ -503,15 +438,9 @@ const AgentTeamReport = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor={COLORS.primary}
-        barStyle="light-content"
-      />
+      <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
 
-      <NewAppHeader
-        leftIconPress={handleBackPress}
-        centerText="Team Report"
-      />
+      <NewAppHeader leftIconPress={handleBackPress} centerText="Team Report" />
 
       <FlatList
         data={paginatedData}
@@ -524,9 +453,7 @@ const AgentTeamReport = ({ navigation }: any) => {
         }}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>
-              No Users Found
-            </Text>
+            <Text style={styles.emptyText}>No Users Found</Text>
           </View>
         }
       />
@@ -535,69 +462,48 @@ const AgentTeamReport = ({ navigation }: any) => {
         <View style={styles.paginationContainer}>
           <TouchableOpacity
             disabled={currentPage === 1}
-            onPress={() =>
-              setCurrentPage(currentPage - 1)
-            }
+            onPress={() => setCurrentPage(currentPage - 1)}
             style={[
               styles.pageButton,
-              currentPage === 1 &&
-                styles.disabledButton,
+              currentPage === 1 && styles.disabledButton,
             ]}
           >
-            <Ionicons
-              name="chevron-back"
-              size={18}
-              color="#fff"
-            />
+            <Ionicons name="chevron-back" size={18} color="#fff" />
           </TouchableOpacity>
 
-          {Array.from(
-            { length: totalPages },
-            (_, index) => {
-              const page = index + 1;
+          {Array.from({ length: totalPages }, (_, index) => {
+            const page = index + 1;
 
-              return (
-                <TouchableOpacity
-                  key={page}
-                  onPress={() =>
-                    setCurrentPage(page)
-                  }
+            return (
+              <TouchableOpacity
+                key={page}
+                onPress={() => setCurrentPage(page)}
+                style={[
+                  styles.pageNumber,
+                  currentPage === page && styles.activePageNumber,
+                ]}
+              >
+                <Text
                   style={[
-                    styles.pageNumber,
-                    currentPage === page &&
-                      styles.activePageNumber,
+                    styles.pageText,
+                    currentPage === page && styles.activePageText,
                   ]}
                 >
-                  <Text
-                    style={[
-                      styles.pageText,
-                      currentPage === page &&
-                        styles.activePageText,
-                    ]}
-                  >
-                    {page}
-                  </Text>
-                </TouchableOpacity>
-              );
-            },
-          )}
+                  {page}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
 
           <TouchableOpacity
             disabled={currentPage === totalPages}
-            onPress={() =>
-              setCurrentPage(currentPage + 1)
-            }
+            onPress={() => setCurrentPage(currentPage + 1)}
             style={[
               styles.pageButton,
-              currentPage === totalPages &&
-                styles.disabledButton,
+              currentPage === totalPages && styles.disabledButton,
             ]}
           >
-            <Ionicons
-              name="chevron-forward"
-              size={18}
-              color="#fff"
-            />
+            <Ionicons name="chevron-forward" size={18} color="#fff" />
           </TouchableOpacity>
         </View>
       )}
@@ -606,26 +512,18 @@ const AgentTeamReport = ({ navigation }: any) => {
         visible={showShareModal}
         transparent
         animationType="fade"
-        onRequestClose={() =>
-          setShowShareModal(false)
-        }
+        onRequestClose={() => setShowShareModal(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.shareModal}>
             <TouchableOpacity
               style={styles.closeButton}
-              onPress={() =>
-                setShowShareModal(false)
-              }
+              onPress={() => setShowShareModal(false)}
             >
-              <Text style={styles.closeButtonText}>
-                ×
-              </Text>
+              <Text style={styles.closeButtonText}>×</Text>
             </TouchableOpacity>
 
-            <Text style={styles.shareTitle}>
-              Share
-            </Text>
+            <Text style={styles.shareTitle}>Share</Text>
 
             <View style={styles.shareOptions}>
               <TouchableOpacity
@@ -640,18 +538,10 @@ const AgentTeamReport = ({ navigation }: any) => {
                     },
                   ]}
                 >
-                  <Text
-                    style={styles.shareIconText}
-                  >
-                    f
-                  </Text>
+                  <Text style={styles.shareIconText}>f</Text>
                 </View>
 
-                <Text
-                  style={styles.shareOptionText}
-                >
-                  Facebook
-                </Text>
+                <Text style={styles.shareOptionText}>Facebook</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -666,18 +556,10 @@ const AgentTeamReport = ({ navigation }: any) => {
                     },
                   ]}
                 >
-                  <Text
-                    style={styles.shareIconText}
-                  >
-                    ✈
-                  </Text>
+                  <Text style={styles.shareIconText}>✈</Text>
                 </View>
 
-                <Text
-                  style={styles.shareOptionText}
-                >
-                  Telegram
-                </Text>
+                <Text style={styles.shareOptionText}>Telegram</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -692,18 +574,10 @@ const AgentTeamReport = ({ navigation }: any) => {
                     },
                   ]}
                 >
-                  <Text
-                    style={styles.shareIconText}
-                  >
-                    💬
-                  </Text>
+                  <Text style={styles.shareIconText}>💬</Text>
                 </View>
 
-                <Text
-                  style={styles.shareOptionText}
-                >
-                  WhatsApp
-                </Text>
+                <Text style={styles.shareOptionText}>WhatsApp</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -718,18 +592,10 @@ const AgentTeamReport = ({ navigation }: any) => {
                     },
                   ]}
                 >
-                  <Text
-                    style={styles.shareIconText}
-                  >
-                    📷
-                  </Text>
+                  <Text style={styles.shareIconText}>📷</Text>
                 </View>
 
-                <Text
-                  style={styles.shareOptionText}
-                >
-                  Instagram
-                </Text>
+                <Text style={styles.shareOptionText}>Instagram</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -744,18 +610,10 @@ const AgentTeamReport = ({ navigation }: any) => {
                     },
                   ]}
                 >
-                  <Text
-                    style={styles.shareIconText}
-                  >
-                    🔗
-                  </Text>
+                  <Text style={styles.shareIconText}>🔗</Text>
                 </View>
 
-                <Text
-                  style={styles.shareOptionText}
-                >
-                  Copy Link
-                </Text>
+                <Text style={styles.shareOptionText}>Copy Link</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -773,7 +631,7 @@ const createStyles = (Scale: any) =>
     },
 
     teamSection: {
-      marginTop: Scale(16),
+      marginTop: Scale(26),
       marginHorizontal: Scale(16),
     },
 
@@ -839,6 +697,7 @@ const createStyles = (Scale: any) =>
       },
       shadowOpacity: 0.08,
       shadowRadius: 4,
+      marginBottom: Scale(10),
     },
 
     levelHeader: {
@@ -1129,12 +988,22 @@ const createStyles = (Scale: any) =>
     emptyContainer: {
       justifyContent: "center",
       alignItems: "center",
-      paddingVertical: Scale(40),
+      borderBottomLeftRadius: 18,
+      borderBottomRightRadius: 18,
+      borderWidth: 1,
+      borderBottomColor: "black",
+      borderTopColor: "transparent",
+      marginTop: Scale(10),
+      marginHorizontal: Scale(10),
+      // paddingVertical: Scale(40),
     },
 
     emptyText: {
       color: "#777",
       fontWeight: "600",
+      fontSize: Scale(16),
+      marginVertical: Scale(20),
+
     },
 
     modalOverlay: {

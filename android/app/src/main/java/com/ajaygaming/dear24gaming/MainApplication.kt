@@ -1,4 +1,4 @@
-package com.ajay_gaming.Demo
+package com.ajaygaming.dear24gaming
 
 import android.app.Application
 import android.content.res.Configuration
