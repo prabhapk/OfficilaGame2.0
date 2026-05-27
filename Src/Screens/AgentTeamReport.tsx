@@ -11,30 +11,63 @@ import {
   Modal,
   TextInput,
 } from "react-native";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { COLORS } from "../Constants/Theme";
 import { useContainerScale } from "../hooks/useContainerScale";
 import NewAppHeader from "../Components/NewAppHeader";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getAgentDashboardData,
   getMyTeamData,
   getRechargeBonusData,
 } from "../Redux/Slice/agentSlice";
 import { RootState } from "../Redux/store";
-import * as Sharing from "expo-sharing";
 import * as Clipboard from "expo-clipboard";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { defaultRechargeData } from "../Utils/Constants";
 
 const AgentTeamReport = ({ navigation }: any) => {
-  const { rechargeBonusData, dashboardData, rechargeBonusFUllData, teamData } =
-    useSelector((state: RootState) => state.agentSlice);
+  const dispatch = useDispatch();
+
+  const { Scale } = useContainerScale();
+
+  const styles = createStyles(Scale);
+
+  const {
+    rechargeBonusData,
+    rechargeBonusFUllData,
+    teamData,
+  } = useSelector((state: RootState) => state.agentSlice);
+
+  const { userId, agentId, isLoggedIn, userDetails } = useSelector(
+    (state: RootState) => state.signInSlice,
+  );
+
   const [selectedLevel, setSelectedLevel] = useState("All");
+
+  const [showShareModal, setShowShareModal] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [searchText, setSearchText] = useState("");
+
   const levelsData = teamData?.data?.levels || [];
-  const tableData =
-    selectedLevel === "All"
+
+  const safeRechargeData =
+    rechargeBonusData?.length > 0
+      ? rechargeBonusData
+      : defaultRechargeData;
+
+  useEffect(() => {
+    dispatch(getRechargeBonusData({ userId: userId }));
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    dispatch(getMyTeamData({ agentId: agentId }));
+  }, [dispatch, agentId]);
+
+  const tableData = useMemo(() => {
+    return selectedLevel === "All"
       ? levelsData.flatMap((levelItem: any) =>
           levelItem.members.map((member: any) => ({
             id: `${levelItem.level}-${member.userId}`,
@@ -55,68 +88,136 @@ const AgentTeamReport = ({ navigation }: any) => {
               commission: member.totalBetCommission,
             })),
           );
-  const dispatch = useDispatch();
-  const [showShareModal, setShowShareModal] = useState(false);
-  const { Scale, verticalScale } = useContainerScale();
-  const styles = createStyles(Scale);
+  }, [levelsData, selectedLevel]);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchText, setSearchText] = useState("");
-  const safeRechargeData =
-    rechargeBonusData?.length > 0 ? rechargeBonusData : defaultRechargeData;
+  const filteredData = useMemo(() => {
+    return tableData.filter((item: any) =>
+      String(item.userId)
+        .toLowerCase()
+        .includes(searchText.toLowerCase()),
+    );
+  }, [tableData, searchText]);
 
   const itemsPerPage = 5;
 
-  // FILTERED DATA
-  const filteredData = tableData.filter((item: any) =>
-    String(item.userId).toLowerCase().includes(searchText.toLowerCase()),
-  );
-
-  // TOTAL PAGES
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  // PAGINATED DATA
   const paginatedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
 
-  const { userId, agentId } = useSelector(
-    (state: RootState) => state.signInSlice,
-  );
-  console.log("userId==>", userId);
-  console.log("dashboardData==>", dashboardData);
+  const invitedlist =
+    rechargeBonusFUllData?.userStats?.invitedlist || {};
 
-  useEffect(() => {
-    dispatch(getRechargeBonusData({ userId: userId }));
-  }, [dispatch, userId]);
-
-  useEffect(() => {
-    dispatch(getMyTeamData({ agentId: agentId }));
-  }, [dispatch, agentId]);
+  const qualifiedUsers =
+    rechargeBonusFUllData?.userStats?.qualifiedUsersPerLevel || {};
 
   const handleBackPress = () => {
     navigation.goBack();
   };
-  const { isLoggedIn, userDetails } = useSelector(
-    (state: RootState) => state.signInSlice,
-  );
-  const invitedlist = rechargeBonusFUllData?.userStats?.invitedlist || {};
-  const qualifiedUsers =
-    rechargeBonusFUllData?.userStats?.qualifiedUsersPerLevel || {};
+
+  const handleInvite = async () => {
+    if (isLoggedIn) {
+      setShowShareModal(true);
+    } else {
+      navigation.navigate("SignInScreen");
+    }
+  };
+
+  const shareUrl =
+    "https://yourapp.com/invite?code=" +
+    (userDetails.referralCode || "");
+
+  const shareMessage = `Join me on this amazing app! Use my referral code: ${
+    userDetails.referralCode || ""
+  }\n\nDownload the app: ${shareUrl}`;
+
+  const handleFacebookShare = async () => {
+    try {
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        shareUrl,
+      )}`;
+
+      await Linking.openURL(facebookUrl);
+
+      setShowShareModal(false);
+    } catch (error) {
+      Alert.alert("Error", "Unable to share to Facebook");
+    }
+  };
+
+  const handleTelegramShare = async () => {
+    try {
+      const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(
+        shareUrl,
+      )}&text=${encodeURIComponent(shareMessage)}`;
+
+      await Linking.openURL(telegramUrl);
+
+      setShowShareModal(false);
+    } catch (error) {
+      Alert.alert("Error", "Unable to share to Telegram");
+    }
+  };
+
+  const handleWhatsAppShare = async () => {
+    try {
+      const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(
+        shareMessage,
+      )}`;
+
+      await Linking.openURL(whatsappUrl);
+
+      setShowShareModal(false);
+    } catch (error) {
+      Alert.alert("Error", "Unable to share to WhatsApp");
+    }
+  };
+
+  const handleInstagramShare = async () => {
+    try {
+      await Linking.openURL("instagram://");
+
+      Alert.alert(
+        "Instagram",
+        "Paste your invite link manually in story/post",
+      );
+
+      setShowShareModal(false);
+    } catch (error) {
+      Alert.alert("Error", "Instagram app not found");
+    }
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await Clipboard.setStringAsync(shareUrl);
+
+      Alert.alert("Copied", "Link copied successfully");
+
+      setShowShareModal(false);
+    } catch (error) {
+      Alert.alert("Error", "Unable to copy link");
+    }
+  };
 
   const renderTeamReportItem = ({ item }: any) => {
     const invitedCount = invitedlist[item.level] || 0;
+
     const qualifiedCount = qualifiedUsers[item.level] || 0;
 
-    const inviteProgress = (invitedCount / item.totalPeopleRequired) * 100;
+    const inviteProgress =
+      (invitedCount / item.totalPeopleRequired) * 100;
 
-    const depositProgress = (qualifiedCount / item.totalPeopleRequired) * 100;
-    const isCompleted = qualifiedCount >= item.totalPeopleRequired;
+    const depositProgress =
+      (qualifiedCount / item.totalPeopleRequired) * 100;
+
+    const isCompleted =
+      qualifiedCount >= item.totalPeopleRequired;
 
     return (
       <View style={styles.levelCard}>
-        {/* HEADER */}
         <LinearGradient
           colors={[COLORS.linearOne, COLORS.linearTwo]}
           start={{ x: 0, y: 0 }}
@@ -124,34 +225,48 @@ const AgentTeamReport = ({ navigation }: any) => {
           style={styles.levelHeader}
         >
           <View>
-            <Text style={styles.levelText}>Level {item.level}</Text>
+            <Text style={styles.levelText}>
+              Level {item.level}
+            </Text>
 
-            <Text style={styles.bonusLabel}>Reward Bonus</Text>
+            <Text style={styles.bonusLabel}>
+              Reward Bonus
+            </Text>
           </View>
 
-          <Text style={styles.bonusAmount}>₹{item.bonusAmount}</Text>
+          <Text style={styles.bonusAmount}>
+            ₹{item.bonusAmount}
+          </Text>
         </LinearGradient>
 
-        {/* BODY */}
         <View style={styles.levelBody}>
-          {/* TOP INFO ROW */}
           <View style={styles.topInfoRow}>
-            {/* Recharge */}
             <View style={styles.smallInfoCard}>
-              <Ionicons name="wallet-outline" size={18} color="black" />
+              <Ionicons
+                name="wallet-outline"
+                size={16}
+                color="#333"
+              />
 
-              <Text style={styles.smallInfoTitle}>Recharge</Text>
+              <Text style={styles.smallInfoTitle}>
+                Recharge
+              </Text>
 
               <Text style={styles.smallInfoValue}>
                 ₹{item.minimumRechargePerPerson}
               </Text>
             </View>
 
-            {/* Required */}
             <View style={styles.smallInfoCard}>
-              <Ionicons name="people-outline" size={18} color="black" />
+              <Ionicons
+                name="people-outline"
+                size={16}
+                color="#333"
+              />
 
-              <Text style={styles.smallInfoTitle}>Required</Text>
+              <Text style={styles.smallInfoTitle}>
+                Required
+              </Text>
 
               <Text style={styles.smallInfoValue}>
                 {item.totalPeopleRequired}
@@ -159,10 +274,11 @@ const AgentTeamReport = ({ navigation }: any) => {
             </View>
           </View>
 
-          {/* INVITES */}
           <View style={styles.progressContainer}>
             <View style={styles.progressTop}>
-              <Text style={styles.progressLabel}>Invites</Text>
+              <Text style={styles.progressLabel}>
+                Invites
+              </Text>
 
               <Text style={styles.progressCount}>
                 {invitedCount}/{item.totalPeopleRequired}
@@ -174,17 +290,21 @@ const AgentTeamReport = ({ navigation }: any) => {
                 style={[
                   styles.progressBar,
                   {
-                    width: `${Math.min(inviteProgress, 100)}%`,
+                    width: `${Math.min(
+                      inviteProgress,
+                      100,
+                    )}%`,
                   },
                 ]}
               />
             </View>
           </View>
 
-          {/* DEPOSITS */}
           <View style={styles.progressContainer}>
             <View style={styles.progressTop}>
-              <Text style={styles.progressLabel}>Deposits</Text>
+              <Text style={styles.progressLabel}>
+                Deposits
+              </Text>
 
               <Text style={styles.depositCount}>
                 {qualifiedCount}/{item.totalPeopleRequired}
@@ -196,35 +316,43 @@ const AgentTeamReport = ({ navigation }: any) => {
                 style={[
                   styles.depositBar,
                   {
-                    width: `${Math.min(depositProgress, 100)}%`,
+                    width: `${Math.min(
+                      depositProgress,
+                      100,
+                    )}%`,
                   },
                 ]}
               />
             </View>
           </View>
 
-          {/* BUTTON */}
           <TouchableOpacity
             activeOpacity={0.85}
-            onPress={!isCompleted ? handleInvite : undefined}
             disabled={isCompleted}
+            onPress={!isCompleted ? handleInvite : undefined}
           >
             <LinearGradient
               colors={
                 isCompleted
-                  ? ["#00C853", "#00A86B"] // ✅ GREEN
-                  : ["#FF416C", "#FF4B2B"] // ✅ RED
+                  ? ["#00C853", "#00A86B"]
+                  : ["#FF416C", "#FF4B2B"]
               }
               style={styles.completeButton}
             >
               <Ionicons
-                name={isCompleted ? "checkmark-circle" : "share-social"}
-                size={18}
+                name={
+                  isCompleted
+                    ? "checkmark-circle"
+                    : "share-social"
+                }
+                size={16}
                 color="#fff"
               />
 
               <Text style={styles.completeText}>
-                {isCompleted ? "Completed" : "Invite Now"}
+                {isCompleted
+                  ? "Completed"
+                  : "Invite Now"}
               </Text>
             </LinearGradient>
           </TouchableOpacity>
@@ -233,87 +361,29 @@ const AgentTeamReport = ({ navigation }: any) => {
     );
   };
 
-  const handleInvite = async () => {
-    if (isLoggedIn) {
-      setShowShareModal(true);
-    } else {
-      navigation.navigate("SignInScreen");
-    }
-  };
-  const shareUrl =
-    "https://yourapp.com/invite?code=" + (userDetails.referralCode || "");
-  const shareMessage = `Join me on this amazing app! Use my referral code: ${userDetails.referralCode || ""}\n\nDownload the app: ${shareUrl}`;
-
-  const handleFacebookShare = async () => {
-    try {
-      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
-      await Linking.openURL(facebookUrl);
-      setShowShareModal(false);
-    } catch (error) {
-      console.log("Error sharing to Facebook:", error);
-      Alert.alert("Error", "Unable to share to Facebook");
-    }
-  };
-
-  const handleTelegramShare = async () => {
-    try {
-      const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareMessage)}`;
-      await Linking.openURL(telegramUrl);
-      setShowShareModal(false);
-    } catch (error) {
-      console.log("Error sharing to Telegram:", error);
-      Alert.alert("Error", "Unable to share to Telegram");
-    }
-  };
-
-  const handleWhatsAppShare = async () => {
-    try {
-      const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(shareMessage)}`;
-      await Linking.openURL(whatsappUrl);
-      setShowShareModal(false);
-    } catch (error) {
-      console.log("Error sharing to WhatsApp:", error);
-      Alert.alert("Error", "Unable to share to WhatsApp");
-    }
-  };
-
-  const handleInstagramShare = async () => {
-    try {
-      // Instagram doesn't support direct URL sharing, so we'll copy the link
-      await Linking.openURL("instagram://");
-      Alert.alert(
-        "Instagram",
-        "Please paste the link in your Instagram story or post",
-      );
-      setShowShareModal(false);
-    } catch (error) {
-      console.log("Error opening Instagram:", error);
-      Alert.alert("Error", "Instagram app not found");
-    }
-  };
-
-  const handleCopyLink = async () => {
-    try {
-      await Clipboard.setStringAsync(shareUrl);
-      Alert.alert("Copied!", "Link copied to clipboard");
-      setShowShareModal(false);
-    } catch (error) {
-      console.log("Error copying link:", error);
-      Alert.alert("Error", "Unable to copy link");
-    }
-  };
-
   const renderTableItem = ({ item, index }: any) => (
     <View
       style={[
         styles.row,
         {
-          backgroundColor: index % 2 === 0 ? "#FFFFFF" : "#F8F8F8",
+          backgroundColor:
+            index % 2 === 0 ? "#FFFFFF" : "#FAFAFA",
         },
       ]}
     >
       <View style={styles.userContainer}>
-        <Text style={styles.userText}>{item.userId}</Text>
+        <View style={styles.avatarCircle}>
+          <Text style={styles.avatarText}>
+            {String(item.userId).charAt(0)}
+          </Text>
+        </View>
+
+        <Text
+          style={styles.userText}
+          numberOfLines={1}
+        >
+          {item.userId}
+        </Text>
       </View>
 
       <Text style={styles.rechargeText}>
@@ -326,42 +396,42 @@ const AgentTeamReport = ({ navigation }: any) => {
     </View>
   );
 
-  return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
-
-      <NewAppHeader leftIconPress={handleBackPress} centerText="Team Report" />
-
+  const renderHeaderSection = () => (
+    <>
       <FlatList
         data={safeRechargeData}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.level.toString()}
         renderItem={renderTeamReportItem}
-        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: Scale(10),
+          paddingHorizontal: Scale(16),
           paddingTop: Scale(10),
         }}
-        removeClippedSubviews={false}
       />
 
-      <View
-        style={{
-          // marginTop: Scale(20),
-          marginHorizontal: Scale(20),
-        }}
-      >
-        {/* Header */}
+      <View style={styles.teamSection}>
         <View style={styles.topContainer}>
           <View style={styles.titleContainer}>
-            <Ionicons name="people" size={16} color="white" />
+            <Ionicons
+              name="people"
+              size={16}
+              color="#fff"
+            />
+
             <Text style={styles.title}>My Teams</Text>
           </View>
 
-          {/* Search Box */}
           <View style={styles.searchContainer}>
-            <Ionicons name="search" size={18} color="#555" />
+            <Ionicons
+              name="search"
+              size={18}
+              color="#777"
+            />
+
             <TextInput
-              placeholder="Search by User Id"
+              placeholder="Search User Id"
               placeholderTextColor="#999"
               style={styles.input}
               value={searchText}
@@ -372,6 +442,7 @@ const AgentTeamReport = ({ navigation }: any) => {
             />
           </View>
         </View>
+
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -391,129 +462,170 @@ const AgentTeamReport = ({ navigation }: any) => {
                 }}
                 style={[
                   styles.filterButton,
-                  isActive && styles.activeFilterButton,
+                  isActive &&
+                    styles.activeFilterButton,
                 ]}
               >
                 <Text
                   style={[
                     styles.filterButtonText,
-                    isActive && styles.activeFilterText,
+                    isActive &&
+                      styles.activeFilterText,
                   ]}
                 >
-                  {level === "All" ? "All" : `Level ${level}`}
+                  {level === "All"
+                    ? "All"
+                    : `Level ${level}`}
                 </Text>
               </TouchableOpacity>
             );
           })}
         </ScrollView>
 
-        {/* Table */}
         <View style={styles.tableContainer}>
-          {/* Table Header */}
           <View style={styles.tableHeader}>
-            <Text style={styles.headerText}>USER ID</Text>
-            <Text style={styles.headerText}>RECHARGE</Text>
-            <Text style={styles.headerText}>COMMISSION</Text>
+            <Text style={styles.headerText}>
+              USER ID
+            </Text>
+
+            <Text style={styles.headerText}>
+              RECHARGE
+            </Text>
+
+            <Text style={styles.headerText}>
+              COMMISSION
+            </Text>
           </View>
-
-          {/* List */}
-          <FlatList
-            data={paginatedData}
-            keyExtractor={(item) => item.id}
-            renderItem={renderTableItem}
-            showsVerticalScrollIndicator={false}
-            style={styles.tableList}
-            scrollEnabled={false}
-            ListEmptyComponent={
-              <View
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  paddingVertical: Scale(30),
-                }}
-              >
-                <Text
-                  style={{
-                    color: "#999",
-                    fontSize: Scale(14),
-                    fontWeight: "600",
-                  }}
-                >
-                  No Users Found
-                </Text>
-              </View>
-            }
-          />
-          {filteredData.length > 0 && (
-            <View style={styles.paginationContainer}>
-              <TouchableOpacity
-                disabled={currentPage === 1}
-                onPress={() => setCurrentPage(currentPage - 1)}
-                style={[
-                  styles.pageButton,
-                  currentPage === 1 && styles.disabledButton,
-                ]}
-              >
-                <Ionicons name="chevron-back" size={18} color="#fff" />
-              </TouchableOpacity>
-
-              {/* PAGE NUMBERS */}
-              {Array.from({ length: totalPages }, (_, index) => {
-                const page = index + 1;
-
-                return (
-                  <TouchableOpacity
-                    key={page}
-                    onPress={() => setCurrentPage(page)}
-                    style={[
-                      styles.pageNumber,
-                      currentPage === page && styles.activePageNumber,
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.pageText,
-                        currentPage === page && styles.activePageText,
-                      ]}
-                    >
-                      {page}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-
-              {/* NEXT */}
-              <TouchableOpacity
-                disabled={currentPage === totalPages}
-                onPress={() => setCurrentPage(currentPage + 1)}
-                style={[
-                  styles.pageButton,
-                  currentPage === totalPages && styles.disabledButton,
-                ]}
-              >
-                <Ionicons name="chevron-forward" size={18} color="#fff" />
-              </TouchableOpacity>
-            </View>
-          )}
         </View>
       </View>
+    </>
+  );
+
+  return (
+    <View style={styles.container}>
+      <StatusBar
+        backgroundColor={COLORS.primary}
+        barStyle="light-content"
+      />
+
+      <NewAppHeader
+        leftIconPress={handleBackPress}
+        centerText="Team Report"
+      />
+
+      <FlatList
+        data={paginatedData}
+        keyExtractor={(item) => item.id}
+        renderItem={renderTableItem}
+        ListHeaderComponent={renderHeaderSection}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: Scale(100),
+        }}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>
+              No Users Found
+            </Text>
+          </View>
+        }
+      />
+
+      {filteredData.length > 0 && (
+        <View style={styles.paginationContainer}>
+          <TouchableOpacity
+            disabled={currentPage === 1}
+            onPress={() =>
+              setCurrentPage(currentPage - 1)
+            }
+            style={[
+              styles.pageButton,
+              currentPage === 1 &&
+                styles.disabledButton,
+            ]}
+          >
+            <Ionicons
+              name="chevron-back"
+              size={18}
+              color="#fff"
+            />
+          </TouchableOpacity>
+
+          {Array.from(
+            { length: totalPages },
+            (_, index) => {
+              const page = index + 1;
+
+              return (
+                <TouchableOpacity
+                  key={page}
+                  onPress={() =>
+                    setCurrentPage(page)
+                  }
+                  style={[
+                    styles.pageNumber,
+                    currentPage === page &&
+                      styles.activePageNumber,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.pageText,
+                      currentPage === page &&
+                        styles.activePageText,
+                    ]}
+                  >
+                    {page}
+                  </Text>
+                </TouchableOpacity>
+              );
+            },
+          )}
+
+          <TouchableOpacity
+            disabled={currentPage === totalPages}
+            onPress={() =>
+              setCurrentPage(currentPage + 1)
+            }
+            style={[
+              styles.pageButton,
+              currentPage === totalPages &&
+                styles.disabledButton,
+            ]}
+          >
+            <Ionicons
+              name="chevron-forward"
+              size={18}
+              color="#fff"
+            />
+          </TouchableOpacity>
+        </View>
+      )}
 
       <Modal
         visible={showShareModal}
         transparent
         animationType="fade"
-        onRequestClose={() => setShowShareModal(false)}
+        onRequestClose={() =>
+          setShowShareModal(false)
+        }
       >
         <View style={styles.modalOverlay}>
           <View style={styles.shareModal}>
             <TouchableOpacity
               style={styles.closeButton}
-              onPress={() => setShowShareModal(false)}
+              onPress={() =>
+                setShowShareModal(false)
+              }
             >
-              <Text style={styles.closeButtonText}>×</Text>
+              <Text style={styles.closeButtonText}>
+                ×
+              </Text>
             </TouchableOpacity>
 
-            <Text style={styles.shareTitle}>Share</Text>
+            <Text style={styles.shareTitle}>
+              Share
+            </Text>
 
             <View style={styles.shareOptions}>
               <TouchableOpacity
@@ -521,11 +633,25 @@ const AgentTeamReport = ({ navigation }: any) => {
                 onPress={handleFacebookShare}
               >
                 <View
-                  style={[styles.shareIcon, { backgroundColor: "#1877F2" }]}
+                  style={[
+                    styles.shareIcon,
+                    {
+                      backgroundColor: "#1877F2",
+                    },
+                  ]}
                 >
-                  <Text style={styles.shareIconText}>f</Text>
+                  <Text
+                    style={styles.shareIconText}
+                  >
+                    f
+                  </Text>
                 </View>
-                <Text style={styles.shareOptionText}>Facebook</Text>
+
+                <Text
+                  style={styles.shareOptionText}
+                >
+                  Facebook
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -533,11 +659,25 @@ const AgentTeamReport = ({ navigation }: any) => {
                 onPress={handleTelegramShare}
               >
                 <View
-                  style={[styles.shareIcon, { backgroundColor: "#0088CC" }]}
+                  style={[
+                    styles.shareIcon,
+                    {
+                      backgroundColor: "#0088CC",
+                    },
+                  ]}
                 >
-                  <Text style={styles.shareIconText}>✈</Text>
+                  <Text
+                    style={styles.shareIconText}
+                  >
+                    ✈
+                  </Text>
                 </View>
-                <Text style={styles.shareOptionText}>Telegram</Text>
+
+                <Text
+                  style={styles.shareOptionText}
+                >
+                  Telegram
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -545,11 +685,25 @@ const AgentTeamReport = ({ navigation }: any) => {
                 onPress={handleWhatsAppShare}
               >
                 <View
-                  style={[styles.shareIcon, { backgroundColor: "#25D366" }]}
+                  style={[
+                    styles.shareIcon,
+                    {
+                      backgroundColor: "#25D366",
+                    },
+                  ]}
                 >
-                  <Text style={styles.shareIconText}>💬</Text>
+                  <Text
+                    style={styles.shareIconText}
+                  >
+                    💬
+                  </Text>
                 </View>
-                <Text style={styles.shareOptionText}>WhatsApp</Text>
+
+                <Text
+                  style={styles.shareOptionText}
+                >
+                  WhatsApp
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -557,11 +711,25 @@ const AgentTeamReport = ({ navigation }: any) => {
                 onPress={handleInstagramShare}
               >
                 <View
-                  style={[styles.shareIcon, { backgroundColor: "#E4405F" }]}
+                  style={[
+                    styles.shareIcon,
+                    {
+                      backgroundColor: "#E4405F",
+                    },
+                  ]}
                 >
-                  <Text style={styles.shareIconText}>📷</Text>
+                  <Text
+                    style={styles.shareIconText}
+                  >
+                    📷
+                  </Text>
                 </View>
-                <Text style={styles.shareOptionText}>Instagram</Text>
+
+                <Text
+                  style={styles.shareOptionText}
+                >
+                  Instagram
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -569,11 +737,25 @@ const AgentTeamReport = ({ navigation }: any) => {
                 onPress={handleCopyLink}
               >
                 <View
-                  style={[styles.shareIcon, { backgroundColor: "#007AFF" }]}
+                  style={[
+                    styles.shareIcon,
+                    {
+                      backgroundColor: "#007AFF",
+                    },
+                  ]}
                 >
-                  <Text style={styles.shareIconText}>🔗</Text>
+                  <Text
+                    style={styles.shareIconText}
+                  >
+                    🔗
+                  </Text>
                 </View>
-                <Text style={styles.shareOptionText}>Copy Link</Text>
+
+                <Text
+                  style={styles.shareOptionText}
+                >
+                  Copy Link
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -582,136 +764,23 @@ const AgentTeamReport = ({ navigation }: any) => {
     </View>
   );
 };
+
 const createStyles = (Scale: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: COLORS.primary,
-    },
-    modalOverlay: {
-      flex: 1,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    shareModal: {
-      backgroundColor: "#fff",
-      borderRadius: 20,
-      padding: 20,
-      width: "100%",
-      maxWidth: 350,
-      alignItems: "center",
-    },
-    closeButton: {
-      position: "absolute",
-      top: 15,
-      left: 15,
-      width: 30,
-      height: 30,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    closeButtonText: {
-      fontSize: 24,
-      color: "#666",
-      fontWeight: "bold",
-    },
-    shareTitle: {
-      fontSize: 20,
-      fontWeight: "bold",
-      color: "#333",
-      marginBottom: 20,
-      marginTop: 10,
-    },
-    shareOptions: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      justifyContent: "space-around",
-      width: "100%",
-    },
-    shareOption: {
-      alignItems: "center",
-      marginVertical: 10,
-      width: "20%",
-    },
-    shareIcon: {
-      width: 50,
-      height: 50,
-      borderRadius: 25,
-      justifyContent: "center",
-      alignItems: "center",
-      marginBottom: 8,
-    },
-    shareIconText: {
-      color: "#fff",
-      fontSize: 20,
-      fontWeight: "bold",
-    },
-    shareOptionText: {
-      fontSize: 12,
-      color: "#333",
-      textAlign: "center",
-    },
-    invitationLinkButton: {
-      borderRadius: Scale(12),
-      alignItems: "center",
-      // width: Scale(200),
-      justifyContent: "center",
-      alignSelf: "center",
-      marginTop: Scale(20),
-      height: Scale(40),
-    },
-    invitationLinkTouchable: {
-      paddingVertical: Scale(10),
-      alignItems: "center",
-      justifyContent: "center",
-      paddingHorizontal: Scale(20),
-    },
-    invitationLinkText: {
-      fontSize: Scale(16),
-      fontWeight: "bold",
-      color: "#fff",
-      textAlign: "center",
-    },
-    // row: {
-    //   flexDirection: "row",
-    //   justifyContent: "space-between",
-    //   alignItems: "center",
-    //   paddingVertical: 15,
-    //   paddingHorizontal: 18,
-    //   borderBottomWidth: 1,
-    //   borderBottomColor: "#F0F0F0",
-    // },
-
-    userText: {
-      flex: 1,
-      fontSize: 15,
-      color: "#333",
-      fontWeight: "600",
-      textAlign: "center",
+      backgroundColor: "#F4F6FB",
     },
 
-    rechargeText: {
-      flex: 1,
-      fontSize: 15,
-      color: "black",
-      textAlign: "center",
-      fontWeight: "600",
+    teamSection: {
+      marginTop: Scale(16),
+      marginHorizontal: Scale(16),
     },
 
-    commissionText: {
-      flex: 1,
-      fontSize: 15,
-      color: "#2EAD65",
-      textAlign: "center",
-      fontWeight: "600",
-    },
     topContainer: {
       flexDirection: "row",
-      justifyContent: "space-between",
       alignItems: "center",
-      // marginBottom: 10,
-      paddingVertical: 5,
+      marginBottom: Scale(10),
     },
 
     titleContainer: {
@@ -722,113 +791,78 @@ const createStyles = (Scale: any) =>
     title: {
       fontSize: Scale(16),
       fontWeight: "700",
-      color: "white",
-      marginLeft: 8,
+      color: COLORS.primary,
+      marginLeft: Scale(6),
     },
 
     searchContainer: {
+      flex: 1,
       flexDirection: "row",
       alignItems: "center",
       backgroundColor: "#fff",
-      borderRadius: 12,
-      paddingHorizontal: 12,
-      // width: "50%",
+      borderRadius: Scale(12),
+      marginLeft: Scale(12),
+      paddingHorizontal: Scale(12),
       height: Scale(40),
+
       elevation: 2,
-      marginVertical: Scale(5),
-      flex: 1,
-      marginLeft: Scale(30),
-    },
 
-    input: {
-      marginLeft: 8,
-      flex: 1,
-      color: "#000",
-    },
-
-    // tableContainer: {
-    //   backgroundColor: "#fff",
-    //   borderRadius: 18,
-    //   overflow: "hidden",
-    // },
-
-    // tableHeader: {
-    //   flexDirection: "row",
-    //   justifyContent: "space-between",
-    //   paddingVertical: 18,
-    //   paddingHorizontal: 18,
-    //   borderBottomWidth: 1,
-    //   borderBottomColor: "#C9A3E6",
-    //   backgroundColor: "#FAF9FD",
-    // },
-
-    // headerText: {
-    //   flex: 1,
-    //   fontSize: 14,
-    //   fontWeight: "700",
-    //   color: "#3B214A",
-    //   textAlign: "center",
-    // },
-    infoBox: {
-      backgroundColor: "#F5F2FF",
-      borderRadius: Scale(14),
-      padding: Scale(14),
-      marginBottom: Scale(18),
-    },
-
-    infoTitle: {
-      color: "#777",
-      marginTop: Scale(8),
-      fontSize: Scale(12),
-    },
-
-    infoValue: {
-      color: "#222",
-      fontWeight: "700",
-      fontSize: Scale(18),
-      marginTop: Scale(4),
-    },
-
-    levelCard: {
-      marginHorizontal: Scale(16),
-      marginTop: Scale(14),
-      borderRadius: Scale(20),
-      overflow: "hidden",
-      backgroundColor: "#fff",
-      elevation: 6,
       shadowColor: "#000",
       shadowOffset: {
         width: 0,
-        height: 3,
+        height: 1,
       },
-      shadowOpacity: 0.12,
-      shadowRadius: 5,
+      shadowOpacity: 0.08,
+      shadowRadius: 3,
+    },
+
+    input: {
+      flex: 1,
+      marginLeft: Scale(8),
+      color: "#000",
+      fontSize: Scale(13),
+    },
+
+    levelCard: {
+      width: Scale(290),
+      marginRight: Scale(14),
+      borderRadius: Scale(20),
+      overflow: "hidden",
+      backgroundColor: "#fff",
+
+      elevation: 3,
+
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.08,
+      shadowRadius: 4,
     },
 
     levelHeader: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      paddingHorizontal: Scale(18),
-      paddingVertical: Scale(5),
+      paddingHorizontal: Scale(16),
+      paddingVertical: Scale(12),
     },
 
     levelBody: {
-      padding: Scale(5),
-      paddingHorizontal: Scale(10),
+      padding: Scale(12),
     },
 
     levelText: {
       color: "#fff",
-      fontSize: Scale(16),
+      fontSize: Scale(15),
       fontWeight: "700",
     },
 
     bonusLabel: {
       color: "#E9D8FF",
-      marginTop: Scale(2),
       fontSize: Scale(11),
-      fontWeight: "bold",
+      marginTop: Scale(2),
     },
 
     bonusAmount: {
@@ -840,38 +874,37 @@ const createStyles = (Scale: any) =>
     topInfoRow: {
       flexDirection: "row",
       justifyContent: "space-between",
-      marginBottom: Scale(10),
+      marginBottom: Scale(8),
     },
 
     smallInfoCard: {
       flex: 0.48,
-      backgroundColor: "#F6F3FF",
+      backgroundColor: "#F7F5FF",
       borderRadius: Scale(14),
-      paddingVertical: Scale(5),
-      paddingHorizontal: Scale(5),
+      padding: Scale(10),
     },
 
     smallInfoTitle: {
       fontSize: Scale(10),
       color: "#666",
-      marginTop: Scale(6),
+      marginTop: Scale(4),
     },
 
     smallInfoValue: {
-      fontSize: Scale(14),
+      fontSize: Scale(13),
       fontWeight: "700",
       color: "#222",
       marginTop: Scale(4),
     },
 
     progressContainer: {
-      marginBottom: Scale(12),
+      marginBottom: Scale(8),
     },
 
     progressTop: {
       flexDirection: "row",
       justifyContent: "space-between",
-      marginBottom: Scale(6),
+      marginBottom: Scale(4),
     },
 
     progressLabel: {
@@ -907,36 +940,158 @@ const createStyles = (Scale: any) =>
 
     depositBar: {
       height: "100%",
-      backgroundColor: "#00C853",
+      backgroundColor: "#00A86B",
       borderRadius: Scale(20),
     },
 
     completeButton: {
-      marginTop: Scale(10),
-      borderRadius: Scale(14),
+      marginTop: Scale(8),
+      borderRadius: Scale(12),
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      paddingVertical: Scale(10),
+      paddingVertical: Scale(9),
     },
 
     completeText: {
       color: "#fff",
-      fontSize: Scale(14),
+      fontSize: Scale(13),
       fontWeight: "700",
-      marginLeft: Scale(8),
+      marginLeft: Scale(6),
     },
+
+    filterButton: {
+      paddingHorizontal: Scale(14),
+      paddingVertical: Scale(7),
+      borderRadius: Scale(30),
+      backgroundColor: "#fff",
+      marginRight: Scale(10),
+
+      elevation: 2,
+
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.08,
+      shadowRadius: 3,
+    },
+
+    activeFilterButton: {
+      backgroundColor: COLORS.primary,
+    },
+
+    filterButtonText: {
+      color: "#333",
+      fontWeight: "700",
+      fontSize: Scale(12),
+    },
+
+    activeFilterText: {
+      color: "#fff",
+    },
+
+    tableContainer: {
+      backgroundColor: "#fff",
+      borderRadius: Scale(18),
+      overflow: "hidden",
+      marginTop: Scale(10),
+
+      elevation: 3,
+
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.08,
+      shadowRadius: 4,
+    },
+
+    tableHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: COLORS.secondaryTextColor,
+      paddingVertical: Scale(12),
+      paddingHorizontal: Scale(12),
+    },
+
+    headerText: {
+      flex: 1,
+      textAlign: "center",
+      color: "#fff",
+      fontSize: Scale(12),
+      fontWeight: "700",
+    },
+
+    row: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingVertical: Scale(12),
+      paddingHorizontal: Scale(14),
+      backgroundColor: "#fff",
+      borderBottomWidth: 1,
+      borderBottomColor: "#F2F2F2",
+      marginHorizontal: Scale(16),
+    },
+
+    userContainer: {
+      flex: 1.4,
+      flexDirection: "row",
+      alignItems: "center",
+    },
+
+    avatarCircle: {
+      width: Scale(30),
+      height: Scale(30),
+      borderRadius: Scale(15),
+      backgroundColor: COLORS.primary,
+      justifyContent: "center",
+      alignItems: "center",
+      marginRight: Scale(8),
+    },
+
+    avatarText: {
+      color: "#fff",
+      fontWeight: "700",
+      fontSize: Scale(12),
+    },
+
+    userText: {
+      flex: 1,
+      color: "#222",
+      fontSize: Scale(13),
+      fontWeight: "600",
+    },
+
+    rechargeText: {
+      flex: 1,
+      textAlign: "center",
+      color: "#000",
+      fontSize: Scale(13),
+      fontWeight: "600",
+    },
+
+    commissionText: {
+      flex: 1,
+      textAlign: "center",
+      color: "#00A86B",
+      fontSize: Scale(13),
+      fontWeight: "700",
+    },
+
     paginationContainer: {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      marginTop: Scale(20),
-      marginBottom: Scale(20),
+      paddingVertical: Scale(20),
+      backgroundColor: "#F4F6FB",
     },
 
     pageButton: {
-      width: Scale(38),
-      height: Scale(38),
+      width: Scale(36),
+      height: Scale(36),
       borderRadius: Scale(10),
       backgroundColor: COLORS.primary,
       justifyContent: "center",
@@ -949,22 +1104,13 @@ const createStyles = (Scale: any) =>
     },
 
     pageNumber: {
-      width: Scale(38),
-      height: Scale(38),
+      width: Scale(36),
+      height: Scale(36),
       borderRadius: Scale(10),
       backgroundColor: "#fff",
       justifyContent: "center",
       alignItems: "center",
       marginHorizontal: Scale(4),
-
-      elevation: 3,
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.1,
-      shadowRadius: 3,
     },
 
     activePageNumber: {
@@ -974,108 +1120,94 @@ const createStyles = (Scale: any) =>
     pageText: {
       color: "#333",
       fontWeight: "700",
-      fontSize: Scale(14),
     },
 
     activePageText: {
       color: "#fff",
     },
-    tableList: {
-      minHeight: Scale(260),
-      maxHeight: Scale(260),
-    },
-    filterButton: {
-      paddingHorizontal: 18,
-      paddingVertical: 8,
-      borderRadius: 30,
-      backgroundColor: "#fff",
-      marginRight: 10,
-      marginBottom: 10,
-      elevation: 3,
 
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.08,
-      shadowRadius: 3,
-    },
-
-    activeFilterButton: {
-      backgroundColor: COLORS.primary,
-      borderColor: COLORS.white,
-      borderWidth: 1,
-    },
-
-    filterButtonText: {
-      color: "#333",
-      fontWeight: "700",
-    },
-
-    activeFilterText: {
-      color: "#fff",
-    },
-    userContainer: {
-      flex: 1,
-      flexDirection: "row",
-      alignItems: "center",
-    },
-
-    avatarCircle: {
-      width: Scale(30),
-      height: Scale(30),
-      borderRadius: Scale(15),
-      backgroundColor: COLORS.linearOne,
+    emptyContainer: {
       justifyContent: "center",
       alignItems: "center",
-      marginRight: Scale(8),
+      paddingVertical: Scale(40),
     },
 
-    avatarText: {
-      color: "#fff",
-      fontWeight: "700",
+    emptyText: {
+      color: "#777",
+      fontWeight: "600",
     },
 
-    tableContainer: {
-      backgroundColor: "#fff",
-      borderRadius: 18,
-      overflow: "hidden",
-      marginBottom: Scale(30),
-      elevation: 5,
-
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 3,
-      },
-      shadowOpacity: 0.12,
-      shadowRadius: 5,
-    },
-
-    tableHeader: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      paddingVertical: 16,
-      paddingHorizontal: 16,
-      backgroundColor: COLORS.secondaryTextColor,
-    },
-
-    headerText: {
+    modalOverlay: {
       flex: 1,
-      fontSize: 13,
+      backgroundColor: "rgba(0,0,0,0.45)",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+
+    shareModal: {
+      backgroundColor: "#fff",
+      width: "90%",
+      borderRadius: Scale(22),
+      padding: Scale(20),
+      alignItems: "center",
+    },
+
+    closeButton: {
+      position: "absolute",
+      top: Scale(10),
+      right: Scale(10),
+      width: Scale(32),
+      height: Scale(32),
+      justifyContent: "center",
+      alignItems: "center",
+    },
+
+    closeButtonText: {
+      fontSize: Scale(24),
+      color: "#666",
+      fontWeight: "bold",
+    },
+
+    shareTitle: {
+      fontSize: Scale(18),
       fontWeight: "700",
+      color: "#222",
+      marginBottom: Scale(20),
+    },
+
+    shareOptions: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      justifyContent: "space-between",
+      width: "100%",
+    },
+
+    shareOption: {
+      width: "30%",
+      alignItems: "center",
+      marginBottom: Scale(18),
+    },
+
+    shareIcon: {
+      width: Scale(52),
+      height: Scale(52),
+      borderRadius: Scale(26),
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: Scale(8),
+    },
+
+    shareIconText: {
       color: "#fff",
+      fontSize: Scale(20),
+      fontWeight: "700",
+    },
+
+    shareOptionText: {
+      fontSize: Scale(11),
+      color: "#333",
       textAlign: "center",
     },
-
-    row: {
-      flexDirection: "row",
-      alignItems: "center",
-      paddingVertical: 14,
-      paddingHorizontal: 16,
-      borderBottomWidth: 1,
-      borderBottomColor: "#F1F1F1",
-    },
   });
+
 export default AgentTeamReport;

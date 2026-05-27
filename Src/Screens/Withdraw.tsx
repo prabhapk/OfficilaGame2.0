@@ -8,6 +8,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   FlatList,
+  Platform,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { walletMini, refresh, lefArrow, checkBox } from "../../assets/assets";
@@ -34,8 +35,10 @@ import { set } from "date-fns";
 import { getWalletBalance } from "../Redux/Slice/signInSlice";
 import { COLORS } from "../Constants/Theme";
 import { Image } from "expo-image";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Withdraw = ({ navigation }: any) => {
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
   const [walletAmount, setWalletAmount] = useState(0);
   const [selectedAmount, setSelectedAmount] = useState<any | null>(null);
@@ -443,20 +446,33 @@ const Withdraw = ({ navigation }: any) => {
         {/* Modal  */}
         <View>
           <Modal
-            isVisible={isModalVisible}
-            animationIn="flipInY"
-            animationOut="flipOutY"
-            animationInTiming={500}
-            animationOutTiming={500}
-            style={{
-              justifyContent: "flex-end",
-              margin: 0,
-            }}
-          >
-            <KeyboardAvoidingView
-              style={{ flex: 1, justifyContent: "flex-end" }}
-            >
-              <View style={styles.modalContainer1}>
+  isVisible={isModalVisible}
+  animationIn="flipInY"
+  animationOut="flipOutY"
+  animationInTiming={500}
+  animationOutTiming={500}
+  avoidKeyboard
+  statusBarTranslucent
+  style={{
+    justifyContent: "flex-end",
+    margin: 0,
+  }}
+>
+          <KeyboardAvoidingView
+  behavior={Platform.OS === "ios" ? "padding" : undefined}
+  style={{
+    flex: 1,
+    justifyContent: "flex-end",
+  }}
+>
+       <View
+  style={[
+    styles.modalContainer1,
+    {
+      paddingBottom: insets.bottom + Scale(20),
+    },
+  ]}
+>
                 <View style={styles.modalTransferView}>
                   <Text style={styles.modalTransferText}>Transfer</Text>
                   <TouchableOpacity
@@ -1147,12 +1163,16 @@ const createStyles = (Scale: any) =>
       color: "#fff",
       marginVertical: Scale(10),
     },
-    modalContainer1: {
-      backgroundColor: COLORS.primary,
-      borderRadius: 10,
-      padding: 20,
-      // marginBottom: 16,
-    },
+ modalContainer1: {
+  backgroundColor: COLORS.primary,
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+
+  paddingTop: 20,
+  paddingHorizontal: 20,
+
+  maxHeight: "90%",
+},
     modalTransferView: {
       flexDirection: "row",
       alignItems: "center",
