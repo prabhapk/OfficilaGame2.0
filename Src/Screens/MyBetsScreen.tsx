@@ -291,8 +291,6 @@ useEffect(() => {
 
           betCount: b.betCount ?? 1,
           totalAmount: b.totalAmount,
-
-          // ✅ result logic (already correct)
           result:
             b.isWinning === true
               ? "Won"
@@ -335,7 +333,7 @@ useEffect(() => {
         imageSource={hot}
         winOrLossId={item.betUniqueId}
         gameName={item.gameName || "Dear24Gaming"}
-        totalWinningAmount={item.totalAmount}
+        totalWinningAmount={item.winningAmount}
       />
     );
   };
@@ -423,6 +421,7 @@ useEffect(() => {
               <Image
                 source={noDataImage}
                 style={styles.noDataImageStyle}
+                contentFit="contain"
               />
               <Text
                 style={styles.noDataTextStyle}
@@ -573,8 +572,8 @@ const createStyles = (Scale: any) =>
                 marginTop: Scale(100),
               },
               noDataImageStyle: {
-                  width: 100,
-                  height: 100,
+                  width: Scale(200),
+                  height: Scale(200),
                   marginVertical: Scale(20),
                 },
                 noDataTextStyle: {

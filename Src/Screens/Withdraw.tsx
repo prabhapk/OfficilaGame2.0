@@ -36,6 +36,7 @@ import { getWalletBalance } from "../Redux/Slice/signInSlice";
 import { COLORS } from "../Constants/Theme";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import LoadingSpinnerButton from "../Components/LoadingSpinnerButton";
 
 const Withdraw = ({ navigation }: any) => {
   const insets = useSafeAreaInsets();
@@ -70,7 +71,7 @@ const Withdraw = ({ navigation }: any) => {
       }),
     );
   }, []);
-  const { bankAccountsData } = useSelector(
+  const { bankAccountsData, withdrawLoader } = useSelector(
     (state: RootState) => state.withdrawSlice,
   );
 
@@ -410,9 +411,9 @@ const Withdraw = ({ navigation }: any) => {
               );
             })}
           </View>
-          <Text style={[styles.sectionTitle, { marginVertical: Scale(20) }]}>
+          {/* <Text style={[styles.sectionTitle, { marginVertical: Scale(20) }]}>
             Actual amount received:₹ {actualAmount}{" "}
-          </Text>
+          </Text> */}
           <Divider style={{ marginVertical: Scale(10) }} />
           <Text style={styles.withdrawalPercentageText}>
             Withdrawal will be charged with 3% of withdraw fee will be charged.
@@ -761,6 +762,7 @@ const Withdraw = ({ navigation }: any) => {
         </View>
       </Modal>
       <View style={{ marginBottom: Scale(10) }}>
+        
         <TouchableOpacity
           style={[
             styles.buttonWrapper,
@@ -771,6 +773,8 @@ const Withdraw = ({ navigation }: any) => {
           ]}
           // disabled={!selectedWithdrawAmounts || selectedWithdrawAmounts >= 0}
           onPress={handleWithDrawAmount}
+          disabled={withdrawLoader}
+
         >
           <LinearGradient
             colors={[COLORS.linearOne, COLORS.linearTwo]}
@@ -778,7 +782,11 @@ const Withdraw = ({ navigation }: any) => {
             end={{ x: 1, y: 0 }}
             style={styles.signInButton}
           >
-            <Text style={styles.signInButtonText}>Withdraw</Text>
+              {withdrawLoader ? (
+      <LoadingSpinnerButton color="#fff" durationMs={1000} />
+    ) : (
+      <Text style={styles.signInButtonText}>Withdraw</Text>
+    )} 
           </LinearGradient>
         </TouchableOpacity>
       </View>

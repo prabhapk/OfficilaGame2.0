@@ -58,6 +58,7 @@ export const serviceUrls = {
   payment: {
       paymentGatewayLists: "/api/user/payment-config",
       depositPayment: '/api/Payment/deposit-payment',
+      verifyRecharge: '/api/Payment/verify',
   },
   Agent: {
     dailyStats: '/api/Agent/daily-stats',
@@ -69,6 +70,9 @@ export const serviceUrls = {
     rebateSummary: '/api/user/rebate/summary',
     rebateList: '/api/user/rebate/list',
     rebateClaim: '/api/user/rebate/claim',
+  },
+  banners:{
+    getAllBanners:'/api/user/User/banners'
   }
 };
 

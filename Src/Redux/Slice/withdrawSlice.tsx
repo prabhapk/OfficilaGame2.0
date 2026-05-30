@@ -231,9 +231,16 @@ export const withdrawSlice = createSlice({
     builder.addCase(UpdateBankAccount.pending, (state, action) => {
       state.withdrawLoader = true;
     });
+    builder.addCase(withDrawAmount.pending, (state, action) => {
+      state.withdrawLoader = true;
+    });
 
     // Fulfilled
     builder.addCase(getBankAccounts.fulfilled, (state, action) => {
+      state.bankAccountsData = action.payload;
+      state.withdrawLoader = false;
+    });
+    builder.addCase(withDrawAmount.fulfilled, (state, action) => {
       state.bankAccountsData = action.payload;
       state.withdrawLoader = false;
     });
@@ -247,6 +254,9 @@ export const withdrawSlice = createSlice({
       state.withdrawLoader = false;
     });
     builder.addCase(UpdateBankAccount.rejected, (state, action) => {
+      state.withdrawLoader = false;
+    });
+    builder.addCase(withDrawAmount.rejected, (state, action) => {
       state.withdrawLoader = false;
     });
   },

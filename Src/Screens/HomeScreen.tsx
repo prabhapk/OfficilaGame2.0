@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
@@ -7,7 +7,7 @@ import { bannerColorGames, bannerliveCasionoGames, bannerTelegram, bannerWhatsap
 import { HomeScreenFlatlist } from "../Constants/CommonFlatlist";
 import { COLORS } from "../Constants/Theme";
 import { AppDispatch, RootState } from "../Redux/store";
-import { getAllGamesList } from "../Redux/Slice/HomeSlice";
+import { getAllBanners, getAllGamesList } from "../Redux/Slice/HomeSlice";
 import { getWalletBalance } from "../Redux/Slice/signInSlice";
 import { useContainerScale } from "../hooks/useContainerScale";
 
@@ -23,6 +23,7 @@ import RecentWinnersList from "../Components/RecentWinnersList";
 import CasinoScreen from "./CasinoScreen";
 import LotteryScreen from "./Lottery/LotteryScreen";
 import Quick3DigitsMenu from "./Lottery/Quick3DigitsMenu";
+import { API_BASE_URL } from "../Config/env";
 // import { SafeAreaView } from "react-native-safe-area-context";
 
 // -----------------------------------------------------------------------------
@@ -77,7 +78,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   const { isLoggedIn, walletBalanceLoader } = useSelector(
     (state: RootState) => state.signInSlice,
   );
-  const { howScreenCommonLoader } = useSelector(
+  const { howScreenCommonLoader, bannersData } = useSelector(
     (state: RootState) => state.homeSlice,
   );
 
@@ -114,6 +115,9 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     }
   }, [dispatch, isFocused, isLoggedIn]);
 
+  useEffect(() => {
+    dispatch(getAllBanners());
+  }, [dispatch]);
   // ---------------------------------------------------------------------------
   // Handlers
   // ---------------------------------------------------------------------------
@@ -143,10 +147,32 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   // ---------------------------------------------------------------------------
   // Render
   // ---------------------------------------------------------------------------
+
+ const BASE_URL = API_BASE_URL;
+
+const groupedBanners = useMemo(() => {
+  return bannersData.reduce((acc, item) => {
+    const placement = item.placement?.toLowerCase();
+
+    if (!item.bannerurl) return acc;
+
+    if (!acc[placement]) {
+      acc[placement] = [];
+    }
+
+    acc[placement].push(`${BASE_URL}${item.bannerurl}`);
+    return acc;
+  }, {} as Record<string, string[]>);
+}, [bannersData]);
+
+const homeTopImages = groupedBanners.hometop || [];
+const popupImages = groupedBanners.popup || [];
+
 const offerImages =[
 offerImage1,
     offerImage2
 ]
+
   return (
     <View style={styles.screen}>
       {/* <CustomLoader visible={howScreenCommonLoader} /> */}
@@ -154,7 +180,7 @@ offerImage1,
      <PromotionalModal
   visible={showPromotionalModal}
   onClose={() => setShowPromotionalModal(false)}
-  images={offerImages}
+  images={popupImages}
 />
 
       <View style={styles.headerWrapper}>

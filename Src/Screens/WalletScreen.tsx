@@ -23,7 +23,7 @@ import {
 import Toast from "react-native-toast-message";
 import { Image } from "expo-image";
 import LoadingSpinnerButton from "../Components/LoadingSpinnerButton";
-const WalletScreenUI = ({ navigation }: any) => {
+const WalletScreen = ({ navigation }: any) => {
   const [walletAmount, setWalletAmount] = useState(0);
   const [selectedAmount, setSelectedAmount] = useState("300");
   const amounts = [
@@ -76,6 +76,8 @@ const WalletScreenUI = ({ navigation }: any) => {
     });
   }
 };
+
+
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.primary }}>
@@ -554,4 +556,4 @@ const createStyles = (Scale: any) =>
     },
   });
 
-export default WalletScreenUI;
+export default WalletScreen;

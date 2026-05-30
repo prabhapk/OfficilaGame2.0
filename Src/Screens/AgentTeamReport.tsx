@@ -890,9 +890,11 @@ const createStyles = (Scale: any) =>
       paddingVertical: Scale(12),
       paddingHorizontal: Scale(14),
       backgroundColor: "#fff",
-      borderBottomWidth: 1,
-      borderBottomColor: "#F2F2F2",
+      borderBottomWidth: 0.5,
+      borderBottomColor: "black",
+      // borderColor: "black",
       marginHorizontal: Scale(16),
+      top: Scale(10),
     },
 
     userContainer: {
@@ -922,6 +924,7 @@ const createStyles = (Scale: any) =>
       color: "#222",
       fontSize: Scale(13),
       fontWeight: "600",
+      marginLeft: Scale(15),
     },
 
     rechargeText: {
@@ -930,6 +933,7 @@ const createStyles = (Scale: any) =>
       color: "#000",
       fontSize: Scale(13),
       fontWeight: "600",
+      right: Scale(15),
     },
 
     commissionText: {
@@ -938,6 +942,7 @@ const createStyles = (Scale: any) =>
       color: "#00A86B",
       fontSize: Scale(13),
       fontWeight: "700",
+      right: Scale(15),
     },
 
     paginationContainer: {

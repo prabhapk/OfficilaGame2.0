@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { depositState } from './types'
 import axios from 'axios';
 import { BaseURL, serviceUrls } from '../../Utils/serviceUrls';
@@ -12,7 +12,9 @@ const initialValues: depositState = {
     paymentGateWayListsLoader: false,
     depositLoader:false,
     depositData:[],
-    paymentPageURL:""
+    paymentPageURL:"",
+    clientTransactionId:"",
+    orderId:""
 }
 
 
@@ -70,6 +72,38 @@ export const DepositPayment = createAsyncThunk<
     }
   }
 );
+export const verifyRechargeDeposit= createAsyncThunk<
+  any,
+  { orderId: any; 
+    clientTransactionId: any; },
+  { rejectValue: string }
+>(
+  'auth/verifyRechargeDeposit',
+  async ({
+    orderId,
+    clientTransactionId,
+  }, thunkAPI) => {
+    const data = {
+        orderId,
+        clientTransactionId,
+    }
+    console.log("verifyRechargeData===>", data)
+    try {
+
+      const response = await axiosInstance.post(serviceUrls.payment.verifyRecharge,
+        data,
+      );
+      console.log("verifyRechargeResponse", response.data);
+      
+      return response.data;
+    } catch (error: any) {
+      console.log('verifyRechargeApiError', error);
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || error.message || error.toString()
+      );
+    }
+  }
+);
 
 
 
@@ -77,9 +111,12 @@ export const depositSlice = createSlice({
   name: 'depositSlice',
   initialState: initialValues,
   reducers: {
-    // setMobileNumber: (state, action: PayloadAction<string>) => {
-    //   state.mobileNumber = action.payload;
-    // },
+    setOrderId: (state, action: PayloadAction<string>) => {
+      state.orderId = action.payload;
+    },
+    setClientTransactionId: (state, action: PayloadAction<string>) => {
+      state.clientTransactionId = action.payload;
+    },
 
   },
   extraReducers: builder => {
@@ -103,6 +140,8 @@ export const depositSlice = createSlice({
         console.log("statedepositData", state.depositData)
         state.paymentPageURL = action.payload.data.pgUrl
         console.log("statepaymentPageURL==>", state.paymentPageURL)
+        state.clientTransactionId = action.payload.data.clientTransactionId
+        state.orderId = action.payload.data.orderId
     });
 
     // Rejected

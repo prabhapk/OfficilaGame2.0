@@ -12,7 +12,9 @@ const initialValues: homeSliceState = {
   allGamesList: [],
   individualGameData: [],
   individualGameDataLoader: false,
-  gamesNameWithGroupId:[]
+  gamesNameWithGroupId:[],
+  bannersData:[]
+
 }
 
 
@@ -94,6 +96,25 @@ export const payNow = createAsyncThunk<any, any, { rejectValue: string }>(
   }
 );
 
+export const getAllBanners = createAsyncThunk<
+  any, // Returned type
+  void, // ThunkArg (no argument expected)
+  { rejectValue: string } // ThunkApiConfig
+>(
+  'banners/getAllBanners',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(serviceUrls.banners.getAllBanners);
+      console.log('getAllBannersListResponse', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.log('getAllBannersListApiError', error);
+      return thunkAPI.rejectWithValue(
+        error?.response?.data || error.message || error.toString()
+      );
+    }
+  }
+);
 
 export const homeSlice = createSlice({
   name: 'homeSlice',
@@ -111,6 +132,10 @@ export const homeSlice = createSlice({
 
     });
     builder.addCase(getIndividualGameData.pending, (state, action) => {
+      state.individualGameDataLoader = true;
+
+    });
+    builder.addCase(getAllBanners.pending, (state, action) => {
       state.individualGameDataLoader = true;
 
     });
@@ -145,6 +170,11 @@ export const homeSlice = createSlice({
     builder.addCase(getIndividualGameData.fulfilled, (state, action) => {
       state.individualGameDataLoader = false;
       state.individualGameData = action.payload;
+    });
+    builder.addCase(getAllBanners.fulfilled, (state, action) => {
+      state.individualGameDataLoader = false;
+      state.bannersData = action.payload;
+      console.log("bannersData=>>", state.bannersData);
     });
     // Rejected
     builder.addCase(getAllGamesList.rejected, (state, action) => {

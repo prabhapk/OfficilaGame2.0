@@ -175,6 +175,7 @@ function MainNavigation() {
             headerShown: false,
           }}
         />
+    
       </Stack.Navigator>
     </NavigationContainer>
   );

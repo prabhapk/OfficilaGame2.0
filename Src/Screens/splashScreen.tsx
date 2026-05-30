@@ -8,7 +8,7 @@ import { StatusBar } from "expo-status-bar";
 const SplashScreen = ({ navigation }: { navigation: any }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace("AgentTeamReport");
+      navigation.replace("DrawerNavigation");
     }, 3000);
 
     return () => clearTimeout(timer);

@@ -83,6 +83,7 @@ export interface CommonSliceState {
     individualGameDataLoader: boolean;
     invidualGameHeaders:any;
     gamesNameWithGroupId:any;
+    bannersData:any
 
   }
   export interface resultSliceState {
@@ -125,6 +126,8 @@ export interface CommonSliceState {
     depositLoader:boolean,
     depositData:any
     paymentPageURL:string
+    clientTransactionId:string
+    orderId:string
   }
 
   export interface agentSliceState {
