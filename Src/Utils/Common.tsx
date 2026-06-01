@@ -224,10 +224,10 @@ export const groupByOrder = (data: any[]) => {
         nextDrawTime: item.nextDrawTime,
         winningNumber: item.winningNumber,
         gameName: item.gameName,
-        isWinning: item.isWinning,
+        isWinning: false, // start false
         bets: [],
         totalAmount: 0,
-        winningAmount: 0, // ✅ initialized
+        winningAmount: 0,
       };
     }
 
@@ -240,11 +240,13 @@ export const groupByOrder = (data: any[]) => {
       isWinning: item.isWinning,
     });
 
-    // ✅ FIX 1: totalAmount (better to use totalAmount instead of amount)
     grouped[item.betUniqueId].totalAmount += item.totalAmount;
 
-    // ✅ FIX 2: ADD THIS LINE (missing piece)
     grouped[item.betUniqueId].winningAmount += item.winningAmount ?? 0;
+
+    // ✅ Important fix
+    grouped[item.betUniqueId].isWinning =
+      grouped[item.betUniqueId].isWinning || item.isWinning;
   });
 
   return Object.values(grouped);

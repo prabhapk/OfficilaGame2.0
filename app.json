@@ -2,7 +2,7 @@
   "expo": {
     "name": "Dear24Gaming",
     "slug": "dear24-gaming",
-    "version": "1.0.1",
+    "version": "1.0.0",
 
     "orientation": "portrait",
 
@@ -19,7 +19,7 @@
     "updates": {
       "url": "https://u.expo.dev/70cdc270-4f3b-45cd-9988-6a9ea5ce7bc7"
     },
-     "runtimeVersion": "1.0.1",
+     "runtimeVersion": "1.0.0",
 
     "splash": {
       "image": "./assets/appIcon.png",
@@ -32,16 +32,17 @@
       "bundleIdentifier": "com.ajaygaming.dear24gaming"
     },
 
-    "android": {
-      "package": "com.ajaygaming.dear24gaming",
+"android": {
+  "package": "com.ajaygaming.dear24gaming",
+  "versionCode": 1,
 
-      "edgeToEdgeEnabled": false,
+  "edgeToEdgeEnabled": false,
 
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/appIcon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
+  "adaptiveIcon": {
+    "foregroundImage": "./assets/appIcon.png",
+    "backgroundColor": "#ffffff"
+  }
+},
 
     "web": {
       "favicon": "./assets/appIcon.png"
