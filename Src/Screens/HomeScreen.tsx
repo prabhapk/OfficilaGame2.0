@@ -151,10 +151,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
  const BASE_URL = API_BASE_URL;
 
 const groupedBanners = useMemo(() => {
-  return bannersData.reduce((acc, item) => {
+  return (bannersData ?? []).reduce((acc, item) => {
     const placement = item.placement?.toLowerCase();
 
-    if (!item.bannerurl) return acc;
+    if (!item.bannerurl || !placement) return acc;
 
     if (!acc[placement]) {
       acc[placement] = [];

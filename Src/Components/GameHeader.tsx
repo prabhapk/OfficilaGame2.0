@@ -68,7 +68,7 @@ const GameHeader: React.FC<Props> = ({
       // Pass real user details here
       await setFreshchatUser({
         name: "Dear24 Lottery User",
-        email: "user@dear24gaming.com",
+        email: "dear24gaming@gmail.com",
         phoneCountryCode: "+91",
         phone: "9876543210",
         externalId: "user-123",
