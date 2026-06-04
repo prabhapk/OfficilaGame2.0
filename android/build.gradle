@@ -20,5 +20,22 @@ allprojects {
   }
 }
 
+subprojects {
+  configurations.configureEach {
+    resolutionStrategy {
+      force 'com.github.freshworks:freshchat-android:6.5.6'
+    }
+    exclude group: 'com.android.support'
+  }
+
+  afterEvaluate { project ->
+    if (project.name == 'react-native-freshchat-sdk') {
+      project.dependencies {
+        implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+      }
+    }
+  }
+}
+
 apply plugin: "expo-root-project"
 apply plugin: "com.facebook.react.rootproject"
